@@ -1,0 +1,89 @@
+@import "../../../scss/utils/variable";
+.container {
+  margin-left: auto;
+  margin-right: auto;
+}
+@media only screen and (max-width: 767px) {
+  .container {
+    max-width: 100%;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .container {
+    max-width: 740px;
+  }
+}
+@media only screen and (min-width: 992px) {
+  .container {
+    max-width: 980px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+@media only screen and (min-width: 1400px) {
+  .container {
+    max-width: 1320px;
+  }
+}
+.product-list-wrapper {
+  padding-top: 12px;
+  .p-component {
+    .p-inputtext {
+      font-size: 1.4rem;
+    }
+  }
+  .product-list-filter {
+    .p-component {
+      font-family: "Montserrat", sans-serif;
+      .p-accordion-header {
+        display: none;
+      }
+      .p-accordion-content {
+        border: none;
+      }
+      font-size: $text-large;
+    }
+    &__title {
+      font-size: $text-large;
+      text-transform: uppercase;
+      font-weight: $font-bold;
+      cursor: pointer;
+      padding: 12px 2px 2px 2px;
+      &-icon {
+        margin-left: 8px;
+      }
+    }
+    &__category {
+    }
+    &__list {
+      margin: 0;
+    }
+    &__item {
+      &.active {
+        &-link {
+          color: $main-color;
+        }
+      }
+      &-link {
+        display: block;
+        padding: 8px 0;
+        font-weight: $font-bold;
+        color: #000;
+        &:hover {
+          color: $main-color;
+        }
+      }
+    }
+  }
+  .product-list-sort {
+    text-align: right;
+  }
+  .product-list-paginator {
+    .p-component button {
+      font-size: $text-large;
+    }
+  }
+}

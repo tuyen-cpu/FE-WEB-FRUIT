@@ -1,0 +1,85 @@
+@import "../../../scss/utils/variable";
+
+.product-item-wrapper {
+  font-size: $text-medium;
+  padding: 12px 4px;
+  .product-img {
+    position: relative;
+    .discount-tag {
+      position: absolute;
+      background: red;
+      font-weight: $font-bold;
+      padding: 4px 8px;
+      color: #fff;
+    }
+    &__link {
+    }
+  }
+  .product-detail {
+    &__name {
+      &-link {
+        color: #00381a;
+        font-size: 14px;
+        font-weight: $font-medium;
+        line-height: 1.3;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &:hover {
+          color: $main-color;
+        }
+      }
+    }
+    &__price {
+      font-size: $text-medium;
+      &-old {
+      }
+      &-new {
+        font-weight: $font-bold;
+        color: #f94c43;
+        margin-right: 10px;
+      }
+    }
+    .product-wrapper {
+      .btn-action {
+        color: #000;
+        margin: 10px 0 0 0;
+        padding: 15px 30px;
+        border-radius: 4px;
+        background-color: transparent;
+        cursor: pointer;
+        font-weight: 500;
+        outline: none;
+        border: 1px solid $main-color;
+        position: relative;
+        isolation: isolate;
+      }
+
+      .btn-action {
+        &:before {
+          content: "";
+          height: 100%;
+          width: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          background-color: $main-color;
+          z-index: -1;
+          transition: width 0.25s ease-in;
+          color: #fff;
+        }
+      }
+
+      .btn-action {
+        &:hover {
+          color: #fff;
+          &:before {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

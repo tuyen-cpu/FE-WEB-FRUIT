@@ -1,1 +1,125 @@
-<p>product-list works!</p>
+<div class="product-list-wrapper grid container">
+  <div class="col-3">
+    <div class="product-list-filter">
+      <div class="product-list-filter__category">
+        <p-accordion>
+          <div
+            class="product-list-filter__title"
+            (click)="toggleFilterCategory()"
+          >
+            <span class="product-list-filter__title-name"
+              >Danh mục sản phẩm</span
+            >
+            <span class="product-list-filter__title-icon">
+              <i
+                [ngClass]="isShowFilterCategory ? 'pi pi-minus' : 'pi pi-plus'"
+              ></i>
+            </span>
+          </div>
+
+          <p-accordionTab [(selected)]="isShowFilterCategory">
+            <ul class="product-list-filter__list">
+              <li class="product-list-filter__item is-selected">
+                <a
+                  [routerLink]="['d']"
+                  routerLinkActive="active"
+                  class="product-list-filter__item-link"
+                  >Rau ăn lá</a
+                >
+              </li>
+              <li class="product-list-filter__item">
+                <a
+                  [routerLink]="['y']"
+                  routerLinkActive="active"
+                  class="product-list-filter__item-link"
+                  >Nhập khẩu</a
+                >
+              </li>
+              <li class="product-list-filter__item">
+                <a
+                  [routerLink]="['r']"
+                  routerLinkActive="active"
+                  class="product-list-filter__item-link"
+                  >Nội địa</a
+                >
+              </li>
+              <li class="product-list-filter__item">
+                <a
+                  [routerLink]="['u']"
+                  routerLinkActive="active"
+                  class="product-list-filter__item-link"
+                  >Rau ăn lá</a
+                >
+              </li>
+              <li class="product-list-filter__item">
+                <a
+                  [routerLink]="['p']"
+                  routerLinkActive="active"
+                  class="product-list-filter__item-link"
+                  >Tất cả sản phẩm</a
+                >
+              </li>
+            </ul>
+          </p-accordionTab>
+        </p-accordion>
+      </div>
+      <div class="product-list-filter__price">
+        <p-accordion>
+          <div class="product-list-filter__title" (click)="toggleFilterPrice()">
+            <span class="product-list-filter__title-name">Giá sản phẩm</span>
+            <span class="product-list-filter__title-icon">
+              <i
+                [ngClass]="isShowFilterPrice ? 'pi pi-minus' : 'pi pi-plus'"
+              ></i>
+            </span>
+          </div>
+
+          <p-accordionTab [(selected)]="isShowFilterPrice">
+            <div
+              class="field-checkbox"
+              *ngFor="let price of priceList; let i = index"
+            >
+              <p-checkbox
+                name="group1"
+                [value]="price"
+                [(ngModel)]="selectedCities"
+                [inputId]="i + ''"
+                (onChange)="changePrice()"
+              ></p-checkbox>
+              <label [for]="i">Dưới {{ price }}</label>
+            </div>
+          </p-accordionTab>
+        </p-accordion>
+      </div>
+    </div>
+  </div>
+  <div class="col-9">
+    <div class="product-list-sort">
+      <p-dropdown
+        [options]="sortOptions"
+        [(ngModel)]="sortOptionSelected"
+        (onChange)="changeSort()"
+        placeholder="Sắp xếp theo"
+        optionLabel="name"
+      ></p-dropdown>
+    </div>
+    <div class="product-list grid">
+      <div class="col-3"><app-product-item></app-product-item></div>
+      <div class="col-3"><app-product-item></app-product-item></div>
+      <div class="col-3"><app-product-item></app-product-item></div>
+      <div class="col-3"><app-product-item></app-product-item></div>
+      <div class="col-3"><app-product-item></app-product-item></div>
+      <div class="col-3"><app-product-item></app-product-item></div>
+      <div class="col-3"><app-product-item></app-product-item></div>
+      <div class="col-3"><app-product-item></app-product-item></div>
+    </div>
+    <div class="product-list-paginator">
+      <p-paginator
+        [rows]="1"
+        [totalRecords]="3"
+        [first]="1"
+        (onPageChange)="onPageChange($event)"
+      ></p-paginator>
+    </div>
+  </div>
+</div>

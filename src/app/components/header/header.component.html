@@ -1,144 +1,224 @@
 <header>
-<div class="sub-header">
-    <div class="sub-header__site flex align-items-center justify-content-between px-5">
-         <span class="sub-header__site-left">Freeship với đơn từ 250k. Giao hàng hỏa tốc 2h.</span>
-        <ul class="sub-header__site-right flex align-items-center justify-content-between">
-            <li class="email mr-5">
-                <i class="pi pi-telegram pi-envelope mr-2"></i>
-                <span class="email-text">Email: cskh@bio-ngon.com</span>
-            </li>
-            <li class="phone">
-                <i class="pi pi-phone phone__icon mr-2"></i>
-                <span class="phone__text">Hotline: cskh@bio-ngon.com</span>
-            </li>
-        </ul>
+  <div class="sub-header">
+    <div
+      class="sub-header__site flex align-items-center justify-content-between px-5"
+    >
+      <span class="sub-header__site-left"
+        >Freeship với đơn từ 250k. Giao hàng hỏa tốc 2h.</span
+      >
+      <ul
+        class="sub-header__site-right flex align-items-center justify-content-between"
+      >
+        <li class="email mr-5">
+          <i class="pi pi-telegram pi-envelope mr-2"></i>
+          <span class="email-text">Email: cskh@bio-ngon.com</span>
+        </li>
+        <li class="phone">
+          <i class="pi pi-phone phone__icon mr-2"></i>
+          <span class="phone__text">Hotline: cskh@bio-ngon.com</span>
+        </li>
+      </ul>
     </div>
-   
-</div>
-<div class="main-header-wrapper">
+  </div>
+  <div class="main-header-wrapper">
     <div class="main-header flex justify-content-between align-items-center">
-        <div class="logo-wrapper">
-            <a routerLink="/" class="logo-wrappe-link">
-                <img class="logo-wrappe-link__img max-w-full" src="../../../assets/img/logo/LOGO-NEW-OK2.png" alt="">
-            </a>
-        </div>
-        <div class="cate-search-wrapper flex align-items-center justify-content-around">
-            <div class="nav-wrapper">
-               <ul class="navbar__list">
-                <li class="navbar__item navbar__item--active">
-                    <a href="" class="navbar__item-link ">
-                       Sản phẩm
-                       <i class="pi pi-angle-down navbar__item-link-icon" aria-hidden="true"></i>
-                    </a>
-                     
-                    <ul class="navbar__sub-menu-list">
-                        <li class="navbar__sub-menu-item">
-                            <a href="" class="navbar__sub-menu-item-link">Trái cây xuất khẩu</a>
-                        </li>
-                        <li class="navbar__sub-menu-item">
-                            <a href="" class="navbar__sub-menu-item-link">rrr</a>
-                        </li>
-                    </ul>
+      <div class="logo-wrapper">
+        <a routerLink="/" class="logo-wrappe-link">
+          <img
+            class="logo-wrappe-link__img max-w-full"
+            src="../../../assets/img/logo/LOGO-NEW-OK2.png"
+            alt=""
+          />
+        </a>
+      </div>
+      <div
+        class="cate-search-wrapper flex align-items-center justify-content-around"
+      >
+        <div class="nav-wrapper">
+          <ul class="navbar__list">
+            <li class="navbar__item navbar__item--active">
+              <a [routerLink]="['product']" class="navbar__item-link">
+                Sản phẩm
+                <i
+                  class="pi pi-angle-down navbar__item-link-icon"
+                  aria-hidden="true"
+                ></i>
+              </a>
+
+              <ul class="navbar__sub-menu-list">
+                <li class="navbar__sub-menu-item">
+                  <a href="" class="navbar__sub-menu-item-link"
+                    >Trái cây xuất khẩu</a
+                  >
                 </li>
-               </ul>
-            </div>
-            <form action="" class="form-search relative w-7 relative">
-                <input appDropdown type="text" class="input-search"  placeholder="Tìm kiếm sản phẩm">
-                <div class="search-dropdown">
-                    <ul class="search-result">
-                        <li class="search-result__item">
-                            <a href="" class="search-result__item-link">
-                                <span class="image"><img src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg" alt=""></span>
-                           <span class="content">
-                            <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                            <span class="price">
-                                <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                            </span>
-                           </span>
-                            </a>
-                        </li>
-                        <li class="search-result__item">
-                            <a href="" class="search-result__item-link">
-                                <span class="image"><img src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg" alt=""></span>
-                           <span class="content">
-                            <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                            <span class="price">
-                                <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                            </span>
-                           </span>
-                            </a>
-                        </li>
-                        <li class="search-result__item">
-                            <a href="" class="search-result__item-link">
-                                <span class="image"><img src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg" alt=""></span>
-                           <span class="content">
-                            <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                            <span class="price">
-                                <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                            </span>
-                           </span>
-                            </a>
-                        </li>
-                        <li class="search-result__item">
-                            <a href="" class="search-result__item-link">
-                                <span class="image"><img src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg" alt=""></span>
-                           <span class="content">
-                            <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                            <span class="price">
-                                <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                            </span>
-                           </span>
-                            </a>
-                        </li>
-                           <li class="search-result__item">
-                            <a href="" class="search-result__item-link">
-                                <span class="image"><img src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg" alt=""></span>
-                           <span class="content">
-                            <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                            <span class="price">
-                                <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                            </span>
-                           </span>
-                            </a>
-                        </li>
-                        <div class="result-more">
-                           <a href=""> Xem thêm 49 sản phẩm</a>
-                        </div>
-                    </ul>
-                </div>
-                <button pButton class="search-btn absolute right-0" type="button" icon="pi pi-search" ></button>
-               
-            </form>
+                <li class="navbar__sub-menu-item">
+                  <a href="" class="navbar__sub-menu-item-link"
+                    >Trái cây nhập khẩu</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
-        <div class="header-icon-wrapper">
-                <ul class="header-icon-list flex">
-                    <li class="header-icon ml-2">
-                        <a class="header-icon-list__link">
-                            <span class="icon-box icon-account ">
-                                <svg class="" aria-hidden="true" focusable="false" data-prefix="far" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M313.6 304c-28.7 0-42.5 16-89.6 16-47.1 0-60.8-16-89.6-16C60.2 304 0 364.2 0 438.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-25.6c0-74.2-60.2-134.4-134.4-134.4zM400 464H48v-25.6c0-47.6 38.8-86.4 86.4-86.4 14.6 0 38.3 16 89.6 16 51.7 0 74.9-16 89.6-16 47.6 0 86.4 38.8 86.4 86.4V464zM224 288c79.5 0 144-64.5 144-144S303.5 0 224 0 80 64.5 80 144s64.5 144 144 144zm0-240c52.9 0 96 43.1 96 96s-43.1 96-96 96-96-43.1-96-96 43.1-96 96-96z" class=""></path></svg>
-                            </span>
-                        </a>
-                        <div class="account-dropdown-wrapper">
-                            <div class="account-dropdown-list">
-                                <div id="site-login" class="account-wrapper is-selected">
-                                    <div class="account-site">
-                                        <div class="account-header">
-                                            <h2 class="account-header__title">ĐĂNG NHẬP TÀI KHOẢN</h2>
-                                            <p>Nhập email và mật khẩu của bạn</p>
-                                        </div>
-                                        <div class="account-content">
-                                            <form action="">
-                                                <div class="account-content__group">
-                                                    <input id="account-content__email" class="account-content__input" type="text" >
-                                                    <label for="account-content__email" class="account-content__label">Email hoặc số điện thoại</label>
-                                                </div>
-                                                <div class="account-content__group">
-                                                    <input id="account-content__password" class="account-content__input" type="password" >
-                                                    <label for="account-content__password" class="account-content__label">Mật khẩu</label>
-                                                </div>
-                                                <a class="btn-action" pButton pRipple type="button">ĐĂNG NHẬP</a>
-                                            </form>
-                                            <!-- <div class="social-btn-wrapper">
+        <form action="" class="form-search relative w-7 relative">
+          <input
+            appDropdown
+            type="text"
+            class="input-search"
+            placeholder="Tìm kiếm sản phẩm"
+          />
+          <div class="search-dropdown">
+            <ul class="search-result">
+              <li class="search-result__item">
+                <a href="" class="search-result__item-link">
+                  <span class="image"
+                    ><img
+                      src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
+                      alt=""
+                  /></span>
+                  <span class="content">
+                    <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                    <span class="price">
+                      <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li class="search-result__item">
+                <a href="" class="search-result__item-link">
+                  <span class="image"
+                    ><img
+                      src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
+                      alt=""
+                  /></span>
+                  <span class="content">
+                    <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                    <span class="price">
+                      <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li class="search-result__item">
+                <a href="" class="search-result__item-link">
+                  <span class="image"
+                    ><img
+                      src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
+                      alt=""
+                  /></span>
+                  <span class="content">
+                    <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                    <span class="price">
+                      <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li class="search-result__item">
+                <a href="" class="search-result__item-link">
+                  <span class="image"
+                    ><img
+                      src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
+                      alt=""
+                  /></span>
+                  <span class="content">
+                    <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                    <span class="price">
+                      <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <li class="search-result__item">
+                <a href="" class="search-result__item-link">
+                  <span class="image"
+                    ><img
+                      src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
+                      alt=""
+                  /></span>
+                  <span class="content">
+                    <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                    <span class="price">
+                      <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                    </span>
+                  </span>
+                </a>
+              </li>
+              <div class="result-more">
+                <a href=""> Xem thêm 49 sản phẩm</a>
+              </div>
+            </ul>
+          </div>
+          <button
+            pButton
+            class="search-btn absolute right-0"
+            type="button"
+            icon="pi pi-search"
+          ></button>
+        </form>
+      </div>
+      <div class="header-icon-wrapper">
+        <ul class="header-icon-list flex">
+          <li class="header-icon ml-2">
+            <a class="header-icon-list__link">
+              <span class="icon-box icon-account">
+                <svg
+                  class=""
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="far"
+                  data-icon="user"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M313.6 304c-28.7 0-42.5 16-89.6 16-47.1 0-60.8-16-89.6-16C60.2 304 0 364.2 0 438.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-25.6c0-74.2-60.2-134.4-134.4-134.4zM400 464H48v-25.6c0-47.6 38.8-86.4 86.4-86.4 14.6 0 38.3 16 89.6 16 51.7 0 74.9-16 89.6-16 47.6 0 86.4 38.8 86.4 86.4V464zM224 288c79.5 0 144-64.5 144-144S303.5 0 224 0 80 64.5 80 144s64.5 144 144 144zm0-240c52.9 0 96 43.1 96 96s-43.1 96-96 96-96-43.1-96-96 43.1-96 96-96z"
+                    class=""
+                  ></path>
+                </svg>
+              </span>
+            </a>
+            <div class="account-dropdown-wrapper">
+              <div class="account-dropdown-list">
+                <div id="site-login" class="account-wrapper is-selected">
+                  <div class="account-site">
+                    <div class="account-header">
+                      <h2 class="account-header__title">ĐĂNG NHẬP TÀI KHOẢN</h2>
+                      <p>Nhập email và mật khẩu của bạn</p>
+                    </div>
+                    <div class="account-content">
+                      <form action="">
+                        <div class="account-content__group">
+                          <input
+                            id="account-content__email"
+                            class="account-content__input"
+                            type="text"
+                          />
+                          <label
+                            for="account-content__email"
+                            class="account-content__label"
+                            >Email hoặc số điện thoại</label
+                          >
+                        </div>
+                        <div class="account-content__group">
+                          <input
+                            id="account-content__password"
+                            class="account-content__input"
+                            type="password"
+                          />
+                          <label
+                            for="account-content__password"
+                            class="account-content__label"
+                            >Mật khẩu</label
+                          >
+                        </div>
+                        <a class="btn-action" pButton pRipple type="button"
+                          >ĐĂNG NHẬP</a
+                        >
+                      </form>
+                      <!-- <div class="social-btn-wrapper">
                                                 <button class="social-btn">
                                                     <div class="pre-btn-login" style="background-repeat: no-repeat; width: 40px; height: 40px; float: left; border-radius: 5px; background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAAMKAAADCgGCv3mMAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAelQTFRF/////wAAzDMz1VUr6EYu20k930o12Uw53k4320043U063ks720w43Ek63k063kw43Us43kw63ks53ko43Ew43Es63Uo53Uo53Us53ks53Us43Us53Us53Uo43Uw63Us53kw53Ew53Us43Us63Uo53Uo53Uw53Uw53Us53Us43Us53Us63Us53Uo53Us63kw53Uw53Us53ks53Us53Us53Us53Us53Us53Us53Us53Us53Us53Us53Us53Uw63Uw73U073k483lA+3lFA3lNC31NC31RD31ZF31hH4FhI4FpJ4FtL4FxM4F1M4F1N4WJS4mNT4mZX4mdX42la42pb42tc421e5HFj5XNl5XRm5nhr5npt5ntu5nxv535x54Bz54J26IN26IN36IZ66Yt/6YyA6Y2B6o2C6o6D6pKH65OI65SK65eM7JmP7JyS7Z+V7aKZ7qOa7qWc7qad7qee7qef8K+m8K+n8LGq8bOr8bau8bav8rix8r2288G788K79MK89MS+9MbA9MfC9cnE9crF9s/K99XR+NjU+NrW+NrX+d3a+d7b+d/b+uTh+ubj+ufl++jm++nn++vp/O3s/O7s/O/t/PHv/fTz/ff2/vf2/vj3/vn5/vv6/vv7/vz8//39//7+////0I4vHAAAAD10Uk5TAAEFBgsVGBsuMjU9QEJGTVJUVVZXWFlaYmNpcH5/gIGKoqOkr7Kztru+wsPIyszO2Nzd3uDj5vL09ff9/v4lm+oAAAK9SURBVFjDvVdpVxMxFJ2RVhSVqohAi1IsILUoZS20jawKKi6474goqIOIqKi4gxs4LlRERRCdX+pk2tKXWTJLzvF+6n3JvT2ZJC/vcZwBXB6fPxAMRyLhYMDv87g4W3AXlkcRgWh5oduqepU3FEM6iO3yZlnR59UgQ9Ru4c3k66oQFbvX09dehkxRsdpYv6YeWUDDWiP9xiZkCc2bdOV8cRxZRHybzrfkS5ENlGodipEtbNesP27PIL5Z9f2bkE00E3vhrke20QDPQxlygJ3g/CJH2LBiUOXMYE96L/OQQ2xN3f8apwa1yfzg1Y50XRkURq52mzp4FYOQKto++HpJwvj78UEX3SCknAFV/ur9IGXw/QbVIIbzZBEZG/opEXjVTnMokg0qiMiwpMIYPT3J+Z/I35f+KKr5p/0nz/Q9XzLTo6iL80DeMafon+1P0kMvxsz2wcP5IL2j6AWj2ScEQThAhnycH9IE1k8Z/p0gj54mQ34uANhBrP9x2I5BgAsCdhkbTCA7BkEuDNgoNriZJk9WoIREUfwqD38SxZdAEuYigE1K4C/EzFmYwTxDRSCJEAZTePiY1kCkGcAl3MfD/QYGRkuAH3EAz76bJoKCd3LoLe0jwm3sxQbTLXDC3s/gPuhuIzxILQvY4Tac0IcjF2gHiTjKj/D0haOZwJF5ObDcSTvKxGXq+YUdEufT/Ows5o+pl4m8zreSuWy8B5Pu0WXMZvdRr7MqoUykdm7uzWQi9fMiPaGoUlrruCoj/R42S2nqpHrtG9R/OWeaVDVpvWNkejGpXnx/vc08res9LG2nhh7eGzjeau1hcf601WUxPq4FjM97Nc9YYOQyljiVjEVWYzZbmRfNYSs0UT5jqVvCWGzv4JnKfVTCMzUc0Xy2lqcxh63pqsxmavuqc5kaz7oC/j+0vuzNt732/x+k+ISHLlgFkwAAAABJRU5ErkJggg==&quot;); background-color: rgb(221, 75, 57); background-size: 40px 40px; background-position-x: 3px;"></div>
                                                     <span class="span">Đăng nhập Google</span>
@@ -148,130 +228,176 @@
                                                     <span class="span">Đăng nhập Google</span>
                                                 </button>
                                             </div> -->
-                                            <div class="switch-site-action">
-                                                <div class="switch-action__text">Khách hàng mới <a >Tạo tài khoản</a></div>
-                                                <div class="switch-action__text">Quên mật khẩu <a  (click)="changeSiteAccount()">Khôi phục mật khẩu</a></div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div id="site-forgot" class="account-wrapper">
-                                    <div class="account-site">
-                                        <div class="account-header">
-                                            <h2 class="account-header__title">KhÔI PHỤC MẬT KHẨU</h2>
-                                            <p>Nhập email và mật khẩu của bạn</p>
-                                        </div>
-                                        <div class="account-content">
-                                            <form action="">
-                                                <div class="account-content__group">
-                                                    <input id="account-content__email-forgot" class="account-content__input" type="text" >
-                                                    <label for="account-content__email-forgot" class="account-content__label">Email hoặc số điện thoại</label>
-                                                </div>
-                                               
-                                                <a class="btn-action" pButton pRipple type="button">KHÔI PHỤC</a>
-                                            </form>
-                                           
-                                            <div class="switch-site-action">
-                                                <div class="switch-action__text">Bạn đã nhớ mật khẩu?<a (click)="changeSiteAccount()">Trở về đăng nhập</a></div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
+                      <div class="switch-site-action">
+                        <div class="switch-action__text">
+                          Khách hàng mới <a>Tạo tài khoản</a>
                         </div>
-                    </li>
-                    <li class="header-icon header-icon__cart ml-4" >
-                        <a  class="header-icon-list__link relative" [routerLink]="['cart']">
-                            <span class="icon-box icon-cart cart-menu " title="Giỏ hàng">
-                                <svg class="" height="511pt" viewBox="0 0 511 511.99913" width="511pt" xmlns="http://www.w3.org/2000/svg"><path d="m512.496094 172v80c0 11.046875-8.953125 20-20 20h-13.152344l-8.425781 74.988281c-1.148438 10.21875-9.804688 17.765625-19.851563 17.769531-.746094 0-1.496094-.042968-2.257812-.128906-10.976563-1.230468-18.875-11.132812-17.640625-22.105468l10.421875-92.753907c1.136718-10.117187 9.691406-17.769531 19.875-17.769531h11.035156v-40h-432v40h341c11.046875 0 20 8.957031 20 20 0 11.046875-8.953125 20-20 20h-307.226562l19.75 164.761719c2.40625 20.089843 19.480468 35.238281 39.714843 35.238281h247.125c20.382813 0 37.472657-15.277344 39.75-35.535156 1.230469-10.976563 11.128907-18.871094 22.105469-17.640625 10.976562 1.234375 18.875 11.132812 17.644531 22.109375-4.554687 40.511718-38.730469 71.066406-79.5 71.066406h-247.125c-40.46875 0-74.617187-30.300781-79.433593-70.480469l-20.316407-169.519531h-13.488281c-11.046875 0-20-8.953125-20-20v-80c0-11.046875 8.953125-20 20-20h70.9375l105.683594-143.839844c6.539062-8.898437 19.054687-10.816406 27.957031-4.273437 8.902344 6.539062 10.816406 19.054687 4.277344 27.957031l-88.28125 120.15625h231.589843l-88.285156-120.15625c-6.539062-8.902344-4.625-21.417969 4.277344-27.957031 8.902344-6.542969 21.417969-4.628907 27.960938 4.273437l105.679687 143.839844h70.199219c11.046875 0 20 8.957031 20 20zm-275.996094 160v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm80 0v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm-160 0v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm0 0"></path></svg>		
-                            </span>
-                            <span class="cart-quantity">
-                                99
-                            </span>
-                           
-                        </a>
-                        <div class="cart-dropdown-wrapper">
-                            <div class="cart-dropdown-site">
-                                <div class="cart-dropdown__title">Giỏ hàng</div>
-                                <ul class="cart-dropdown__list">
-                                    <li class="cart-dropdown-item flex">
-                                       <img class="cart-dropdown-item__image" src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp" alt="">
-                                        <div class="cart-dropdown-item__content">
-                                            <h4 class="name">Gói Thành Viên 4000k</h4>
-                                            <span class="quantity">
-                                              <button class="quantity__btn">-</button>
-                                                <input type="text" value="3" min="1" class="value">
-                                               <button class="quantity__btn">+</button>
-                                            </span>
-                                            <span class="price">120.000đ</span>
-                                            <span class="close">
-                                                <i class="pi pi-times"></i>
-                                            </span>
-                                        </div>
-                                    </li>
-                                    <li class="cart-dropdown-item flex">
-                                        <img class="cart-dropdown-item__image" src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp" alt="">
-                                         <div class="cart-dropdown-item__content">
-                                             <h4 class="name">Gói Thành Viên 4000k</h4>
-                                             <span class="quantity">
-                                               <button class="quantity__btn">-</button>
-                                                 <input type="text" value="3" min="1" class="value">
-                                                <button class="quantity__btn">+</button>
-                                             </span>
-                                             <span class="price">120.000đ</span>
-                                             <span class="close">
-                                                 <i class="pi pi-times"></i>
-                                             </span>
-                                         </div>
-                                     </li>
-                                     <li class="cart-dropdown-item flex">
-                                        <img class="cart-dropdown-item__image" src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp" alt="">
-                                         <div class="cart-dropdown-item__content">
-                                             <h4 class="name">Gói Thành Viên 4000k</h4>
-                                             <span class="quantity">
-                                               <button class="quantity__btn">-</button>
-                                                 <input type="text" value="3" min="1" class="value">
-                                                <button class="quantity__btn">+</button>
-                                             </span>
-                                             <span class="price">120.000đ</span>
-                                             <span class="close">
-                                                 <i class="pi pi-times"></i>
-                                             </span>
-                                         </div>
-                                     </li>
-                                      <li class="cart-dropdown-item flex">
-                                        <img class="cart-dropdown-item__image" src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp" alt="">
-                                         <div class="cart-dropdown-item__content">
-                                             <h4 class="name">Gói Thành Viên 4000k</h4>
-                                             <span class="quantity">
-                                               <button class="quantity__btn">-</button>
-                                                 <input type="text" value="3" min="1" class="value">
-                                                <button class="quantity__btn">+</button>
-                                             </span>
-                                             <span class="price">120.000đ</span>
-                                             <span class="close">
-                                                 <i class="pi pi-times"></i>
-                                             </span>
-                                         </div>
-                                     </li>
-                                </ul>
-                                <div class="cart-dropdown-footer">
-                                    <div class="total-wrapper flex justify-content-between">
-                                        <span class="total_title">Tổng tiền</span>
-                                        <span class="total_value">1.000.123đ</span>
-                                    </div>
-                                    <div class="btn-action-wrapper flex">
-                                        <a class="btn-action" pButton pRipple type="button">XEM GIỎ HÀNG</a>
-                                        <a class="btn-action" pButton pRipple type="button">THANH TOÁN</a>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="switch-action__text">
+                          Quên mật khẩu
+                          <a (click)="changeSiteAccount()"
+                            >Khôi phục mật khẩu</a
+                          >
                         </div>
-                    </li>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="site-forgot" class="account-wrapper">
+                  <div class="account-site">
+                    <div class="account-header">
+                      <h2 class="account-header__title">KhÔI PHỤC MẬT KHẨU</h2>
+                      <p>Nhập email và mật khẩu của bạn</p>
+                    </div>
+                    <div class="account-content">
+                      <form action="">
+                        <div class="account-content__group">
+                          <input
+                            id="account-content__email-forgot"
+                            class="account-content__input"
+                            type="text"
+                          />
+                          <label
+                            for="account-content__email-forgot"
+                            class="account-content__label"
+                            >Email hoặc số điện thoại</label
+                          >
+                        </div>
+
+                        <a class="btn-action" pButton pRipple type="button"
+                          >KHÔI PHỤC</a
+                        >
+                      </form>
+
+                      <div class="switch-site-action">
+                        <div class="switch-action__text">
+                          Bạn đã nhớ mật khẩu?<a (click)="changeSiteAccount()"
+                            >Trở về đăng nhập</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="header-icon header-icon__cart ml-4">
+            <a class="header-icon-list__link relative" [routerLink]="['cart']">
+              <span class="icon-box icon-cart cart-menu" title="Giỏ hàng">
+                <svg
+                  class=""
+                  height="511pt"
+                  viewBox="0 0 511 511.99913"
+                  width="511pt"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="m512.496094 172v80c0 11.046875-8.953125 20-20 20h-13.152344l-8.425781 74.988281c-1.148438 10.21875-9.804688 17.765625-19.851563 17.769531-.746094 0-1.496094-.042968-2.257812-.128906-10.976563-1.230468-18.875-11.132812-17.640625-22.105468l10.421875-92.753907c1.136718-10.117187 9.691406-17.769531 19.875-17.769531h11.035156v-40h-432v40h341c11.046875 0 20 8.957031 20 20 0 11.046875-8.953125 20-20 20h-307.226562l19.75 164.761719c2.40625 20.089843 19.480468 35.238281 39.714843 35.238281h247.125c20.382813 0 37.472657-15.277344 39.75-35.535156 1.230469-10.976563 11.128907-18.871094 22.105469-17.640625 10.976562 1.234375 18.875 11.132812 17.644531 22.109375-4.554687 40.511718-38.730469 71.066406-79.5 71.066406h-247.125c-40.46875 0-74.617187-30.300781-79.433593-70.480469l-20.316407-169.519531h-13.488281c-11.046875 0-20-8.953125-20-20v-80c0-11.046875 8.953125-20 20-20h70.9375l105.683594-143.839844c6.539062-8.898437 19.054687-10.816406 27.957031-4.273437 8.902344 6.539062 10.816406 19.054687 4.277344 27.957031l-88.28125 120.15625h231.589843l-88.285156-120.15625c-6.539062-8.902344-4.625-21.417969 4.277344-27.957031 8.902344-6.542969 21.417969-4.628907 27.960938 4.273437l105.679687 143.839844h70.199219c11.046875 0 20 8.957031 20 20zm-275.996094 160v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm80 0v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm-160 0v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm0 0"
+                  ></path>
+                </svg>
+              </span>
+              <span class="cart-quantity"> 99 </span>
+            </a>
+            <div class="cart-dropdown-wrapper">
+              <div class="cart-dropdown-site">
+                <div class="cart-dropdown__title">Giỏ hàng</div>
+                <ul class="cart-dropdown__list">
+                  <li class="cart-dropdown-item flex">
+                    <img
+                      class="cart-dropdown-item__image"
+                      src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp"
+                      alt=""
+                    />
+                    <div class="cart-dropdown-item__content">
+                      <h4 class="name">Gói Thành Viên 4000k</h4>
+                      <span class="quantity">
+                        <button class="quantity__btn">-</button>
+                        <input type="text" value="3" min="1" class="value" />
+                        <button class="quantity__btn">+</button>
+                      </span>
+                      <span class="price">120.000đ</span>
+                      <span class="close">
+                        <i class="pi pi-times"></i>
+                      </span>
+                    </div>
+                  </li>
+                  <li class="cart-dropdown-item flex">
+                    <img
+                      class="cart-dropdown-item__image"
+                      src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp"
+                      alt=""
+                    />
+                    <div class="cart-dropdown-item__content">
+                      <h4 class="name">Gói Thành Viên 4000k</h4>
+                      <span class="quantity">
+                        <button class="quantity__btn">-</button>
+                        <input type="text" value="3" min="1" class="value" />
+                        <button class="quantity__btn">+</button>
+                      </span>
+                      <span class="price">120.000đ</span>
+                      <span class="close">
+                        <i class="pi pi-times"></i>
+                      </span>
+                    </div>
+                  </li>
+                  <li class="cart-dropdown-item flex">
+                    <img
+                      class="cart-dropdown-item__image"
+                      src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp"
+                      alt=""
+                    />
+                    <div class="cart-dropdown-item__content">
+                      <h4 class="name">Gói Thành Viên 4000k</h4>
+                      <span class="quantity">
+                        <button class="quantity__btn">-</button>
+                        <input type="text" value="3" min="1" class="value" />
+                        <button class="quantity__btn">+</button>
+                      </span>
+                      <span class="price">120.000đ</span>
+                      <span class="close">
+                        <i class="pi pi-times"></i>
+                      </span>
+                    </div>
+                  </li>
+                  <li class="cart-dropdown-item flex">
+                    <img
+                      class="cart-dropdown-item__image"
+                      src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp"
+                      alt=""
+                    />
+                    <div class="cart-dropdown-item__content">
+                      <h4 class="name">Gói Thành Viên 4000k</h4>
+                      <span class="quantity">
+                        <button class="quantity__btn">-</button>
+                        <input type="text" value="3" min="1" class="value" />
+                        <button class="quantity__btn">+</button>
+                      </span>
+                      <span class="price">120.000đ</span>
+                      <span class="close">
+                        <i class="pi pi-times"></i>
+                      </span>
+                    </div>
+                  </li>
                 </ul>
-        </div>
+                <div class="cart-dropdown-footer">
+                  <div class="total-wrapper flex justify-content-between">
+                    <span class="total_title">Tổng tiền</span>
+                    <span class="total_value">1.000.123đ</span>
+                  </div>
+                  <div class="btn-action-wrapper flex">
+                    <a class="btn-action" pButton pRipple type="button"
+                      >XEM GIỎ HÀNG</a
+                    >
+                    <a class="btn-action" pButton pRipple type="button"
+                      >THANH TOÁN</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-</div>
+  </div>
 </header>
