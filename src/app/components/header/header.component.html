@@ -120,8 +120,8 @@
                         </a>
                         <div class="account-dropdown-wrapper">
                             <div class="account-dropdown-list">
-                                <div class="account-login-wrapper">
-                                    <div class="account-login-site">
+                                <div id="site-login" class="account-wrapper is-selected">
+                                    <div class="account-site">
                                         <div class="account-header">
                                             <h2 class="account-header__title">ĐĂNG NHẬP TÀI KHOẢN</h2>
                                             <p>Nhập email và mật khẩu của bạn</p>
@@ -136,7 +136,7 @@
                                                     <input id="account-content__password" class="account-content__input" type="password" >
                                                     <label for="account-content__password" class="account-content__label">Mật khẩu</label>
                                                 </div>
-                                                <a class="btn-action" pButton pRipple type="button">XEM GIỎ HÀNG</a>
+                                                <a class="btn-action" pButton pRipple type="button">ĐĂNG NHẬP</a>
                                             </form>
                                             <!-- <div class="social-btn-wrapper">
                                                 <button class="social-btn">
@@ -149,8 +149,31 @@
                                                 </button>
                                             </div> -->
                                             <div class="switch-site-action">
-                                                <div class="switch-action__text">Khách hàng mới <a href="">Tạo tài khoản</a></div>
-                                                <div class="switch-action__text">Quên mật khẩu <a href="">Khôi phục mật khẩu</a></div>
+                                                <div class="switch-action__text">Khách hàng mới <a >Tạo tài khoản</a></div>
+                                                <div class="switch-action__text">Quên mật khẩu <a  (click)="changeSiteAccount()">Khôi phục mật khẩu</a></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div id="site-forgot" class="account-wrapper">
+                                    <div class="account-site">
+                                        <div class="account-header">
+                                            <h2 class="account-header__title">KhÔI PHỤC MẬT KHẨU</h2>
+                                            <p>Nhập email và mật khẩu của bạn</p>
+                                        </div>
+                                        <div class="account-content">
+                                            <form action="">
+                                                <div class="account-content__group">
+                                                    <input id="account-content__email-forgot" class="account-content__input" type="text" >
+                                                    <label for="account-content__email-forgot" class="account-content__label">Email hoặc số điện thoại</label>
+                                                </div>
+                                               
+                                                <a class="btn-action" pButton pRipple type="button">KHÔI PHỤC</a>
+                                            </form>
+                                           
+                                            <div class="switch-site-action">
+                                                <div class="switch-action__text">Bạn đã nhớ mật khẩu?<a (click)="changeSiteAccount()">Trở về đăng nhập</a></div>
                                             </div>
                                         </div>
 

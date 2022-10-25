@@ -1,5 +1,5 @@
 import { DropdownDirective } from './../../directives/dropdown.directive';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import {ViewEncapsulation} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -17,12 +17,23 @@ import { MegaMenuItem } from 'primeng/api';
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit {
- 
+    isSiteLogin=true;
 
-  constructor() { }
+  constructor(private renderer: Renderer2,private el: ElementRef) { }
 
   ngOnInit(): void {
    
   }
-  
+  changeSiteAccount(){
+    this.isSiteLogin=!this.isSiteLogin;
+    let siteLogin=this.el.nativeElement.querySelector("#site-login");
+    let siteForgot=this.el.nativeElement.querySelector("#site-forgot");
+    if(siteLogin.classList.contains('is-selected')){
+      siteLogin.classList.remove('is-selected');
+      siteForgot.classList.add('is-selected')
+    }else{
+      siteForgot.classList.remove('is-selected');
+      siteLogin.classList.add('is-selected')
+    }
+  }
 }
