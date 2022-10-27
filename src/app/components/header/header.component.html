@@ -6,9 +6,7 @@
       <span class="sub-header__site-left"
         >Freeship với đơn từ 250k. Giao hàng hỏa tốc 2h.</span
       >
-      <ul
-        class="sub-header__site-right flex align-items-center justify-content-between"
-      >
+      <ul class="sub-header__site-right">
         <li class="email mr-5">
           <i class="pi pi-telegram pi-envelope mr-2"></i>
           <span class="email-text">Email: cskh@bio-ngon.com</span>
@@ -22,6 +20,74 @@
   </div>
   <div class="main-header-wrapper">
     <div class="main-header flex justify-content-between align-items-center">
+      <div
+        [ngClass]="
+          isShowCategoryDropdown
+            ? 'menu-mobile-wrapper open'
+            : 'menu-mobile-wrapper'
+        "
+      >
+        <div class="menu-mobile-site" (click)="changeShowCategoryDropdown()">
+          <i
+            [ngClass]="isShowCategoryDropdown ? 'pi pi-times' : 'pi pi-bars'"
+          ></i>
+          <div class="category-dropdown-mobile">
+            <ul class="category-dropdown-mobile__list">
+              <li class="category-dropdown-mobile__item">
+                <a href="" class="category-dropdown-mobile__item-link"
+                  >Sản phẩm</a
+                >
+                <ul class="category-dropdown-mobile__sub">
+                  <li>
+                    <a href="">Tất cả sản phẩm</a>
+                  </li>
+                  <li>
+                    <a href="">Trái cây xuất khẩu</a>
+                  </li>
+
+                  <li>
+                    <a href="">Trái cây nhập khẩu</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="category-dropdown-mobile__item">
+                <a href="" class="category-dropdown-mobile__item-link"
+                  >Sản phẩm</a
+                >
+                <ul class="category-dropdown-mobile__sub">
+                  <li>
+                    <a href="">Tất cả sản phẩm</a>
+                  </li>
+                  <li>
+                    <a href="">Trái cây xuất khẩu</a>
+                  </li>
+
+                  <li>
+                    <a href="">Trái cây nhập khẩu</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="category-dropdown-mobile__item">
+                <a href="" class="category-dropdown-mobile__item-link"
+                  >Sản phẩm</a
+                >
+                <ul class="category-dropdown-mobile__sub">
+                  <li>
+                    <a href="">Tất cả sản phẩm</a>
+                  </li>
+                  <li>
+                    <a href="">Trái cây xuất khẩu</a>
+                  </li>
+
+                  <li>
+                    <a href="">Trái cây nhập khẩu</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <div class="logo-wrapper">
         <a routerLink="/" class="logo-wrappe-link">
           <img
@@ -31,9 +97,7 @@
           />
         </a>
       </div>
-      <div
-        class="cate-search-wrapper flex align-items-center justify-content-around"
-      >
+      <div class="cate-search-wrapper">
         <div class="nav-wrapper">
           <ul class="navbar__list">
             <li class="navbar__item navbar__item--active">
@@ -58,8 +122,53 @@
                 </li>
               </ul>
             </li>
+            <li class="navbar__item">
+              <a [routerLink]="['product']" class="navbar__item-link">
+                Sản phẩm
+                <i
+                  class="pi pi-angle-down navbar__item-link-icon"
+                  aria-hidden="true"
+                ></i>
+              </a>
+
+              <ul class="navbar__sub-menu-list">
+                <li class="navbar__sub-menu-item">
+                  <a href="" class="navbar__sub-menu-item-link"
+                    >Trái cây xuất khẩu</a
+                  >
+                </li>
+                <li class="navbar__sub-menu-item">
+                  <a href="" class="navbar__sub-menu-item-link"
+                    >Trái cây nhập khẩu</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="navbar__item">
+              <a [routerLink]="['product']" class="navbar__item-link">
+                Sản phẩm
+                <i
+                  class="pi pi-angle-down navbar__item-link-icon"
+                  aria-hidden="true"
+                ></i>
+              </a>
+
+              <ul class="navbar__sub-menu-list">
+                <li class="navbar__sub-menu-item">
+                  <a href="" class="navbar__sub-menu-item-link"
+                    >Trái cây xuất khẩu</a
+                  >
+                </li>
+                <li class="navbar__sub-menu-item">
+                  <a href="" class="navbar__sub-menu-item-link"
+                    >Trái cây nhập khẩu</a
+                  >
+                </li>
+              </ul>
+            </li>
           </ul>
         </div>
+
         <form action="" class="form-search relative w-7 relative">
           <input
             appDropdown
@@ -159,8 +268,17 @@
       </div>
       <div class="header-icon-wrapper">
         <ul class="header-icon-list flex">
-          <li class="header-icon ml-2">
-            <a class="header-icon-list__link">
+          <li
+            [ngClass]="
+              isShowAccountDropdown
+                ? 'header-icon ml-2 open'
+                : 'header-icon ml-2'
+            "
+          >
+            <a
+              class="header-icon-list__link"
+              (click)="changeShowAccountDropdown()"
+            >
               <span class="icon-box icon-account">
                 <svg
                   class=""
@@ -181,7 +299,7 @@
               </span>
             </a>
             <div class="account-dropdown-wrapper">
-              <div class="account-dropdown-list">
+              <div class="account-dropdown-list height-login">
                 <div id="site-login" class="account-wrapper is-selected">
                   <div class="account-site">
                     <div class="account-header">
@@ -230,7 +348,12 @@
                                             </div> -->
                       <div class="switch-site-action">
                         <div class="switch-action__text">
-                          Khách hàng mới <a>Tạo tài khoản</a>
+                          Khách hàng mới
+                          <a
+                            routerLink="/account/register"
+                            (click)="changeShowAccountDropdown()"
+                            >Tạo tài khoản</a
+                          >
                         </div>
                         <div class="switch-action__text">
                           Quên mật khẩu
@@ -397,6 +520,116 @@
             </div>
           </li>
         </ul>
+      </div>
+      <div class="search-mobile-wrapper">
+        <div class="search-mobile-site">
+          <form action="">
+            <div class="search-mobile-site__inner">
+              <input
+                type="text"
+                [ngClass]="
+                  isShowSearchDropdownMobile
+                    ? 'search-mobile-site__inner-input open'
+                    : 'search-mobile-site__inner-input'
+                "
+                placeholder="Tìm kiếm sản phẩm..."
+              />
+              <div class="search-dropdown search-dropdown--mobile">
+                <ul class="search-result">
+                  <li class="search-result__item">
+                    <a href="" class="search-result__item-link">
+                      <span class="image"
+                        ><img
+                          src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
+                          alt=""
+                      /></span>
+                      <span class="content">
+                        <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                        <span class="price">
+                          <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="search-result__item">
+                    <a href="" class="search-result__item-link">
+                      <span class="image"
+                        ><img
+                          src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
+                          alt=""
+                      /></span>
+                      <span class="content">
+                        <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                        <span class="price">
+                          <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="search-result__item">
+                    <a href="" class="search-result__item-link">
+                      <span class="image"
+                        ><img
+                          src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
+                          alt=""
+                      /></span>
+                      <span class="content">
+                        <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                        <span class="price">
+                          <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="search-result__item">
+                    <a href="" class="search-result__item-link">
+                      <span class="image"
+                        ><img
+                          src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
+                          alt=""
+                      /></span>
+                      <span class="content">
+                        <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                        <span class="price">
+                          <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="search-result__item">
+                    <a href="" class="search-result__item-link">
+                      <span class="image"
+                        ><img
+                          src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
+                          alt=""
+                      /></span>
+                      <span class="content">
+                        <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                        <span class="price">
+                          <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                        </span>
+                      </span>
+                    </a>
+                  </li>
+                  <div class="result-more">
+                    <a href=""> Xem thêm 49 sản phẩm</a>
+                  </div>
+                </ul>
+              </div>
+              <a
+                (click)="changeShowSearchDropdownMobile()"
+                class="search-mobile-site__inner-btn"
+                ><i
+                  [ngClass]="
+                    isShowSearchDropdownMobile
+                      ? 'p-button-icon pi pi-times'
+                      : 'p-button-icon pi pi-search'
+                  "
+                ></i
+              ></a>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

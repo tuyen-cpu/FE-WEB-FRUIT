@@ -41,6 +41,7 @@ a {
 ul {
   list-style: none;
   padding-left: 0;
+  margin: 0;
 }
 
 abbr[title] {
@@ -103,6 +104,12 @@ input {
   overflow: visible;
 }
 
+input:focus {
+  outline: none;
+}
+input:focus-visible {
+  outline: none;
+}
 button,
 select {
   text-transform: none;

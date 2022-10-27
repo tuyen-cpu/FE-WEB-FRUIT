@@ -1,0 +1,66 @@
+<div class="register-wrapper col-12 sm:col-12 md:col-6">
+  <div class="register-site">
+    <div class="register-title">
+      <h2>TẠO TÀI KHOẢN</h2>
+    </div>
+    <form
+      action=""
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()"
+      class="register-form"
+    >
+      <div class="register-form__field">
+        <input
+          type="text"
+          formControlName="lastName"
+          [ngClass]="
+            getLastName.dirty
+              ? 'p-inputtext ng-invalid ng-dirty register-form__field-input'
+              : 'p-inputtext ng-invalid register-form__field-input'
+          "
+          placeholder="Họ"
+        />
+        <span
+          class="p-error block"
+          *ngIf="
+            getLastName.invalid && getLastName.dirty && getLastName.touched
+          "
+          >Lỗi H</span
+        >
+      </div>
+      <div class="register-form__field">
+        <input
+          type="text"
+          formControlName="firstName"
+          class="register-form__field-input"
+          placeholder="Tên"
+        />
+        <span></span>
+      </div>
+
+      <!-- <div class="register-form__field">
+        <input
+          type="email"
+          formControlName="email"
+          class="register-form__field-input"
+          placeholder="Email"
+        />
+        <span></span>
+      </div>
+
+      <div class="register-form__field">
+        <input
+          type="password"
+          class="register-form__field-input"
+          formControlName="password"
+          placeholder="Mật khẩu"
+        />
+        <span></span>
+      </div> -->
+
+      <button type="submit" class="btn-action register-form__btn">
+        Đăng ký
+      </button>
+    </form>
+  </div>
+</div>
