@@ -1,3 +1,4 @@
+import { UserService } from './../../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,7 +20,7 @@ import {
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private userService: UserService) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -37,7 +38,18 @@ export class RegisterComponent implements OnInit {
     });
   }
   onSubmit() {
-    console.log(this.registerForm.invalid, this.registerForm.valid);
+    console.log(this.registerForm.value);
+    this.userService.register(this.registerForm.value).subscribe({
+      next: (response) => {
+        console.log('thanh cong', response);
+        alert(
+          'Đăng ký thành công, vui lòng kiểm tra mail để xác minh tài khoản'
+        );
+      },
+      error: (e) => {
+        console.log(e.error);
+      },
+    });
   }
   get getLastName() {
     return this.registerForm.controls['lastName'];
