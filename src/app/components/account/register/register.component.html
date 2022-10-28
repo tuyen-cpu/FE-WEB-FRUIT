@@ -32,7 +32,11 @@
         <input
           type="text"
           formControlName="firstName"
-          class="register-form__field-input"
+          [ngClass]="
+            getLastName.dirty
+              ? 'p-inputtext ng-invalid ng-dirty register-form__field-input'
+              : 'p-inputtext ng-invalid register-form__field-input'
+          "
           placeholder="Tên"
         />
         <span></span>
@@ -42,7 +46,11 @@
         <input
           type="email"
           formControlName="email"
-          class="register-form__field-input"
+          [ngClass]="
+            getLastName.dirty
+              ? 'p-inputtext ng-invalid ng-dirty register-form__field-input'
+              : 'p-inputtext ng-invalid register-form__field-input'
+          "
           placeholder="Email"
         />
         <span></span>
@@ -51,7 +59,11 @@
       <div class="register-form__field">
         <input
           type="password"
-          class="register-form__field-input"
+          [ngClass]="
+            getLastName.dirty
+              ? 'p-inputtext ng-invalid ng-dirty register-form__field-input'
+              : 'p-inputtext ng-invalid register-form__field-input'
+          "
           formControlName="password"
           placeholder="Mật khẩu"
         />

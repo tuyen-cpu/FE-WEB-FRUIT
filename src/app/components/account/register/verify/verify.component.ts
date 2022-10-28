@@ -1,4 +1,4 @@
-import { UserService } from './../../../../services/user.service';
+import { UserService } from '../../../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';

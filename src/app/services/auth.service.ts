@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class UserService {
-  REST_API = 'http://localhost:3000/api/user';
+  REST_API = 'http://localhost:3000/api/auth';
   constructor(private httpClient: HttpClient) {}
 
   verify(code: string): Observable<any> {
@@ -14,5 +14,8 @@ export class UserService {
   }
   register(form: any): Observable<any> {
     return this.httpClient.post(`${this.REST_API}/process_register`, form);
+  }
+  login(form: any): Observable<any> {
+    return this.httpClient.post(`${this.REST_API}/login`, form);
   }
 }

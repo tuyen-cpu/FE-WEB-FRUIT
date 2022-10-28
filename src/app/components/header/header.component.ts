@@ -1,3 +1,4 @@
+import { UserService } from './../../services/auth.service';
 import { DropdownDirective } from './../../directives/dropdown.directive';
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
@@ -6,12 +7,19 @@ import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { MegaMenuItem } from 'primeng/api';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     ButtonModule,
     MegaMenuModule,
     RouterModule,
@@ -26,9 +34,22 @@ export class HeaderComponent implements OnInit {
   isShowSearchDropdownMobile = false;
   isShowAccountDropdown = false;
   isShowCategoryDropdown = false;
-  constructor(private renderer: Renderer2, private el: ElementRef) {}
+  isLoading = false;
 
-  ngOnInit(): void {}
+  loginForm!: FormGroup;
+  constructor(
+    private renderer: Renderer2,
+    private el: ElementRef,
+    private fb: FormBuilder,
+    private userService: UserService
+  ) {}
+
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: ['', Validators.required],
+      password: '',
+    });
+  }
   changeSiteAccount() {
     let siteLogin = this.el.nativeElement.querySelector('#site-login');
     let siteForgot = this.el.nativeElement.querySelector('#site-forgot');
@@ -58,5 +79,18 @@ export class HeaderComponent implements OnInit {
   }
   changeShowCategoryDropdown() {
     this.isShowCategoryDropdown = !this.isShowCategoryDropdown;
+  }
+  onSubmit() {
+    this.isLoading = true;
+    this.userService.login(this.loginForm.value).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.loginForm.reset();
+      },
+      error: (err) => {
+        alert(err.error.data);
+        this.isLoading = false;
+      },
+    });
   }
 }

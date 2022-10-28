@@ -307,11 +307,16 @@
                       <p>Nhập email và mật khẩu của bạn</p>
                     </div>
                     <div class="account-content">
-                      <form action="">
+                      <form
+                        action=""
+                        [formGroup]="loginForm"
+                        (ngSubmit)="onSubmit()"
+                      >
                         <div class="account-content__group">
                           <input
                             id="account-content__email"
                             class="account-content__input"
+                            formControlName="email"
                             type="text"
                           />
                           <label
@@ -324,6 +329,7 @@
                           <input
                             id="account-content__password"
                             class="account-content__input"
+                            formControlName="password"
                             type="password"
                           />
                           <label
@@ -332,9 +338,15 @@
                             >Mật khẩu</label
                           >
                         </div>
-                        <a class="btn-action" pButton pRipple type="button"
-                          >ĐĂNG NHẬP</a
+                        <button
+                          class="btn-action"
+                          type="submit"
+                          pButton
+                          pRipple
+                          [loading]="isLoading"
                         >
+                          ĐĂNG NHẬP
+                        </button>
                       </form>
                       <!-- <div class="social-btn-wrapper">
                                                 <button class="social-btn">
