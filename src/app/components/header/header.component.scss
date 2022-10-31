@@ -25,10 +25,10 @@
   color: #fff;
 }
 .height-login {
-  height: 320px;
+  height: 100vh;
 }
 .height-forgot {
-  height: 240px;
+  height: 100vh;
 }
 .main-header-wrapper {
   border-bottom: 1px solid rgb(219, 219, 219);
@@ -349,7 +349,6 @@
           .account-dropdown-wrapper {
             visibility: hidden;
             opacity: 0;
-            z-index: -1;
             transform: scale(0.9);
             position: absolute;
             right: 0;
@@ -403,6 +402,32 @@
                     }
                   }
                   .account-content {
+                    .mygroup {
+                      input + span {
+                        position: relative;
+                      }
+
+                      input + span::before {
+                        position: absolute;
+                        right: -20px;
+                        top: 5px;
+                      }
+
+                      input:invalid {
+                        border: 2px solid red;
+                      }
+
+                      input:invalid + span::before {
+                        content: "✖";
+                        color: red;
+                      }
+
+                      input:valid + span::before {
+                        content: "✓";
+                        color: green;
+                      }
+                    }
+
                     .account-content__group {
                       position: relative;
                       margin-bottom: 12px;
@@ -432,12 +457,28 @@
                         transition: transform 0.2s ease-in-out;
                         transition: transform 0.2s ease-in-out;
                       }
-                      .account-content__input:valid + .account-content__label {
-                        transform: translateY(-6px) scale(0.8);
-                      }
 
-                      .account-content__input:focus + .account-content__label {
-                        transform: translateY(-6px) scale(0.8);
+                      // .account-content__input:invalid {
+                      //   border: 2px solid red;
+                      // }
+                      // .account-content__input:valid + .account-content__label {
+                      //   transform: translateY(-6px) scale(0.8);
+                      // }
+                      .account-content__input {
+                        &:valid {
+                          + {
+                            .account-content__label {
+                              transform: translateY(-6px) scale(0.8);
+                            }
+                          }
+                        }
+                        &:focus {
+                          + {
+                            .account-content__label {
+                              transform: translateY(-6px) scale(0.8);
+                            }
+                          }
+                        }
                       }
                     }
                     .btn-action {
@@ -619,6 +660,7 @@
             text-align: center;
             border-radius: 100%;
             background: #f3fdf8;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
             svg {
               width: 18px;
               height: 40px;
@@ -704,6 +746,12 @@
 }
 //sm
 @media screen and (min-width: 576px) {
+  .height-login {
+    height: 320px;
+  }
+  .height-forgot {
+    height: 240px;
+  }
   .main-header {
     padding: 0 10px;
   }

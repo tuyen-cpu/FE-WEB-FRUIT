@@ -27,8 +27,9 @@
             : 'menu-mobile-wrapper'
         "
       >
-        <div class="menu-mobile-site" (click)="changeShowCategoryDropdown()">
+        <div class="menu-mobile-site">
           <i
+            (click)="changeShowCategoryDropdown()"
             [ngClass]="isShowCategoryDropdown ? 'pi pi-times' : 'pi pi-bars'"
           ></i>
           <div class="category-dropdown-mobile">
@@ -279,7 +280,10 @@
               class="header-icon-list__link"
               (click)="changeShowAccountDropdown()"
             >
-              <span class="icon-box icon-account">
+              <span
+                *ngIf="!isShowAccountDropdown"
+                class="icon-box icon-account"
+              >
                 <svg
                   class=""
                   aria-hidden="true"
@@ -297,9 +301,18 @@
                   ></path>
                 </svg>
               </span>
+              <span *ngIf="isShowAccountDropdown" class="icon-box icon--close">
+                <svg class="icon---close" viewBox="0 0 19 19">
+                  <path
+                    d="M9.1923882 8.39339828l7.7781745-7.7781746 1.4142136 1.41421357-7.7781746 7.77817459 7.7781746 7.77817456L16.9705627 19l-7.7781745-7.7781746L1.41421356 19 0 17.5857864l7.7781746-7.77817456L0 2.02943725 1.41421356.61522369 9.1923882 8.39339828z"
+                    fill="currentColor"
+                    fill-rule="evenodd"
+                  ></path>
+                </svg>
+              </span>
             </a>
             <div class="account-dropdown-wrapper">
-              <div class="account-dropdown-list height-login">
+              <div *ngIf="!user" class="account-dropdown-list height-login">
                 <div id="site-login" class="account-wrapper is-selected">
                   <div class="account-site">
                     <div class="account-header">
@@ -307,6 +320,11 @@
                       <p>Nhập email và mật khẩu của bạn</p>
                     </div>
                     <div class="account-content">
+                      <!-- <form class="mygroup">
+                        <label for="fname">First name *: </label>
+                        <input id="fname" name="fname" type="text" required />
+                        <span></span>
+                      </form> -->
                       <form
                         action=""
                         [formGroup]="loginForm"
@@ -318,6 +336,7 @@
                             class="account-content__input"
                             formControlName="email"
                             type="text"
+                            required
                           />
                           <label
                             for="account-content__email"
@@ -331,6 +350,7 @@
                             class="account-content__input"
                             formControlName="password"
                             type="password"
+                            required
                           />
                           <label
                             for="account-content__password"
@@ -390,6 +410,7 @@
                             id="account-content__email-forgot"
                             class="account-content__input"
                             type="text"
+                            required
                           />
                           <label
                             for="account-content__email-forgot"
@@ -414,8 +435,18 @@
                   </div>
                 </div>
               </div>
+              <div *ngIf="user" class="account-dropdown-list height-login">
+                <div id="site-login" class="account-wrapper is-selected">
+                  <div class="account-site">
+                    <div class="account-header">
+                      <button pButton (click)="logout()">Logout</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </li>
+
           <li class="header-icon header-icon__cart ml-4">
             <a class="header-icon-list__link relative" [routerLink]="['cart']">
               <span class="icon-box icon-cart cart-menu" title="Giỏ hàng">
