@@ -1,5 +1,7 @@
+import { EventBusService } from './../../services/event-bus.service';
+import { TokenStorageService } from './../../services/token-storage.service';
 import { UserInforService } from './../../services/user-infor.service';
-import { UserService } from './../../services/auth.service';
+import { AuthService } from './../../services/auth.service';
 import { DropdownDirective } from './../../directives/dropdown.directive';
 import {
   Component,
@@ -47,14 +49,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userSubject!: Subscription;
   user!: User;
   loginForm!: FormGroup;
-
   tokenExpirationTimer: any;
+  eventBusSub?: Subscription;
+
   constructor(
     private renderer: Renderer2,
     private el: ElementRef,
     private fb: FormBuilder,
-    private userService: UserService,
-    private userInforService: UserInforService
+    private authService: AuthService,
+    private userInforService: UserInforService,
+    private tokenStorageService: TokenStorageService,
+    private eventBusService: EventBusService
   ) {}
 
   ngOnInit(): void {
@@ -64,14 +69,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
     this.autoLogin();
 
-    this.userSubject = this.userService.userChange.subscribe((user) => {
+    this.userSubject = this.tokenStorageService.userChange.subscribe((user) => {
       this.user = user;
     });
+    // this.eventBusSub = this.eventBusService.on('logout', () => {
+    //   this.logout();
+    // });
   }
   autoLogin() {
     if (this.userInforService.user) {
-      this.userService.userChange.next(this.userInforService.user);
+      this.tokenStorageService.userChange.next(this.userInforService.user);
     }
+  }
+  getUser() {
+    this.authService.getuser().subscribe({
+      next: (data) => {
+        console.log(data);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
   autoLogout(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
@@ -110,12 +128,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   onSubmit() {
     this.isLoading = true;
-    this.userService.login(this.loginForm.value).subscribe({
+    this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
+        console.log(response);
         this.isLoading = false;
-        this.loginForm.reset();
-        this.userInforService.user = response.data;
-        this.userService.userChange.next(this.userInforService.user);
+        // this.loginForm.reset();
+        this.userInforService.user = {
+          id: response.data.id,
+          username: response.data.username,
+          email: response.data.email,
+          roles: response.data.roles,
+        };
+        this.tokenStorageService.saveToken(response.data.token);
+        this.tokenStorageService.saveRefreshToken(response.data.refreshToken);
+        this.tokenStorageService.userChange.next(this.userInforService.user);
       },
       error: (err) => {
         alert(err.error.data);
@@ -124,22 +150,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
   logout() {
-    this.userService.logout().subscribe({
-      next: (data) => {
-        console.log(data);
-        this.userService.userChange.next(null);
-        this.userInforService.delete();
-      },
-    });
+    // this.authService.logout().subscribe({
+    //   next: (data) => {
+    //     console.log(data);
+    //     this.authService.userChange.next(null);
+    //     this.tokenStorageService.signOut();
+    //   },
+    // });
+    this.tokenStorageService.userChange.next(null);
+    this.tokenStorageService.signOut();
   }
   refreshToekn() {
-    this.userService.refreshToken().subscribe({
-      next: (da) => {
-        console.log(da);
-      },
-    });
+    this.authService
+      .refreshToken(this.tokenStorageService.getRefreshToken() || '')
+      .subscribe({
+        next: (da) => {
+          console.log(da);
+        },
+      });
   }
   ngOnDestroy(): void {
-    this.userSubject.unsubscribe();
+    if (this.userSubject) {
+      this.userSubject.unsubscribe();
+    }
+
+    // if (this.eventBusSub) {
+    //   this.eventBusSub.unsubscribe();
+    // }
   }
 }

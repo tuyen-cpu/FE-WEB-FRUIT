@@ -6,13 +6,16 @@ import { ResponseObject, User } from '../model/user.model';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class AuthService {
   REST_API = 'http://localhost:3000/api/auth';
-  userChange = new BehaviorSubject<any>(null);
+
   constructor(private httpClient: HttpClient) {}
 
   verify(code: string): Observable<any> {
     return this.httpClient.get(`${this.REST_API}/verify?code=${code}`);
+  }
+  getuser(): Observable<any> {
+    return this.httpClient.get('http://localhost:3000/api/user/all');
   }
   register(form: any): Observable<any> {
     return this.httpClient.post(`${this.REST_API}/process_register`, form);
@@ -23,7 +26,9 @@ export class UserService {
   logout(): Observable<any> {
     return this.httpClient.post(`${this.REST_API}/logout`, '');
   }
-  refreshToken() {
-    return this.httpClient.post(`${this.REST_API}/refreshtoken`, {});
+  refreshToken(refreshToken: string) {
+    return this.httpClient.post(`${this.REST_API}/refreshtoken`, {
+      refreshToken: refreshToken,
+    });
   }
 }

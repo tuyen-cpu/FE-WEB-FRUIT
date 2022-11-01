@@ -7,10 +7,16 @@ import { HomeComponent } from './components/home/home.component';
 
 @Component({
   selector: 'app-root',
-  standalone:true,
-  imports: [CommonModule,HeaderComponent,FooterComponent, RouterModule, HomeComponent],
+  standalone: true,
+  imports: [
+    CommonModule,
+    HeaderComponent,
+    FooterComponent,
+    RouterModule,
+    HomeComponent,
+  ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'FE-BAN-HANG';

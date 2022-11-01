@@ -7,6 +7,7 @@ import { User } from '../model/user.model';
 })
 export class UserInforService {
   USER = 'user';
+
   constructor() {}
 
   get user(): User | null {

@@ -1,4 +1,5 @@
-import { UserService } from '../../../../services/auth.service';
+import { AuthService } from './../../../../services/auth.service';
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
@@ -13,12 +14,12 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 export class VerifyComponent implements OnInit {
   message: string = 'ss';
   constructor(
-    private userService: UserService,
+    private authService: AuthService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.userService.verify(this.route.snapshot.queryParams['code']).subscribe({
+    this.authService.verify(this.route.snapshot.queryParams['code']).subscribe({
       next: (response) => {
         this.message = response.data;
         console.log(this.message);
