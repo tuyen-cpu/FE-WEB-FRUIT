@@ -1,4 +1,3 @@
-import { EventBusService } from './../../services/event-bus.service';
 import { TokenStorageService } from './../../services/token-storage.service';
 import { UserInforService } from './../../services/user-infor.service';
 import { AuthService } from './../../services/auth.service';
@@ -58,8 +57,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private authService: AuthService,
     private userInforService: UserInforService,
-    private tokenStorageService: TokenStorageService,
-    private eventBusService: EventBusService
+    private tokenStorageService: TokenStorageService
   ) {}
 
   ngOnInit(): void {
@@ -72,9 +70,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userSubject = this.tokenStorageService.userChange.subscribe((user) => {
       this.user = user;
     });
-    // this.eventBusSub = this.eventBusService.on('logout', () => {
-    //   this.logout();
-    // });
   }
   autoLogin() {
     if (this.userInforService.user) {
@@ -173,9 +168,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.userSubject) {
       this.userSubject.unsubscribe();
     }
-
-    // if (this.eventBusSub) {
-    //   this.eventBusSub.unsubscribe();
-    // }
   }
 }

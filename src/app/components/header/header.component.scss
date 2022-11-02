@@ -328,8 +328,8 @@
     }
     .header-icon-wrapper {
       .header-icon-list {
+        position: relative;
         .header-icon {
-          position: relative;
           &.open {
             .account-dropdown-wrapper {
               z-index: 999;
@@ -349,7 +349,7 @@
           .account-dropdown-wrapper {
             visibility: hidden;
             opacity: 0;
-            transform: scale(0.9);
+            transform: scale(0.1);
             position: absolute;
             right: 0;
             width: 340px;

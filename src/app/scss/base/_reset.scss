@@ -119,7 +119,7 @@ select {
 [type="reset"],
 [type="submit"],
 button {
-  appearance: button;
+  appearance: none;
 }
 
 [type="button"]::-moz-focus-inner,

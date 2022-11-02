@@ -11,6 +11,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Validation } from 'src/app/utils/Validation';
 
 @Component({
   selector: 'app-register',
@@ -21,22 +22,29 @@ import {
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
+  submitted = false;
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.registerForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', Validators.email],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(40),
+    this.registerForm = this.fb.group(
+      {
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        email: ['', [Validators.email, Validators.required]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(40),
+          ],
         ],
-      ],
-    });
+        confirmPassword: ['', [Validators.required]],
+      },
+      {
+        validators: [Validation.match('password', 'confirmPassword')],
+      }
+    );
   }
   onSubmit() {
     console.log(this.registerForm.value);
@@ -52,6 +60,7 @@ export class RegisterComponent implements OnInit {
       },
     });
   }
+
   get getLastName() {
     return this.registerForm.controls['lastName'];
   }
@@ -63,5 +72,11 @@ export class RegisterComponent implements OnInit {
   }
   get getPassword() {
     return this.registerForm.controls['password'];
+  }
+  get getConfirmPassword() {
+    return this.registerForm.controls['confirmPassword'];
+  }
+  get f(): { [key: string]: AbstractControl } {
+    return this.registerForm.controls;
   }
 }

@@ -8,7 +8,10 @@
       text-transform: uppercase;
     }
     .register-form {
+      text-align: center;
       &__field {
+        margin-bottom: 24px;
+        position: relative;
         &-input {
           font-size: $text-large;
           width: 100%;
@@ -18,21 +21,51 @@
           color: #00381a;
           padding: 0 20px;
           font-weight: 500;
-          margin-bottom: 24px;
-          &:hover {
-            border: 1px solid $main-color;
-          }
+          // margin-bottom: 24px;
+          // &:hover {
+          //   border: 1px solid $main-color;
+          // }
           &:focus {
             background: #fff;
             border-color: #ededed;
           }
         }
+        &-message {
+          position: absolute;
+          top: 105%;
+          font-size: $text-medium;
+        }
       }
       &__btn {
         margin: 0;
-        width: 30%;
+        width: 100%;
         text-align: center;
         font-weight: $font-bold;
+        &:disabled {
+          opacity: 0.7;
+          cursor: no-drop;
+        }
+      }
+    }
+  }
+}
+@media screen and (min-width: 576px) {
+  .register-wrapper {
+    .register-site {
+      .register-title {
+      }
+      .register-form {
+        &__field {
+          &-input {
+          }
+          &-message {
+          }
+        }
+        &__btn {
+          width: 40%;
+          &:disabled {
+          }
+        }
       }
     }
   }

@@ -66,7 +66,6 @@ export class AppInterceptor implements HttpInterceptor {
         return this.authService.refreshToken(token).pipe(
           switchMap((response: any) => {
             this.isRefreshing = false;
-
             this.tokenService.saveToken(response.data.accessToken);
             this.tokenService.saveRefreshToken(response.data.refreshToken);
             this.refreshTokenSubject.next(response.data.accessToken);
@@ -92,7 +91,6 @@ export class AppInterceptor implements HttpInterceptor {
     return next.handle(request);
   }
   private addTokenHeader(request: HttpRequest<any>, token: string) {
-    console.log('isRefreshing= ' + this.isRefreshing);
     return request.clone({
       headers: request.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token),
     });

@@ -11,66 +11,128 @@
     >
       <div class="register-form__field">
         <input
-          type="text"
-          formControlName="lastName"
-          [ngClass]="
-            getLastName.dirty
-              ? 'p-inputtext ng-invalid ng-dirty register-form__field-input'
-              : 'p-inputtext ng-invalid register-form__field-input'
-          "
+          id="lastName"
+          class="register-form__field-input"
           placeholder="Họ"
-        />
-        <span
-          class="p-error block"
-          *ngIf="
-            getLastName.invalid && getLastName.dirty && getLastName.touched
-          "
-          >Lỗi H</span
-        >
-      </div>
-      <div class="register-form__field">
-        <input
+          formControlName="lastName"
           type="text"
-          formControlName="firstName"
-          [ngClass]="
-            getLastName.dirty
-              ? 'p-inputtext ng-invalid ng-dirty register-form__field-input'
-              : 'p-inputtext ng-invalid register-form__field-input'
-          "
+          pInputText
+        />
+        <span *ngIf="getLastName.dirty">
+          <small
+            *ngIf="getLastName.errors?.['minlength']||getLastName.errors?.['required']"
+            id="password-help"
+            class="register-form__field-message p-error block"
+          >
+            Họ không được bỏ trống.</small
+          >
+        </span>
+      </div>
+      <div class="register-form__field">
+        <input
+          id="firstName"
+          class="register-form__field-input"
           placeholder="Tên"
+          formControlName="firstName"
+          type="text"
+          pInputText
         />
-        <span></span>
+        <span *ngIf="getFirstName.dirty">
+          <small
+            *ngIf="getFirstName.errors?.['minlength']||getFirstName.errors?.['required']"
+            id="password-help"
+            class="register-form__field-message p-error block"
+          >
+            Tên không được bỏ trống.</small
+          >
+        </span>
       </div>
 
       <div class="register-form__field">
         <input
-          type="email"
-          formControlName="email"
-          [ngClass]="
-            getLastName.dirty
-              ? 'p-inputtext ng-invalid ng-dirty register-form__field-input'
-              : 'p-inputtext ng-invalid register-form__field-input'
-          "
+          id="email"
+          class="register-form__field-input"
           placeholder="Email"
+          formControlName="email"
+          type="email"
+          pInputText
         />
-        <span></span>
+        <span *ngIf="getEmail.dirty">
+          <small
+            *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
+            id="password-help"
+            class="register-form__field-message p-error block"
+          >
+            Email không được bỏ trống.</small
+          >
+          <small
+            *ngIf="getEmail.errors?.['email']"
+            id="password-help"
+            class="register-form__field-message p-error block"
+          >
+            Email sai định dạng. Vd:tuyen@gmail.com</small
+          >
+        </span>
       </div>
 
       <div class="register-form__field">
         <input
-          type="password"
-          [ngClass]="
-            getLastName.dirty
-              ? 'p-inputtext ng-invalid ng-dirty register-form__field-input'
-              : 'p-inputtext ng-invalid register-form__field-input'
-          "
-          formControlName="password"
+          id="password"
+          class="register-form__field-input"
           placeholder="Mật khẩu"
+          formControlName="password"
+          type="password"
+          pInputText
         />
-        <span></span>
+        <span *ngIf="getPassword.dirty">
+          <small
+            *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
+            id="password-help"
+            class="register-form__field-message p-error block"
+          >
+            Mật khẩu phải có ít nhất 6 kí tự.</small
+          >
+          <small
+            *ngIf="getPassword.errors?.['maxlength']"
+            id="password-help"
+            class="register-form__field-message p-error block"
+          >
+            Mật khẩu không được nhiều hơn 40 kí tự.</small
+          >
+        </span>
       </div>
-
-      <button type="submit" class="btn-action register-form__btn">
+      <div class="register-form__field">
+        <input
+          id="confirmpassword"
+          class="register-form__field-input"
+          placeholder="Mật khẩu"
+          type="password"
+          pInputText
+          formControlName="confirmPassword"
+          placeholder="Xác nhận mật khẩu"
+        />
+        <span *ngIf="getConfirmPassword.dirty">
+          <small
+            *ngIf="getConfirmPassword.errors?.['matching']"
+            id="password-help"
+            class="register-form__field-message p-error block"
+          >
+            Mật khẩu không khớp</small
+          >
+          <small
+            *ngIf="getConfirmPassword.errors?.['required']"
+            id="password-help"
+            class="register-form__field-message p-error block"
+          >
+            Mật khẩu trống</small
+          >
+        </span>
+      </div>
+      <button
+        type="submit"
+        [disabled]="!registerForm.valid"
+        class="btn-action register-form__btn"
+      >
         Đăng ký
       </button>
     </form>
