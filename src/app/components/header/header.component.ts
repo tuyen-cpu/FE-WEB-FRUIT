@@ -22,7 +22,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { User } from 'src/app/model/user.model';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import {
   GoogleLoginProvider,
   SocialAuthService,
@@ -69,11 +69,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.socialAuthService.authState.subscribe((user) => {
-      this.socialUser = user;
-      this.authService
-        .loginWithGoogle({ value: this.socialUser.idToken })
-        .subscribe((response) => {
+    this.socialAuthService.authState
+      .pipe(
+        switchMap((response: any) => {
+          return this.authService.loginWithGoogle({ value: response.idToken });
+        })
+      )
+      .subscribe({
+        next: (response) => {
           this.userInforService.user = {
             id: response.data.id,
             username: response.data.username,
@@ -83,9 +86,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.tokenStorageService.saveToken(response.data.token);
           this.tokenStorageService.saveRefreshToken(response.data.refreshToken);
           this.tokenStorageService.userChange.next(this.userInforService.user);
-        });
-      console.log(this.socialUser);
-    });
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+    // this.socialAuthService.authState.subscribe((user) => {
+    //   this.socialUser = user;
+    //   this.authService
+    //     .loginWithGoogle({ value: this.socialUser.idToken })
+    //     .subscribe((response) => {
+    //       this.userInforService.user = {
+    //         id: response.data.id,
+    //         username: response.data.username,
+    //         email: response.data.email,
+    //         roles: response.data.roles,
+    //       };
+    //       this.tokenStorageService.saveToken(response.data.token);
+    //       this.tokenStorageService.saveRefreshToken(response.data.refreshToken);
+    //       this.tokenStorageService.userChange.next(this.userInforService.user);
+    //     });
+    //   console.log(this.socialUser);
+    // });
 
     this.loginForm = this.fb.group({
       email: [null, Validators.required],
