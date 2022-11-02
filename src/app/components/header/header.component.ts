@@ -23,6 +23,12 @@ import {
 } from '@angular/forms';
 import { User } from 'src/app/model/user.model';
 import { Subscription } from 'rxjs';
+import {
+  GoogleLoginProvider,
+  SocialAuthService,
+  SocialLoginModule,
+  SocialUser,
+} from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-header',
@@ -34,6 +40,7 @@ import { Subscription } from 'rxjs';
     MegaMenuModule,
     RouterModule,
     DropdownDirective,
+    SocialLoginModule,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
@@ -50,17 +57,36 @@ export class HeaderComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
   tokenExpirationTimer: any;
   eventBusSub?: Subscription;
-
+  socialUser!: SocialUser;
   constructor(
     private renderer: Renderer2,
     private el: ElementRef,
     private fb: FormBuilder,
     private authService: AuthService,
     private userInforService: UserInforService,
-    private tokenStorageService: TokenStorageService
+    private tokenStorageService: TokenStorageService,
+    private socialAuthService: SocialAuthService
   ) {}
 
   ngOnInit(): void {
+    this.socialAuthService.authState.subscribe((user) => {
+      this.socialUser = user;
+      this.authService
+        .loginWithGoogle({ value: this.socialUser.idToken })
+        .subscribe((response) => {
+          this.userInforService.user = {
+            id: response.data.id,
+            username: response.data.username,
+            email: response.data.email,
+            roles: response.data.roles,
+          };
+          this.tokenStorageService.saveToken(response.data.token);
+          this.tokenStorageService.saveRefreshToken(response.data.refreshToken);
+          this.tokenStorageService.userChange.next(this.userInforService.user);
+        });
+      console.log(this.socialUser);
+    });
+
     this.loginForm = this.fb.group({
       email: [null, Validators.required],
       password: null,
@@ -162,6 +188,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         next: (da) => {
           console.log(da);
         },
+      });
+  }
+  googleSignin() {
+    this.socialAuthService
+      .signIn(GoogleLoginProvider.PROVIDER_ID)
+      .then((data) => {
+        console.log(data);
       });
   }
   ngOnDestroy(): void {

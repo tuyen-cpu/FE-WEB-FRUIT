@@ -23,6 +23,9 @@ export class AuthService {
   login(form: any): Observable<any> {
     return this.httpClient.post(`${this.REST_API}/login`, form);
   }
+  loginWithGoogle(token: {}): Observable<any> {
+    return this.httpClient.post(`${this.REST_API}/google`, token);
+  }
   logout(): Observable<any> {
     return this.httpClient.post(`${this.REST_API}/logout`, '');
   }

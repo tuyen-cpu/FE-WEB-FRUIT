@@ -328,7 +328,7 @@
     }
     .header-icon-wrapper {
       .header-icon-list {
-        position: relative;
+        position: unset;
         .header-icon {
           &.open {
             .account-dropdown-wrapper {
@@ -485,12 +485,30 @@
                       margin: 0;
                     }
                     .social-btn-wrapper {
+                      text-align: center;
+                      display: flex;
                       margin-top: 8px;
                       .social-btn-wrapper {
                         background-color: rgb(221, 75, 57);
                         & + .social-btn-wrapper {
                           margin-right: 4px;
                         }
+                      }
+                      .social-btn {
+                        // background-color: #dd4b39;
+                        // width: 200px;
+                        // padding: 0px 10px 0px 0px;
+                        // border: none;
+                        // color: rgb(255, 255, 255);
+                        // font-weight: 500;
+                        // border-radius: 5px;
+                        display: block;
+                        // margin-bottom: 8px;
+                        // margin: auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-around;
+                        cursor: pointer;
                       }
                     }
                     .switch-site-action {
@@ -747,7 +765,7 @@
 //sm
 @media screen and (min-width: 576px) {
   .height-login {
-    height: 320px;
+    height: 360px;
   }
   .height-forgot {
     height: 240px;
@@ -889,7 +907,6 @@
       .header-icon-wrapper {
         .header-icon-list {
           .header-icon {
-            position: unset;
             &:hover {
               .account-dropdown-wrapper {
               }
@@ -1104,6 +1121,7 @@
       }
       .header-icon-wrapper {
         .header-icon-list {
+          position: relative;
           .header-icon {
             &:hover {
               .account-dropdown-wrapper {
