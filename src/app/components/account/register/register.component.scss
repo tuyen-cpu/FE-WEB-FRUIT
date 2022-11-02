@@ -8,7 +8,6 @@
       text-transform: uppercase;
     }
     .register-form {
-      text-align: center;
       &__field {
         margin-bottom: 24px;
         position: relative;
@@ -16,8 +15,10 @@
           font-size: $text-large;
           width: 100%;
           height: 55px;
-          //   border: 1px solid transparent;
-          background: #ededed;
+          border: 1px solid transparent;
+          border-radius: 0;
+          font-family: $font-family;
+          background: #f3f3f3;
           color: #00381a;
           padding: 0 20px;
           font-weight: 500;
@@ -26,8 +27,10 @@
           //   border: 1px solid $main-color;
           // }
           &:focus {
+            border-radius: 0;
             background: #fff;
             border-color: #ededed;
+            box-shadow: none;
           }
         }
         &-message {
@@ -49,7 +52,7 @@
     }
   }
 }
-@media screen and (min-width: 576px) {
+@media screen and (min-width: 768px) {
   .register-wrapper {
     .register-site {
       .register-title {
@@ -62,7 +65,7 @@
           }
         }
         &__btn {
-          width: 40%;
+          width: 30%;
           &:disabled {
           }
         }
