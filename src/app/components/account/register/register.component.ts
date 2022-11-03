@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { AuthService } from './../../../services/auth.service';
 
 import { Component, OnInit } from '@angular/core';
@@ -23,6 +24,7 @@ import { Validation } from 'src/app/utils/Validation';
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
+    RouterModule,
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],

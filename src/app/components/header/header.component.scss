@@ -652,6 +652,12 @@
                 color: #f30;
                 font-size: 1.4rem;
               }
+              .btn-action-wrapper {
+                .btn-action {
+                  width: 100%;
+                  border-radius: 0;
+                }
+              }
             }
           }
         }

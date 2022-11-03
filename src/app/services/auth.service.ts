@@ -29,6 +29,16 @@ export class AuthService {
   logout(): Observable<any> {
     return this.httpClient.post(`${this.REST_API}/logout`, '');
   }
+
+  forgot(email: string): Observable<any> {
+    return this.httpClient.get(
+      `${this.REST_API}/forgot-password?email=${email}`
+    );
+  }
+
+  reset(formReset: { verifyCode: string; password: string }): Observable<any> {
+    return this.httpClient.post(`${this.REST_API}/reset-password`, formReset);
+  }
   refreshToken(refreshToken: string) {
     return this.httpClient.post(`${this.REST_API}/refreshtoken`, {
       refreshToken: refreshToken,
