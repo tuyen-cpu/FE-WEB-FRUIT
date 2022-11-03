@@ -14,7 +14,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MegaMenuModule } from 'primeng/megamenu';
-import { MegaMenuItem } from 'primeng/api';
 import {
   FormBuilder,
   FormGroup,
@@ -24,7 +23,6 @@ import {
 import { User } from 'src/app/model/user.model';
 import { Subscription, switchMap } from 'rxjs';
 import {
-  GoogleLoginProvider,
   SocialAuthService,
   SocialLoginModule,
   SocialUser,
@@ -52,6 +50,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isShowAccountDropdown = false;
   isShowCategoryDropdown = false;
   isLoading = false;
+
   userSubject!: Subscription;
   user!: User;
   loginForm!: FormGroup;
@@ -59,7 +58,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   eventBusSub?: Subscription;
   socialUser!: SocialUser;
   constructor(
-    private renderer: Renderer2,
     private el: ElementRef,
     private fb: FormBuilder,
     private authService: AuthService,
@@ -69,6 +67,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.listenerSocialAuth();
+    this.initForm();
+    this.autoLogin();
+    this.userSubject = this.tokenStorageService.userChange.subscribe((user) => {
+      this.user = user;
+    });
+  }
+
+  /**
+   * Listener event authen with social: Google:
+   * - Login with google.
+   */
+  listenerSocialAuth() {
     this.socialAuthService.authState
       .pipe(
         switchMap((response: any) => {
@@ -77,53 +88,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (response) => {
-          this.userInforService.user = {
-            id: response.data.id,
-            username: response.data.username,
-            email: response.data.email,
-            roles: response.data.roles,
-          };
-          this.tokenStorageService.saveToken(response.data.token);
-          this.tokenStorageService.saveRefreshToken(response.data.refreshToken);
-          this.tokenStorageService.userChange.next(this.userInforService.user);
+          this.addUserInformationToLocalstorage(response);
         },
         error: (error) => {
           console.log(error);
         },
       });
-    // this.socialAuthService.authState.subscribe((user) => {
-    //   this.socialUser = user;
-    //   this.authService
-    //     .loginWithGoogle({ value: this.socialUser.idToken })
-    //     .subscribe((response) => {
-    //       this.userInforService.user = {
-    //         id: response.data.id,
-    //         username: response.data.username,
-    //         email: response.data.email,
-    //         roles: response.data.roles,
-    //       };
-    //       this.tokenStorageService.saveToken(response.data.token);
-    //       this.tokenStorageService.saveRefreshToken(response.data.refreshToken);
-    //       this.tokenStorageService.userChange.next(this.userInforService.user);
-    //     });
-    //   console.log(this.socialUser);
-    // });
+  }
 
+  initForm(): void {
     this.loginForm = this.fb.group({
       email: [null, Validators.required],
       password: null,
     });
-    this.autoLogin();
-
-    this.userSubject = this.tokenStorageService.userChange.subscribe((user) => {
-      this.user = user;
-    });
   }
+
+  /**
+   * Auto login if has user information from localstorage.
+   */
   autoLogin() {
     if (this.userInforService.user) {
       this.tokenStorageService.userChange.next(this.userInforService.user);
     }
   }
+
   getUser() {
     this.authService.getuser().subscribe({
       next: (data) => {
@@ -134,11 +122,59 @@ export class HeaderComponent implements OnInit, OnDestroy {
       },
     });
   }
+
   autoLogout(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
   }
+
+  /**
+   * Handle when click login.
+   */
+  onLogin() {
+    this.isLoading = true;
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.loginForm.reset();
+        this.addUserInformationToLocalstorage(response);
+      },
+      error: (err) => {
+        alert(err.error.data);
+        this.isLoading = false;
+      },
+    });
+  }
+  /**
+   * @param response {token,refreshToken,userInfo}
+   */
+  addUserInformationToLocalstorage(response: any) {
+    this.userInforService.user = {
+      id: response.data.id,
+      username: response.data.username,
+      email: response.data.email,
+      roles: response.data.roles,
+    };
+    this.tokenStorageService.saveToken(response.data.token);
+    this.tokenStorageService.saveRefreshToken(response.data.refreshToken);
+    this.tokenStorageService.userChange.next(this.userInforService.user);
+  }
+
+  logout() {
+    this.tokenStorageService.userChange.next(null);
+    this.tokenStorageService.signOut();
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubject) {
+      this.userSubject.unsubscribe();
+    }
+  }
+
+  /**
+   * Switch site account login <-> forgot account
+   */
   changeSiteAccount() {
     let siteLogin = this.el.nativeElement.querySelector('#site-login');
     let siteForgot = this.el.nativeElement.querySelector('#site-forgot');
@@ -168,60 +204,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   changeShowCategoryDropdown() {
     this.isShowCategoryDropdown = !this.isShowCategoryDropdown;
-  }
-  onSubmit() {
-    this.isLoading = true;
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.isLoading = false;
-        // this.loginForm.reset();
-        this.userInforService.user = {
-          id: response.data.id,
-          username: response.data.username,
-          email: response.data.email,
-          roles: response.data.roles,
-        };
-        this.tokenStorageService.saveToken(response.data.token);
-        this.tokenStorageService.saveRefreshToken(response.data.refreshToken);
-        this.tokenStorageService.userChange.next(this.userInforService.user);
-      },
-      error: (err) => {
-        alert(err.error.data);
-        this.isLoading = false;
-      },
-    });
-  }
-  logout() {
-    // this.authService.logout().subscribe({
-    //   next: (data) => {
-    //     console.log(data);
-    //     this.authService.userChange.next(null);
-    //     this.tokenStorageService.signOut();
-    //   },
-    // });
-    this.tokenStorageService.userChange.next(null);
-    this.tokenStorageService.signOut();
-  }
-  refreshToekn() {
-    this.authService
-      .refreshToken(this.tokenStorageService.getRefreshToken() || '')
-      .subscribe({
-        next: (da) => {
-          console.log(da);
-        },
-      });
-  }
-  googleSignin() {
-    this.socialAuthService
-      .signIn(GoogleLoginProvider.PROVIDER_ID)
-      .then((data) => {
-        console.log(data);
-      });
-  }
-  ngOnDestroy(): void {
-    if (this.userSubject) {
-      this.userSubject.unsubscribe();
-    }
   }
 }

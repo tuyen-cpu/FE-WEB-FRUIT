@@ -1,0 +1,87 @@
+<div class="login-wrapper col-12 sm:col-12 md:col-6">
+  <div class="login-site">
+    <div class="login-title">
+      <h2>ĐĂNG NHẬP</h2>
+    </div>
+    <form
+      action=""
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="login-form"
+    >
+      <div class="login-form__field">
+        <input
+          id="email"
+          class="login-form__field-input"
+          placeholder="Email"
+          formControlName="email"
+          type="email"
+          pInputText
+        />
+        <span *ngIf="getEmail.dirty">
+          <small
+            *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
+            id="password-help"
+            class="login-form__field-message p-error block"
+          >
+            Email không được bỏ trống.</small
+          >
+          <small
+            *ngIf="getEmail.errors?.['email']"
+            id="password-help"
+            class="login-form__field-message p-error block"
+          >
+            Email sai định dạng. Vd:tuyen@gmail.com</small
+          >
+        </span>
+      </div>
+
+      <div class="login-form__field">
+        <input
+          id="password"
+          class="login-form__field-input"
+          placeholder="Mật khẩu"
+          formControlName="password"
+          type="password"
+          pInputText
+        />
+        <span *ngIf="getPassword.dirty">
+          <small
+            *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
+            id="password-help"
+            class="login-form__field-message p-error block"
+          >
+            Mật khẩu phải có ít nhất 6 kí tự.</small
+          >
+          <small
+            *ngIf="getPassword.errors?.['maxlength']"
+            id="password-help"
+            class="login-form__field-message p-error block"
+          >
+            Mật khẩu không được nhiều hơn 40 kí tự.</small
+          >
+        </span>
+      </div>
+
+      <div class="grid action-wrapper">
+        <button
+          type="submit"
+          [disabled]="!loginForm.valid"
+          class="btn-action login-form__btn col-5 sm:col-4 md:col-4"
+          pButton
+          [loading]="isLoading"
+        >
+          ĐĂNG NHẬP
+        </button>
+        <div class="link-action-wrapper col-5 sm:col-4 md:col-4">
+          <a class="link-action" [routerLink]="['/forgot']">Quên mật khẩu?</a
+          ><br />
+          hoặc
+          <a class="link-action" [routerLink]="['/account/register']"
+            >Đăng ký</a
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

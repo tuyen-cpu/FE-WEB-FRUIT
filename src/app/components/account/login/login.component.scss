@@ -1,13 +1,13 @@
 @import "../../../scss/utils/variable";
-.register-wrapper {
+.login-wrapper {
   margin: auto;
-  .register-site {
-    .register-title {
+  .login-site {
+    .login-title {
       text-align: center;
       font-size: 20px;
       text-transform: uppercase;
     }
-    .register-form {
+    .login-form {
       &__field {
         margin-bottom: 24px;
         position: relative;
@@ -15,7 +15,7 @@
           font-size: $text-large;
           width: 100%;
           height: 55px;
-          // border: 1px solid transparent;
+          //   border: 1px solid transparent;
           border-radius: 0;
           font-family: $font-family;
           background: #ededed;
@@ -39,27 +39,43 @@
           font-size: $text-medium;
         }
       }
+      .action-wrapper {
+        margin-right: unset;
+        margin-left: unset;
+      }
       &__btn {
         margin: 0;
-        width: 100%;
         text-align: center;
         font-weight: $font-bold;
         font-family: $font-family;
         text-transform: uppercase;
+        font-weight: 500;
+        border-radius: 0;
         &:disabled {
           opacity: 0.7;
           cursor: no-drop;
+        }
+      }
+      .link-action-wrapper {
+        margin-left: 20px;
+        font-size: $text-large;
+        .link-action {
+          font-size: $text-large;
+          color: #00381a;
+          font-weight: 500;
+          padding-bottom: 6px;
+          display: inline-block;
         }
       }
     }
   }
 }
 @media screen and (min-width: 768px) {
-  .register-wrapper {
-    .register-site {
-      .register-title {
+  .login-wrapper {
+    .login-site {
+      .login-title {
       }
-      .register-form {
+      .login-form {
         &__field {
           &-input {
           }
@@ -67,7 +83,6 @@
           }
         }
         &__btn {
-          width: 30%;
           &:disabled {
           }
         }

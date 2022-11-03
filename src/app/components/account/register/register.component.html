@@ -132,6 +132,8 @@
         type="submit"
         [disabled]="!registerForm.valid"
         class="btn-action register-form__btn"
+        pButton
+        [loading]="isLoading"
       >
         Đăng ký
       </button>
