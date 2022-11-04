@@ -17,4 +17,9 @@ export default class ProductService {
       `${this.REST_API}/all?categoryId=${categoryId}&price=${price}&page=${page}&size=${size}`
     );
   }
+  search(key: string, page: number = 0, size: number = 10): Observable<any> {
+    return this.httpClient.get(
+      `${this.REST_API}/search?key=${key}&page=${page}&size=${size}`
+    );
+  }
 }

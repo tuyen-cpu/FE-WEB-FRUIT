@@ -8,12 +8,14 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  ViewChild,
 } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MegaMenuModule } from 'primeng/megamenu';
+import { ProgressBarModule } from 'primeng/progressbar';
 import {
   FormBuilder,
   FormGroup,
@@ -21,12 +23,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { User } from 'src/app/model/user.model';
-import { Subscription, switchMap } from 'rxjs';
+import { debounceTime, Subject, Subscription, switchMap } from 'rxjs';
 import {
   SocialAuthService,
   SocialLoginModule,
   SocialUser,
 } from '@abacritt/angularx-social-login';
+import ProductService from 'src/app/services/product.service';
+import { Product } from 'src/app/model/category.model';
+import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
 
 @Component({
   selector: 'app-header',
@@ -35,16 +40,19 @@ import {
     CommonModule,
     ReactiveFormsModule,
     ButtonModule,
+    ProgressBarModule,
     MegaMenuModule,
     RouterModule,
     DropdownDirective,
     SocialLoginModule,
+    HighlighterPipe,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  @ViewChild('searchInput') searchInput!: ElementRef;
   isSiteLogin = true;
   isShowSearchDropdownMobile = false;
   isShowAccountDropdown = false;
@@ -57,13 +65,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   tokenExpirationTimer: any;
   eventBusSub?: Subscription;
   socialUser!: SocialUser;
+  keySearch = '';
+  products: Product[] = [];
+  searchForm!: FormGroup;
+  private subjectKeyup = new Subject<any>();
   constructor(
     private el: ElementRef,
     private fb: FormBuilder,
     private authService: AuthService,
     private userInforService: UserInforService,
     private tokenStorageService: TokenStorageService,
-    private socialAuthService: SocialAuthService
+    private socialAuthService: SocialAuthService,
+    private productService: ProductService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +87,52 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userSubject = this.tokenStorageService.userChange.subscribe((user) => {
       this.user = user;
     });
+    this.searchProduct();
+  }
+  searchProduct() {
+    this.subjectKeyup.pipe(debounceTime(900)).subscribe((key) => {
+      this.isLoading = false;
+      this.productService.search(key, 0, 6).subscribe({
+        next: (response) => {
+          this.products = response.data.content;
+          console.log(response.data);
+        },
+        error: (response) => {
+          console.log(response);
+        },
+      });
+    });
+  }
+  onSubmit() {
+    if (!this.searchForm.valid) return;
+    this.goSearchPage();
+    this.products = [];
+  }
+  goSearchPage() {
+    this.router.navigate(['/product/search'], {
+      queryParams: { query: this.keySearch },
+    });
+  }
+  instantSearch(event: any) {
+    const value = event.target.value;
+    if (this.hasBlankSpaces(value)) {
+      this.products = [];
+      this.isLoading = false;
+      this.searchInput.nativeElement.classList.remove('open');
+      return;
+    }
+    this.searchInput.nativeElement.classList.add('open');
+    this.isLoading = true;
+    this.keySearch = value;
+    this.subjectKeyup.next(value);
+  }
+  /*
+  Validate variable
+  if value of variable is null,
+  empty and has blank spaces
+  */
+  hasBlankSpaces(str: string) {
+    return str === null || str.match(/^ *$/) !== null;
   }
 
   /**
@@ -100,6 +160,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.loginForm = this.fb.group({
       email: [null, Validators.required],
       password: null,
+    });
+    this.searchForm = this.fb.group({
+      inputSearch: ['', Validators.required],
     });
   }
 
@@ -169,6 +232,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.userSubject) {
       this.userSubject.unsubscribe();
+    }
+    if (this.subjectKeyup) {
+      this.subjectKeyup.unsubscribe();
     }
   }
 

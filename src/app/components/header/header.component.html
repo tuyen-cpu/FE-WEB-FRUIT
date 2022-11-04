@@ -146,41 +146,31 @@
                 </li>
               </ul>
             </li>
-            <li class="navbar__item">
-              <a [routerLink]="['product']" class="navbar__item-link">
-                Sản phẩm
-                <i
-                  class="pi pi-angle-down navbar__item-link-icon"
-                  aria-hidden="true"
-                ></i>
-              </a>
-
-              <ul class="navbar__sub-menu-list">
-                <li class="navbar__sub-menu-item">
-                  <a href="" class="navbar__sub-menu-item-link"
-                    >Trái cây xuất khẩu</a
-                  >
-                </li>
-                <li class="navbar__sub-menu-item">
-                  <a href="" class="navbar__sub-menu-item-link"
-                    >Trái cây nhập khẩu</a
-                  >
-                </li>
-              </ul>
-            </li>
           </ul>
         </div>
 
-        <form action="" class="form-search relative w-7 relative">
+        <form
+          (ngSubmit)="onSubmit()"
+          [formGroup]="searchForm"
+          class="form-search relative w-7 relative"
+        >
           <input
+            #searchInput
             appDropdown
+            (keyup)="instantSearch($event)"
             type="text"
+            formControlName="inputSearch"
             class="input-search"
             placeholder="Tìm kiếm sản phẩm"
           />
           <div class="search-dropdown">
+            <p-progressBar
+              [hidden]="!isLoading"
+              mode="indeterminate"
+              [style]="{ height: '6px' }"
+            ></p-progressBar>
             <ul class="search-result">
-              <li class="search-result__item">
+              <li *ngFor="let product of products" class="search-result__item">
                 <a href="" class="search-result__item-link">
                   <span class="image"
                     ><img
@@ -188,82 +178,33 @@
                       alt=""
                   /></span>
                   <span class="content">
-                    <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                    <p
+                      class="name"
+                      [innerHtml]="
+                        product.name | highlighter: keySearch:'partial'
+                      "
+                    ></p>
                     <span class="price">
-                      <span class="mx-3">54,000đ</span><del>60,000đ</del>
+                      <span class="mx-3">{{
+                        product.price | currency: "VND"
+                      }}</span
+                      ><del>60,000đ</del>
                     </span>
                   </span>
                 </a>
               </li>
-              <li class="search-result__item">
-                <a href="" class="search-result__item-link">
-                  <span class="image"
-                    ><img
-                      src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
-                      alt=""
-                  /></span>
-                  <span class="content">
-                    <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                    <span class="price">
-                      <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                    </span>
-                  </span>
-                </a>
-              </li>
-              <li class="search-result__item">
-                <a href="" class="search-result__item-link">
-                  <span class="image"
-                    ><img
-                      src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
-                      alt=""
-                  /></span>
-                  <span class="content">
-                    <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                    <span class="price">
-                      <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                    </span>
-                  </span>
-                </a>
-              </li>
-              <li class="search-result__item">
-                <a href="" class="search-result__item-link">
-                  <span class="image"
-                    ><img
-                      src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
-                      alt=""
-                  /></span>
-                  <span class="content">
-                    <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                    <span class="price">
-                      <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                    </span>
-                  </span>
-                </a>
-              </li>
-              <li class="search-result__item">
-                <a href="" class="search-result__item-link">
-                  <span class="image"
-                    ><img
-                      src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
-                      alt=""
-                  /></span>
-                  <span class="content">
-                    <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                    <span class="price">
-                      <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                    </span>
-                  </span>
-                </a>
-              </li>
+
               <div class="result-more">
-                <a href=""> Xem thêm 49 sản phẩm</a>
+                <a class="cursor-pointer" (click)="goSearchPage()">
+                  Xem thêm kết quả.</a
+                >
               </div>
             </ul>
           </div>
           <button
+            type="submit"
             pButton
             class="search-btn absolute right-0"
-            type="button"
             icon="pi pi-search"
           ></button>
         </form>

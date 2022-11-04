@@ -1,3 +1,4 @@
+import { SearchComponent } from './search/search.component';
 import { ProductListComponent } from './product-list/product-list.component';
 
 import { ProductComponent } from './product.component';
@@ -14,6 +15,10 @@ export const ProductRoutes: Routes = [
       {
         path: 'list',
         component: ProductListComponent,
+      },
+      {
+        path: 'search',
+        component: SearchComponent,
       },
     ],
   },
