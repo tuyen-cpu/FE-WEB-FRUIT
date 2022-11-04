@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ImageService } from './../../../services/image.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Image, Product } from 'src/app/model/category.model';
 
 @Component({
   selector: 'app-product-item',
@@ -9,7 +11,18 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./product-item.component.scss'],
 })
 export class ProductItemComponent implements OnInit {
-  constructor() {}
+  @Input() product!: Product;
+  image!: Image;
+  constructor(private imageService: ImageService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.imageService.getByProductId(this.product.id!).subscribe({
+      next: (response) => {
+        this.image = response.data;
+      },
+      error: (response) => {
+        console.log(response);
+      },
+    });
+  }
 }

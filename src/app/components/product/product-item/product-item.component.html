@@ -9,7 +9,7 @@
           data-src="//product.hstatic.net/200000271661/product/traicay-duaxiem_7ca1dbab69fe45d5a64f9e3b43cbbb01_large.jpg"
           data-lowsrc="//product.hstatic.net/200000271661/product/traicay-duaxiem_7ca1dbab69fe45d5a64f9e3b43cbbb01_large.jpg"
           data-sizes="auto"
-          src="//product.hstatic.net/200000271661/product/traicay-duaxiem_7ca1dbab69fe45d5a64f9e3b43cbbb01_large.jpg"
+          [src]="image.link"
           sizes="197px"
         />
       </picture>
@@ -17,13 +17,15 @@
   </div>
   <div class="product-detail">
     <h3 class="product-detail__name">
-      <a href="" class="product-detail__name-link"
-        >Dừa xiêm trọc Bến Tre size M (450-600g/trái)</a
-      >
+      <a href="" class="product-detail__name-link">{{ product.name }}</a>
     </h3>
     <div class="product-detail__price">
-      <span class="product-detail__price-new">27,000đ</span>
-      <del class="product-detail__price-old">30,000đ</del>
+      <span class="product-detail__price-new">{{
+        product.price | currency: "VND"
+      }}</span>
+      <del class="product-detail__price-old">{{
+        product.price | currency: "VND"
+      }}</del>
     </div>
     <div class="product-wrapper">
       <button class="btn-action">Thêm vào giỏ</button>

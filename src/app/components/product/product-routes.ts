@@ -8,11 +8,11 @@ export const ProductRoutes: Routes = [
     children: [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       {
-        path: 'list',
+        path: 'list/:categoryId',
         component: ProductListComponent,
       },
       {
-        path: 'list/',
+        path: 'list',
         component: ProductListComponent,
       },
     ],
