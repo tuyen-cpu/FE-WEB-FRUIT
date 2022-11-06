@@ -1,5 +1,5 @@
 import { switchMap } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -18,30 +18,61 @@ import { Paginator } from 'src/app/model/paginator.model';
 })
 export class SearchComponent implements OnInit {
   products: Product[] = [];
-  paginator: Paginator = { pageNumber: 0, pageSize: 12, totalElements: 0 };
+  paginator: Paginator = { pageNumber: 0, pageSize: 5, totalElements: 0 };
+  key: string = '';
+  paramsURL: {} = {};
   constructor(
     private productService: ProductService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams
       .pipe(
         switchMap((res: any) => {
-          return this.productService.search(res['query']);
+          console.log('change params', res['query']);
+          this.key = res['query'];
+          if (res['page'] === undefined) {
+            this.paginator.pageNumber = 0;
+          } else {
+            this.paginator.pageNumber = res['page'] - 1;
+          }
+          this.paginator.pageSize = Number(res['size']) || 5;
+          this.paramsURL = { ...this.paramsURL, query: this.key };
+          return this.productService.search(
+            this.key,
+            this.paginator.pageNumber!,
+            this.paginator.pageSize!
+          );
         })
       )
       .subscribe({
         next: (response) => {
+          console.log(response);
           this.paginator.totalElements = response.data.totalPages;
           this.products = response.data.content;
         },
-        error: (response) => {},
+        error: (response) => {
+          console.log(response);
+        },
       });
   }
+
   onPageChange(event: any) {
     console.log(event);
     this.paginator.pageNumber = event.page;
-    //  this.getProducts(this.filter, this.paginator);
+    this.paramsURL = {
+      ...this.paramsURL,
+      page: this.paginator.pageNumber! + 1,
+      size: this.paginator.pageSize,
+    };
+    this.addParams();
+  }
+  addParams() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.paramsURL,
+    });
   }
 }

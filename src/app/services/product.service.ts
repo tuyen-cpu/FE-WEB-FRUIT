@@ -10,8 +10,8 @@ export default class ProductService {
   getProductByCategoryIdAndPriceLessThan(
     categoryId: number,
     price: number,
-    page: number = 0,
-    size: number = 10
+    page: number,
+    size: number
   ): Observable<any> {
     return this.httpClient.get(
       `${this.REST_API}/all?categoryId=${categoryId}&price=${price}&page=${page}&size=${size}`

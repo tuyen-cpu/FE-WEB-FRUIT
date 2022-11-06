@@ -167,7 +167,7 @@
             <p-progressBar
               [hidden]="!isLoading"
               mode="indeterminate"
-              [style]="{ height: '6px' }"
+              [style]="{ height: '2px' }"
             ></p-progressBar>
             <ul class="search-result">
               <li *ngFor="let product of products" class="search-result__item">
@@ -195,8 +195,15 @@
               </li>
 
               <div class="result-more">
-                <a class="cursor-pointer" (click)="goSearchPage()">
+                <a
+                  [hidden]="products.length === 0"
+                  class="cursor-pointer"
+                  (click)="goSearchPage()"
+                >
                   Xem thêm kết quả.</a
+                >
+                <span [hidden]="products.length !== 0"
+                  >Không có kết quả phù hợp.</span
                 >
               </div>
             </ul>

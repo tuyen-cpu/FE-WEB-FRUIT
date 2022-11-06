@@ -48,7 +48,7 @@ export class ProductListComponent implements OnInit {
   isShowFilterCategory = true;
   isShowFilterPrice = true;
 
-  paginator: Paginator = { pageNumber: 0, pageSize: 12, totalElements: 0 };
+  paginator: Paginator = { totalElements: 0 };
 
   priceList: number[] = [50000, 150000, 200000, 500000];
   sortOptionSelected = '';
@@ -91,17 +91,14 @@ export class ProductListComponent implements OnInit {
       .getProductByCategoryIdAndPriceLessThan(
         filter.categoryId,
         filter.price,
-        paginator.pageNumber,
-        paginator.pageSize
+        paginator.pageNumber!,
+        paginator.pageSize!
       )
       .subscribe({
         next: (response) => {
-          console.log('Voà 1');
           this.products = response.data.content;
           this.paginator.totalElements = response.data.totalPages;
-          console.log('vào 2');
           this.isLoading = false;
-          console.log('Voà 3');
         },
         error: (response) => {
           console.log(response);
@@ -111,15 +108,19 @@ export class ProductListComponent implements OnInit {
   }
   changeRouter() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      this.paginator.pageNumber = 0;
       this.filter.categoryId = Number(paramMap.get('categoryId'));
-
       this.getProducts(this.filter, this.paginator);
     });
   }
   changeParams() {
     this.route.queryParams.subscribe((res) => {
-      this.filter.price = res['price'] || 99999999;
+      if (res['page'] === undefined) {
+        this.paginator.pageNumber = 0;
+      } else {
+        this.paginator.pageNumber = res['page'] - 1;
+      }
+      this.paginator.pageSize = Number(res['size']) || 12;
+      this.filter.price = Number(res['price']) || 99999999;
       this.getProducts(this.filter, this.paginator);
     });
   }
@@ -139,15 +140,23 @@ export class ProductListComponent implements OnInit {
   }
   changePrice() {
     this.paramsURL = { price: this.filter.price };
+    this.addParams();
+  }
+  onPageChange(event: any) {
+    this.paginator.pageNumber = event.page;
+    this.paramsURL = {
+      ...this.paramsURL,
+      page: this.paginator.pageNumber! + 1,
+      size: this.paginator.pageSize,
+    };
+    // this.getProducts(this.filter, this.paginator);
+    this.addParams();
+  }
+  addParams() {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: this.paramsURL,
     });
-  }
-  onPageChange(event: any) {
-    console.log(event);
-    this.paginator.pageNumber = event.page;
-    this.getProducts(this.filter, this.paginator);
   }
   changeSort() {}
   trackById(index: number, item: any) {
