@@ -1,3 +1,5 @@
+import { CartItem } from './../../model/cart.model';
+import { CartStorageService } from './../../services/cart-storage.service';
 import { TokenStorageService } from './../../services/token-storage.service';
 import { UserInforService } from './../../services/user-infor.service';
 import { AuthService } from './../../services/auth.service';
@@ -69,6 +71,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   searchForm!: FormGroup;
   private subjectKeyup = new Subject<any>();
+  private cartStorageChange = new Subscription();
+  carts: CartItem[] = [];
+
   constructor(
     private el: ElementRef,
     private fb: FormBuilder,
@@ -77,7 +82,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private tokenStorageService: TokenStorageService,
     private socialAuthService: SocialAuthService,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private cartStorageService: CartStorageService
   ) {}
 
   ngOnInit(): void {
@@ -88,6 +94,41 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.user = user;
     });
     this.searchProduct();
+    this.cartStorageChange = this.cartStorageService.cartItemsChange.subscribe(
+      (data) => {
+        this.carts = data;
+      }
+    );
+  }
+  updateQuantity(element: any, cartItem: CartItem, action: string) {
+    switch (action) {
+      case '-':
+        if (Number(element.value) >= 2) element.value--;
+        break;
+      case '+':
+        element.value++;
+        break;
+      default:
+        if (!Number(element.value) || Number(element.value) < 0) {
+          element.value = Number(1);
+        }
+
+        break;
+    }
+    cartItem.quantity = Number(element.value);
+    this.cartStorageService.updateCart(cartItem);
+  }
+  remove(cartItem: CartItem) {
+    this.cartStorageService.remove(cartItem);
+  }
+  getTotalMoneyCart() {
+    return this.cartStorageService.totalMoneyCart;
+  }
+  getTotalQuantityCart() {
+    return this.cartStorageService.totalQuantityCart;
+  }
+  calcPriceDiscount(price: number, discount: number = 0): number {
+    return price - (price * discount) / 100;
   }
   searchProduct() {
     this.subjectKeyup.pipe(debounceTime(900)).subscribe((key) => {
@@ -235,6 +276,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     if (this.subjectKeyup) {
       this.subjectKeyup.unsubscribe();
+    }
+    if (this.cartStorageChange) {
+      this.cartStorageChange.unsubscribe();
     }
   }
 

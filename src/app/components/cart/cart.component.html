@@ -3,15 +3,16 @@
     <div class="cart-title">
       <h2 class="cart-title__text">Giỏ hàng của bạn</h2>
     </div>
-    <div class="cart-content grid">
+    <div *ngIf="carts.length !== 0" class="cart-content grid">
       <div class="cart-table lg:col-8 md:col-12 sm:col-12">
         <div class="cart-number-item">
           <p class="cart-number-item__text">
-            Bạn đang có <b>7 sản phẩm</b> trong giỏ hàng
+            Bạn đang có <b>{{ getTotalQuantityCart() }} sản phẩm</b> trong giỏ
+            hàng
           </p>
         </div>
         <ul class="cart-list">
-          <li class="cart-item">
+          <li *ngFor="let item of carts" class="cart-item">
             <span
               ><img
                 src="https://product.hstatic.net/200000271661/product/6_da7b88aa791e4ea9a4d1bf90e7588a66_medium.png"
@@ -19,136 +20,49 @@
             /></span>
             <div class="cart-item__infor">
               <p class="cart-item__infor-name">
-                Rau dền Lam baby Hữu cơ (Gói 250g)
+                {{ item.product.name }}
               </p>
-              <p class="cart-item__infor-price">60,000</p>
-              <div class="cart-item__infor-quantity">
-                <button class="btn-qty">-</button>
-                <input
-                  type="text"
-                  class="cart-item__infor-quantity-value"
-                  value="20"
-                />
-                <button class="btn-qty">+</button>
+              <p class="cart-item__infor-price">
+                {{ item.product.price | currency: "VND" }}
+              </p>
+              <div class="flex justify-content-between">
+                <div class="cart-item__infor-quantity">
+                  <button
+                    (click)="updateQuantity(inputQuantityElement, item, '-')"
+                    class="btn-qty"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="text"
+                    class="cart-item__infor-quantity-value"
+                    onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"
+                    maxlength="3"
+                    value="{{ item.quantity }}"
+                    #inputQuantityElement
+                    (input)="updateQuantity(inputQuantityElement, item, '')"
+                  />
+                  <button
+                    (click)="updateQuantity(inputQuantityElement, item, '+')"
+                    class="btn-qty"
+                  >
+                    +
+                  </button>
+                </div>
+                <span class="cart-item__infor-total"
+                  >Thành tiền:
+                  <b>{{
+                    calcPriceDiscount(
+                      item.product.price,
+                      item.product.discount
+                    ) * item.quantity | currency: "VND"
+                  }}</b>
+                </span>
               </div>
-              <span class="cart-item__infor-total"
-                >Thành tiền: <b>180,000đ</b>
-              </span>
-              <a class="cart-item__remove">
+
+              <a (click)="remove(item)" class="cart-item__remove">
                 <i class="pi pi-trash cart-item__remove-icon"></i>
               </a>
-            </div>
-          </li>
-          <li class="cart-item">
-            <span
-              ><img
-                src="https://product.hstatic.net/200000271661/product/6_da7b88aa791e4ea9a4d1bf90e7588a66_medium.png"
-                alt=""
-            /></span>
-            <div class="cart-item__infor">
-              <p class="cart-item__infor-name">
-                Rau dền Lam baby Hữu cơ (Gói 250g)
-              </p>
-              <p class="cart-item__infor-price">60,000</p>
-              <div class="cart-item__infor-quantity">
-                <button class="btn-qty">-</button>
-                <input
-                  type="text"
-                  class="cart-item__infor-quantity-value"
-                  value="20"
-                />
-                <button class="btn-qty">+</button>
-              </div>
-              <span class="cart-item__infor-total"
-                >Thành tiền: <b>180,000đ</b>
-              </span>
-              <div class="cart-item__remove">
-                <i class="pi pi-trash cart-item__remove-icon"></i>
-              </div>
-            </div>
-          </li>
-          <li class="cart-item">
-            <span
-              ><img
-                src="https://product.hstatic.net/200000271661/product/6_da7b88aa791e4ea9a4d1bf90e7588a66_medium.png"
-                alt=""
-            /></span>
-            <div class="cart-item__infor">
-              <p class="cart-item__infor-name">
-                Rau dền Lam baby Hữu cơ (Gói 250g)
-              </p>
-              <p class="cart-item__infor-price">60,000</p>
-              <div class="cart-item__infor-quantity">
-                <button class="btn-qty">-</button>
-                <input
-                  type="text"
-                  class="cart-item__infor-quantity-value"
-                  value="20"
-                />
-                <button class="btn-qty">+</button>
-              </div>
-              <span class="cart-item__infor-total"
-                >Thành tiền: <b>180,000đ</b>
-              </span>
-              <div class="cart-item__remove">
-                <i class="pi pi-trash cart-item__remove-icon"></i>
-              </div>
-            </div>
-          </li>
-          <li class="cart-item">
-            <span
-              ><img
-                src="https://product.hstatic.net/200000271661/product/6_da7b88aa791e4ea9a4d1bf90e7588a66_medium.png"
-                alt=""
-            /></span>
-            <div class="cart-item__infor">
-              <p class="cart-item__infor-name">
-                Rau dền Lam baby Hữu cơ (Gói 250g)
-              </p>
-              <p class="cart-item__infor-price">60,000</p>
-              <div class="cart-item__infor-quantity">
-                <button class="btn-qty">-</button>
-                <input
-                  type="text"
-                  class="cart-item__infor-quantity-value"
-                  value="20"
-                />
-                <button class="btn-qty">+</button>
-              </div>
-              <span class="cart-item__infor-total"
-                >Thành tiền: <b>180,000đ</b>
-              </span>
-              <div class="cart-item__remove">
-                <i class="pi pi-trash cart-item__remove-icon"></i>
-              </div>
-            </div>
-          </li>
-          <li class="cart-item">
-            <span
-              ><img
-                src="https://product.hstatic.net/200000271661/product/6_da7b88aa791e4ea9a4d1bf90e7588a66_medium.png"
-                alt=""
-            /></span>
-            <div class="cart-item__infor">
-              <p class="cart-item__infor-name">
-                Rau dền Lam baby Hữu cơ (Gói 250g)
-              </p>
-              <p class="cart-item__infor-price">60,000</p>
-              <div class="cart-item__infor-quantity">
-                <button class="btn-qty">-</button>
-                <input
-                  type="text"
-                  class="cart-item__infor-quantity-value"
-                  value="20"
-                />
-                <button class="btn-qty">+</button>
-              </div>
-              <span class="cart-item__infor-total"
-                >Thành tiền: <b>180,000đ</b>
-              </span>
-              <div class="cart-item__remove">
-                <i class="pi pi-trash cart-item__remove-icon"></i>
-              </div>
             </div>
           </li>
         </ul>
@@ -169,7 +83,9 @@
           <div class="cart-total__title">Thông tin đơn hàng</div>
           <div class="cart-total__value">
             <span class="cart-total__value-name">Tổng tiền:</span>
-            <span class="cart-total__value-number">180,000đ</span>
+            <span class="cart-total__value-number">{{
+              getTotalMoneyCart() | currency: "VND"
+            }}</span>
           </div>
           <div class="cart-total__desc">
             Phí vận chuyển sẽ được tính ở trang thanh toán. Bạn cũng có thể nhập

@@ -630,6 +630,13 @@ $yellow-btn: #ffba00;
                   height: 20px;
                   border: none;
                   position: relative;
+                  .name {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    display: block;
+                    width: 90%;
+                  }
                   .quantity {
                     display: inline-flex;
                     &__btn {

@@ -1,3 +1,4 @@
+import { CartStorageService } from './../../../services/cart-storage.service';
 import { ImageService } from './../../../services/image.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,7 +15,10 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
 export class ProductItemComponent implements OnInit {
   @Input() product!: Product;
   image!: Image;
-  constructor(private imageService: ImageService) {}
+  constructor(
+    private imageService: ImageService,
+    private cartStorageService: CartStorageService
+  ) {}
 
   ngOnInit(): void {
     this.imageService.getByProductId(this.product.id!).subscribe({
@@ -25,5 +29,9 @@ export class ProductItemComponent implements OnInit {
         console.log(response);
       },
     });
+  }
+  addCart(product: Product) {
+    console.log(product);
+    this.cartStorageService.addToCart({ product: product, quantity: 1 });
   }
 }

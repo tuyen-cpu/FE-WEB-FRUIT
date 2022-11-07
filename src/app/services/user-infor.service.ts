@@ -19,7 +19,7 @@ export class UserInforService {
   }
 
   set user(value: User | null) {
-    localStorage.setItem('user', JSON.stringify(value));
+    localStorage.setItem(this.USER, JSON.stringify(value));
   }
   delete() {
     localStorage.removeItem(this.USER);

@@ -433,84 +433,55 @@
                   ></path>
                 </svg>
               </span>
-              <span class="cart-quantity"> 99 </span>
+              <span class="cart-quantity"> {{ getTotalQuantityCart() }} </span>
             </a>
             <div class="cart-dropdown-wrapper">
               <div class="cart-dropdown-site">
                 <div class="cart-dropdown__title">Giỏ hàng</div>
                 <ul class="cart-dropdown__list">
-                  <li class="cart-dropdown-item flex">
+                  <li
+                    *ngFor="let item of carts"
+                    class="cart-dropdown-item flex"
+                  >
                     <img
                       class="cart-dropdown-item__image"
                       src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp"
                       alt=""
                     />
                     <div class="cart-dropdown-item__content">
-                      <h4 class="name">Gói Thành Viên 4000k</h4>
+                      <h4 class="name">{{ item.product.name }}</h4>
                       <span class="quantity">
-                        <button class="quantity__btn">-</button>
-                        <input type="text" value="3" min="1" class="value" />
-                        <button class="quantity__btn">+</button>
+                        <button
+                          (click)="
+                            updateQuantity(inputQuantityElement, item, '-')
+                          "
+                          class="quantity__btn"
+                        >
+                          -
+                        </button>
+                        <input
+                          type="text"
+                          min="1"
+                          class="value"
+                          value="{{ item.quantity }}"
+                          #inputQuantityElement
+                        />
+                        <button
+                          (click)="
+                            updateQuantity(inputQuantityElement, item, '+')
+                          "
+                          class="quantity__btn"
+                        >
+                          +
+                        </button>
                       </span>
-                      <span class="price">120.000đ</span>
-                      <span class="close">
-                        <i class="pi pi-times"></i>
-                      </span>
-                    </div>
-                  </li>
-                  <li class="cart-dropdown-item flex">
-                    <img
-                      class="cart-dropdown-item__image"
-                      src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp"
-                      alt=""
-                    />
-                    <div class="cart-dropdown-item__content">
-                      <h4 class="name">Gói Thành Viên 4000k</h4>
-                      <span class="quantity">
-                        <button class="quantity__btn">-</button>
-                        <input type="text" value="3" min="1" class="value" />
-                        <button class="quantity__btn">+</button>
-                      </span>
-                      <span class="price">120.000đ</span>
-                      <span class="close">
-                        <i class="pi pi-times"></i>
-                      </span>
-                    </div>
-                  </li>
-                  <li class="cart-dropdown-item flex">
-                    <img
-                      class="cart-dropdown-item__image"
-                      src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp"
-                      alt=""
-                    />
-                    <div class="cart-dropdown-item__content">
-                      <h4 class="name">Gói Thành Viên 4000k</h4>
-                      <span class="quantity">
-                        <button class="quantity__btn">-</button>
-                        <input type="text" value="3" min="1" class="value" />
-                        <button class="quantity__btn">+</button>
-                      </span>
-                      <span class="price">120.000đ</span>
-                      <span class="close">
-                        <i class="pi pi-times"></i>
-                      </span>
-                    </div>
-                  </li>
-                  <li class="cart-dropdown-item flex">
-                    <img
-                      class="cart-dropdown-item__image"
-                      src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp"
-                      alt=""
-                    />
-                    <div class="cart-dropdown-item__content">
-                      <h4 class="name">Gói Thành Viên 4000k</h4>
-                      <span class="quantity">
-                        <button class="quantity__btn">-</button>
-                        <input type="text" value="3" min="1" class="value" />
-                        <button class="quantity__btn">+</button>
-                      </span>
-                      <span class="price">120.000đ</span>
-                      <span class="close">
+                      <span class="price">{{
+                        calcPriceDiscount(
+                          item.product.price,
+                          item.product.discount
+                        ) * item.quantity | currency: "VND"
+                      }}</span>
+                      <span (click)="remove(item)" class="close">
                         <i class="pi pi-times"></i>
                       </span>
                     </div>
@@ -519,7 +490,9 @@
                 <div class="cart-dropdown-footer">
                   <div class="total-wrapper flex justify-content-between">
                     <span class="total_title">Tổng tiền</span>
-                    <span class="total_value">1.000.123đ</span>
+                    <span class="total_value">{{
+                      getTotalMoneyCart() | currency: "VND"
+                    }}</span>
                   </div>
                   <div class="btn-action-wrapper flex">
                     <a class="btn-action" pButton pRipple type="button"
