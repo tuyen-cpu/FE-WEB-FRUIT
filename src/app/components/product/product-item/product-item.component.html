@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="product-item-wrapper">
   <div class="product-img">
     <span class="discount-tag">-{{ product.discount }}%</span>
@@ -9,7 +10,7 @@
           data-src="//product.hstatic.net/200000271661/product/traicay-duaxiem_7ca1dbab69fe45d5a64f9e3b43cbbb01_large.jpg"
           data-lowsrc="//product.hstatic.net/200000271661/product/traicay-duaxiem_7ca1dbab69fe45d5a64f9e3b43cbbb01_large.jpg"
           data-sizes="auto"
-          [lazyLoad]="image.link || ''"
+          [lazyLoad]="image.link ? image.link : ''"
           sizes="197px"
         />
       </picture>
@@ -17,7 +18,7 @@
   </div>
   <div class="product-detail">
     <h3 class="product-detail__name">
-      <a href="" class="product-detail__name-link">{{ product.name }}</a>
+      <a class="product-detail__name-link">{{ product.name }}</a>
     </h3>
     <div class="product-detail__price">
       <span class="product-detail__price-new">{{

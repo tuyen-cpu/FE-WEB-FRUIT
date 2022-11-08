@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <header>
   <div class="" (click)="getUser()">get user</div>
   <div class="sub-header">
@@ -433,7 +434,7 @@
                   ></path>
                 </svg>
               </span>
-              <span class="cart-quantity"> {{ getTotalQuantityCart() }} </span>
+              <span class="cart-quantity"> {{ totalQuantity }} </span>
             </a>
             <div class="cart-dropdown-wrapper">
               <div class="cart-dropdown-site">
@@ -491,7 +492,7 @@
                   <div class="total-wrapper flex justify-content-between">
                     <span class="total_title">Tổng tiền</span>
                     <span class="total_value">{{
-                      getTotalMoneyCart() | currency: "VND"
+                      totalCart | currency: "VND"
                     }}</span>
                   </div>
                   <div class="btn-action-wrapper flex">

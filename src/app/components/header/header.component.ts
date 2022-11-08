@@ -1,5 +1,5 @@
+import { CartItemService } from './../../services/cart-item.service';
 import { CartItem } from './../../model/cart.model';
-import { CartStorageService } from './../../services/cart-storage.service';
 import { TokenStorageService } from './../../services/token-storage.service';
 import { UserInforService } from './../../services/user-infor.service';
 import { AuthService } from './../../services/auth.service';
@@ -18,6 +18,7 @@ import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { ToastModule } from 'primeng/toast';
 import {
   FormBuilder,
   FormGroup,
@@ -25,7 +26,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { User } from 'src/app/model/user.model';
-import { debounceTime, Subject, Subscription, switchMap } from 'rxjs';
+import {
+  debounceTime,
+  mergeMap,
+  of,
+  Subject,
+  Subscription,
+  switchMap,
+} from 'rxjs';
 import {
   SocialAuthService,
   SocialLoginModule,
@@ -34,6 +42,7 @@ import {
 import ProductService from 'src/app/services/product.service';
 import { Product } from 'src/app/model/category.model';
 import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-header',
@@ -48,7 +57,9 @@ import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
     DropdownDirective,
     SocialLoginModule,
     HighlighterPipe,
+    ToastModule,
   ],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -71,9 +82,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   searchForm!: FormGroup;
   private subjectKeyup = new Subject<any>();
-  private cartStorageChange = new Subscription();
+  private cartItemsSubscription!: Subscription;
   carts: CartItem[] = [];
-
+  totalQuantity: number = 0;
+  totalCart: number = 0;
   constructor(
     private el: ElementRef,
     private fb: FormBuilder,
@@ -83,22 +95,58 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private socialAuthService: SocialAuthService,
     private productService: ProductService,
     private router: Router,
-    private cartStorageService: CartStorageService
+    private cartItemService: CartItemService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.listenerSocialAuth();
     this.initForm();
     this.autoLogin();
-    this.userSubject = this.tokenStorageService.userChange.subscribe((user) => {
-      this.user = user;
+
+    this.userSubject = this.tokenStorageService.userChange.subscribe({
+      next: (data) => {
+        this.user = data;
+        if (data) {
+          this.getCartItems(data.id);
+        } else {
+          this.cartItemService.next([]);
+        }
+      },
     });
     this.searchProduct();
-    this.cartStorageChange = this.cartStorageService.cartItemsChange.subscribe(
-      (data) => {
-        this.carts = data;
+    this.cartItemsSubscription = this.cartItemService.cartItemsChange.subscribe(
+      {
+        next: (response) => {
+          this.carts = response;
+          this.loadTotal();
+        },
+        error: (response) => {},
       }
     );
+  }
+  getCartItems(userId: number) {
+    this.cartItemService.getAllByUserId(userId).subscribe({
+      next: (res) => {
+        this.cartItemService.next(res.data.content);
+      },
+    });
+  }
+  loadTotal() {
+    console.log('vao load total');
+    this.totalQuantity = this.carts.reduce((total, current) => {
+      return total + current.quantity;
+    }, 0);
+    this.totalCart = this.carts.reduce((total, current) => {
+      return (
+        total +
+        this.calcPriceDiscount(
+          current.product.price,
+          current.product.discount
+        ) *
+          current.quantity
+      );
+    }, 0);
   }
   updateQuantity(element: any, cartItem: CartItem, action: string) {
     switch (action) {
@@ -116,17 +164,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
         break;
     }
     cartItem.quantity = Number(element.value);
-    this.cartStorageService.updateCart(cartItem);
+    this.cartItemService
+      .update(
+        cartItem.id || 1000,
+        cartItem.quantity,
+        cartItem.product.id || 1000,
+        this.user.id
+      )
+      .subscribe({
+        next: (res) => {
+          this.showSuccessMessage('Success', res.message);
+        },
+        error: (res) => {
+          this.showErrorMessage('Failed', res.error.message);
+          element.value--;
+        },
+      });
   }
   remove(cartItem: CartItem) {
-    this.cartStorageService.remove(cartItem);
+    console.log('xoá', cartItem);
+    this.cartItemService.delete(cartItem.id || 1000).subscribe({
+      next: (res) => {
+        console.log(res.data);
+      },
+    });
   }
-  getTotalMoneyCart() {
-    return this.cartStorageService.totalMoneyCart;
-  }
-  getTotalQuantityCart() {
-    return this.cartStorageService.totalQuantityCart;
-  }
+
   calcPriceDiscount(price: number, discount: number = 0): number {
     return price - (price * discount) / 100;
   }
@@ -277,8 +340,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.subjectKeyup) {
       this.subjectKeyup.unsubscribe();
     }
-    if (this.cartStorageChange) {
-      this.cartStorageChange.unsubscribe();
+    if (this.cartItemsSubscription) {
+      this.cartItemsSubscription.unsubscribe();
     }
   }
 
@@ -314,5 +377,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   changeShowCategoryDropdown() {
     this.isShowCategoryDropdown = !this.isShowCategoryDropdown;
+  }
+  showSuccessMessage(summary: string, detail: string) {
+    this.messageService.add({
+      severity: 'success',
+      summary: summary,
+      detail: detail,
+      life: 1000,
+    });
+  }
+  showErrorMessage(summary: string, detail: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: summary,
+      detail: detail,
+    });
   }
 }
