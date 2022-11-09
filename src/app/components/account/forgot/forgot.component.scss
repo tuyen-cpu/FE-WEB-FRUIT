@@ -1,13 +1,13 @@
 @import "../../../scss/utils/variable";
-.login-wrapper {
+.forgot-wrapper {
   margin: auto;
-  .login-site {
-    .login-title {
+  .forgot-site {
+    .forgot-title {
       text-align: center;
       font-size: 20px;
       text-transform: uppercase;
     }
-    .login-form {
+    .forgot-form {
       &__field {
         margin-bottom: 24px;
         position: relative;
@@ -71,11 +71,11 @@
   }
 }
 @media screen and (min-width: 768px) {
-  .login-wrapper {
-    .login-site {
-      .login-title {
+  .forgot-wrapper {
+    .forgot-site {
+      .forgot-title {
       }
-      .login-form {
+      .forgot-form {
         &__field {
           &-input {
           }

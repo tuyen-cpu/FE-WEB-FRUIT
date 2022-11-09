@@ -7,9 +7,7 @@
             class="product-list-filter__title"
             (click)="toggleFilterCategory()"
           >
-            <span class="product-list-filter__title-name"
-              >Danh mục sản phẩm</span
-            >
+            <span class="product-list-filter__title-name">Categories</span>
             <span class="product-list-filter__title-icon">
               <i
                 [ngClass]="isShowFilterCategory ? 'pi pi-minus' : 'pi pi-plus'"
@@ -54,7 +52,7 @@
       <div class="product-list-filter__price">
         <p-accordion>
           <div class="product-list-filter__title" (click)="toggleFilterPrice()">
-            <span class="product-list-filter__title-name">Giá sản phẩm</span>
+            <span class="product-list-filter__title-name">Price</span>
             <span class="product-list-filter__title-icon">
               <i
                 [ngClass]="isShowFilterPrice ? 'pi pi-minus' : 'pi pi-plus'"
@@ -100,7 +98,7 @@
         class="col-6 sm:col-6 md:col-4 lg:col-3"
       >
         <app-product-item
-          *ngIf="!!product"
+          *ngIf="product"
           [product]="product"
         ></app-product-item>
       </div>

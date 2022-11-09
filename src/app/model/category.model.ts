@@ -10,11 +10,11 @@ export interface Product {
 }
 export interface Category {
   id?: number;
-  name?: string;
+  name: string;
   status?: number;
 }
 
 export interface Image {
   id?: number;
-  link?: string;
+  link: string;
 }

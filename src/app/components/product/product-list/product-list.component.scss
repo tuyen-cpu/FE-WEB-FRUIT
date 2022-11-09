@@ -28,6 +28,7 @@
     max-width: 1320px;
   }
 }
+
 .product-list-wrapper {
   padding-top: 12px;
   .p-component {
@@ -87,11 +88,59 @@
     text-align: right;
   }
   .product-list-paginator {
+    margin-top: 24px;
     .p-component button {
       font-size: $text-large;
     }
   }
 }
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last {
+  background-color: #fff;
+  border-radius: 0;
+  color: #000;
+  border: 1px solid #e1e1e1;
+}
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: #000000;
+  border-color: #000000;
+  color: #ffffff;
+  transition: opacity 150ms linear, color 150ms linear, background 150ms linear;
+  &:not(.p-highlight):hover {
+    background: #000000;
+    border-color: transparent;
+    color: #ffffff;
+  }
+}
+.p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+  background: #000000;
+  border-color: transparent;
+  color: #ffffff;
+}
+.p-paginator .p-paginator-pages .p-paginator-page {
+  background-color: #fff;
+  border-radius: 0;
+  color: #000;
+  border: 1px solid #e1e1e1;
+  border-radius: 0;
+}
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last {
+  min-width: 3.5rem;
+  height: 3.5rem;
+}
+.p-paginator .p-paginator-pages .p-paginator-page {
+  min-width: 3.5rem;
+  height: 3.5rem;
+}
+.p-link:focus {
+  box-shadow: none;
+}
+
 @media screen and (max-width: 991.98px) {
   .product-list-filter {
     display: none;

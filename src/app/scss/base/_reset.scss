@@ -36,6 +36,7 @@ pre {
 a {
   background-color: transparent;
   text-decoration: none;
+  transition: opacity 150ms linear, color 150ms linear, background 150ms linear;
 }
 
 ul {

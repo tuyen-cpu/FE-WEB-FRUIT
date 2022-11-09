@@ -24,6 +24,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { DialogModule } from 'primeng/dialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @Component({
   selector: 'app-product-list',
   standalone: true,
@@ -39,6 +40,7 @@ import { DialogModule } from 'primeng/dialog';
     DropdownModule,
     ProgressBarModule,
     DialogModule,
+    ProgressSpinnerModule,
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
@@ -63,6 +65,7 @@ export class ProductListComponent implements OnInit {
     price: this.priceList[0],
   };
   isLoading: boolean = false;
+
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
@@ -77,6 +80,7 @@ export class ProductListComponent implements OnInit {
       { name: 'A-Z', code: 'AZ' },
       { name: 'Z-A', code: 'ZA' },
     ];
+
     this.changeRouter();
     this.changeParams();
     this.getCategory();
@@ -96,9 +100,11 @@ export class ProductListComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          this.products = response.data.content;
-          this.paginator.totalElements = response.data.totalPages;
-          this.isLoading = false;
+          setTimeout(() => {
+            this.products = response.data.content;
+            this.paginator.totalElements = response.data.totalPages;
+            this.isLoading = false;
+          }, 1200);
         },
         error: (response) => {
           console.log(response);

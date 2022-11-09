@@ -1,7 +1,7 @@
 import { switchMap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductItemComponent } from '../product-item/product-item.component';
 import { Product } from 'src/app/model/category.model';
@@ -15,6 +15,7 @@ import { Paginator } from 'src/app/model/paginator.model';
   imports: [CommonModule, ProductItemComponent, PaginatorModule],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class SearchComponent implements OnInit {
   products: Product[] = [];

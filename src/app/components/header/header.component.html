@@ -1,6 +1,5 @@
 <p-toast></p-toast>
 <header>
-  <div class="" (click)="getUser()">get user</div>
   <div class="sub-header">
     <div
       class="sub-header__site flex align-items-center justify-content-between px-5"
@@ -42,14 +41,18 @@
                 >
                 <ul class="category-dropdown-mobile__sub">
                   <li>
-                    <a href="">Tất cả sản phẩm</a>
+                    <a
+                      (click)="changeShowCategoryDropdown()"
+                      routerLink="/product/list"
+                      >Tất cả sản phẩm</a
+                    >
                   </li>
-                  <li>
-                    <a href="">Trái cây xuất khẩu</a>
-                  </li>
-
-                  <li>
-                    <a href="">Trái cây nhập khẩu</a>
+                  <li *ngFor="let cate of categories">
+                    <a
+                      (click)="changeShowCategoryDropdown()"
+                      routerLink="/product/list/{{ cate.id }}"
+                      >{{ cate.name }}</a
+                    >
                   </li>
                 </ul>
               </li>
@@ -105,7 +108,7 @@
           <ul class="navbar__list">
             <li class="navbar__item navbar__item--active">
               <a [routerLink]="['product']" class="navbar__item-link">
-                Sản phẩm
+                Product
                 <i
                   class="pi pi-angle-down navbar__item-link-icon"
                   aria-hidden="true"
@@ -114,18 +117,25 @@
 
               <ul class="navbar__sub-menu-list">
                 <li class="navbar__sub-menu-item">
-                  <a href="" class="navbar__sub-menu-item-link"
-                    >Trái cây xuất khẩu</a
+                  <a
+                    routerLink="/product/list"
+                    class="navbar__sub-menu-item-link"
+                    >All product</a
                   >
                 </li>
-                <li class="navbar__sub-menu-item">
-                  <a href="" class="navbar__sub-menu-item-link"
-                    >Trái cây nhập khẩu</a
+                <li
+                  *ngFor="let cate of categories"
+                  class="navbar__sub-menu-item"
+                >
+                  <a
+                    routerLink="/product/list/{{ cate.id }}"
+                    class="navbar__sub-menu-item-link"
+                    >{{ cate.name }}</a
                   >
                 </li>
               </ul>
             </li>
-            <li class="navbar__item">
+            <!-- <li class="navbar__item">
               <a [routerLink]="['product']" class="navbar__item-link">
                 Sản phẩm
                 <i
@@ -146,7 +156,7 @@
                   >
                 </li>
               </ul>
-            </li>
+            </li> -->
           </ul>
         </div>
 
@@ -162,7 +172,7 @@
             type="text"
             formControlName="inputSearch"
             class="input-search"
-            placeholder="Tìm kiếm sản phẩm"
+            placeholder="Search product at here..."
           />
           <div class="search-dropdown">
             <p-progressBar
@@ -172,7 +182,7 @@
             ></p-progressBar>
             <ul class="search-result">
               <li *ngFor="let product of products" class="search-result__item">
-                <a href="" class="search-result__item-link">
+                <a routerLink="/product/list" class="search-result__item-link">
                   <span class="image"
                     ><img
                       src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
@@ -261,7 +271,13 @@
                 </svg>
               </span>
             </a>
-            <div class="account-dropdown-wrapper">
+            <div
+              [ngClass]="
+                user
+                  ? 'account-dropdown-wrapper user-info'
+                  : 'account-dropdown-wrapper'
+              "
+            >
               <div *ngIf="!user" class="account-dropdown-list height-login">
                 <div id="site-login" class="account-wrapper is-selected">
                   <div class="account-site">
@@ -407,12 +423,24 @@
                   </div>
                 </div>
               </div>
-              <div *ngIf="user" class="account-dropdown-list height-login">
+              <div *ngIf="user" class="account-dropdown-list">
                 <div id="site-login" class="account-wrapper is-selected">
                   <div class="account-site">
                     <div class="account-header">
-                      <button pButton (click)="logout()">Logout</button>
+                      <!-- <h2 class="mt-2 mb-2">User information</h2> -->
+                      <h6 class="name my-3 text-xl">{{ user.email }}</h6>
                     </div>
+                    <ul>
+                      <li>
+                        <a class="item-info">My account</a>
+                      </li>
+                      <li>
+                        <a class="item-info">Address list</a>
+                      </li>
+                      <li>
+                        <a (click)="logout()" class="item-info">Logout</a>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -488,6 +516,37 @@
                     </div>
                   </li>
                 </ul>
+                <div
+                  *ngIf="carts.length === 0"
+                  class="flex flex-column align-items-center py-4"
+                >
+                  <svg width="81" height="70" viewBox="0 0 81 70">
+                    <g
+                      transform="translate(0 2)"
+                      stroke-width="4"
+                      stroke="#2A7D2E"
+                      fill="none"
+                      fill-rule="evenodd"
+                    >
+                      <circle
+                        stroke-linecap="square"
+                        cx="34"
+                        cy="60"
+                        r="6"
+                      ></circle>
+                      <circle
+                        stroke-linecap="square"
+                        cx="67"
+                        cy="60"
+                        r="6"
+                      ></circle>
+                      <path
+                        d="M22.9360352 15h54.8070373l-4.3391876 30H30.3387146L19.6676025 0H.99560547"
+                      ></path>
+                    </g>
+                  </svg>
+                  <p class="mt-4">Hiện chưa có sản phẩm</p>
+                </div>
                 <div class="cart-dropdown-footer">
                   <div class="total-wrapper flex justify-content-between">
                     <span class="total_title">Tổng tiền</span>
@@ -496,11 +555,21 @@
                     }}</span>
                   </div>
                   <div class="btn-action-wrapper flex">
-                    <a class="btn-action" pButton pRipple type="button"
-                      >XEM GIỎ HÀNG</a
+                    <a
+                      class="btn-action"
+                      routerLink="/cart"
+                      pButton
+                      pRipple
+                      type="button"
+                      >MY CART</a
                     >
-                    <a class="btn-action" pButton pRipple type="button"
-                      >THANH TOÁN</a
+                    <a
+                      routerLink="/checkout"
+                      class="btn-action"
+                      pButton
+                      pRipple
+                      type="button"
+                      >CHECKOUT</a
                     >
                   </div>
                 </div>
@@ -511,7 +580,7 @@
       </div>
       <div class="search-mobile-wrapper">
         <div class="search-mobile-site">
-          <form action="">
+          <form (ngSubmit)="onSubmit()" [formGroup]="searchForm">
             <div class="search-mobile-site__inner">
               <input
                 type="text"
@@ -520,11 +589,18 @@
                     ? 'search-mobile-site__inner-input open'
                     : 'search-mobile-site__inner-input'
                 "
-                placeholder="Tìm kiếm sản phẩm..."
+                #searchInput
+                appDropdown
+                (keyup)="instantSearch($event)"
+                formControlName="inputSearch"
+                placeholder="Search product at here..."
               />
               <div class="search-dropdown search-dropdown--mobile">
                 <ul class="search-result">
-                  <li class="search-result__item">
+                  <li
+                    *ngFor="let product of products"
+                    class="search-result__item"
+                  >
                     <a href="" class="search-result__item-link">
                       <span class="image"
                         ><img
@@ -532,75 +608,30 @@
                           alt=""
                       /></span>
                       <span class="content">
-                        <p class="name">Dưa hấu dài (Trái 2kg)</p>
+                        <p
+                          class="name"
+                          [innerHtml]="
+                            product.name | highlighter: keySearch:'partial'
+                          "
+                        ></p>
                         <span class="price">
                           <span class="mx-3">54,000đ</span><del>60,000đ</del>
                         </span>
                       </span>
                     </a>
                   </li>
-                  <li class="search-result__item">
-                    <a href="" class="search-result__item-link">
-                      <span class="image"
-                        ><img
-                          src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
-                          alt=""
-                      /></span>
-                      <span class="content">
-                        <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                        <span class="price">
-                          <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                        </span>
-                      </span>
-                    </a>
-                  </li>
-                  <li class="search-result__item">
-                    <a href="" class="search-result__item-link">
-                      <span class="image"
-                        ><img
-                          src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
-                          alt=""
-                      /></span>
-                      <span class="content">
-                        <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                        <span class="price">
-                          <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                        </span>
-                      </span>
-                    </a>
-                  </li>
-                  <li class="search-result__item">
-                    <a href="" class="search-result__item-link">
-                      <span class="image"
-                        ><img
-                          src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
-                          alt=""
-                      /></span>
-                      <span class="content">
-                        <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                        <span class="price">
-                          <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                        </span>
-                      </span>
-                    </a>
-                  </li>
-                  <li class="search-result__item">
-                    <a href="" class="search-result__item-link">
-                      <span class="image"
-                        ><img
-                          src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
-                          alt=""
-                      /></span>
-                      <span class="content">
-                        <p class="name">Dưa hấu dài (Trái 2kg)</p>
-                        <span class="price">
-                          <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                        </span>
-                      </span>
-                    </a>
-                  </li>
+
                   <div class="result-more">
-                    <a href=""> Xem thêm 49 sản phẩm</a>
+                    <a
+                      [hidden]="products.length === 0"
+                      class="cursor-pointer"
+                      (click)="goSearchPage()"
+                    >
+                      Xem thêm kết quả.</a
+                    >
+                    <span [hidden]="products.length !== 0"
+                      >Không có kết quả phù hợp.</span
+                    >
                   </div>
                 </ul>
               </div>

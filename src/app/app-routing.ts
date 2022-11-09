@@ -2,6 +2,7 @@ import { AccountRoutes } from './components/account/account-routes';
 import { HomeComponent } from './components/home/home.component';
 
 import { Routes } from '@angular/router';
+import { ProvincesApiService } from './services/provinces-api.service';
 
 export const APP_ROUTES: Routes = [
   { path: '', component: HomeComponent },
@@ -23,5 +24,13 @@ export const APP_ROUTES: Routes = [
       import('./components/account/account-routes').then(
         ({ AccountRoutes }) => AccountRoutes
       ),
+  },
+  {
+    path: 'checkout',
+    loadComponent: () =>
+      import('./components/checkout/checkout.component').then(
+        (c) => c.CheckoutComponent
+      ),
+    providers: [ProvincesApiService],
   },
 ];

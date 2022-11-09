@@ -1,3 +1,4 @@
+import { CategoryService } from './../../services/category.service';
 import { CartItemService } from './../../services/cart-item.service';
 import { CartItem } from './../../model/cart.model';
 import { TokenStorageService } from './../../services/token-storage.service';
@@ -40,7 +41,7 @@ import {
   SocialUser,
 } from '@abacritt/angularx-social-login';
 import ProductService from 'src/app/services/product.service';
-import { Product } from 'src/app/model/category.model';
+import { Category, Product } from 'src/app/model/category.model';
 import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
@@ -84,6 +85,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private subjectKeyup = new Subject<any>();
   private cartItemsSubscription!: Subscription;
   carts: CartItem[] = [];
+  categories: Category[] = [];
   totalQuantity: number = 0;
   totalCart: number = 0;
   constructor(
@@ -96,14 +98,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private router: Router,
     private cartItemService: CartItemService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
     this.listenerSocialAuth();
     this.initForm();
     this.autoLogin();
-
+    this.getCategory();
     this.userSubject = this.tokenStorageService.userChange.subscribe({
       next: (data) => {
         this.user = data;
@@ -132,8 +135,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
       },
     });
   }
+  getCategory() {
+    this.categoryService.getAll().subscribe({
+      next: (res) => {
+        this.categories = res.data;
+      },
+      error: (res) => {},
+    });
+  }
   loadTotal() {
-    console.log('vao load total');
     this.totalQuantity = this.carts.reduce((total, current) => {
       return total + current.quantity;
     }, 0);
@@ -182,7 +192,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
   }
   remove(cartItem: CartItem) {
-    console.log('xoá', cartItem);
     this.cartItemService.delete(cartItem.id || 1000).subscribe({
       next: (res) => {
         console.log(res.data);
