@@ -338,7 +338,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.tokenStorageService.userChange.next(null);
     this.tokenStorageService.signOut();
   }
 

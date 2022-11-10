@@ -11,6 +11,7 @@ export class TokenStorageService {
   constructor() {}
 
   signOut(): void {
+    this.userChange.next(null);
     localStorage.clear();
   }
 

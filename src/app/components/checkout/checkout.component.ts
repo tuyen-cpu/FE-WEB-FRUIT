@@ -1,3 +1,4 @@
+import { TokenStorageService } from 'src/app/services/token-storage.service';
 import {
   FormBuilder,
   FormsModule,
@@ -21,6 +22,8 @@ import { MessageModule } from 'primeng/message';
 import { District, Province, Ward } from 'src/app/model/province.model';
 import { ProvincesApiService } from 'src/app/services/provinces-api.service';
 import { render } from 'creditcardpayments/creditCardPayments';
+import { UserInforService } from 'src/app/services/user-infor.service';
+import { User } from 'src/app/model/user.model';
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -71,7 +74,9 @@ export class CheckoutComponent implements OnInit {
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
     private provincesApi: ProvincesApiService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private userInforService: UserInforService,
+    private tokenStorageService: TokenStorageService
   ) {}
 
   ngOnInit(): void {
@@ -150,5 +155,11 @@ export class CheckoutComponent implements OnInit {
   }
   get notes() {
     return this.infoForm.get('notes');
+  }
+  getUser(): User {
+    return this.userInforService.user!;
+  }
+  logout() {
+    this.tokenStorageService.signOut();
   }
 }

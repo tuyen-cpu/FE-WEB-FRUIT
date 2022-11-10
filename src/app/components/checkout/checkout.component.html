@@ -3,7 +3,10 @@
     class="flex-order-2 md:flex-order-1 col-12 sm:col-12 md:col-12 lg:col-8 grid p-5"
   >
     <div class="col-12 px-3">
-      <!-- <div class="user-information flex align-items-center mb-5">
+      <div
+        *ngIf="getUser()"
+        class="user-information flex align-items-center mb-5"
+      >
         <span class="avatar">
           <img
             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDUwIDUwIj48dGl0bGU+QXJ0Ym9hcmQ8L3RpdGxlPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PHBhdGggZD0iTTAgMGg1MHY1MEgwVjB6IiBmaWxsPSIjRDhEOEQ4Ii8+PHBhdGggZD0iTTI1LjEwMyAyNi4yNDJjMy4yMTIgMCA1LjY0Mi0yLjkyIDUuNjQyLTYuNzg3IDAtMy4wODYtMi41OC01LjcwNS01LjY0Mi01LjcwNS0zLjA2IDAtNS42NCAyLjYyLTUuNjQgNS43MDUgMCAzLjg2NiAyLjQzIDYuNzg3IDUuNjQgNi43ODd6bTAtMTAuNTRjMS45NTIgMCAzLjY3OCAxLjc2MyAzLjY3OCAzLjc1MyAwIDIuNzU3LTEuNTc0IDQuODM1LTMuNjc3IDQuODM1LTIuMTAzIDAtMy42NzctMi4wNzgtMy42NzctNC44MzUgMC0xLjk5IDEuNzI2LTMuNzUzIDMuNjc3LTMuNzUzem0tOC40NSAyMC42MTVsLjE3Ny0xLjg3N2MuMzktMy43NzggNC42OTctNC42MSA4LjI3My00LjYxIDMuNTc3IDAgNy44ODQuODMyIDguMjc0IDQuNTk4bC4xNzYgMS44OWgyLjAxNWwtLjE3Ni0yLjA4Yy0uNDQtNC4xMTctNC4wNjgtNi4zODQtMTAuMjktNi4zODQtNi4yMiAwLTkuODQ2IDIuMjY3LTEwLjI4NyA2LjM5N2wtLjE3NiAyLjA2N2gyLjAxNHoiIGZpbGw9IiNGRkYiLz48L2c+PC9zdmc+"
@@ -12,12 +15,17 @@
         </span>
         <div class="content ml-4">
           <p class="m-0 mb-2">alanwalker (tranquangtuyen3263263@gmail.com)</p>
-          <a class="btn-v cursor-pointer">Logout</a>
+          <a (click)="logout()" class="btn-v cursor-pointer">Logout</a>
         </div>
-      </div> -->
-      <div class="user-information flex align-items-center mb-5">
+      </div>
+      <div
+        *ngIf="!getUser()"
+        class="user-information flex align-items-center mb-5"
+      >
         <span
-          >Do you already have an account?<a class="btn-v cursor-pointer"
+          >Do you already have an account?<a
+            routerLink="/account/login"
+            class="btn-v cursor-pointer"
             >Login</a
           ></span
         >

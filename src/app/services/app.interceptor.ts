@@ -36,6 +36,9 @@ export class AppInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<Object>> {
+    if (req.url.includes('provinces.open-api.vn')) {
+      return next.handle(req);
+    }
     const token = this.tokenService.getToken();
     if (token) {
       req = this.addTokenHeader(req, token);
