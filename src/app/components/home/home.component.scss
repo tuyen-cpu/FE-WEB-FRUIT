@@ -1,0 +1,64 @@
+.home-wrapper {
+  .slide-auto {
+    position: relative;
+    overflow: hidden;
+    .p-carousel-content {
+      position: relative;
+      button {
+        &.ng-star-inserted.p-link {
+          width: 4rem;
+          height: 4rem;
+          background-color: aliceblue;
+        }
+        span {
+          font-size: 1.5rem;
+        }
+        &.p-ripple {
+          position: absolute;
+        }
+        &:first-child {
+          z-index: 999;
+          left: 0;
+        }
+        &:last-child {
+          right: 0;
+        }
+      }
+      .p-carousel-indicators {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+      }
+    }
+    .wave {
+      bottom: -4%;
+    }
+  }
+  .category-home {
+    .cate-bg {
+      overflow: hidden;
+      &-1 {
+        background-color: #fbfaee;
+      }
+      &-2 {
+        background-color: #e4eff0;
+      }
+      &-3 {
+        background-color: #ecf2df;
+      }
+      &-4 {
+        background-color: #e1edf2;
+      }
+      &:hover {
+        .img-wrapper {
+          transform: none;
+        }
+      }
+      .img-wrapper {
+        transform: translate3d(-15px, 0, 0);
+        transition: all 0.3s ease;
+        will-change: transform;
+      }
+    }
+  }
+}

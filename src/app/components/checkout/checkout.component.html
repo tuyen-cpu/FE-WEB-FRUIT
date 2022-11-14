@@ -345,17 +345,18 @@
             <i class="pi pi-angle-left back-icon"></i>
             <span>Back to cart</span>
           </a>
-          <a
+          <button
             pButton
             pRipple
             type="button"
             class="btn-checkout"
             label="Checkout"
             (click)="onSubmit()"
+            [disabled]="infoForm.invalid"
             [loading]="isLoading"
-          ></a>
+          ></button>
         </div>
-        <div id="myPaypalButton"></div>
+        <div [hidden]="infoForm.invalid" id="myPaypalButton"></div>
       </div>
     </div>
   </div>
