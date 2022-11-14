@@ -29,13 +29,16 @@ $yellow-btn: #ffba00;
 }
 @media only screen and (min-width: 1400px) {
   .container {
-    max-width: 1320px;
+    max-width: 1400px;
   }
+}
+header {
+  background-color: $main-color;
 }
 .sub-header {
   &__site {
     font-size: 1.3rem;
-    background-color: $main-color;
+
     color: #fff;
     padding: 8px 0;
     &-right {
@@ -64,6 +67,7 @@ $yellow-btn: #ffba00;
 }
 
 .main-header-wrapper {
+  background-color: #fff;
   border-bottom: 1px solid rgb(219, 219, 219);
   position: relative;
   .menu-mobile-wrapper {
@@ -327,7 +331,7 @@ $yellow-btn: #ffba00;
         }
       }
       .form-search {
-        flex: 1;
+        // flex: 1;
         .input-search {
           padding: 0px 20px;
           &.open {
@@ -369,7 +373,7 @@ $yellow-btn: #ffba00;
                 width: 200px;
                 min-width: 200px;
                 .account-dropdown-list {
-                  height: 150px;
+                  height: 170px;
                   .item-info {
                     color: #677279;
                     font-size: $text-large;
@@ -850,12 +854,12 @@ $yellow-btn: #ffba00;
     height: 240px;
   }
   .main-header {
-    padding: 0 10px;
+    // padding: 0 10px;
   }
 }
 @media screen and (max-width: 575.98px) {
   .main-header {
-    padding: 0 10px;
+    // padding: 0 10px;
   }
   .cart-dropdown-wrapper {
     display: none;
@@ -865,12 +869,21 @@ $yellow-btn: #ffba00;
 //md
 @media screen and (min-width: 768px) {
   .main-header {
-    padding: 0 20px;
+    // padding: 0 20px;
   }
 }
 @media screen and (max-width: 767.98px) {
 }
 @media screen and (max-width: 991.98px) {
+  .main-header-wrapper
+    .main-header
+    .header-icon-wrapper
+    .header-icon-list
+    .header-icon.open
+    .account-dropdown-wrapper.user-info {
+    width: 100vw;
+    height: 100vh;
+  }
   .sub-header {
     &__site {
       &-left {
@@ -994,6 +1007,9 @@ $yellow-btn: #ffba00;
               left: 0;
               right: 0;
               width: 100vw;
+              &.user-info {
+                width: 100vw;
+              }
               .account-dropdown-list {
                 .account-wrapper {
                   .account-site {
@@ -1096,7 +1112,7 @@ $yellow-btn: #ffba00;
 @media screen and (min-width: 992px) {
   .main-header-wrapper {
     .main-header {
-      padding: 0 80px;
+      // padding: 0 80px;
       .menu-mobile-wrapper {
         display: none;
       }

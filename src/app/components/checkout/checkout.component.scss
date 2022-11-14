@@ -93,10 +93,13 @@ $color-btn: #357ebd;
     }
 
     .product-list {
+      font-weight: 500;
       .product-item {
+        margin-bottom: 8px;
         .img-wrapper {
           width: 50px;
           height: 50px;
+          margin-right: 8px;
           .quantity {
             font-size: 0.78em;
             white-space: nowrap;
@@ -127,10 +130,17 @@ $color-btn: #357ebd;
             z-index: 2;
           }
         }
+        .name {
+          flex: 1;
+        }
+        .price {
+          font-weight: 500;
+        }
       }
     }
     .voucher-wrapper {
       border-bottom: $border-bottom;
+      padding-top: 8px;
     }
     .fee-wrapper {
       color: $text-color-light;

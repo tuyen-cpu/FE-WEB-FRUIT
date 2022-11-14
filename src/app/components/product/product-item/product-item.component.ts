@@ -22,7 +22,6 @@ export class ProductItemComponent implements OnInit {
   @Input() product!: Product;
   image!: Image;
   constructor(
-    private imageService: ImageService,
     private cartItemService: CartItemService,
     private userInforService: UserInforService,
     private messageService: MessageService,
@@ -30,16 +29,7 @@ export class ProductItemComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.imageService.getByProductId(this.product.id!).subscribe({
-      next: (response) => {
-        this.image = response.data;
-      },
-      error: (response) => {
-        console.log(response);
-      },
-    });
-  }
+  ngOnInit(): void {}
   addCart(product: Product) {
     if (this.userInforService.user) {
       this.cartItemService

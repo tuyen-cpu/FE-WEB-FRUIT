@@ -25,6 +25,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { LoadingComponent } from 'src/app/utils/loading/loading.component';
 @Component({
   selector: 'app-product-list',
   standalone: true,
@@ -41,6 +42,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ProgressBarModule,
     DialogModule,
     ProgressSpinnerModule,
+    LoadingComponent,
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
@@ -104,7 +106,7 @@ export class ProductListComponent implements OnInit {
             this.products = response.data.content;
             this.paginator.totalElements = response.data.totalPages;
             this.isLoading = false;
-          }, 1200);
+          }, 500);
         },
         error: (response) => {
           console.log(response);

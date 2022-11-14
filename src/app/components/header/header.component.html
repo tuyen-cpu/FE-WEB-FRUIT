@@ -1,8 +1,8 @@
 <p-toast></p-toast>
 <header>
-  <div class="sub-header">
+  <div class="sub-header container">
     <div
-      class="sub-header__site flex align-items-center justify-content-between px-5"
+      class="sub-header__site flex align-items-center justify-content-between"
     >
       <span class="sub-header__site-left"
         >Freeship với đơn từ 250k. Giao hàng hỏa tốc 2h.</span
@@ -20,7 +20,9 @@
     </div>
   </div>
   <div class="main-header-wrapper">
-    <div class="main-header flex justify-content-between align-items-center">
+    <div
+      class="container main-header flex justify-content-between align-items-center"
+    >
       <div
         [ngClass]="
           isShowCategoryDropdown
@@ -135,28 +137,11 @@
                 </li>
               </ul>
             </li>
-            <!-- <li class="navbar__item">
+            <li class="navbar__item">
               <a [routerLink]="['product']" class="navbar__item-link">
-                Sản phẩm
-                <i
-                  class="pi pi-angle-down navbar__item-link-icon"
-                  aria-hidden="true"
-                ></i>
+                About
               </a>
-
-              <ul class="navbar__sub-menu-list">
-                <li class="navbar__sub-menu-item">
-                  <a href="" class="navbar__sub-menu-item-link"
-                    >Trái cây xuất khẩu</a
-                  >
-                </li>
-                <li class="navbar__sub-menu-item">
-                  <a href="" class="navbar__sub-menu-item-link"
-                    >Trái cây nhập khẩu</a
-                  >
-                </li>
-              </ul>
-            </li> -->
+            </li>
           </ul>
         </div>
 
@@ -214,7 +199,7 @@
                   Xem thêm kết quả.</a
                 >
                 <span [hidden]="products.length !== 0"
-                  >Không có kết quả phù hợp.</span
+                  >No matching results.</span
                 >
               </div>
             </ul>
@@ -338,7 +323,7 @@
                         <div class="social-btn">
                           <asl-google-signin-button
                             type="standard"
-                            size="large"
+                            size="medium"
                           ></asl-google-signin-button>
                         </div>
 
@@ -438,6 +423,9 @@
                         <a class="item-info">Address list</a>
                       </li>
                       <li>
+                        <a class="item-info">Orders list</a>
+                      </li>
+                      <li>
                         <a (click)="logout()" class="item-info">Logout</a>
                       </li>
                     </ul>
@@ -474,7 +462,7 @@
                   >
                     <img
                       class="cart-dropdown-item__image"
-                      src="../../../assets/img/product/5_e29c1a8ec6eb4b6380ec254c825df696_small.webp"
+                      [src]="item.product.image.link"
                       alt=""
                     />
                     <div class="cart-dropdown-item__content">
@@ -549,7 +537,7 @@
                 </div>
                 <div class="cart-dropdown-footer">
                   <div class="total-wrapper flex justify-content-between">
-                    <span class="total_title">Tổng tiền</span>
+                    <span class="total_title">Subtotal</span>
                     <span class="total_value">{{
                       totalCart | currency: "VND"
                     }}</span>
@@ -563,14 +551,15 @@
                       type="button"
                       >MY CART</a
                     >
-                    <a
+                    <button
                       routerLink="/checkout"
                       class="btn-action"
                       pButton
                       pRipple
-                      type="button"
-                      >CHECKOUT</a
+                      [disabled]="carts.length === 0"
                     >
+                      CHECKOUT
+                    </button>
                   </div>
                 </div>
               </div>

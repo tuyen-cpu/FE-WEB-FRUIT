@@ -2,22 +2,18 @@
 <div class="cart-wrapper">
   <div class="cart-site container">
     <div class="cart-title">
-      <h2 class="cart-title__text">Giỏ hàng của bạn</h2>
+      <h2 class="cart-title__text">My cart</h2>
     </div>
     <div *ngIf="carts.length !== 0" class="cart-content grid">
       <div class="cart-table lg:col-8 md:col-12 sm:col-12">
         <div class="cart-number-item">
           <p class="cart-number-item__text">
-            Bạn đang có <b>{{ totalQuantity }} sản phẩm</b> trong giỏ hàng
+            You have <b>{{ totalQuantity }} products</b> in your cart.
           </p>
         </div>
         <ul class="cart-list">
           <li *ngFor="let item of carts" class="cart-item">
-            <span
-              ><img
-                src="https://product.hstatic.net/200000271661/product/6_da7b88aa791e4ea9a4d1bf90e7588a66_medium.png"
-                alt=""
-            /></span>
+            <span><img [src]="item.product.image.link" alt="" /></span>
             <div class="cart-item__infor">
               <p class="cart-item__infor-name">
                 {{ item.product.name }}
@@ -67,7 +63,7 @@
           </li>
         </ul>
         <div class="cart-note">
-          <div class="cart-note__title">Ghi chú đơn hàng</div>
+          <div class="cart-note__title">Order notes:</div>
           <div class="cart-note__content">
             <textarea
               rows="5"
@@ -80,24 +76,28 @@
       </div>
       <div class="cart-total lg:col-4 md:col-12 sm:col-12">
         <div class="cart-total-box">
-          <div class="cart-total__title">Thông tin đơn hàng</div>
+          <div class="cart-total__title">Order information</div>
           <div class="cart-total__value">
-            <span class="cart-total__value-name">Tổng tiền:</span>
+            <span class="cart-total__value-name"
+              >Subtotal ({{ totalQuantity }} items):</span
+            >
             <span class="cart-total__value-number">{{
               totalCart | currency: "VND"
             }}</span>
           </div>
           <div class="cart-total__desc">
-            Phí vận chuyển sẽ được tính ở trang thanh toán. Bạn cũng có thể nhập
-            mã giảm giá ở trang thanh toán.
+            Shipping fee will be calculated at the checkout page. You can also
+            enter the discount code at the checkout page.
           </div>
           <div class="cart-total__action">
-            <button class="btn-action">THANH TOÁN</button>
+            <button class="btn-action" routerLink="/checkout">
+              PROCEED TO CHECKOUT
+            </button>
             <a
               [routerLink]="['/product']"
               class="btn-action btn-continue-shopping"
             >
-              Tiếp tục mua hàng
+              Continue shopping
             </a>
           </div>
         </div>
@@ -122,7 +122,7 @@
           ></path>
         </g>
       </svg>
-      <p class="mt-4 text-2xl">Hiện chưa có sản phẩm</p>
+      <p class="mt-4 text-2xl">Cart is empty.</p>
     </div>
   </div>
 </div>

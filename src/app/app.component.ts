@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HomeComponent } from './components/home/home.component';
-
+import { SocialLoginModule } from '@abacritt/angularx-social-login';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -14,6 +14,7 @@ import { HomeComponent } from './components/home/home.component';
     FooterComponent,
     RouterModule,
     HomeComponent,
+    SocialLoginModule,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],

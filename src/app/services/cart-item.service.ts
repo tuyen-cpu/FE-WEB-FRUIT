@@ -34,14 +34,10 @@ export class CartItemService {
       })
       .pipe(
         tap((res: any) => {
-          console.log(res);
           const carts = this.cartItemsChange.getValue();
-          console.log('carts: ', carts);
           let newCarts: any[] = [];
           if (carts.find((e) => e.product.id === res.data.product.id)) {
-            console.log('vao giong ');
             newCarts = carts.map((e) => {
-              console.log('42: ', e.id);
               if (e.product.id === res.data.product.id) {
                 e.quantity++;
                 return e;
@@ -50,16 +46,12 @@ export class CartItemService {
               }
             });
           } else {
-            console.log('vao ko giong ', res.data);
             const ttt = carts.filter((o) => {
-              console.log('54: ', o);
               return o.product.id !== res.data.product.id;
             });
-            console.log(ttt);
             newCarts = [...ttt, res.data];
           }
 
-          console.log(newCarts);
           this.next(newCarts);
         })
       );
@@ -82,7 +74,6 @@ export class CartItemService {
           const newCarts = this.cartItemsChange
             .getValue()
             .map((obj) => (obj.product.id === productId ? res.data : obj));
-          console.log(newCarts);
           this.next(newCarts);
         })
       );
@@ -96,12 +87,19 @@ export class CartItemService {
         const indexOfObject = carts.findIndex((object) => {
           return object.id === id;
         });
-        console.log(indexOfObject);
         carts.splice(indexOfObject, 1);
-        console.log(carts);
         this.next(carts);
       })
     );
+  }
+  deleteByUserId(userId: number) {
+    return this.httpClient
+      .delete(`${this.REST_API}/delete/user/${userId}`)
+      .pipe(
+        tap((res) => {
+          this.next([]);
+        })
+      );
   }
   next(carts: CartItem[]) {
     this.cartItemsChange.next(carts);

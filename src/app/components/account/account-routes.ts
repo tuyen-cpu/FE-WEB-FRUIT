@@ -1,3 +1,4 @@
+import { OrderComponent } from './order/order.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { LoginComponent } from './login/login.component';
 import { VerifyComponent } from './register/verify/verify.component';
@@ -28,6 +29,10 @@ export const AccountRoutes: Routes = [
       {
         path: 'forgot',
         component: ForgotComponent,
+      },
+      {
+        path: 'order',
+        component: OrderComponent,
       },
     ],
   },

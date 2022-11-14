@@ -1,3 +1,4 @@
+import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { AccountRoutes } from './components/account/account-routes';
 import { HomeComponent } from './components/home/home.component';
 
@@ -24,6 +25,7 @@ export const APP_ROUTES: Routes = [
       import('./components/account/account-routes').then(
         ({ AccountRoutes }) => AccountRoutes
       ),
+    providers: [SocialLoginModule],
   },
   {
     path: 'checkout',

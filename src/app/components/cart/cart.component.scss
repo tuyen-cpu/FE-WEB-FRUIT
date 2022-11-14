@@ -85,6 +85,7 @@
             .cart-item__infor {
               margin-left: 20px;
               font-size: $text-large;
+              flex: 1;
               &-name {
                 font-weight: $font-bold;
               }
@@ -199,6 +200,7 @@
             background-color: #e00707;
             margin: 0;
             width: 100%;
+            font-weight: 600;
           }
           .btn-continue-shopping {
             background-color: #fff;

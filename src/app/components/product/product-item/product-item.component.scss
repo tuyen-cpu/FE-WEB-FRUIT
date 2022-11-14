@@ -2,9 +2,11 @@
 
 .product-item-wrapper {
   font-size: $text-medium;
-  padding: 12px 4px;
+  padding: 12px 8px;
   .product-img {
     position: relative;
+    box-shadow: 0 0 13px 0 rgb(0, 0, 0, 0.06);
+    transition: all 0.5s linear;
     .discount-tag {
       position: absolute;
       background: red;
@@ -13,6 +15,9 @@
       color: #fff;
     }
     &__link {
+    }
+    &:hover {
+      box-shadow: 0 0 13px 0 rgb(0, 0, 0, 0.3);
     }
   }
   .product-detail {

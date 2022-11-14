@@ -21,7 +21,7 @@ if (environment.production) {
 //   .catch(err => console.error(err));
 bootstrapApplication(AppComponent, {
   providers: [
-    // {provide: BACKEND_URL, useValue: 'https://photoapp.looknongmodules.com/api'},
+    //  {provide: BACKEND_URL, useValue: 'https://photoapp.looknongmodules.com/api'},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AppInterceptor,

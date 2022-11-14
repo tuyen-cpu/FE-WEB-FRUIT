@@ -1,8 +1,10 @@
+import { Subscription } from 'rxjs';
+import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { TokenStorageService } from './../../../services/token-storage.service';
 import { UserInforService } from './../../../services/user-infor.service';
 import { AuthService } from './../../../services/auth.service';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
@@ -28,14 +30,16 @@ import { Router, RouterModule } from '@angular/router';
     ButtonModule,
     RouterModule,
   ],
+
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
   submitted = false;
 
   isLoading = false;
+  userSupscription!: Subscription;
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -45,6 +49,13 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.userSupscription = this.tokenStorageService.userChange.subscribe(
+      (data) => {
+        if (data) {
+          this.router.navigate(['/']);
+        }
+      }
+    );
     this.loginForm = this.fb.group({
       email: ['', [Validators.email, Validators.required]],
       password: [
@@ -93,5 +104,10 @@ export class LoginComponent implements OnInit {
 
   get f(): { [key: string]: AbstractControl } {
     return this.loginForm.controls;
+  }
+  ngOnDestroy(): void {
+    if (this.userSupscription) {
+      this.userSupscription.unsubscribe();
+    }
   }
 }

@@ -7,6 +7,7 @@ export interface Product {
   quantity?: number;
   status?: number;
   category?: Category[];
+  image: Image;
 }
 export interface Category {
   id?: number;

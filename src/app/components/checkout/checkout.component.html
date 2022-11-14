@@ -135,7 +135,7 @@
             <h4 class="info-title">Address delivery.</h4>
             <div class="field">
               <input
-                id="phone"
+                id="street"
                 placeholder="Street"
                 formControlName="street"
                 [class]="
@@ -269,73 +269,25 @@
   <div class="flex-order-1 md:flex-order-2 col-12 sm:col-12 md:col-12 lg:col-4">
     <div class="sidebar grid px-3">
       <div class="w-full sidebar__title">
-        <h4>Orders (3 items)</h4>
+        <h4>Orders ({{ totalQuantity }})</h4>
       </div>
       <div class="col-12">
         <ul class="product-list max-h-24rem overflow-y-scroll">
           <li
+            *ngFor="let item of cartItems"
             class="product-item flex align-items-center justify-content-between"
           >
             <span class="relative img-wrapper">
-              <img
-                src="https://product.hstatic.net/200000271661/product/6_da7b88aa791e4ea9a4d1bf90e7588a66_small.png"
-                alt=""
-              />
-              <small class="quantity">99</small>
+              <img [src]="item.product.image.link" alt="" />
+              <small class="quantity">{{ item.quantity }}</small>
             </span>
-            <div>
-              <p>DC x OP Luffy Attack T-shirt - White</p>
-              <span>Size: M</span>
+            <div class="name">
+              <p>{{ item.product.name }}</p>
+              <!-- <span>Size: M</span> -->
             </div>
-            <span>420.000đ</span>
-          </li>
-          <li
-            class="product-item flex align-items-center justify-content-between"
-          >
-            <span class="relative img-wrapper">
-              <img
-                src="https://product.hstatic.net/200000271661/product/6_da7b88aa791e4ea9a4d1bf90e7588a66_small.png"
-                alt=""
-              />
-              <small class="quantity">99</small>
-            </span>
-            <div>
-              <p>DC x OP Luffy Attack T-shirt - White</p>
-              <span>Size: M</span>
-            </div>
-            <span>420.000đ</span>
-          </li>
-          <li
-            class="product-item flex align-items-center justify-content-between"
-          >
-            <span class="relative img-wrapper">
-              <img
-                src="https://product.hstatic.net/200000271661/product/6_da7b88aa791e4ea9a4d1bf90e7588a66_small.png"
-                alt=""
-              />
-              <small class="quantity">99</small>
-            </span>
-            <div>
-              <p>DC x OP Luffy Attack T-shirt - White</p>
-              <span>Size: M</span>
-            </div>
-            <span>420.000đ</span>
-          </li>
-          <li
-            class="product-item flex align-items-center justify-content-between"
-          >
-            <span class="relative img-wrapper">
-              <img
-                src="https://product.hstatic.net/200000271661/product/6_da7b88aa791e4ea9a4d1bf90e7588a66_small.png"
-                alt=""
-              />
-              <small class="quantity">99</small>
-            </span>
-            <div>
-              <p>DC x OP Luffy Attack T-shirt - White</p>
-              <span>Size: M</span>
-            </div>
-            <span>420.000đ</span>
+            <span class="price">{{
+              item.product.price | currency: "VND"
+            }}</span>
           </li>
         </ul>
         <div class="voucher-wrapper">
@@ -374,24 +326,24 @@
         </div>
         <div class="fee-wrapper py-2">
           <div class="flex justify-content-between pt-2">
-            <span>Tạm tính:</span>
+            <span>Subtotal ({{ totalQuantity }} items):</span>
             <span>{{ 85400 | currency: "VND" }}</span>
           </div>
           <div class="flex justify-content-between pt-2">
-            <span>Phí vận chuyển:</span>
+            <span>Shipping fee:</span>
             <span>{{ 30000 | currency: "VND" }}</span>
           </div>
         </div>
         <div class="total-wrapper py-3">
           <div class="flex justify-content-between">
-            <span>Tổng cộng:</span>
-            <span class="total-value">{{ 85400 | currency: "VND" }}</span>
+            <span>Total:</span>
+            <span class="total-value">{{ totalCart | currency: "VND" }}</span>
           </div>
         </div>
         <div class="btn-action-wrapper flex justify-content-between">
           <a routerLink="/cart" class="flex align-items-center back-cart">
             <i class="pi pi-angle-left back-icon"></i>
-            <span>Quay về giỏ hàng</span>
+            <span>Back to cart</span>
           </a>
           <a
             pButton
@@ -399,6 +351,8 @@
             type="button"
             class="btn-checkout"
             label="Checkout"
+            (click)="onSubmit()"
+            [loading]="isLoading"
           ></a>
         </div>
         <div id="myPaypalButton"></div>

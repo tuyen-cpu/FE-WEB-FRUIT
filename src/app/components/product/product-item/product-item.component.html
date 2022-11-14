@@ -10,7 +10,7 @@
           data-src="//product.hstatic.net/200000271661/product/traicay-duaxiem_7ca1dbab69fe45d5a64f9e3b43cbbb01_large.jpg"
           data-lowsrc="//product.hstatic.net/200000271661/product/traicay-duaxiem_7ca1dbab69fe45d5a64f9e3b43cbbb01_large.jpg"
           data-sizes="auto"
-          [lazyLoad]="image.link ? image.link : ''"
+          [lazyLoad]="product.image.link ? product.image.link : ''"
           sizes="197px"
         />
       </picture>
@@ -31,9 +31,7 @@
       }}</del>
     </div>
     <div class="product-wrapper">
-      <button class="btn-action" (click)="addCart(product)">
-        Thêm vào giỏ
-      </button>
+      <button class="btn-action" (click)="addCart(product)">Add to cart</button>
     </div>
   </div>
 </div>

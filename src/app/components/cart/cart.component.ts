@@ -61,7 +61,6 @@ export class CartComponent implements OnInit, OnDestroy {
       return total + current.quantity;
     }, 0);
     this.totalCart = this.carts.reduce((total, current) => {
-      console.log(current);
       return (
         total +
         this.calcPriceDiscount(
