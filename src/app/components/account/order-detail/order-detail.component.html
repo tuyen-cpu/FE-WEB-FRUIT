@@ -1,0 +1,111 @@
+<div class="order-detail-wrapper container">
+  <div class="title text-center mb-6">
+    <h2 class="title-order-detail">CHI TIẾT ĐƠN HÀNG</h2>
+  </div>
+  <div class="grid">
+    <div class="account-side col-12 sm:col-12 md:12 lg:col-3">
+      <h5 class="title text-3xl uppercase">Account</h5>
+      <ul class="text-2xl">
+        <li>
+          <a class="block py-2">
+            <i class="pi pi-circle"></i> Account information</a
+          >
+        </li>
+        <li>
+          <a class="block py-2"><i class="pi pi-circle"></i> Address list</a>
+        </li>
+        <li>
+          <a class="block py-2"><i class="pi pi-circle"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-12 sm:col-12 md:12 lg:col-9">
+      <div class="order-information">
+        <div class="title text-2xl mb-3">
+          <b class="font-medium">Order: H-{{ order.id }}</b
+          >, Đặt lúc — {{ order.createdDate | date: "M/d/yy, h:mm a" }}
+        </div>
+        <div class="text-xl mb-2">
+          Đơn hàng của bạn đã hủy lúc 09/11/2022, 11:05SA
+        </div>
+        <a class="inline-block text-2xl mt-3">Back to account</a>
+      </div>
+      <div class="mt-4">
+        <p-table
+          [value]="orderDetails"
+          responsiveLayout="stack"
+          [breakpoint]="'960px'"
+          styleClass="p-datatable-gridlines"
+        >
+          <!-- <ng-template pTemplate="caption"> Stack </ng-template> -->
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th></th>
+              <th>Product</th>
+              <th>ID Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Discount</th>
+              <th>Total</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-orderdetail let-columns="columns">
+            <tr>
+              <td>
+                <span class="p-column-title"></span
+                ><a routerLink="/" class="order-detail-link"
+                  ><img
+                    [src]="orderdetail.product.image.link"
+                    width="100px"
+                    alt=""
+                /></a>
+              </td>
+              <td>
+                <span class="p-column-title">Product</span
+                >{{ orderdetail.product.name }}
+              </td>
+              <td>
+                <span class="p-column-title">ID Product</span
+                >{{ orderdetail.product.id }}
+              </td>
+              <td>
+                <span class="p-column-title">Quantity</span
+                >{{ orderdetail.quantity }}
+              </td>
+              <td>
+                <span class="p-column-title">Price</span
+                >{{ orderdetail.price | myCurrency: orderdetail.price:"VND" }}
+              </td>
+              <td>
+                <span class="p-column-title">Discount</span>-{{
+                  orderdetail.discount
+                }}%
+              </td>
+              <td>
+                <span class="p-column-title">Total</span>
+                {{
+                  (orderdetail.price -
+                    (orderdetail.price * orderdetail.discount) / 100) *
+                    orderdetail.quantity | myCurrency: orderdetail.price:"VND"
+                }}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div
+              class="flex align-items-center justify-content-between text-2xl"
+            >
+              <span> Subtotal:</span>
+              <span class="px-8">
+                {{ subTotal | myCurrency: subTotal:"vnd" }}</span
+              >
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+      <div class="address-order">
+        <div class="title"><h6>PAYING ADDRESS</h6></div>
+      </div>
+    </div>
+  </div>
+</div>

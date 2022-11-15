@@ -627,7 +627,7 @@ header {
 
           .cart-dropdown-site {
             padding: 25px 15px 15px 15px;
-            font-size: 1.2rem;
+            font-size: $text-large;
             .cart-dropdown__title {
               font-size: 14px;
               text-transform: uppercase;
@@ -765,6 +765,7 @@ header {
       top: 100%;
       left: 0;
       right: 0;
+      font-size: $text-large;
       .search-mobile-site {
         padding: 8px;
         &__inner {

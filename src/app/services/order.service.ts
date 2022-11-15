@@ -12,4 +12,12 @@ export class OrderService {
   checkout(checkout: Checkout): Observable<any> {
     return this.httpClient.post(`${this.REST_API}`, checkout);
   }
+  getAllByUserId(userId: number, page: number, size: number): Observable<any> {
+    return this.httpClient.get(
+      `${this.REST_API}/all/${userId}?page=${page}&size=${size}`
+    );
+  }
+  getAllById(id: number): Observable<any> {
+    return this.httpClient.get(`${this.REST_API}/${id}`);
+  }
 }

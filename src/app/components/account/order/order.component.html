@@ -1,1 +1,39 @@
-<p>order works!</p>
+<div class="order-wrapper container">
+  <p-table [value]="orders" styleClass="p-datatable-striped">
+    <ng-template pTemplate="caption"> List of latest orders </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Order date</th>
+        <th>Total</th>
+        <th>Address</th>
+        <th>Status</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-order>
+      <tr>
+        <td>
+          <a [routerLink]="['/account/order/' + order.id]" class="order-link"
+            >HD-{{ order.id }}</a
+          >
+        </td>
+        <td>{{ order.createdDate | date: "M/d/yy, h:mm a" }}</td>
+        <td>{{ order.total | currency: "VND" }}</td>
+        <td>
+          {{
+            order.address.street +
+              ", " +
+              order.address.ward +
+              ", " +
+              order.address.distirct +
+              ", " +
+              order.address.city
+          }}
+        </td>
+        <td>
+          {{ order.shippingStatus.name === "UNVERIFIED" ? "ĐANG XỬ LÝ" : "l" }}
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

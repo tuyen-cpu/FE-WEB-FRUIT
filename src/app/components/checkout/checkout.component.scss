@@ -20,7 +20,7 @@ $color-btn: #357ebd;
     }
 
     .btn-v {
-      color: #338dbc;
+      color: $main-color;
       font-weight: 500;
       &:hover {
         font-weight: $font-bold;
@@ -70,7 +70,7 @@ $color-btn: #357ebd;
           background-size: contain;
         }
         &--cash {
-          color: #1990c6;
+          color: $main-color;
           font-size: 20px;
         }
         display: flex;
@@ -106,7 +106,7 @@ $color-btn: #357ebd;
             white-space: nowrap;
             padding: 0 0.62em;
             border-radius: 2em;
-            background-color: #2a9dcc;
+            background-color: $main-color;
             color: #fff;
             position: absolute;
             right: -0.9em;
@@ -152,13 +152,18 @@ $color-btn: #357ebd;
       font-size: 1.8rem;
       font-weight: bold;
       .total-value {
-        color: #2a9dcc;
+        color: red;
       }
     }
     .btn-action-wrapper {
       margin-bottom: 8px;
       .btn-checkout {
-        padding: 1rem 1.5rem;
+        padding: 1.3rem 1.5rem;
+        background-color: $main-color;
+        border: 1px solid $main-color;
+        font-family: $font-family;
+        text-transform: uppercase;
+        font-weight: 600;
         &:hover {
           filter: grayscale(40%);
         }
@@ -169,7 +174,7 @@ $color-btn: #357ebd;
         }
       }
       .back-cart {
-        color: #2a9dcc;
+        color: $main-color;
         .back-icon {
           transition: all 0.2s ease-out;
         }

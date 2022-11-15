@@ -1,4 +1,5 @@
 import { Address } from './address.model';
+import { Product } from './category.model';
 
 export interface Checkout {
   id?: number;
@@ -14,4 +15,22 @@ export interface OrderDetail {
   discount: number;
   productId: number;
   billId?: number;
+}
+export interface Order {
+  id: number;
+  total: number;
+  createdDate: Date;
+  shippingStatus: ShippingStatus;
+  address: Address;
+}
+export interface ShippingStatus {
+  id: number;
+  name: string;
+}
+export interface OrderDetailRequest {
+  id: number;
+  price: number;
+  quantity: number;
+  discount: number;
+  product: Product;
 }

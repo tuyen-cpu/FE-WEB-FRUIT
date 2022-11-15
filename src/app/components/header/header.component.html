@@ -169,9 +169,7 @@
               <li *ngFor="let product of products" class="search-result__item">
                 <a routerLink="/product/list" class="search-result__item-link">
                   <span class="image"
-                    ><img
-                      src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
-                      alt=""
+                    ><img [src]="product.image.link" alt="" width="60px"
                   /></span>
                   <span class="content">
                     <p
@@ -423,7 +421,9 @@
                         <a class="item-info">Address list</a>
                       </li>
                       <li>
-                        <a class="item-info">Orders list</a>
+                        <a routerLink="/account/order" class="item-info"
+                          >Orders list</a
+                        >
                       </li>
                       <li>
                         <a (click)="logout()" class="item-info">Logout</a>
@@ -592,9 +592,7 @@
                   >
                     <a href="" class="search-result__item-link">
                       <span class="image"
-                        ><img
-                          src="https://product.hstatic.net/200000271661/product/traicay-duahaudai_8dadb14c05064c89bdd2d12b344e570b_thumb.jpg"
-                          alt=""
+                        ><img [src]="product.image.link" width="60px" alt=""
                       /></span>
                       <span class="content">
                         <p
