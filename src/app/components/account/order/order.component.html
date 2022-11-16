@@ -1,4 +1,7 @@
 <div class="order-wrapper container">
+  <div class="title text-center mb-6">
+    <h2 class="title-account-component">ORDERED LIST</h2>
+  </div>
   <p-table [value]="orders" styleClass="p-datatable-striped">
     <ng-template pTemplate="caption"> List of latest orders </ng-template>
     <ng-template pTemplate="header">
@@ -25,7 +28,7 @@
               ", " +
               order.address.ward +
               ", " +
-              order.address.distirct +
+              order.address.district +
               ", " +
               order.address.city
           }}

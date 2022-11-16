@@ -25,7 +25,7 @@ export const APP_ROUTES: Routes = [
       import('./components/account/account-routes').then(
         ({ AccountRoutes }) => AccountRoutes
       ),
-    providers: [SocialLoginModule],
+    providers: [SocialLoginModule, ProvincesApiService],
   },
   {
     path: 'checkout',

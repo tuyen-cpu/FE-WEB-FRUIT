@@ -136,6 +136,7 @@ export class CheckoutComponent implements OnInit {
   onSubmit() {
     this.isLoading = true;
     const valueForm = this.infoForm.value;
+    console.log(valueForm);
     let orderDetails: OrderDetail[] = this.cartItems.map((item) => {
       return {
         price: item.product.price,
@@ -149,7 +150,7 @@ export class CheckoutComponent implements OnInit {
       shippingCost: 300000,
       address: {
         city: valueForm.province.name,
-        district: valueForm.name.disctrict,
+        district: valueForm.district.name,
         ward: valueForm.ward.name,
         street: valueForm.street,
         status: 1,

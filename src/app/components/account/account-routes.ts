@@ -6,6 +6,8 @@ import { Routes } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
 import { ResetComponent } from './reset/reset.component';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
+import { AddressComponent } from './address/address.component';
+import { AccountComponent } from './account.component';
 export const AccountRoutes: Routes = [
   {
     path: '',
@@ -38,6 +40,10 @@ export const AccountRoutes: Routes = [
       {
         path: 'order/:orderId',
         component: OrderDetailComponent,
+      },
+      {
+        path: 'address',
+        component: AddressComponent,
       },
     ],
   },
