@@ -6,11 +6,13 @@ import { ActivatedRoute, ParamMap, RouterModule } from '@angular/router';
 import { Order, OrderDetailRequest } from 'src/app/model/bill.model';
 
 import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 import { myCurrency } from 'src/app/pipes/my-currency.pipe';
+import { TokenStorageService } from 'src/app/services/token-storage.service';
 @Component({
   selector: 'app-order-detail',
   standalone: true,
-  imports: [CommonModule, TableModule, RouterModule, myCurrency],
+  imports: [CommonModule, TableModule, RouterModule, myCurrency, ButtonModule],
   templateUrl: './order-detail.component.html',
   styleUrls: ['./order-detail.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -23,6 +25,7 @@ export class OrderDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private orderService: OrderService,
+    private tokenStorageService: TokenStorageService,
     private orderDetailService: OrderDetailService
   ) {}
 
@@ -57,5 +60,8 @@ export class OrderDetailComponent implements OnInit {
       },
       error: (res) => {},
     });
+  }
+  logout() {
+    this.tokenStorageService.signOut();
   }
 }

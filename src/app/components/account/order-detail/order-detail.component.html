@@ -7,15 +7,19 @@
       <h5 class="title text-3xl uppercase">Account</h5>
       <ul class="text-2xl">
         <li>
-          <a class="block py-2">
+          <a routerLink="/account/profile" class="block py-2">
             <i class="pi pi-circle"></i> Account information</a
           >
         </li>
         <li>
-          <a class="block py-2"><i class="pi pi-circle"></i> Address list</a>
+          <a routerLink="/account/address" class="block py-2"
+            ><i class="pi pi-circle"></i> Address list</a
+          >
         </li>
         <li>
-          <a class="block py-2"><i class="pi pi-circle"></i> Logout</a>
+          <a (click)="logout()" class="block py-2"
+            ><i class="pi pi-circle"></i> Logout</a
+          >
         </li>
       </ul>
     </div>
@@ -36,6 +40,11 @@
           responsiveLayout="stack"
           [breakpoint]="'960px'"
           styleClass="p-datatable-gridlines"
+          [paginator]="true"
+          [rows]="5"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          [rowsPerPageOptions]="[5, 10, 20]"
         >
           <!-- <ng-template pTemplate="caption"> Stack </ng-template> -->
           <ng-template pTemplate="header" let-columns>
@@ -103,8 +112,22 @@
           </ng-template>
         </p-table>
       </div>
-      <div class="address-order">
-        <div class="title"><h6>PAYING ADDRESS</h6></div>
+      <div class="address-order text-2xl grid">
+        <div class="col-12 sm:col-12 md:col-12 lg:col-6">
+          <div class="title">
+            <h6 class="text-2xl mb-4 font-semibold">PAYING ADDRESS</h6>
+          </div>
+          <div class="status-order alert alert-info">
+            <b class="font-medium">Payment status:</b> Waiting
+          </div>
+          <div class="box p-3">
+            <div class="name line-height-2 mb-2">Trần Quang Tuyền</div>
+            <div class="address line-height-2 mb-2">
+              Quận 1, p.Dakao, TP.HCM
+            </div>
+            <div class="phone line-height-2 mb-2">035696589</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
