@@ -58,9 +58,18 @@
           [(selection)]="selectedAddresses"
           [rowHover]="true"
           dataKey="id"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-          [showCurrentPageReport]="true"
+          responsiveLayout="scroll"
         >
+          <!-- <ng-template pTemplate="summary">
+            <div class="page">
+              <p-paginator
+                [rows]="1"
+                [totalRecords]="paginator.totalElements"
+                [first]="paginator.pageNumber!"
+                (onPageChange)="onPageChange($event)"
+              ></p-paginator>
+            </div>
+          </ng-template> -->
           <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
               <h5 class="m-0">Manage addresss</h5>
@@ -88,7 +97,7 @@
                 Phone <p-sortIcon field="phone"></p-sortIcon>
               </th>
               <th>Default</th>
-              <th></th>
+              <th style="min-width: 10rem"></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-address>
@@ -96,7 +105,7 @@
               <td>
                 <p-tableCheckbox [value]="address"></p-tableCheckbox>
               </td>
-              <td>{{ address.lastName + address.firstName }}</td>
+              <td>{{ address.lastName + ", " + address.firstName }}</td>
               <td>
                 {{
                   address.street +
@@ -109,9 +118,13 @@
                 }}
               </td>
               <td>
-                {{ address.street + ", " + address.ward + ", " }}
+                {{ address.phone }}
               </td>
-              <td>{{ address.isDefault }}</td>
+              <td>
+                <span [class]="'address-default status-' + address.isDefault">{{
+                  address.isDefault === 0 ? "NO" : "DEFAULT"
+                }}</span>
+              </td>
               <td>
                 <button
                   pButton
@@ -129,12 +142,6 @@
                 ></button>
               </td>
             </tr>
-          </ng-template>
-          <ng-template pTemplate="summary">
-            <div class="flex align-items-center justify-content-between">
-              In total there are
-              {{ addresses ? addresses.length : 0 }} addresss.
-            </div>
           </ng-template>
         </p-table>
       </div>
@@ -188,13 +195,33 @@
               id="phone "
               [(ngModel)]="address.phone"
               required
-              [pattern]="'/(84|0[3|5|7|8|9])+([0-9]{8})\b/'"
+              [pattern]="phonePattern"
+              #phone="ngModel"
               [ngClass]="{
-                'ng-invalid ng-dirty': submitted && !address.phone
+                'ng-invalid ng-dirty': (submitted && !address.phone)||(submitted && phone.errors?.['pattern'])
               }"
             />
             <small class="p-error" *ngIf="submitted && !address.phone"
-              >Phone name is required.</small
+              >Phone is required.</small
+            >
+            <small class="p-error" *ngIf="phone.errors?.['pattern']"
+              >Phone is invalid.</small
+            >
+          </div>
+          <div class="field">
+            <label for="street">Street</label>
+            <input
+              pInputText
+              id="street"
+              [(ngModel)]="address.street"
+              required
+              #street="ngModel"
+              [ngClass]="{
+                'ng-invalid ng-dirty': (submitted && !address.street)||(submitted && street.errors?.['pattern'])
+              }"
+            />
+            <small class="p-error" *ngIf="submitted && !address.street"
+              >Street is required.</small
             >
           </div>
           <div class="field-checkbox">
@@ -207,29 +234,49 @@
           </div>
           <div class="field">
             <p-dropdown
-              (onChange)="onChangeProvince($event)"
+              (onChange)="onChangeProvince($event.value.code)"
               [style]="{ minWidth: '100%' }"
               [options]="provinces"
               placeholder="Select a City"
               optionLabel="name"
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !city
+              }"
+              [(ngModel)]="city"
             ></p-dropdown>
+            <small class="p-error" *ngIf="submitted && !city"
+              >City is required.</small
+            >
           </div>
           <div class="field">
             <p-dropdown
-              (onChange)="onChangeDistrict($event)"
+              (onChange)="onChangeDistrict($event.value.code)"
               [style]="{ minWidth: '100%' }"
               [options]="districts"
               placeholder="Select a district"
               optionLabel="name"
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !district
+              }"
+              [(ngModel)]="district"
             ></p-dropdown>
+            <small class="p-error" *ngIf="submitted && !district"
+              >District is required.</small
+            >
           </div>
           <div class="field">
             <p-dropdown
-              [style]="{ minWidth: '100%' }"
               [options]="wards"
               placeholder="Select a ward"
               optionLabel="name"
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !ward
+              }"
+              [(ngModel)]="ward"
             ></p-dropdown>
+            <small class="p-error" *ngIf="submitted && !ward"
+              >Ward is required.</small
+            >
           </div>
         </ng-template>
 
@@ -248,6 +295,7 @@
             label="Save"
             icon="pi pi-check"
             class="p-button-text"
+            [loading]="isLoading"
             (click)="saveAddress()"
           ></button>
         </ng-template>
@@ -255,3 +303,4 @@
     </div>
   </div>
 </div>
+<app-loading [hidden]="!isLoading"></app-loading>

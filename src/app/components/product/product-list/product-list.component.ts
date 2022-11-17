@@ -52,7 +52,7 @@ export class ProductListComponent implements OnInit {
   isShowFilterCategory = true;
   isShowFilterPrice = true;
 
-  paginator: Paginator = { totalElements: 0 };
+  paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
 
   priceList: number[] = [50000, 150000, 200000, 500000];
   sortOptionSelected = '';
