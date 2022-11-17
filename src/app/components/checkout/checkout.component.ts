@@ -148,15 +148,17 @@ export class CheckoutComponent implements OnInit {
     let checkout: Checkout = {
       description: 'Mô tả thôi',
       shippingCost: 300000,
-      address: {
-        city: valueForm.province.name,
-        district: valueForm.district.name,
-        ward: valueForm.ward.name,
-        street: valueForm.street,
-        status: 1,
-        userId: this.getUser().id!,
-        description: 'chỉ là description',
-      },
+      // address: {
+      //   city: valueForm.province.name,
+      //   district: valueForm.district.name,
+      //   ward: valueForm.ward.name,
+      //   street: valueForm.street,
+      //   status: 1,
+      //   userId: this.getUser().id!,
+      //   description: 'chỉ là description',
+      // },
+      userId: this.getUser().id,
+      address: 'wwqwqwqwqew',
       orderDetails: orderDetails,
     };
     this.orderService

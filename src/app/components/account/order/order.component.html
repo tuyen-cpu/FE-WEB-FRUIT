@@ -23,7 +23,7 @@
         <td>{{ order.createdDate | date: "M/d/yy, h:mm a" }}</td>
         <td>{{ order.total | currency: "VND" }}</td>
         <td>
-          {{
+          <!-- {{
             order.address.street +
               ", " +
               order.address.ward +
@@ -31,7 +31,7 @@
               order.address.district +
               ", " +
               order.address.city
-          }}
+          }} -->
         </td>
         <td>
           {{ order.shippingStatus.name === "UNVERIFIED" ? "ĐANG XỬ LÝ" : "l" }}

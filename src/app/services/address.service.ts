@@ -17,4 +17,7 @@ export class AddressService {
   add(address: Address): Observable<any> {
     return this.http.post(`${this.REST_API}/add`, address);
   }
+  update(address: Address): Observable<any> {
+    return this.http.put(`${this.REST_API}/update`, address);
+  }
 }

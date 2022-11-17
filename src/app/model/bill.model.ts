@@ -5,7 +5,8 @@ export interface Checkout {
   id?: number;
   shippingCost?: number;
   description?: string;
-  address?: Address;
+  address?: string;
+  userId?: number;
   orderDetails?: OrderDetail[];
 }
 export interface OrderDetail {
@@ -21,7 +22,7 @@ export interface Order {
   total: number;
   createdDate: Date;
   shippingStatus: ShippingStatus;
-  address: Address;
+  address: string;
 }
 export interface ShippingStatus {
   id: number;

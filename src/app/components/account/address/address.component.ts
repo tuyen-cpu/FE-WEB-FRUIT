@@ -64,9 +64,9 @@ export class AddressComponent implements OnInit {
   addressesChange = new BehaviorSubject<Address[]>([]);
   addressSubscription!: Subscription;
 
-  city: Province = {};
-  district: District = {};
-  ward: Ward = {};
+  city!: Province;
+  district!: District;
+  ward!: Ward;
   isLoading: boolean = false;
   submitted = false;
   phonePattern: string | RegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
@@ -110,11 +110,11 @@ export class AddressComponent implements OnInit {
   }
   openNew() {
     this.resetValueForm();
+    this.submitted = false;
     this.addressDialog = true;
   }
   resetValueForm() {
     this.address = {};
-    this.submitted = false;
     this.city = {};
     this.district = {};
     this.ward = {};
@@ -160,6 +160,7 @@ export class AddressComponent implements OnInit {
     this.submitted = false;
   }
   saveAddress() {
+    console.log(!this.city);
     this.submitted = true;
     this.isLoading = true;
     if (this.invalidForm()) {
@@ -173,6 +174,28 @@ export class AddressComponent implements OnInit {
 
     this.address.isDefault = this.isDefault ? 1 : 0;
     console.log(this.address);
+    if (this.address.id) {
+      this.addressService.update(this.address).subscribe({
+        next: (res) => {
+          this.addresses.push(res.data);
+          this.addressesChange.next(this.addresses);
+          this.isLoading = false;
+          this.addressDialog = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Address Created',
+            life: 2000,
+          });
+        },
+        error: (res) => {
+          this.isLoading = false;
+          this.addressDialog = false;
+        },
+      });
+      return;
+    }
+
     this.addressService.add(this.address).subscribe({
       next: (res) => {
         this.addresses.push(res.data);
@@ -232,6 +255,9 @@ export class AddressComponent implements OnInit {
   }
   getUserId(): number {
     return this.userInforService.user?.id!;
+  }
+  isEmpty(obj: Object) {
+    return Object.keys(obj).length === 0;
   }
   // changeParams() {
   //   this.route.queryParams.subscribe((res) => {
