@@ -1,10 +1,16 @@
-import { BehaviorSubject, Subscription, switchMap } from 'rxjs';
+import { BehaviorSubject, isEmpty, Subscription, switchMap } from 'rxjs';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserInforService } from 'src/app/services/user-infor.service';
 import { AddressService } from './../../../services/address.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -50,7 +56,7 @@ import { LoadingComponent } from 'src/app/utils/loading/loading.component';
   styleUrls: ['./address.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class AddressComponent implements OnInit {
+export class AddressComponent implements OnInit, OnDestroy {
   @ViewChild('dt') dt!: Table;
   selectedAddresses: any[] = [];
   addresses: Address[] = [];
@@ -61,8 +67,8 @@ export class AddressComponent implements OnInit {
   districts: District[] = [];
   wards: Ward[] = [];
 
-  addressesChange = new BehaviorSubject<Address[]>([]);
-  addressSubscription!: Subscription;
+  // addressesChange = new BehaviorSubject<Address[]>([]);
+  // addressSubscription!: Subscription;
 
   city!: Province;
   district!: District;
@@ -73,6 +79,8 @@ export class AddressComponent implements OnInit {
 
   paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
   paramsURL: {} = {};
+  first = 0;
+  row = 10;
   constructor(
     private tokenStorageService: TokenStorageService,
     private messageService: MessageService,
@@ -87,17 +95,17 @@ export class AddressComponent implements OnInit {
   ngOnInit(): void {
     this.getAddresses();
     this.getProvinces();
-    this.addressSubscription = this.addressesChange.subscribe((data) => {
-      this.addresses = data;
-    });
+    // this.addressSubscription = this.addressesChange.subscribe((data) => {
+    //   this.addresses = data;
+    // });
   }
   getAddresses() {
     this.isLoading = true;
     console.log(this.isLoading);
-    this.addressService.getByUserId(this.getUserId(), 0, 50).subscribe({
+    this.addressService.getByUserId(this.getUserId(), 0, 1000).subscribe({
       next: (res) => {
         this.addresses = res.data.content;
-        this.addressesChange.next(this.addresses);
+        // this.addressesChange.next(this.addresses);
         this.isLoading = false;
       },
       error: (res) => {
@@ -134,7 +142,6 @@ export class AddressComponent implements OnInit {
             this.district = this.districts.find(
               (e) => e.name === address.district
             )!;
-            console.log(this.district);
             return this.provincesApi.getCommunes(this.district.code!);
           })
         )
@@ -142,9 +149,10 @@ export class AddressComponent implements OnInit {
           next: (district: District) => {
             this.wards = district.wards!;
             this.ward = this.wards.find((e) => e.name === address.ward)!;
-            console.log(this.ward);
+
             this.isLoading = false;
             this.addressDialog = true;
+            this.getAddresses();
           },
           error: (res) => {
             this.isLoading = false;
@@ -177,10 +185,11 @@ export class AddressComponent implements OnInit {
     if (this.address.id) {
       this.addressService.update(this.address).subscribe({
         next: (res) => {
-          this.addresses.push(res.data);
-          this.addressesChange.next(this.addresses);
+          // this.addresses.push(res.data);
+          // this.addressesChange.next(this.addresses);
           this.isLoading = false;
           this.addressDialog = false;
+          this.getAddresses();
           this.messageService.add({
             severity: 'success',
             summary: 'Successful',
@@ -193,15 +202,18 @@ export class AddressComponent implements OnInit {
           this.addressDialog = false;
         },
       });
+
       return;
     }
 
     this.addressService.add(this.address).subscribe({
       next: (res) => {
-        this.addresses.push(res.data);
-        this.addressesChange.next(this.addresses);
+        // this.addresses.push(res.data);
+        // this.addressesChange.next(this.addresses);
         this.isLoading = false;
         this.addressDialog = false;
+        this.getAddresses();
+
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -287,4 +299,13 @@ export class AddressComponent implements OnInit {
   //     queryParams: this.paramsURL,
   //   });
   // }
+
+  ngOnDestroy(): void {
+    // if (this.addressesChange) {
+    //   this.addressesChange.unsubscribe();
+    // }
+  }
+  isEmptyObject(obj: Object): boolean {
+    return Object.keys(obj).length === 0;
+  }
 }

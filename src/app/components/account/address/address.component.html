@@ -48,16 +48,25 @@
             ></button>
           </ng-template>
         </p-toolbar>
-
+        <div class="mb-3">
+          <!-- <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()" styleClass="p-button-text"></p-button> -->
+          <p-button
+            type="button"
+            icon="pi pi-refresh"
+            styleClass="p-button-text"
+          ></p-button>
+          <!-- <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()" styleClass="p-button-text"></p-button> -->
+        </div>
         <p-table
           #dt
           [value]="addresses"
-          [rows]="10"
+          [rows]="row"
           [paginator]="true"
           [globalFilterFields]="['ward', 'city', 'district', 'street']"
           [(selection)]="selectedAddresses"
           [rowHover]="true"
           dataKey="id"
+          [showCurrentPageReport]="true"
           responsiveLayout="scroll"
         >
           <!-- <ng-template pTemplate="summary">
@@ -240,11 +249,11 @@
               placeholder="Select a City"
               optionLabel="name"
               [ngClass]="{
-                'ng-invalid ng-dirty': submitted && !city
+                'ng-invalid ng-dirty': submitted && isEmptyObject(city)
               }"
               [(ngModel)]="city"
             ></p-dropdown>
-            <small class="p-error" *ngIf="submitted && !city"
+            <small class="p-error" *ngIf="submitted && isEmptyObject(city)"
               >City is required.</small
             >
           </div>
@@ -256,11 +265,11 @@
               placeholder="Select a district"
               optionLabel="name"
               [ngClass]="{
-                'ng-invalid ng-dirty': submitted && !district
+                'ng-invalid ng-dirty': submitted && isEmptyObject(district)
               }"
               [(ngModel)]="district"
             ></p-dropdown>
-            <small class="p-error" *ngIf="submitted && !district"
+            <small class="p-error" *ngIf="submitted && isEmptyObject(district)"
               >District is required.</small
             >
           </div>
@@ -270,11 +279,11 @@
               placeholder="Select a ward"
               optionLabel="name"
               [ngClass]="{
-                'ng-invalid ng-dirty': submitted && !ward
+                'ng-invalid ng-dirty': submitted && isEmptyObject(ward)
               }"
               [(ngModel)]="ward"
             ></p-dropdown>
-            <small class="p-error" *ngIf="submitted && !ward"
+            <small class="p-error" *ngIf="submitted && isEmptyObject(ward)"
               >Ward is required.</small
             >
           </div>
