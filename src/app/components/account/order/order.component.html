@@ -1,3 +1,7 @@
+<p-confirmDialog
+  header="Confirmation"
+  icon="pi pi-exclamation-triangle"
+></p-confirmDialog>
 <div class="order-wrapper container">
   <div class="title text-center mb-6">
     <h2 class="title-account-component">ORDERED LIST</h2>
@@ -11,6 +15,7 @@
         <th>Total</th>
         <th>Address</th>
         <th>Status</th>
+        <th>Action</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-order>
@@ -21,7 +26,7 @@
           >
         </td>
         <td>{{ order.createdDate | date: "M/d/yy, h:mm a" }}</td>
-        <td>{{ order.total | currency: "VND" }}</td>
+        <td>{{ order.total | myCurrency: "VND" }}</td>
         <td>
           <!-- {{
             order.address.street +
@@ -32,9 +37,25 @@
               ", " +
               order.address.city
           }} -->
+          {{ order.address }}
         </td>
         <td>
-          {{ order.shippingStatus.name === "UNVERIFIED" ? "ĐANG XỬ LÝ" : "l" }}
+          {{
+            order.shippingStatus.name === "UNVERIFIED"
+              ? "UNVERIFIED"
+              : "CANCELED"
+          }}
+        </td>
+        <td>
+          <button
+            pButton
+            pRipple
+            label="Cancel"
+            icon="pi pi-trash"
+            class="p-button-danger"
+            *ngIf="order.shippingStatus.name === 'UNVERIFIED'"
+            (click)="onCancelOrder(order)"
+          ></button>
         </td>
       </tr>
     </ng-template>

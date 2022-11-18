@@ -1,6 +1,8 @@
+import { LoadingComponent } from './../../utils/loading/loading.component';
+import { Address } from './../../model/address.model';
 import { OrderService } from './../../services/order.service';
 import { Checkout, OrderDetail } from './../../model/bill.model';
-import { Subscription, switchMap } from 'rxjs';
+import { Subscription, switchMap, map } from 'rxjs';
 import { CartItemService } from './../../services/cart-item.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 import {
@@ -30,6 +32,8 @@ import { render } from 'creditcardpayments/creditCardPayments';
 import { UserInforService } from 'src/app/services/user-infor.service';
 import { User } from 'src/app/model/user.model';
 import { CartItem } from 'src/app/model/cart.model';
+import { AddressService } from 'src/app/services/address.service';
+import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -47,6 +51,8 @@ import { CartItem } from 'src/app/model/cart.model';
     MessagesModule,
     MessageModule,
     ToastModule,
+    LoadingComponent,
+    MyCurrency,
   ],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
@@ -64,11 +70,13 @@ export class CheckoutComponent implements OnInit {
   districts!: District[];
   wards!: Ward[];
   infoForm!: FormGroup;
-
+  addresses: { name: string }[] = [];
   cartItems: CartItem[] = [];
   totalQuantity: number = 0;
   totalCart: number = 0;
   cartItemsChange!: Subscription;
+  addressSeleted!: { name: string };
+  addressTemp: { city?: Province; ward?: Ward; district?: District } = {};
   constructor(
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
@@ -78,7 +86,8 @@ export class CheckoutComponent implements OnInit {
     private tokenStorageService: TokenStorageService,
     private cartItemService: CartItemService,
     private orderService: OrderService,
-    private router: Router
+    private router: Router,
+    private addressService: AddressService
   ) {}
 
   ngOnInit(): void {
@@ -87,6 +96,7 @@ export class CheckoutComponent implements OnInit {
     this.primengConfig.ripple = true;
     this.getProvinces();
     this.getCartItems();
+    this.getAddresses();
   }
   getCartItems() {
     this.cartItemsChange = this.cartItemService.cartItemsChange.subscribe(
@@ -106,6 +116,67 @@ export class CheckoutComponent implements OnInit {
       },
     });
   }
+  getAddresses() {
+    this.isLoading = true;
+    this.addressService.getByUserId(this.getUser().id!, 0, 1000).subscribe({
+      next: (res) => {
+        this.addresses = res.data.content.map((e: Address) => {
+          return {
+            name: `${e.lastName} ${e.firstName}. ${e.street}, ${e.ward}, ${e.district}, ${e.city}`,
+            address: <Address>{ ...e },
+          };
+        });
+        this.isLoading = false;
+      },
+      error: (res) => {
+        this.isLoading = false;
+      },
+    });
+  }
+  onChangeAddress(e: any) {
+    this.isLoading = true;
+    let { value } = e;
+    this.addressTemp.city = this.provinces.find(
+      (e) => e.name === value.address.city
+    )!;
+    if (this.addressTemp.city) {
+      this.provincesApi
+        .getDistricts(this.addressTemp.city.code!)
+        .pipe(
+          switchMap((province: Province) => {
+            this.districts = province.districts!;
+            this.addressTemp.district = this.districts.find(
+              (e) => e.name === value.address.district
+            )!;
+            return this.provincesApi.getCommunes(
+              this.addressTemp.district.code!
+            );
+          })
+        )
+        .subscribe({
+          next: (district: District) => {
+            this.wards = district.wards!;
+            this.addressTemp.ward = this.wards.find(
+              (e) => e.name === value.address.ward
+            )!;
+            this.infoForm.patchValue({
+              firstName: value.address.firstName,
+              lastName: value.address.lastName,
+              phoneNum: value.address.phone,
+              street: value.address.street,
+              province: this.addressTemp.city,
+              district: this.addressTemp.district,
+              ward: this.addressTemp.ward,
+            });
+          },
+          error: (res) => {
+            this.isLoading = false;
+          },
+        });
+    }
+
+    this.isLoading = false;
+  }
   renderPaypal() {
     render({
       id: '#myPaypalButton',
@@ -121,7 +192,6 @@ export class CheckoutComponent implements OnInit {
   onChangeProvince(e: any) {
     this.provincesApi.getDistricts(e.value.code).subscribe({
       next: (province: Province) => {
-        console.log(province);
         this.districts = province.districts!;
       },
     });
@@ -136,7 +206,6 @@ export class CheckoutComponent implements OnInit {
   onSubmit() {
     this.isLoading = true;
     const valueForm = this.infoForm.value;
-    console.log(valueForm);
     let orderDetails: OrderDetail[] = this.cartItems.map((item) => {
       return {
         price: item.product.price,
@@ -158,9 +227,10 @@ export class CheckoutComponent implements OnInit {
       //   description: 'chỉ là description',
       // },
       userId: this.getUser().id,
-      address: 'wwqwqwqwqew',
+      address: `${this.street?.value.name}, ${this.ward?.value.name}, ${this.district?.value.name}, ${this.province?.value.name}`,
       orderDetails: orderDetails,
     };
+
     this.orderService
       .checkout(checkout)
       .pipe(
@@ -208,8 +278,8 @@ export class CheckoutComponent implements OnInit {
   }
   initForm() {
     this.infoForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      name: ['', [Validators.required, Validators.minLength(3)]],
+      firstName: ['', [Validators.required, Validators.minLength(3)]],
+      lastName: ['', [Validators.required, Validators.minLength(3)]],
       phoneNum: [
         '',
         [Validators.required, Validators.pattern(this.regexNumPhone)],
@@ -219,13 +289,14 @@ export class CheckoutComponent implements OnInit {
       district: [null, Validators.required],
       ward: [null, Validators.required],
       notes: [''],
+      address: [null],
     });
   }
-  get email() {
-    return this.infoForm.get('email');
+  get firstName() {
+    return this.infoForm.get('firstName');
   }
-  get name() {
-    return this.infoForm.get('name');
+  get lastName() {
+    return this.infoForm.get('lastName');
   }
   get phoneNum() {
     return this.infoForm.get('phoneNum');
@@ -239,6 +310,16 @@ export class CheckoutComponent implements OnInit {
   get notes() {
     return this.infoForm.get('notes');
   }
+  get address() {
+    return this.infoForm.get('address');
+  }
+  get ward() {
+    return this.infoForm.get('ward');
+  }
+  get district() {
+    return this.infoForm.get('district');
+  }
+
   loadTotal() {
     this.totalQuantity = this.cartItems.reduce((total, current) => {
       return total + current.quantity;

@@ -146,13 +146,12 @@
         </div>
 
         <form
-          (ngSubmit)="onSubmit()"
+          (ngSubmit)="onSubmit(searchInput)"
           [formGroup]="searchForm"
           class="form-search relative w-7 relative"
         >
           <input
             #searchInput
-            appDropdown
             (keyup)="instantSearch($event)"
             type="text"
             formControlName="inputSearch"
@@ -415,22 +414,35 @@
                     </div>
                     <ul>
                       <li>
-                        <a routerLink="/account/profile" class="item-info"
+                        <a
+                          routerLink="/account/profile"
+                          (click)="changeShowAccountDropdown()"
+                          class="item-info"
                           >My account</a
                         >
                       </li>
                       <li>
-                        <a routerLink="/account/address" class="item-info"
+                        <a
+                          routerLink="/account/address"
+                          (click)="changeShowAccountDropdown()"
+                          class="item-info"
                           >Address list</a
                         >
                       </li>
                       <li>
-                        <a routerLink="/account/order" class="item-info"
+                        <a
+                          routerLink="/account/order"
+                          (click)="changeShowAccountDropdown()"
+                          class="item-info"
                           >Orders list</a
                         >
                       </li>
                       <li>
-                        <a (click)="logout()" class="item-info">Logout</a>
+                        <a
+                          (click)="logout(); changeShowAccountDropdown()"
+                          class="item-info"
+                          >Logout</a
+                        >
                       </li>
                     </ul>
                   </div>
@@ -573,7 +585,10 @@
       </div>
       <div class="search-mobile-wrapper">
         <div class="search-mobile-site">
-          <form (ngSubmit)="onSubmit()" [formGroup]="searchForm">
+          <form
+            (ngSubmit)="onSubmit(searchInputMobile)"
+            [formGroup]="searchForm"
+          >
             <div class="search-mobile-site__inner">
               <input
                 type="text"
@@ -582,13 +597,17 @@
                     ? 'search-mobile-site__inner-input open'
                     : 'search-mobile-site__inner-input'
                 "
-                #searchInput
-                appDropdown
+                #searchInputMobile
                 (keyup)="instantSearch($event)"
                 formControlName="inputSearch"
                 placeholder="Search product at here..."
               />
               <div class="search-dropdown search-dropdown--mobile">
+                <p-progressBar
+                  [hidden]="!isLoading"
+                  mode="indeterminate"
+                  [style]="{ height: '2px' }"
+                ></p-progressBar>
                 <ul class="search-result">
                   <li
                     *ngFor="let product of products"
@@ -627,7 +646,7 @@
                 </ul>
               </div>
               <a
-                (click)="changeShowSearchDropdownMobile()"
+                (click)="changeShowSearchDropdownMobile(searchInputMobile)"
                 class="search-mobile-site__inner-btn"
                 ><i
                   [ngClass]="

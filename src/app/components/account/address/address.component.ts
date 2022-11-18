@@ -1,4 +1,13 @@
-import { BehaviorSubject, isEmpty, Subscription, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  debounceTime,
+  fromEvent,
+  isEmpty,
+  of,
+  Subscription,
+  switchMap,
+  timeout,
+} from 'rxjs';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserInforService } from 'src/app/services/user-infor.service';
 import { AddressService } from './../../../services/address.service';
@@ -10,10 +19,15 @@ import {
   ViewChild,
   ViewEncapsulation,
   OnDestroy,
+  AfterViewInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import {
+  ConfirmationService,
+  ConfirmEventType,
+  MessageService,
+} from 'primeng/api';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
@@ -29,7 +43,9 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { Paginator } from 'src/app/model/paginator.model';
 import { PaginatorModule } from 'primeng/paginator';
 import { LoadingComponent } from 'src/app/utils/loading/loading.component';
-
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @Component({
   selector: 'app-address',
   standalone: true,
@@ -50,13 +66,16 @@ import { LoadingComponent } from 'src/app/utils/loading/loading.component';
     PaginatorModule,
     LoadingComponent,
     RouterModule,
+    MessageModule,
+    MessagesModule,
+    ConfirmDialogModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class AddressComponent implements OnInit, OnDestroy {
+export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('dt') dt!: Table;
   selectedAddresses: any[] = [];
   addresses: Address[] = [];
@@ -93,11 +112,15 @@ export class AddressComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // this.isLoading = true;
     this.getAddresses();
     this.getProvinces();
     // this.addressSubscription = this.addressesChange.subscribe((data) => {
     //   this.addresses = data;
     // });
+  }
+  ngAfterViewInit(): void {
+    // this.isLoading = false;
   }
   getAddresses() {
     this.isLoading = true;
@@ -128,7 +151,12 @@ export class AddressComponent implements OnInit, OnDestroy {
     this.ward = {};
     this.isDefault = false;
   }
-  deleteSelectedAddresses() {}
+  deleteSelectedAddresses(event: Event) {
+    this.selectedAddresses.forEach((e: Address) => {
+      this.deleteAddress(e, event);
+      this.selectedAddresses = [];
+    });
+  }
   editAddress(address: Address) {
     this.isLoading = true;
     this.isDefault = address.isDefault ? true : false;
@@ -162,7 +190,55 @@ export class AddressComponent implements OnInit, OnDestroy {
 
     this.address = { ...address };
   }
-  deleteAddress(address: any) {}
+  deleteAddress(address: Address, event: Event) {
+    this.isLoading = true;
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to perform this action?',
+      accept: () => {
+        this.addressService.delete(address.id!).subscribe({
+          next: (res) => {
+            this.getAddresses();
+            this.isLoading = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Confirmed',
+              detail: res.message,
+            });
+          },
+          error: (res) => {
+            this.isLoading = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Rejected',
+              detail: res.error.message,
+            });
+          },
+        });
+      },
+      reject: (type: any) => {
+        this.isLoading = false;
+        // switch (type) {
+        //   case ConfirmEventType.REJECT:
+        //     this.messageService.add({
+        //       severity: 'error',
+        //       summary: 'Rejected',
+        //       detail: 'You have rejected',
+        //     });
+
+        //     break;
+        //   case ConfirmEventType.CANCEL:
+        //     this.messageService.add({
+        //       severity: 'warn',
+        //       summary: 'Cancelled',
+        //       detail: 'You have cancelled',
+        //     });
+
+        //     break;
+        // }
+      },
+    });
+    this.selectedAddresses = [];
+  }
   hideDialog() {
     this.addressDialog = false;
     this.submitted = false;
@@ -268,9 +344,7 @@ export class AddressComponent implements OnInit, OnDestroy {
   getUserId(): number {
     return this.userInforService.user?.id!;
   }
-  isEmpty(obj: Object) {
-    return Object.keys(obj).length === 0;
-  }
+
   // changeParams() {
   //   this.route.queryParams.subscribe((res) => {
   //     console.log('change param');
@@ -307,5 +381,11 @@ export class AddressComponent implements OnInit, OnDestroy {
   }
   isEmptyObject(obj: Object): boolean {
     return Object.keys(obj).length === 0;
+  }
+  resetView() {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.getAddresses();
+    }, 500);
   }
 }

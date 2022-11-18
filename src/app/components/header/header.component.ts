@@ -67,6 +67,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput!: ElementRef;
+  @ViewChild('searchInputMobile') searchInputMobile!: ElementRef;
+
   isSiteLogin = true;
   isShowSearchDropdownMobile = false;
   isShowAccountDropdown = false;
@@ -167,13 +169,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
         element.value++;
         break;
       default:
-        if (!Number(element.value) || Number(element.value) < 0) {
-          element.value = Number(1);
-        }
+        // if (!Number(element.value) || Number(element.value) < 0) {
+        //   element.value = Number(1);
+        // }
 
         break;
     }
     cartItem.quantity = Number(element.value);
+    if (cartItem.quantity === 1) {
+      this.remove(cartItem);
+      return;
+    }
     this.cartItemService
       .update(
         cartItem.id || 1000,
@@ -216,10 +222,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
     });
   }
-  onSubmit() {
-    if (!this.searchForm.valid) return;
+  onSubmit(e: any) {
+    if (!this.searchForm.valid || e.value === '') return;
     this.goSearchPage();
+    e.value = '';
     this.products = [];
+    this.keySearch = '';
+
+    this.products = [];
+    this.isLoading = false;
+    this.isShowSearchDropdownMobile = false;
+    this.searchInput.nativeElement.classList.remove('open');
+    this.searchInputMobile.nativeElement.classList.remove('open');
   }
   goSearchPage() {
     this.router.navigate(['/product/search'], {
@@ -231,10 +245,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.hasBlankSpaces(value)) {
       this.products = [];
       this.isLoading = false;
+      this.isShowSearchDropdownMobile = false;
       this.searchInput.nativeElement.classList.remove('open');
+      this.searchInputMobile.nativeElement.classList.remove('open');
+
       return;
     }
     this.searchInput.nativeElement.classList.add('open');
+    this.searchInputMobile.nativeElement.classList.add('open');
+    this.isShowSearchDropdownMobile = true;
     this.isLoading = true;
     this.keySearch = value;
     this.subjectKeyup.next(value);
@@ -377,8 +396,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     this.isSiteLogin = !this.isSiteLogin;
   }
-  changeShowSearchDropdownMobile() {
+  changeShowSearchDropdownMobile(e: any) {
     this.isShowSearchDropdownMobile = !this.isShowSearchDropdownMobile;
+    e.value = '';
+    this.keySearch = '';
   }
   changeShowAccountDropdown() {
     this.isShowAccountDropdown = !this.isShowAccountDropdown;

@@ -17,6 +17,11 @@
           >
         </li>
         <li>
+          <a routerLink="/account/order" class="block py-2"
+            ><i class="pi pi-circle"></i> Order list</a
+          >
+        </li>
+        <li>
           <a (click)="logout()" class="block py-2"
             ><i class="pi pi-circle"></i> Logout</a
           >
@@ -26,7 +31,7 @@
     <div class="col-12 sm:col-12 md:12 lg:col-9">
       <div class="order-information">
         <div class="title text-2xl mb-3">
-          <b class="font-medium">Order: H-{{ order.id }}</b
+          <b class="font-medium">Order: H-{{ orderId }}</b
           >, Đặt lúc — {{ order.createdDate | date: "M/d/yy, h:mm a" }}
         </div>
         <div class="text-xl mb-2">
@@ -40,11 +45,7 @@
           responsiveLayout="stack"
           [breakpoint]="'960px'"
           styleClass="p-datatable-gridlines"
-          [paginator]="true"
-          [rows]="5"
-          [showCurrentPageReport]="true"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-          [rowsPerPageOptions]="[5, 10, 20]"
         >
           <!-- <ng-template pTemplate="caption"> Stack </ng-template> -->
           <ng-template pTemplate="header" let-columns>
@@ -83,7 +84,7 @@
               </td>
               <td>
                 <span class="p-column-title">Price</span
-                >{{ orderdetail.price | myCurrency: orderdetail.price:"VND" }}
+                >{{ orderdetail.price | myCurrency: "VND" }}
               </td>
               <td>
                 <span class="p-column-title">Discount</span>-{{
@@ -95,7 +96,7 @@
                 {{
                   (orderdetail.price -
                     (orderdetail.price * orderdetail.discount) / 100) *
-                    orderdetail.quantity | myCurrency: orderdetail.price:"VND"
+                    orderdetail.quantity | myCurrency: "VND"
                 }}
               </td>
             </tr>
@@ -105,9 +106,7 @@
               class="flex align-items-center justify-content-between text-2xl"
             >
               <span> Subtotal:</span>
-              <span class="px-8">
-                {{ subTotal | myCurrency: subTotal:"vnd" }}</span
-              >
+              <span class="px-8"> {{ subTotal | myCurrency: "vnd" }}</span>
             </div>
           </ng-template>
         </p-table>

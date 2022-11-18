@@ -24,7 +24,7 @@
       <span class="product-detail__price-new">{{
         (product.price || 0) -
           ((product.price || 0) * (product.discount || 0)) / 100
-          | currency: "VND"
+          | myCurrency: "VND"
       }}</span>
       <del class="product-detail__price-old">{{
         product.price | currency: "VND"

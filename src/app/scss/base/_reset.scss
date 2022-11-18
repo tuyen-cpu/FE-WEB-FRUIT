@@ -3,7 +3,12 @@
 html {
   line-height: 1.15;
   text-size-adjust: 100%;
-  font-size: 62.5%;
+  font-size: 9px;
+}
+@media only screen and (min-width: 768px) {
+  html {
+    font-size: 62.5%;
+  }
 }
 
 body {

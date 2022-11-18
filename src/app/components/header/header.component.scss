@@ -7,31 +7,7 @@ $yellow-btn: #ffba00;
   margin-left: auto;
   margin-right: auto;
 }
-@media only screen and (max-width: 767px) {
-  .container {
-    max-width: 100%;
-  }
-}
-@media only screen and (min-width: 768px) {
-  .container {
-    max-width: 740px;
-  }
-}
-@media only screen and (min-width: 992px) {
-  .container {
-    max-width: 980px;
-  }
-}
-@media only screen and (min-width: 1200px) {
-  .container {
-    max-width: 1140px;
-  }
-}
-@media only screen and (min-width: 1400px) {
-  .container {
-    max-width: 1400px;
-  }
-}
+
 header {
   background-color: $main-color;
 }
@@ -71,6 +47,7 @@ header {
   border-bottom: 1px solid rgb(219, 219, 219);
   position: relative;
   .menu-mobile-wrapper {
+    user-select: none;
     cursor: pointer;
     display: block;
 
@@ -373,6 +350,7 @@ header {
                 width: 200px;
                 min-width: 200px;
                 .account-dropdown-list {
+                  user-select: none;
                   height: 170px;
                   .item-info {
                     color: #677279;

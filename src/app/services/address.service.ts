@@ -20,4 +20,7 @@ export class AddressService {
   update(address: Address): Observable<any> {
     return this.http.put(`${this.REST_API}/update`, address);
   }
+  delete(id: number): Observable<any> {
+    return this.http.delete(`${this.REST_API}/delete/${id}`);
+  }
 }

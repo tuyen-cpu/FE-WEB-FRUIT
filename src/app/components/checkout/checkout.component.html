@@ -1,8 +1,6 @@
 <div class="checkout-wrapper grid container justify-content-center mt-3">
-  <div
-    class="flex-order-2 md:flex-order-1 col-12 sm:col-12 md:col-12 lg:col-8 grid p-5"
-  >
-    <div class="col-12 px-3">
+  <div class="col-12">
+    <div class="sm:pl-6">
       <div
         *ngIf="getUser()"
         class="user-information flex align-items-center mb-5"
@@ -30,18 +28,34 @@
           ></span
         >
       </div>
-
+    </div>
+  </div>
+  <div
+    class="flex-order-2 md:flex-order-1 col-12 sm:col-12 md:col-12 lg:col-8 grid sm:pl-5 sm:pr-5"
+  >
+    <div class="col-12 sm:px-3">
+      <div class="field"></div>
       <form class="grid" [formGroup]="infoForm" (ngSubmit)="onSubmit()">
         <div class="col-12">
           <div class="section-wrapper">
             <h4 class="info-title">Information delivery</h4>
             <div class="field">
+              <p-dropdown
+                (onChange)="onChangeAddress($event)"
+                [style]="{ minWidth: '100%' }"
+                [options]="addresses"
+                formControlName="address"
+                placeholder="Select a stored address"
+                optionLabel="name"
+              ></p-dropdown>
+            </div>
+            <div class="field">
               <input
-                id="email"
-                placeholder="Email"
-                formControlName="email"
+                id="firstName"
+                placeholder="First Name"
+                formControlName="firstName"
                 [class]="
-                  email?.invalid
+                  firstName?.invalid
                     ? 'ng-invalid ng-dirty w-full input-custom'
                     : 'w-full input-custom'
                 "
@@ -49,30 +63,32 @@
               />
               <div
                 class="mt-1"
-                *ngIf="email?.invalid && email?.dirty && email?.touched"
-                id="email-help"
+                *ngIf="
+                  firstName?.invalid && firstName?.dirty && firstName?.touched
+                "
+                id="firstName-help"
               >
                 <small
                   class="p-error message-error"
-                  [hidden]="!email?.errors?.['required']"
+                  [hidden]="!firstName?.errors?.['required']"
                 >
-                  Email is required.
+                  firstName is required.
                 </small>
                 <small
                   class="p-error message-error"
-                  [hidden]="!email?.errors?.['email']"
+                  [hidden]="!firstName?.errors?.['firstName']"
                 >
-                  Email is invalid.
+                  firstName is invalid.
                 </small>
               </div>
             </div>
             <div class="field">
               <input
-                id="name"
-                placeholder="Name"
-                formControlName="name"
+                id="lastName"
+                placeholder="Last Name"
+                formControlName="lastName"
                 [class]="
-                  name?.invalid
+                  lastName?.invalid
                     ? 'ng-invalid ng-dirty w-full input-custom'
                     : 'w-full input-custom'
                 "
@@ -80,20 +96,22 @@
               />
               <div
                 class="mt-1"
-                *ngIf="name?.invalid && name?.dirty && name?.touched"
+                *ngIf="
+                  lastName?.invalid && lastName?.dirty && lastName?.touched
+                "
                 id="name-help"
               >
                 <small
                   class="p-error message-error"
-                  [hidden]="!name?.errors?.['required']"
+                  [hidden]="!lastName?.errors?.['required']"
                 >
-                  Name is required.
+                  Last name is required.
                 </small>
                 <small
                   class="p-error message-error"
-                  [hidden]="!name?.errors?.['minlength']"
+                  [hidden]="!lastName?.errors?.['minlength']"
                 >
-                  Min length of name is 3.
+                  Min length of last name is 3.
                 </small>
               </div>
             </div>
@@ -327,7 +345,7 @@
         <div class="fee-wrapper py-2">
           <div class="flex justify-content-between pt-2">
             <span>Subtotal ({{ totalQuantity }} items):</span>
-            <span>{{ 85400 | currency: "VND" }}</span>
+            <span>{{ totalCart | myCurrency: "VND" }}</span>
           </div>
           <div class="flex justify-content-between pt-2">
             <span>Shipping fee:</span>
@@ -361,3 +379,4 @@
     </div>
   </div>
 </div>
+<app-loading [hidden]="!isLoading || infoForm.invalid"></app-loading>

@@ -7,12 +7,12 @@ import { Order, OrderDetailRequest } from 'src/app/model/bill.model';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { myCurrency } from 'src/app/pipes/my-currency.pipe';
+import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 @Component({
   selector: 'app-order-detail',
   standalone: true,
-  imports: [CommonModule, TableModule, RouterModule, myCurrency, ButtonModule],
+  imports: [CommonModule, TableModule, RouterModule, MyCurrency, ButtonModule],
   templateUrl: './order-detail.component.html',
   styleUrls: ['./order-detail.component.scss'],
   encapsulation: ViewEncapsulation.None,

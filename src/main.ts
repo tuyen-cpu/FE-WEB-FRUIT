@@ -12,6 +12,7 @@ import {
   GoogleLoginProvider,
   SocialAuthServiceConfig,
 } from '@abacritt/angularx-social-login';
+import { AuthGuard } from './app/guards/auth.guard';
 
 if (environment.production) {
   enableProdMode();
@@ -51,6 +52,6 @@ bootstrapApplication(AppComponent, {
         preloadingStrategy: PreloadAllModules,
       })
     ),
-    // ...
+    AuthGuard,
   ],
 });

@@ -17,7 +17,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Validation } from 'src/app/utils/Validation';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -37,7 +37,7 @@ import { Router, RouterModule } from '@angular/router';
 export class LoginComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
   submitted = false;
-
+  returnUrl!: string;
   isLoading = false;
   userSupscription!: Subscription;
   constructor(
@@ -45,10 +45,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private userInforService: UserInforService,
     private tokenStorageService: TokenStorageService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.userSupscription = this.tokenStorageService.userChange.subscribe(
       (data) => {
         if (data) {
@@ -76,7 +78,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         console.log('thanh cong', response);
         this.addUserInformationToLocalstorage(response);
-        this.router.navigate(['/']);
+        // this.router.navigate(['/']);
+        this.router.navigateByUrl(this.returnUrl);
       },
       error: (e) => {
         alert(e.error.data);

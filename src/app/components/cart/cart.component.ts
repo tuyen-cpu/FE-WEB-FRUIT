@@ -84,13 +84,17 @@ export class CartComponent implements OnInit, OnDestroy {
         element.value++;
         break;
       default:
-        if (!Number(element.value) || Number(element.value) < 0) {
-          element.value = Number(1);
-        }
+        // if (!Number(element.value) || Number(element.value) < 0) {
+        //   element.value = Number(1);
+        // }
 
         break;
     }
     cartItem.quantity = Number(element.value);
+    if (cartItem.quantity === 1) {
+      this.remove(cartItem);
+      return;
+    }
     this.cartItemService
       .update(
         cartItem.id || 1000,

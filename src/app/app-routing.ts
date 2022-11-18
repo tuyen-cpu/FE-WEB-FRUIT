@@ -1,3 +1,4 @@
+import { AuthGuard } from './guards/auth.guard';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { AccountRoutes } from './components/account/account-routes';
 import { HomeComponent } from './components/home/home.component';
@@ -21,11 +22,12 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'account',
+
     loadChildren: () =>
       import('./components/account/account-routes').then(
         ({ AccountRoutes }) => AccountRoutes
       ),
-    providers: [SocialLoginModule, ProvincesApiService],
+    providers: [SocialLoginModule, ProvincesApiService, AuthGuard],
   },
   {
     path: 'checkout',

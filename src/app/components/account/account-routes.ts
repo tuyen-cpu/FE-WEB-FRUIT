@@ -1,3 +1,4 @@
+import { AuthGuard } from './../../guards/auth.guard';
 import { OrderComponent } from './order/order.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { LoginComponent } from './login/login.component';
@@ -35,14 +36,17 @@ export const AccountRoutes: Routes = [
       },
       {
         path: 'order',
+        canActivate: [AuthGuard],
         component: OrderComponent,
       },
       {
         path: 'order/:orderId',
+        canActivate: [AuthGuard],
         component: OrderDetailComponent,
       },
       {
         path: 'address',
+        canActivate: [AuthGuard],
         component: AddressComponent,
       },
     ],

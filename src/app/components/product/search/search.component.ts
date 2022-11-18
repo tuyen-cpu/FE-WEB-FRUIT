@@ -19,7 +19,7 @@ import { Paginator } from 'src/app/model/paginator.model';
 })
 export class SearchComponent implements OnInit {
   products: Product[] = [];
-  paginator: Paginator = { pageNumber: 0, pageSize: 5, totalElements: 0 };
+  paginator: Paginator = { pageNumber: 0, pageSize: 12, totalElements: 0 };
   key: string = '';
   paramsURL: {} = {};
   constructor(
@@ -39,7 +39,7 @@ export class SearchComponent implements OnInit {
           } else {
             this.paginator.pageNumber = res['page'] - 1;
           }
-          this.paginator.pageSize = Number(res['size']) || 5;
+          this.paginator.pageSize = Number(res['size']) || 12;
           this.paramsURL = { ...this.paramsURL, query: this.key };
           return this.productService.search(
             this.key,

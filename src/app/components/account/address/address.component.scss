@@ -70,8 +70,26 @@
     background: #c8e6c9;
     color: #256029;
   }
-  &.status-0 {
-    background: #ffcdd2;
-    color: #c63737;
+  // &.status-0 {
+  //   background: #ffcdd2;
+  //   color: #c63737;
+  // }
+}
+.p-button-text {
+  .pi {
+    font-size: 1.4rem;
+  }
+}
+.p-inline-message.p-inline-message-info {
+  display: block;
+  padding: 18px 8px;
+  margin: 0;
+  .p-inline-message-text {
+    font-size: 1.4rem;
+    font-family: $font-family;
+  }
+
+  .p-inline-message-icon {
+    font-size: 1.4rem;
   }
 }
