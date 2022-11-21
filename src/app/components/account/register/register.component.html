@@ -1,7 +1,7 @@
 <div class="register-wrapper col-12 sm:col-12 md:col-6">
   <div class="register-site">
     <div class="register-title">
-      <h2>TẠO TÀI KHOẢN</h2>
+      <h2>CREATE A NEW ACCOUNT</h2>
     </div>
     <form
       action=""
@@ -13,7 +13,7 @@
         <input
           id="lastName"
           class="register-form__field-input"
-          placeholder="Họ"
+          placeholder="Last name"
           formControlName="lastName"
           type="text"
           pInputText
@@ -32,7 +32,7 @@
         <input
           id="firstName"
           class="register-form__field-input"
-          placeholder="Tên"
+          placeholder="First name"
           formControlName="firstName"
           type="text"
           pInputText
@@ -79,7 +79,7 @@
         <input
           id="password"
           class="register-form__field-input"
-          placeholder="Mật khẩu"
+          placeholder="Password"
           formControlName="password"
           type="password"
           pInputText
@@ -105,11 +105,10 @@
         <input
           id="confirmpassword"
           class="register-form__field-input"
-          placeholder="Mật khẩu"
+          placeholder="Re-password"
           type="password"
           pInputText
           formControlName="confirmPassword"
-          placeholder="Xác nhận mật khẩu"
         />
         <span *ngIf="getConfirmPassword.dirty">
           <small
@@ -135,14 +134,14 @@
         pButton
         [loading]="isLoading"
       >
-        Đăng ký
+        CREATE
       </button>
     </form>
 
     <button
       pButton
       [routerLink]="['/account/login']"
-      label="Chuyển đến đăng nhập"
+      label="Back to login"
       icon="pi pi-arrow-left"
       class="p-button-text back-login-btn"
     ></button>

@@ -76,9 +76,10 @@ export class CartComponent implements OnInit, OnDestroy {
     return price - (price * discount) / 100;
   }
   updateQuantity(element: any, cartItem: CartItem, action: string) {
+    console.log('cart');
     switch (action) {
       case '-':
-        if (Number(element.value) >= 2) element.value--;
+        element.value--;
         break;
       case '+':
         element.value++;
@@ -91,7 +92,7 @@ export class CartComponent implements OnInit, OnDestroy {
         break;
     }
     cartItem.quantity = Number(element.value);
-    if (cartItem.quantity === 1) {
+    if (cartItem.quantity === 0) {
       this.remove(cartItem);
       return;
     }

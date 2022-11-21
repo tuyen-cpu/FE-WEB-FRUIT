@@ -91,6 +91,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.userInforService.user = {
       id: response.data.id,
       username: response.data.username,
+      firstName: response.data.firstName,
+      lastName: response.data.lastName,
       email: response.data.email,
       roles: response.data.roles,
     };

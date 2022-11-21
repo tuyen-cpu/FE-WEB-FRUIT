@@ -71,9 +71,11 @@ export class CartItemService {
       })
       .pipe(
         tap((res: any) => {
+          console.log(res);
           const newCarts = this.cartItemsChange
             .getValue()
             .map((obj) => (obj.product.id === productId ? res.data : obj));
+          console.log(newCarts);
           this.next(newCarts);
         })
       );

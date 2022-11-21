@@ -3,7 +3,7 @@
     <div class="sm:pl-6">
       <div
         *ngIf="getUser()"
-        class="user-information flex align-items-center mb-5"
+        class="user-information flex align-items-center mb-3"
       >
         <span class="avatar">
           <img
@@ -18,7 +18,7 @@
       </div>
       <div
         *ngIf="!getUser()"
-        class="user-information flex align-items-center mb-5"
+        class="user-information flex align-items-center mb-3"
       >
         <span
           >Do you already have an account?<a
@@ -30,9 +30,7 @@
       </div>
     </div>
   </div>
-  <div
-    class="flex-order-2 md:flex-order-1 col-12 sm:col-12 md:col-12 lg:col-8 grid sm:pl-5 sm:pr-5"
-  >
+  <div class="col-12 sm:col-12 md:col-12 lg:col-8 grid sm:pl-5 sm:pr-5">
     <div class="col-12 sm:px-3">
       <div class="field"></div>
       <form class="grid" [formGroup]="infoForm" (ngSubmit)="onSubmit()">
@@ -284,7 +282,9 @@
     </div> -->
   </div>
 
-  <div class="flex-order-1 md:flex-order-2 col-12 sm:col-12 md:col-12 lg:col-4">
+  <div
+    class="flex-order-1 md:flex-order-2 col-12 sm:col-12 md:col-12 lg:col-4 mt-4"
+  >
     <div class="sidebar grid px-3">
       <div class="w-full sidebar__title">
         <h4>Orders ({{ totalQuantity }})</h4>
@@ -380,3 +380,7 @@
   </div>
 </div>
 <app-loading [hidden]="!isLoading || infoForm.invalid"></app-loading>
+<p-confirmDialog
+  header="Confirmation"
+  icon="pi pi-exclamation-triangle"
+></p-confirmDialog>

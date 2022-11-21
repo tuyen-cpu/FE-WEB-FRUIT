@@ -161,9 +161,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }, 0);
   }
   updateQuantity(element: any, cartItem: CartItem, action: string) {
+    console.log('header');
     switch (action) {
       case '-':
-        if (Number(element.value) >= 2) element.value--;
+        element.value--;
         break;
       case '+':
         element.value++;
@@ -176,7 +177,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         break;
     }
     cartItem.quantity = Number(element.value);
-    if (cartItem.quantity === 1) {
+    if (cartItem.quantity === 0) {
       this.remove(cartItem);
       return;
     }
@@ -334,9 +335,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.loginForm.reset();
         this.addUserInformationToLocalstorage(response);
+        console.log(response);
       },
       error: (err) => {
-        alert(err.error.data);
+        alert(err.error.message);
         this.isLoading = false;
       },
     });
@@ -348,6 +350,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userInforService.user = {
       id: response.data.id,
       username: response.data.username,
+      firstName: response.data.firstName,
+      lastName: response.data.lastName,
       email: response.data.email,
       roles: response.data.roles,
     };

@@ -2,5 +2,8 @@
   color: #00381a;
   a {
     cursor: pointer;
+    &.active {
+      color: #00381a;
+    }
   }
 }

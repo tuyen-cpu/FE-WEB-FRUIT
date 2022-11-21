@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import url(./app/scss/base/_reset.scss);
+@import "../src/app/scss/utils/variable";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,200&display=swap");
 html {
   font-smooth: antialiased;
@@ -54,4 +55,95 @@ html {
   .container {
     max-width: 1400px;
   }
+}
+.btn-animationn {
+  color: #000;
+  margin: 10px 0 0 0;
+  padding: 15px 30px;
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+  font-weight: 500;
+  outline: none;
+  border: 1px solid $main-color;
+  position: relative;
+  isolation: isolate;
+  border-radius: 0;
+  &:before {
+    content: "";
+    height: 100%;
+    width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: $main-color;
+    z-index: -1;
+    transition: width 0.25s ease-in;
+    color: #fff;
+  }
+  &:hover {
+    color: #fff;
+    &:before {
+      width: 100%;
+    }
+  }
+}
+
+.btn-animation-converse {
+  color: #000;
+  margin: 10px 0 0 0;
+  padding: 15px 30px;
+  border-radius: 4px;
+  background-color: $main-color !important;
+  cursor: pointer;
+  font-weight: 500;
+  outline: none;
+  border: 1px solid $main-color;
+  position: relative;
+  isolation: isolate;
+  border-radius: 0;
+  &:before {
+    content: "";
+    height: 100%;
+    width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    z-index: -1;
+    transition: width 0.25s ease-in;
+    color: #fff;
+  }
+  &:hover {
+    color: #fff;
+    &:before {
+      width: 100%;
+    }
+  }
+}
+.p-component {
+  font-size: 1.4rem !important;
+  .p-link {
+    font-size: 1.4rem !important;
+  }
+  .p-inputtext {
+    font-size: 1.4rem !important;
+  }
+}
+.p-toolbar {
+  &.p-component {
+    border-radius: 0;
+  }
+  .p-button {
+    border-radius: 0;
+    padding: 1rem 2rem;
+    font-family: $font-family;
+  }
+}
+p-table {
+  ::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  /* Track */
 }

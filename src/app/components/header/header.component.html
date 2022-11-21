@@ -201,12 +201,30 @@
               </div>
             </ul>
           </div>
-          <button
-            type="submit"
-            pButton
-            class="search-btn absolute right-0"
-            icon="pi pi-search"
-          ></button>
+          <button type="submit" class="search-btn absolute right-0">
+            <svg
+              version="1.1"
+              class="search-header__dropdown-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 24 27"
+              style="enable-background: new 0 0 24 27"
+              xml:space="preserve"
+            >
+              <path
+                d="M10,2C4.5,2,0,6.5,0,12s4.5,10,10,10s10-4.5,10-10S15.5,2,10,2z M10,19c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S13.9,19,10,19z"
+              ></path>
+              <rect
+                x="17"
+                y="17"
+                transform="matrix(0.7071 -0.7071 0.7071 0.7071 -9.2844 19.5856)"
+                width="4"
+                height="8"
+              ></rect>
+            </svg>
+          </button>
         </form>
       </div>
       <div class="header-icon-wrapper">
@@ -264,8 +282,8 @@
                 <div id="site-login" class="account-wrapper is-selected">
                   <div class="account-site">
                     <div class="account-header">
-                      <h2 class="account-header__title">ĐĂNG NHẬP TÀI KHOẢN</h2>
-                      <p>Nhập email và mật khẩu của bạn</p>
+                      <h2 class="account-header__title">LOGIN ACCOUNT</h2>
+                      <p>Enter your email and your password</p>
                     </div>
                     <div class="account-content">
                       <!-- <form class="mygroup">
@@ -289,8 +307,8 @@
                           <label
                             for="account-content__email"
                             class="account-content__label"
-                            >Email hoặc số điện thoại</label
-                          >
+                            >Email
+                          </label>
                         </div>
                         <div class="account-content__group">
                           <input
@@ -303,7 +321,7 @@
                           <label
                             for="account-content__password"
                             class="account-content__label"
-                            >Mật khẩu</label
+                            >Password</label
                           >
                         </div>
                         <button
@@ -313,7 +331,7 @@
                           pRipple
                           [loading]="isLoading"
                         >
-                          ĐĂNG NHẬP
+                          LOGIN
                         </button>
                       </form>
                       <div class="social-btn-wrapper">
@@ -321,6 +339,7 @@
                           <asl-google-signin-button
                             type="standard"
                             size="medium"
+                            shape="rectangular"
                           ></asl-google-signin-button>
                         </div>
 
@@ -345,18 +364,16 @@
                       </div>
                       <div class="switch-site-action">
                         <div class="switch-action__text">
-                          Khách hàng mới
+                          Are you a new customer?
                           <a
                             routerLink="/account/register"
                             (click)="changeShowAccountDropdown()"
-                            >Tạo tài khoản</a
+                            >Create a account</a
                           >
                         </div>
                         <div class="switch-action__text">
-                          Quên mật khẩu
-                          <a (click)="changeSiteAccount()"
-                            >Khôi phục mật khẩu</a
-                          >
+                          Forgot password
+                          <a (click)="changeSiteAccount()">Reset password</a>
                         </div>
                       </div>
                     </div>
@@ -365,8 +382,8 @@
                 <div id="site-forgot" class="account-wrapper">
                   <div class="account-site">
                     <div class="account-header">
-                      <h2 class="account-header__title">KhÔI PHỤC MẬT KHẨU</h2>
-                      <p>Nhập email và mật khẩu của bạn</p>
+                      <h2 class="account-header__title">RESET PASSWORD</h2>
+                      <p>Enter your email</p>
                     </div>
                     <div class="account-content">
                       <form action="">
@@ -380,7 +397,7 @@
                           <label
                             for="account-content__email-forgot"
                             class="account-content__label"
-                            >Email hoặc số điện thoại</label
+                            >Email</label
                           >
                         </div>
 
@@ -390,15 +407,14 @@
                           pRipple
                           type="button"
                         >
-                          KHÔI PHỤC
+                          RESET
                         </button>
                       </form>
 
                       <div class="switch-site-action">
                         <div class="switch-action__text">
-                          Bạn đã nhớ mật khẩu?<a (click)="changeSiteAccount()"
-                            >Trở về đăng nhập</a
-                          >
+                          Did you remember the password?
+                          <a (click)="changeSiteAccount()">Back to login</a>
                         </div>
                       </div>
                     </div>
@@ -469,8 +485,18 @@
               <span class="cart-quantity"> {{ totalQuantity }} </span>
             </a>
             <div class="cart-dropdown-wrapper">
+              <!-- <span class="triangle-box">
+                <svg viewBox="0 0 20 9" role="presentation">
+                  <path
+                    d="M.47108938 9c.2694725-.26871321.57077721-.56867841.90388257-.89986354C3.12384116 6.36134886 5.74788116 3.76338565 9.2467995.30653888c.4145057-.4095171 1.0844277-.40860098 1.4977971.00205122L19.4935156 9H.47108938z"
+                    fill="#ffffff"
+                    data-darkreader-inline-fill=""
+                    style="--darkreader-inline-fill: #f4ede1"
+                  ></path>
+                </svg>
+              </span> -->
               <div class="cart-dropdown-site">
-                <div class="cart-dropdown__title">Giỏ hàng</div>
+                <div class="cart-dropdown__title">CART</div>
                 <ul class="cart-dropdown__list">
                   <li
                     *ngFor="let item of carts"
@@ -486,7 +512,11 @@
                       <span class="quantity">
                         <button
                           (click)="
-                            updateQuantity(inputQuantityElement, item, '-')
+                            updateQuantity(
+                              inputQuantityElementHeader,
+                              item,
+                              '-'
+                            )
                           "
                           class="quantity__btn"
                         >
@@ -497,11 +527,15 @@
                           min="1"
                           class="value"
                           value="{{ item.quantity }}"
-                          #inputQuantityElement
+                          #inputQuantityElementHeader
                         />
                         <button
                           (click)="
-                            updateQuantity(inputQuantityElement, item, '+')
+                            updateQuantity(
+                              inputQuantityElementHeader,
+                              item,
+                              '+'
+                            )
                           "
                           class="quantity__btn"
                         >
@@ -549,7 +583,7 @@
                       ></path>
                     </g>
                   </svg>
-                  <p class="mt-4">Hiện chưa có sản phẩm</p>
+                  <p class="mt-4">Cart is empty</p>
                 </div>
                 <div class="cart-dropdown-footer">
                   <div class="total-wrapper flex justify-content-between">

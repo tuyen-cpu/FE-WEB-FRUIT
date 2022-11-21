@@ -1,34 +1,9 @@
-<div class="order-detail-wrapper container">
+<div class="order-detail-wrapper">
   <div class="title text-center mb-6">
-    <h2 class="title-account-component">CHI TIẾT ĐƠN HÀNG</h2>
+    <h2 class="title-account-component">ORDER DETAIL</h2>
   </div>
   <div class="grid">
-    <div class="account-side col-12 sm:col-12 md:12 lg:col-3">
-      <h5 class="title text-3xl uppercase">Account</h5>
-      <ul class="text-2xl">
-        <li>
-          <a routerLink="/account/profile" class="block py-2">
-            <i class="pi pi-circle"></i> Account information</a
-          >
-        </li>
-        <li>
-          <a routerLink="/account/address" class="block py-2"
-            ><i class="pi pi-circle"></i> Address list</a
-          >
-        </li>
-        <li>
-          <a routerLink="/account/order" class="block py-2"
-            ><i class="pi pi-circle"></i> Order list</a
-          >
-        </li>
-        <li>
-          <a (click)="logout()" class="block py-2"
-            ><i class="pi pi-circle"></i> Logout</a
-          >
-        </li>
-      </ul>
-    </div>
-    <div class="col-12 sm:col-12 md:12 lg:col-9">
+    <div class="col-12 sm:col-12 md:12 lg:col-12">
       <div class="order-information">
         <div class="title text-2xl mb-3">
           <b class="font-medium">Order: H-{{ orderId }}</b
@@ -41,6 +16,8 @@
       </div>
       <div class="mt-4">
         <p-table
+          [scrollable]="true"
+          scrollHeight="600px"
           [value]="orderDetails"
           responsiveLayout="stack"
           [breakpoint]="'960px'"
@@ -117,12 +94,13 @@
             <h6 class="text-2xl mb-4 font-semibold">PAYING ADDRESS</h6>
           </div>
           <div class="status-order alert alert-info">
-            <b class="font-medium">Payment status:</b> Waiting
+            <b class="font-medium">Payment status: </b
+            >{{ order.payment.status }}
           </div>
           <div class="box p-3">
             <div class="name line-height-2 mb-2">Trần Quang Tuyền</div>
             <div class="address line-height-2 mb-2">
-              Quận 1, p.Dakao, TP.HCM
+              {{ order.address }}
             </div>
             <div class="phone line-height-2 mb-2">035696589</div>
           </div>

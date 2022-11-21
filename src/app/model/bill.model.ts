@@ -8,6 +8,7 @@ export interface Checkout {
   address?: string;
   userId?: number;
   orderDetails?: OrderDetail[];
+  payment?: Payment;
 }
 export interface OrderDetail {
   id?: number;
@@ -23,6 +24,7 @@ export interface Order {
   createdDate: Date;
   shippingStatus: ShippingStatus;
   address: string;
+  payment: Payment;
 }
 export interface ShippingStatus {
   id: number;
@@ -34,4 +36,19 @@ export interface OrderDetailRequest {
   quantity: number;
   discount: number;
   product: Product;
+}
+export interface Payment {
+  id?: number;
+  status?: EStatusPayment;
+  payer?: string;
+  paymentMethod?: PaymentMethod;
+  email?: string;
+}
+export enum PaymentMethod {
+  COD,
+  PAYPAL,
+}
+export enum EStatusPayment {
+  PAID,
+  UNPAID,
 }

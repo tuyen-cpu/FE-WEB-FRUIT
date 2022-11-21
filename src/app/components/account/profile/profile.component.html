@@ -1,0 +1,122 @@
+<div class="profile-wrapper">
+  <div class="profile-wrapper col-12 sm:col-12 md:col-6">
+    <div class="profile-site">
+      <div class="profile-title">
+        <h2>profile</h2>
+      </div>
+      <form
+        action=""
+        [formGroup]="profileForm"
+        (ngSubmit)="onSubmit()"
+        class="profile-form"
+      >
+        <div class="profile-form__field">
+          <input
+            id="email"
+            class="profile-form__field-input"
+            placeholder="Email"
+            formControlName="email"
+            type="email"
+            [disabled]="true"
+            pInputText
+          />
+          <span *ngIf="getEmail.dirty">
+            <small
+              *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              Email không được bỏ trống.</small
+            >
+            <small
+              *ngIf="getEmail.errors?.['email']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              Email sai định dạng. Vd:tuyen@gmail.com</small
+            >
+          </span>
+        </div>
+
+        <div class="profile-form__field">
+          <input
+            id="first-name"
+            class="profile-form__field-input"
+            placeholder="Email"
+            formControlName="firstName"
+            type="first-name"
+            pInputText
+          />
+          <span *ngIf="firstName.dirty">
+            <small
+              *ngIf="firstName.errors?.['minlength']||firstName.errors?.['required']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              First name is not empty.</small
+            >
+            <small
+              *ngIf="firstName.errors?.['email']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              First name invalid. Ex:tuyen@gmail.com</small
+            >
+          </span>
+        </div>
+        <div class="profile-form__field">
+          <input
+            id="last-name"
+            class="profile-form__field-input"
+            placeholder="Email"
+            formControlName="lastName"
+            type="last-name"
+            pInputText
+          />
+          <span *ngIf="lastName.dirty">
+            <small
+              *ngIf="lastName.errors?.['minlength']||lastName.errors?.['required']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              Last name không được bỏ trống.</small
+            >
+            <small
+              *ngIf="lastName.errors?.['email']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              Last name invalid. Vd:tuyen@gmail.com</small
+            >
+          </span>
+        </div>
+        <div class="grid action-wrapper">
+          <button
+            type="submit"
+            [disabled]="!profileForm.valid"
+            class="btn-action profile-form__btn col-5 sm:col-4 md:col-4"
+            pButton
+            [loading]="isLoading"
+          >
+            profile
+          </button>
+          <div class="link-action-wrapper col-5 sm:col-4 md:col-4">
+            <a class="link-action" [routerLink]="['/account/forgot']"
+              >Forgot password?</a
+            ><br />
+            or
+            <a class="link-action" [routerLink]="['/account/register']"
+              >Create a new account</a
+            >
+          </div>
+          <div class="col-5 sm:col-4 md:col-4">
+            <!-- <asl-google-signin-button
+                  type="standard"
+                  size="large"
+                ></asl-google-signin-button> -->
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

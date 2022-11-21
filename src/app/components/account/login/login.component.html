@@ -1,7 +1,7 @@
 <div class="login-wrapper col-12 sm:col-12 md:col-6">
   <div class="login-site">
     <div class="login-title">
-      <h2>ĐĂNG NHẬP</h2>
+      <h2>LOGIN</h2>
     </div>
     <form
       action=""
@@ -40,7 +40,7 @@
         <input
           id="password"
           class="login-form__field-input"
-          placeholder="Mật khẩu"
+          placeholder="Password"
           formControlName="password"
           type="password"
           pInputText
@@ -71,15 +71,15 @@
           pButton
           [loading]="isLoading"
         >
-          ĐĂNG NHẬP
+          LOGIN
         </button>
         <div class="link-action-wrapper col-5 sm:col-4 md:col-4">
           <a class="link-action" [routerLink]="['/account/forgot']"
-            >Quên mật khẩu?</a
+            >Forgot password?</a
           ><br />
-          hoặc
+          or
           <a class="link-action" [routerLink]="['/account/register']"
-            >Đăng ký</a
+            >Create a new account</a
           >
         </div>
         <div class="col-5 sm:col-4 md:col-4">

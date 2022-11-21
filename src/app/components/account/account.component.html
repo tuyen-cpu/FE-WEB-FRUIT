@@ -1,1 +1,40 @@
-<router-outlet></router-outlet>
+<div class="grid container">
+  <div class="account-side mt-8 col-12 sm:col-12 md:12 lg:col-2">
+    <!-- <h5 class="title text-3xl uppercase">Account</h5> -->
+    <ul class="text-2xl">
+      <li>
+        <a
+          routerLink="/account/profile"
+          routerLinkActive="active"
+          class="block py-2"
+        >
+          <i class="pi pi-circle"></i> Account information</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/account/address"
+          routerLinkActive="active"
+          class="block py-2"
+          ><i class="pi pi-circle"></i> Address list</a
+        >
+      </li>
+      <li>
+        <a
+          routerLink="/account/order"
+          routerLinkActive="active"
+          class="block py-2"
+          ><i class="pi pi-circle"></i> Order list</a
+        >
+      </li>
+      <li>
+        <a (click)="logout()" routerLinkActive="active" class="block py-2"
+          ><i class="pi pi-circle"></i> Logout</a
+        >
+      </li>
+    </ul>
+  </div>
+  <div class="col-12 sm:col-12 md:12 lg:col-10">
+    <router-outlet></router-outlet>
+  </div>
+</div>

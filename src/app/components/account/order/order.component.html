@@ -14,7 +14,8 @@
         <th>Order date</th>
         <th>Total</th>
         <th>Address</th>
-        <th>Status</th>
+        <th>Status Shipping</th>
+        <th>Status Payment</th>
         <th>Action</th>
       </tr>
     </ng-template>
@@ -40,22 +41,18 @@
           {{ order.address }}
         </td>
         <td>
-          {{
-            order.shippingStatus.name === "UNVERIFIED"
-              ? "UNVERIFIED"
-              : "CANCELED"
-          }}
+          {{ order.shippingStatus.name }}
         </td>
         <td>
-          <button
-            pButton
-            pRipple
-            label="Cancel"
-            icon="pi pi-trash"
-            class="p-button-danger"
+          {{ order.payment.status }}
+        </td>
+        <td>
+          <a
+            class="cursor-pointer text-red-700"
             *ngIf="order.shippingStatus.name === 'UNVERIFIED'"
             (click)="onCancelOrder(order)"
-          ></button>
+            >Cancel</a
+          >
         </td>
       </tr>
     </ng-template>

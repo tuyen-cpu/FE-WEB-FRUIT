@@ -9,9 +9,11 @@ import { ResetComponent } from './reset/reset.component';
 import { OrderDetailComponent } from './order-detail/order-detail.component';
 import { AddressComponent } from './address/address.component';
 import { AccountComponent } from './account.component';
+import { ProfileComponent } from './profile/profile.component';
 export const AccountRoutes: Routes = [
   {
     path: '',
+    component: AccountComponent,
     children: [
       { path: '', redirectTo: 'register', pathMatch: 'full' },
       {
@@ -48,6 +50,11 @@ export const AccountRoutes: Routes = [
         path: 'address',
         canActivate: [AuthGuard],
         component: AddressComponent,
+      },
+      {
+        path: 'profile',
+        canActivate: [AuthGuard],
+        component: ProfileComponent,
       },
     ],
   },

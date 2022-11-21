@@ -1,7 +1,13 @@
+import { EStatusShipping } from './../../model/status-shipping.enum';
 import { LoadingComponent } from './../../utils/loading/loading.component';
 import { Address } from './../../model/address.model';
 import { OrderService } from './../../services/order.service';
-import { Checkout, OrderDetail } from './../../model/bill.model';
+import {
+  Checkout,
+  EStatusPayment,
+  OrderDetail,
+  PaymentMethod,
+} from './../../model/bill.model';
 import { Subscription, switchMap, map } from 'rxjs';
 import { CartItemService } from './../../services/cart-item.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
@@ -20,7 +26,11 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import {
+  MessageService,
+  PrimeNGConfig,
+  ConfirmationService,
+} from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 
@@ -34,6 +44,7 @@ import { User } from 'src/app/model/user.model';
 import { CartItem } from 'src/app/model/cart.model';
 import { AddressService } from 'src/app/services/address.service';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -53,10 +64,11 @@ import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
     ToastModule,
     LoadingComponent,
     MyCurrency,
+    ConfirmDialogModule,
   ],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
   encapsulation: ViewEncapsulation.None,
 })
 export class CheckoutComponent implements OnInit {
@@ -65,7 +77,11 @@ export class CheckoutComponent implements OnInit {
   isLoading = false;
   regexNumPhone: any = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
   payment: any = 'PAYPAL';
-
+  payer!: string;
+  emailPayer!: string;
+  statusPayment!: EStatusPayment;
+  paymentMethod!: PaymentMethod;
+  payInAdvace: boolean = false;
   provinces!: Province[];
   districts!: District[];
   wards!: Ward[];
@@ -82,6 +98,7 @@ export class CheckoutComponent implements OnInit {
     private primengConfig: PrimeNGConfig,
     private provincesApi: ProvincesApiService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private userInforService: UserInforService,
     private tokenStorageService: TokenStorageService,
     private cartItemService: CartItemService,
@@ -185,6 +202,14 @@ export class CheckoutComponent implements OnInit {
       //   '' + ~~((this.totalCart + this.shippingCost - this.discount) / 23.4),
       value: '' + 10000,
       onApprove: (details) => {
+        console.log(details);
+        this.payer =
+          details.payer.name.given_name + ' ' + details.payer.name.surname;
+        this.emailPayer = details.payer.email_address;
+        this.statusPayment = EStatusPayment.PAID;
+        this.paymentMethod = PaymentMethod.PAYPAL;
+        this.payInAdvace = true;
+        console.log();
         this.onSubmit();
       },
     });
@@ -204,6 +229,7 @@ export class CheckoutComponent implements OnInit {
     });
   }
   onSubmit() {
+    console.log(this.payer, this.paymentMethod, this.statusPayment);
     this.isLoading = true;
     const valueForm = this.infoForm.value;
     let orderDetails: OrderDetail[] = this.cartItems.map((item) => {
@@ -227,27 +253,43 @@ export class CheckoutComponent implements OnInit {
       //   description: 'chỉ là description',
       // },
       userId: this.getUser().id,
-      address: `${this.street?.value.name}, ${this.ward?.value.name}, ${this.district?.value.name}, ${this.province?.value.name}`,
+      address: `${valueForm.street}, ${valueForm.ward.name}, ${valueForm.district.name}, ${valueForm.province.name}`,
       orderDetails: orderDetails,
+      payment: {
+        email: this.emailPayer || '',
+        payer: this.payer || this.getUser().name,
+        paymentMethod: this.payInAdvace
+          ? this.paymentMethod
+          : PaymentMethod.COD,
+        status: this.payInAdvace ? this.statusPayment : EStatusPayment.UNPAID,
+      },
     };
-
-    this.orderService
-      .checkout(checkout)
-      .pipe(
-        switchMap((_) =>
-          this.cartItemService.deleteByUserId(this.getUser().id!)
-        )
-      )
-      .subscribe({
-        next: (res) => {
-          this.isLoading = false;
-          this.router.navigate(['/account/order']);
-        },
-        error: (res) => {
-          this.isLoading = false;
-          alert(res.error.message);
-        },
-      });
+    console.log(checkout);
+    this.confirmationService.confirm({
+      message: 'Are you sure that you want to order?',
+      accept: () => {
+        this.orderService
+          .checkout(checkout)
+          .pipe(
+            switchMap((_) =>
+              this.cartItemService.deleteByUserId(this.getUser().id!)
+            )
+          )
+          .subscribe({
+            next: (res) => {
+              this.isLoading = false;
+              this.router.navigate(['/account/order']);
+            },
+            error: (res) => {
+              this.isLoading = false;
+              alert(res.error.message);
+            },
+          });
+      },
+      reject: (type: any) => {
+        this.isLoading = false;
+      },
+    });
   }
   onCheckVoucher() {
     this.isLoading = true;
