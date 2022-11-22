@@ -45,6 +45,7 @@ import { CartItem } from 'src/app/model/cart.model';
 import { AddressService } from 'src/app/services/address.service';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { phoneNum } from 'src/app/utils/regex';
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -322,10 +323,7 @@ export class CheckoutComponent implements OnInit {
     this.infoForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.minLength(3)]],
-      phoneNum: [
-        '',
-        [Validators.required, Validators.pattern(this.regexNumPhone)],
-      ],
+      phoneNum: ['', [Validators.required, Validators.pattern(phoneNum)]],
       street: ['', [Validators.required, Validators.minLength(3)]],
       province: [null, Validators.required],
       district: [null, Validators.required],

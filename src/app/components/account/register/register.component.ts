@@ -13,7 +13,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
 import { Validation } from 'src/app/utils/Validation';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-register',
@@ -25,7 +27,9 @@ import { Validation } from 'src/app/utils/Validation';
     InputTextModule,
     ButtonModule,
     RouterModule,
+    ToastModule,
   ],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
@@ -34,9 +38,16 @@ export class RegisterComponent implements OnInit {
   submitted = false;
 
   isLoading = false;
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
+    this.initForm();
+  }
+  initForm() {
     this.registerForm = this.fb.group(
       {
         firstName: ['', Validators.required],
@@ -62,14 +73,11 @@ export class RegisterComponent implements OnInit {
     console.log(this.registerForm.value);
     this.authService.register(this.registerForm.value).subscribe({
       next: (response) => {
-        console.log('thanh cong', response);
-        alert(
-          'Đăng ký thành công, vui lòng kiểm tra mail để xác minh tài khoản'
-        );
+        this.showSuccessMessage('Success', response.message);
         this.isLoading = false;
       },
       error: (e) => {
-        alert(e.error.data);
+        this.showErrorMessage('Error', e.error.message);
         this.isLoading = false;
       },
     });
@@ -92,5 +100,21 @@ export class RegisterComponent implements OnInit {
   }
   get f(): { [key: string]: AbstractControl } {
     return this.registerForm.controls;
+  }
+  showSuccessMessage(summary: string, detail: string) {
+    this.messageService.add({
+      severity: 'success',
+      summary: summary,
+      detail: detail,
+      life: 3000,
+    });
+  }
+  showErrorMessage(summary: string, detail: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: summary,
+      detail: detail,
+      life: 3000,
+    });
   }
 }

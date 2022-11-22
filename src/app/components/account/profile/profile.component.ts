@@ -2,7 +2,12 @@ import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TokenStorageService } from './../../../services/token-storage.service';
 import { UserInforService } from './../../../services/user-infor.service';
 import { AuthService } from './../../../services/auth.service';
-import { Subscription } from 'rxjs';
+import {
+  Subscription,
+  debounceTime,
+  distinctUntilKeyChanged,
+  distinctUntilChanged,
+} from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -16,7 +21,11 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { User } from 'src/app/model/user.model';
-
+import { nameValidator, Validation } from 'src/app/utils/Validation';
+import { name } from 'src/app/utils/regex';
+import { UserService } from 'src/app/services/user.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -27,7 +36,9 @@ import { User } from 'src/app/model/user.model';
     InputTextModule,
     ButtonModule,
     RouterModule,
+    ToastModule,
   ],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
@@ -36,12 +47,15 @@ export class ProfileComponent implements OnInit {
   submitted = false;
   returnUrl!: string;
   isLoading = false;
-  userSupscription!: Subscription;
+  isDisable = true;
+  userSubscription!: Subscription;
+  valueFormSubscription!: Subscription;
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private userService: UserService,
     private userInforService: UserInforService,
     private tokenStorageService: TokenStorageService,
+    private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -63,18 +77,71 @@ export class ProfileComponent implements OnInit {
       ],
       firstName: [
         this.userInforService.user?.firstName,
-        [Validators.email, Validators.required, Validators.minLength(3)],
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(40),
+        ],
       ],
       lastName: [
         this.userInforService.user?.lastName,
-        [Validators.email, Validators.required, Validators.minLength(3)],
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(20),
+        ],
       ],
     });
     this.profileForm.controls['email'].disable();
+    this.valueFormSubscription = this.profileForm.valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe({
+        next: (res) => {
+          this.isDisable = false;
+        },
+        error: (res) => {
+          this.isLoading = false;
+        },
+      });
   }
   onSubmit() {
     this.isLoading = true;
     console.log(this.profileForm.value);
+
+    let formValue = this.profileForm.value;
+    this.userService
+      .update({
+        firstName: formValue.firstName,
+        lastName: formValue.lastName,
+        id: this.userInforService.user?.id,
+      })
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+          this.tokenStorageService.userChange.next(res.data);
+          this.userInforService.user = {
+            id: this.userInforService.user?.id,
+            username: this.userInforService.user?.username,
+            firstName: res.data.firstName,
+            lastName: res.data.lastName,
+            email: this.userInforService.user?.email,
+            roles: this.userInforService.user?.roles,
+          };
+          this.isLoading = false;
+          this.isDisable = true;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success!',
+            detail: 'Your information has been edited!',
+            life: 2000,
+          });
+        },
+        error: (res) => {
+          console.log(res);
+          this.isLoading = false;
+          this.isDisable = true;
+        },
+      });
   }
   addUserInformationToLocalstorage(response: any) {
     this.userInforService.user = {
@@ -100,8 +167,11 @@ export class ProfileComponent implements OnInit {
     return this.profileForm.controls;
   }
   ngOnDestroy(): void {
-    if (this.userSupscription) {
-      this.userSupscription.unsubscribe();
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+    if (this.valueFormSubscription) {
+      this.valueFormSubscription.unsubscribe();
     }
   }
 }

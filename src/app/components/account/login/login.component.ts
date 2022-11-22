@@ -18,6 +18,8 @@ import {
 } from '@angular/forms';
 import { Validation } from 'src/app/utils/Validation';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-register',
@@ -29,8 +31,9 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
     InputTextModule,
     ButtonModule,
     RouterModule,
+    ToastModule,
   ],
-
+  providers: [MessageService, ConfirmationService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
@@ -46,7 +49,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private userInforService: UserInforService,
     private tokenStorageService: TokenStorageService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -76,13 +80,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         this.isLoading = false;
-        console.log('thanh cong', response);
         this.addUserInformationToLocalstorage(response);
         // this.router.navigate(['/']);
         this.router.navigateByUrl(this.returnUrl);
       },
       error: (e) => {
-        alert(e.error.data);
+        this.showErrorMessage('Error', e.error.message);
         this.isLoading = false;
       },
     });
@@ -114,5 +117,21 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.userSupscription) {
       this.userSupscription.unsubscribe();
     }
+  }
+  showSuccessMessage(summary: string, detail: string) {
+    this.messageService.add({
+      severity: 'success',
+      summary: summary,
+      detail: detail,
+      life: 1000,
+    });
+  }
+  showErrorMessage(summary: string, detail: string) {
+    this.messageService.add({
+      severity: 'error',
+      summary: summary,
+      detail: detail,
+      life: 1000,
+    });
   }
 }

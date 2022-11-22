@@ -1,3 +1,4 @@
+<p-toast position="bottom-right"></p-toast>
 <div class="profile-wrapper">
   <div class="profile-wrapper col-12 sm:col-12 md:col-6">
     <div class="profile-site">
@@ -17,7 +18,6 @@
             placeholder="Email"
             formControlName="email"
             type="email"
-            [disabled]="true"
             pInputText
           />
           <span *ngIf="getEmail.dirty">
@@ -42,25 +42,29 @@
           <input
             id="first-name"
             class="profile-form__field-input"
-            placeholder="Email"
+            placeholder="First name"
             formControlName="firstName"
             type="first-name"
             pInputText
           />
           <span *ngIf="firstName.dirty">
             <small
-              *ngIf="firstName.errors?.['minlength']||firstName.errors?.['required']"
-              id="password-help"
+              *ngIf="firstName.errors?.['required']"
               class="profile-form__field-message p-error block"
             >
               First name is not empty.</small
             >
             <small
-              *ngIf="firstName.errors?.['email']"
-              id="password-help"
+              *ngIf="firstName.errors?.['minlength']"
               class="profile-form__field-message p-error block"
             >
-              First name invalid. Ex:tuyen@gmail.com</small
+              Minimum length must be 3 characters.</small
+            >
+            <small
+              *ngIf="firstName.errors?.['maxlength']"
+              class="profile-form__field-message p-error block"
+            >
+              Maximum length must be 40 characters.</small
             >
           </span>
         </div>
@@ -68,53 +72,42 @@
           <input
             id="last-name"
             class="profile-form__field-input"
-            placeholder="Email"
+            placeholder="Last name"
             formControlName="lastName"
             type="last-name"
             pInputText
           />
           <span *ngIf="lastName.dirty">
             <small
-              *ngIf="lastName.errors?.['minlength']||lastName.errors?.['required']"
-              id="password-help"
+              *ngIf="lastName.errors?.['required']"
               class="profile-form__field-message p-error block"
             >
               Last name không được bỏ trống.</small
             >
             <small
-              *ngIf="lastName.errors?.['email']"
-              id="password-help"
+              *ngIf="lastName.errors?.['minlength']"
               class="profile-form__field-message p-error block"
             >
-              Last name invalid. Vd:tuyen@gmail.com</small
+              Minimum length must be 3 characters.</small
+            >
+            <small
+              *ngIf="lastName.errors?.['maxlength']"
+              class="profile-form__field-message p-error block"
+            >
+              Maximum length must be 20 characters.</small
             >
           </span>
         </div>
         <div class="grid action-wrapper">
           <button
             type="submit"
-            [disabled]="!profileForm.valid"
+            [disabled]="!profileForm.valid || isDisable"
             class="btn-action profile-form__btn col-5 sm:col-4 md:col-4"
             pButton
             [loading]="isLoading"
           >
-            profile
+            Save
           </button>
-          <div class="link-action-wrapper col-5 sm:col-4 md:col-4">
-            <a class="link-action" [routerLink]="['/account/forgot']"
-              >Forgot password?</a
-            ><br />
-            or
-            <a class="link-action" [routerLink]="['/account/register']"
-              >Create a new account</a
-            >
-          </div>
-          <div class="col-5 sm:col-4 md:col-4">
-            <!-- <asl-google-signin-button
-                  type="standard"
-                  size="large"
-                ></asl-google-signin-button> -->
-          </div>
         </div>
       </form>
     </div>

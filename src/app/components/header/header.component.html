@@ -2,12 +2,12 @@
 <header>
   <div class="sub-header container">
     <div
-      class="sub-header__site flex align-items-center justify-content-between"
+      class="sub-header__site flex py-2 justify-content-center lg:justify-content-between align-items-center"
     >
       <span class="sub-header__site-left"
         >Freeship với đơn từ 250k. Giao hàng hỏa tốc 2h.</span
       >
-      <ul class="sub-header__site-right">
+      <ul class="sub-header__site-right align-items-center hidden lg:flex">
         <li class="email mr-5">
           <i class="pi pi-telegram pi-envelope mr-2"></i>
           <span class="email-text">Email: cskh@bio-ngon.com</span>
@@ -21,13 +21,13 @@
   </div>
   <div class="main-header-wrapper">
     <div
-      class="container main-header flex justify-content-between align-items-center"
+      class="container main-header grid justify-content-between align-items-center mt-0"
     >
       <div
         [ngClass]="
           isShowCategoryDropdown
-            ? 'menu-mobile-wrapper open'
-            : 'menu-mobile-wrapper'
+            ? 'menu-mobile-wrapper open col-2 sm:col-2 md:col-2 lg:hidden'
+            : 'menu-mobile-wrapper col-2 sm:col-2 md:col-2 lg:hidden'
         "
       >
         <div class="menu-mobile-site">
@@ -96,17 +96,19 @@
           </div>
         </div>
       </div>
-      <div class="logo-wrapper">
+      <div class="logo-wrapper col-2 sm:col-2 md:col-2 lg:col-2">
         <a routerLink="/" class="logo-wrappe-link">
           <img
             class="logo-wrappe-link__img max-w-full"
-            src="../../../assets/img/logo/LOGO-NEW-OK2.png"
+            src="../../../assets/img/logo/logo.png"
             alt=""
           />
         </a>
       </div>
-      <div class="cate-search-wrapper">
-        <div class="nav-wrapper">
+      <div
+        class="cate-search-wrapper grid col-4 sm:col-3 md:col-3 lg:col-10 mt-0"
+      >
+        <div class="nav-wrapper hidden lg:block md:col-4">
           <ul class="navbar__list">
             <li class="navbar__item navbar__item--active">
               <a [routerLink]="['product']" class="navbar__item-link">
@@ -144,11 +146,10 @@
             </li>
           </ul>
         </div>
-
         <form
           (ngSubmit)="onSubmit(searchInput)"
           [formGroup]="searchForm"
-          class="form-search relative w-7 relative"
+          class="form-search relative relative hidden lg:block md:col-6"
         >
           <input
             #searchInput
@@ -226,18 +227,18 @@
             </svg>
           </button>
         </form>
-      </div>
-      <div class="header-icon-wrapper">
-        <ul class="header-icon-list flex">
+        <ul
+          class="header-icon-list col-12 md:col-12 lg:col-2 grid mt-0 justify-content-end"
+        >
           <li
             [ngClass]="
               isShowAccountDropdown
-                ? 'header-icon ml-2 open'
-                : 'header-icon ml-2'
+                ? 'header-icon ml-2 open col-5 sm:col-4'
+                : 'header-icon ml-2 col-5 sm:col-4'
             "
           >
             <a
-              class="header-icon-list__link"
+              class="header-icon-list__link block"
               (click)="changeShowAccountDropdown()"
             >
               <span
@@ -467,8 +468,11 @@
             </div>
           </li>
 
-          <li class="header-icon header-icon__cart ml-4">
-            <a class="header-icon-list__link relative" [routerLink]="['cart']">
+          <li class="header-icon header-icon__cart col-5 sm:col-4">
+            <a
+              class="header-icon-list__link relative block"
+              [routerLink]="['cart']"
+            >
               <span class="icon-box icon-cart cart-menu" title="Giỏ hàng">
                 <svg
                   class=""
@@ -617,6 +621,7 @@
           </li>
         </ul>
       </div>
+
       <div class="search-mobile-wrapper">
         <div class="search-mobile-site">
           <form
