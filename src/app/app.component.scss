@@ -21,6 +21,7 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
   cursor: pointer;
   &:hover {
     background-color: $main-color;

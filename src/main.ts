@@ -50,6 +50,7 @@ bootstrapApplication(AppComponent, {
       HttpClientModule,
       RouterModule.forRoot(APP_ROUTES, {
         preloadingStrategy: PreloadAllModules,
+        scrollPositionRestoration: 'top',
       })
     ),
     AuthGuard,

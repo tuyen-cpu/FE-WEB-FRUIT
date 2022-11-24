@@ -110,8 +110,22 @@
       >
         <div class="nav-wrapper hidden lg:block md:col-4">
           <ul class="navbar__list">
-            <li class="navbar__item navbar__item--active">
-              <a [routerLink]="['product']" class="navbar__item-link">
+            <li class="navbar__item">
+              <a
+                [routerLink]="['/']"
+                class="navbar__item-link"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                Home
+              </a>
+            </li>
+            <li class="navbar__item">
+              <a
+                [routerLink]="['/product']"
+                class="navbar__item-link"
+                routerLinkActive="active"
+              >
                 Product
                 <i
                   class="pi pi-angle-down navbar__item-link-icon"
@@ -140,7 +154,12 @@
               </ul>
             </li>
             <li class="navbar__item">
-              <a [routerLink]="['product']" class="navbar__item-link">
+              <a
+                [routerLink]="['/about']"
+                class="navbar__item-link"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
                 About
               </a>
             </li>

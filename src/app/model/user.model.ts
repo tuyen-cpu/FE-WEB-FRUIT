@@ -16,3 +16,8 @@ export interface ResponseObject {
   message?: string;
   data?: Object;
 }
+export interface ChangePasswordResquest {
+  email: string;
+  password: string;
+  newPassword: string;
+}

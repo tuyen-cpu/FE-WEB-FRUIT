@@ -1,3 +1,4 @@
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { SearchComponent } from './search/search.component';
 import { ProductListComponent } from './product-list/product-list.component';
 
@@ -19,6 +20,10 @@ export const ProductRoutes: Routes = [
       {
         path: 'search',
         component: SearchComponent,
+      },
+      {
+        path: ':product-id',
+        component: ProductDetailComponent,
       },
     ],
   },

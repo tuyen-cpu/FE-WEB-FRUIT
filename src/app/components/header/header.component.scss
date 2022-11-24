@@ -134,6 +134,13 @@ header {
         .navbar__item {
           display: inline-flex;
           position: relative;
+          .navbar__item-link {
+            &.active {
+              &:hover::before {
+                opacity: 0;
+              }
+            }
+          }
         }
 
         .navbar__item:hover .navbar__item-link-icon {
@@ -180,14 +187,14 @@ header {
           border-bottom: 2px solid $main-color;
         }
 
-        .navbar__item--active .navbar__item-link {
+        .active.navbar__item-link {
           opacity: 1;
           transform: scale(1, 1);
           -webkit-transform: scale(1, 1);
           border-bottom: 2px solid #000;
         }
 
-        .navbar__item--active .navbar__item-link {
+        .active.navbar__item-link {
           border-bottom: 2px solid $main-color;
         }
 

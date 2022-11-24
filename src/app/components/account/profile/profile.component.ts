@@ -26,6 +26,7 @@ import { name } from 'src/app/utils/regex';
 import { UserService } from 'src/app/services/user.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -44,12 +45,16 @@ import { ToastModule } from 'primeng/toast';
 })
 export class ProfileComponent implements OnInit {
   profileForm!: FormGroup;
+  resetForm!: FormGroup;
   submitted = false;
   returnUrl!: string;
   isLoading = false;
   isDisable = true;
+  isLoadingChangePassword = false;
   userSubscription!: Subscription;
   valueFormSubscription!: Subscription;
+  resetFormSubscription!: Subscription;
+  errorMessageInvalidPassword!: string;
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -70,28 +75,7 @@ export class ProfileComponent implements OnInit {
     //   }
     // );
 
-    this.profileForm = this.fb.group({
-      email: [
-        this.userInforService.user?.email,
-        [Validators.email, Validators.required],
-      ],
-      firstName: [
-        this.userInforService.user?.firstName,
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(40),
-        ],
-      ],
-      lastName: [
-        this.userInforService.user?.lastName,
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(20),
-        ],
-      ],
-    });
+    this.initForm();
     this.profileForm.controls['email'].disable();
     this.valueFormSubscription = this.profileForm.valueChanges
       .pipe(distinctUntilChanged())
@@ -102,6 +86,14 @@ export class ProfileComponent implements OnInit {
         error: (res) => {
           this.isLoading = false;
         },
+      });
+    this.resetFormSubscription = this.resetForm.valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe({
+        next: (res) => {
+          this.errorMessageInvalidPassword = '';
+        },
+        error: (res) => {},
       });
   }
   onSubmit() {
@@ -166,6 +158,20 @@ export class ProfileComponent implements OnInit {
   get f(): { [key: string]: AbstractControl } {
     return this.profileForm.controls;
   }
+
+  get getNewPassword() {
+    return this.resetForm.controls['newPassword'];
+  }
+  get getOldPassword() {
+    return this.resetForm.controls['oldPassword'];
+  }
+  get getConfirmPassword() {
+    return this.resetForm.controls['confirmPassword'];
+  }
+
+  get getResetForm(): { [key: string]: AbstractControl } {
+    return this.resetForm.controls;
+  }
   ngOnDestroy(): void {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
@@ -173,5 +179,80 @@ export class ProfileComponent implements OnInit {
     if (this.valueFormSubscription) {
       this.valueFormSubscription.unsubscribe();
     }
+  }
+  initForm() {
+    this.profileForm = this.fb.group({
+      email: [
+        this.userInforService.user?.email,
+        [Validators.email, Validators.required],
+      ],
+      firstName: [
+        this.userInforService.user?.firstName,
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(40),
+        ],
+      ],
+      lastName: [
+        this.userInforService.user?.lastName,
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(20),
+        ],
+      ],
+    });
+    this.resetForm = this.fb.group(
+      {
+        newPassword: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(40),
+          ],
+        ],
+        oldPassword: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(40),
+          ],
+        ],
+        confirmPassword: ['', [Validators.required]],
+      },
+      {
+        validators: [Validation.match('newPassword', 'confirmPassword')],
+      }
+    );
+  }
+
+  changePassword() {
+    this.errorMessageInvalidPassword = '';
+    this.isLoadingChangePassword = true;
+    this.userService
+      .changePassword({
+        email: this.userInforService.user?.email!,
+        password: this.resetForm.value.oldPassword,
+        newPassword: this.resetForm.value.newPassword,
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success!',
+            detail: res.message,
+            life: 2000,
+          });
+          this.isLoadingChangePassword = false;
+          this.resetForm.reset();
+        },
+        error: (res) => {
+          this.errorMessageInvalidPassword = res.error.message;
+          this.isLoadingChangePassword = false;
+        },
+      });
   }
 }

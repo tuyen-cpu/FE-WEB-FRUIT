@@ -3,7 +3,7 @@
   <div class="profile-wrapper col-12 sm:col-12 md:col-6">
     <div class="profile-site">
       <div class="profile-title">
-        <h2>profile</h2>
+        <h2>My account</h2>
       </div>
       <form
         action=""
@@ -107,6 +107,116 @@
             [loading]="isLoading"
           >
             Save
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="change-password mt-7">
+      <h2>Change password</h2>
+      <form
+        action=""
+        [formGroup]="resetForm"
+        (ngSubmit)="changePassword()"
+        class="profile-form"
+      >
+        <div class="profile-form__field">
+          <input
+            id="old-password"
+            class="profile-form__field-input"
+            placeholder="Password"
+            formControlName="oldPassword"
+            type="password"
+            title="Password"
+            pInputText
+          />
+          <span *ngIf="getOldPassword.dirty">
+            <small
+              *ngIf="getOldPassword.errors?.['minlength']||getOldPassword.errors?.['required']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              Mật khẩu phải có ít nhất 6 kí tự.</small
+            >
+            <small
+              *ngIf="getOldPassword.errors?.['maxlength']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              Mật khẩu không được nhiều hơn 40 kí tự.</small
+            >
+            <small
+              *ngIf="errorMessageInvalidPassword"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              {{ errorMessageInvalidPassword }}</small
+            >
+          </span>
+        </div>
+        <div class="profile-form__field">
+          <input
+            id="password"
+            class="profile-form__field-input"
+            placeholder="New password"
+            formControlName="newPassword"
+            type="password"
+            title="New password"
+            pInputText
+          />
+          <span *ngIf="getNewPassword.dirty">
+            <small
+              *ngIf="getNewPassword.errors?.['minlength']||getNewPassword.errors?.['required']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              Mật khẩu phải có ít nhất 6 kí tự.</small
+            >
+            <small
+              *ngIf="getNewPassword.errors?.['maxlength']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              Mật khẩu không được nhiều hơn 40 kí tự.</small
+            >
+          </span>
+        </div>
+        <div class="profile-form__field">
+          <input
+            id="confirmpassword"
+            class="profile-form__field-input"
+            placeholder="Confirm password"
+            type="password"
+            pInputText
+            formControlName="confirmPassword"
+            placeholder="Xác nhận mật khẩu"
+            title="Confirm password"
+          />
+          <span *ngIf="getConfirmPassword.dirty">
+            <small
+              *ngIf="getConfirmPassword.errors?.['matching']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              Mật khẩu không khớp</small
+            >
+            <small
+              *ngIf="getConfirmPassword.errors?.['required']"
+              id="password-help"
+              class="profile-form__field-message p-error block"
+            >
+              Mật khẩu trống</small
+            >
+          </span>
+        </div>
+        <div class="grid action-wrapper">
+          <button
+            type="submit"
+            [disabled]="!resetForm.valid"
+            class="btn-action reset-form__btn col-5 sm:col-4 md:col-4 m-0 border-noround profile-form__btn"
+            pButton
+            [loading]="isLoadingChangePassword"
+          >
+            Change
           </button>
         </div>
       </form>

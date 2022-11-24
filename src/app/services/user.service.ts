@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { District, Province } from '../model/province.model';
-import { User } from '../model/user.model';
+import { ChangePasswordResquest, User } from '../model/user.model';
 
 @Injectable()
 export class UserService {
@@ -10,5 +10,11 @@ export class UserService {
   constructor(private http: HttpClient) {}
   update(user: User): Observable<any> {
     return this.http.put(`${this.REST_API}/update`, user);
+  }
+  changePassword(changePasswordResquest: ChangePasswordResquest) {
+    return this.http.post(
+      `${this.REST_API}/change-password`,
+      changePasswordResquest
+    );
   }
 }

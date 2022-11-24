@@ -7,7 +7,8 @@ import { RouterModule } from '@angular/router';
 import { CarouselModule } from 'primeng/carousel';
 import { ProductItemComponent } from '../product/product-item/product-item.component';
 import ProductService from 'src/app/services/product.service';
-import { Product } from 'src/app/model/category.model';
+import { Category, Product } from 'src/app/model/category.model';
+import { CategoryService } from 'src/app/services/category.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -24,32 +25,50 @@ import { Product } from 'src/app/model/category.model';
 })
 export class HomeComponent implements OnInit {
   backgrounds: any = ['slider1.webp', 'slider2.webp', 'slider3.webp'];
-  categories: any = ['1', '2', '3'];
+  categoriesImg: any = ['1', '2', '3'];
   responsiveOptions: any;
   responsiveCateOptions: any;
   products: Product[] = [];
-  constructor(private productService: ProductService) {}
+  categories: Category[] = [];
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService
+  ) {}
 
   ngOnInit(): void {
     this.getProducts();
+    this.resonsiveCarousel();
+  }
+  getCategories() {
+    this.categoryService.getAll().subscribe({
+      next: (res) => {},
+      error: (res) => {},
+    });
+  }
+  resonsiveCarousel() {
     this.responsiveOptions = [
       {
         breakpoint: '1024px',
         numVisible: 1,
-        numScroll: 3,
+        numScroll: 1,
       },
       {
         breakpoint: '768px',
         numVisible: 1,
-        numScroll: 3,
+        numScroll: 1,
       },
       {
         breakpoint: '560px',
         numVisible: 1,
-        numScroll: 3,
+        numScroll: 1,
       },
     ];
     this.responsiveCateOptions = [
+      {
+        breakpoint: '1300px',
+        numVisible: 2,
+        numScroll: 3,
+      },
       {
         breakpoint: '1024px',
         numVisible: 2,
@@ -58,12 +77,12 @@ export class HomeComponent implements OnInit {
       {
         breakpoint: '768px',
         numVisible: 2,
-        numScroll: 2,
+        numScroll: 1,
       },
       {
         breakpoint: '560px',
         numVisible: 1,
-        numScroll: 3,
+        numScroll: 1,
       },
     ];
   }

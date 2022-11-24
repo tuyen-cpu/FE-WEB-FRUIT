@@ -124,6 +124,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       {
         next: (response) => {
           this.carts = response;
+          console.log(this.carts);
           this.loadTotal();
         },
         error: (response) => {},
@@ -195,6 +196,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         error: (res) => {
           this.showErrorMessage('Failed', res.error.message);
           element.value--;
+
+          cartItem.quantity = Number(element.value);
+          console.log(cartItem.quantity);
         },
       });
   }

@@ -34,7 +34,6 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 export class ResetComponent implements OnInit {
   resetForm!: FormGroup;
   submitted = false;
-
   isLoading = false;
   constructor(
     private fb: FormBuilder,

@@ -61,16 +61,20 @@
     </div> -->
   </div>
   <div class="category-home my-8">
-    <div class="container">
+    <div class="grid justify-content-center">
       <p-carousel
-        [value]="categories"
+        [value]="categoriesImg"
         [numVisible]="3"
         [numScroll]="3"
-        [circular]="false"
-        [responsiveOptions]="responsiveOptions"
+        [circular]="true"
+        [responsiveOptions]="responsiveCateOptions"
+        [showNavigators]="false"
+        class="col-12 lg:col-9 mx-4"
       >
         <ng-template let-cate pTemplate="item">
-          <div class="relative category-home__item overflow-hidden">
+          <div
+            class="relative category-home__item sm:px-2 sm:px-2 md:px-3 md:px-3 lg:px-4 lg:px-4"
+          >
             <a href="" class="block overflow-hidden"
               ><img
                 [src]="
@@ -125,6 +129,41 @@
           *ngFor="let product of products"
         >
           <app-product-item [product]="product"></app-product-item>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="banner-new-customner my-4">
+    <div class="container">
+      <div class="relative banner-new-customner__site">
+        <img
+          src="../../../assets/img/background/organic-banner-04.webp"
+          alt=""
+        />
+        <div
+          class="banner-new-customner__content absolute bottom-50 translate-y-50 text-center left-0 right-0"
+        >
+          <span
+            class="banner-new-customner__content-subtitle md:text-4xl lg:text-5xl"
+            >New customer offers</span
+          >
+          <h3
+            class="banner-new-customner__content-title my-3 md:text-5xl lg:text-6xl"
+          >
+            Cooked vegetable with sauce and space
+          </h3>
+          <p
+            class="banner-new-customner__content-des md:text-xl lg:text-2xl line-height-2"
+          >
+            Praesent dapibus, neque id cursus ucibus, tortor neque
+            <br />
+            egestas augue, eu vulputate magna eros eu erat.
+          </p>
+          <a
+            routerLink="/product/list"
+            class="btn-action inline-block m-0 md:px-4 md:py-3 lg:p-4 lg:px-6 md:text-xl lg:text-2xl mt-3"
+            >Shop now</a
+          >
         </div>
       </div>
     </div>

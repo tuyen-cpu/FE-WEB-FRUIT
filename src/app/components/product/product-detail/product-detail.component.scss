@@ -1,0 +1,144 @@
+@import "~swiper/css";
+@import "~swiper/css/free-mode";
+@import "~swiper/css/navigation";
+@import "~swiper/css/thumbs";
+@import "../../../scss/utils/variable";
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper {
+  width: 100%;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.swiper-slide {
+  background-size: cover;
+  background-position: center;
+}
+
+.mySwiper2 {
+  height: 80%;
+  width: 100%;
+}
+
+.mySwiper {
+  height: 20%;
+  box-sizing: border-box;
+  padding: 10px 0;
+}
+
+.mySwiper .swiper-slide {
+  width: 25%;
+  height: 100%;
+  opacity: 0.4;
+}
+
+.mySwiper .swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cart-item__infor {
+  margin-left: 20px;
+  font-size: $text-large;
+  flex: 1;
+  &-name {
+    font-weight: $font-bold;
+  }
+  &-price {
+  }
+  &-quantity {
+    $height: 25px;
+    display: flex;
+
+    &-value {
+      height: $height;
+      width: 35px;
+      background: #ededed;
+      font-weight: 500;
+      font-size: 15px;
+      height: 25px;
+      padding: 0;
+      text-align: center;
+      border: 1px solid #dadbdd;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      appearance: none;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  &-total {
+    float: right;
+    b {
+      color: $main-color;
+    }
+  }
+}
+.cart-item__remove {
+  cursor: pointer;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  &-icon {
+    font-size: $text-large;
+    padding: 12px;
+    border-radius: 50%;
+    &:hover {
+      background-color: #f3fdf8;
+      color: red;
+    }
+  }
+}
+.btn-qty {
+  height: 25px;
+  width: 25px;
+  background: #fff;
+  font-weight: 500;
+  font-size: $text-large;
+  color: #abafb2;
+  padding: 0;
+  text-align: center;
+  border: 1px solid #dadbdd;
+  border-radius: 0;
+  appearance: none;
+  cursor: pointer;
+}

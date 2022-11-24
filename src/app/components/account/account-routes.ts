@@ -15,7 +15,7 @@ export const AccountRoutes: Routes = [
     path: '',
     component: AccountComponent,
     children: [
-      { path: '', redirectTo: 'register', pathMatch: 'full' },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
       {
         path: 'register',
         component: RegisterComponent,
