@@ -1,7 +1,8 @@
-<div class="product-detail-wrapper">
+<p-toast></p-toast>
+<div class="product-detail-wrapper" *ngIf="product">
   <div class="container">
     <div class="main grid">
-      <div class="col-5">
+      <div class="col-12 md:col-5">
         <swiper
           style="
             --swiper-navigation-color: #fff;
@@ -9,13 +10,11 @@
           "
           [loop]="true"
           [spaceBetween]="10"
-          [navigation]="true"
           [thumbs]="{ swiper: thumbsSwiper }"
           class="mySwiper2"
         >
           <ng-template swiperSlide
-            ><img
-              src="https://swiperjs.com/demos/images/nature-1.jpg" /></ng-template
+            ><img [src]="product.image.link" /></ng-template
           ><ng-template swiperSlide
             ><img
               src="https://swiperjs.com/demos/images/nature-2.jpg" /></ng-template
@@ -55,66 +54,136 @@
         >
           <ng-template swiperSlide
             ><img
-              src="https://swiperjs.com/demos/images/nature-1.jpg" /></ng-template
+              class="cursor-pointer"
+              [src]="product.image.link" /></ng-template
           ><ng-template swiperSlide
             ><img
+              class="cursor-pointer"
               src="https://swiperjs.com/demos/images/nature-2.jpg" /></ng-template
           ><ng-template swiperSlide
             ><img
+              class="cursor-pointer"
               src="https://swiperjs.com/demos/images/nature-3.jpg" /></ng-template
           ><ng-template swiperSlide
             ><img
+              class="cursor-pointer"
               src="https://swiperjs.com/demos/images/nature-4.jpg" /></ng-template
           ><ng-template swiperSlide
             ><img
+              class="cursor-pointer"
               src="https://swiperjs.com/demos/images/nature-5.jpg" /></ng-template
           ><ng-template swiperSlide
             ><img
+              class="cursor-pointer"
               src="https://swiperjs.com/demos/images/nature-6.jpg" /></ng-template
           ><ng-template swiperSlide
             ><img
+              class="cursor-pointer"
               src="https://swiperjs.com/demos/images/nature-7.jpg" /></ng-template
           ><ng-template swiperSlide
             ><img
+              class="cursor-pointer"
               src="https://swiperjs.com/demos/images/nature-8.jpg" /></ng-template
           ><ng-template swiperSlide
             ><img
+              class="cursor-pointer"
               src="https://swiperjs.com/demos/images/nature-9.jpg" /></ng-template
           ><ng-template swiperSlide
             ><img src="https://swiperjs.com/demos/images/nature-10.jpg"
           /></ng-template>
         </swiper>
       </div>
-      <div class="col-7">
-        <div class="product-infomation">
-          <h3 class="name">Avocado seed</h3>
-          <div class="stock">Availability: Instock</div>
-          <div class="price">
-            <span class="old-price">Rs. 18.00</span>
-            <del class="new-price">Rs. 20.00 </del>
+      <div class="col-12 md:col-7 md:pl-5">
+        <div class="product-infomation text-black-alpha-90">
+          <h3 class="name text-5xl mt-0">{{ product.name }}</h3>
+          <div class="stock text-2xl my-6"><b>Availability:</b> Instock</div>
+          <div class="price my-6 text-2xl flex align-items-center">
+            <span class="new-price mr-2"
+              ><b>{{
+                calcPrice(product.price, product.discount) | myCurrency: "VND"
+              }}</b></span
+            >
+            <del class="old-price mr-2 text-black-alpha-60 font-semibold"
+              >{{ product.price | myCurrency: "VND" }}
+            </del>
+            <span class="sale-title">{{ product.discount }}</span>
           </div>
-          <div class="">Hurry up! only 35 products left in stock!</div>
-          <p>
+          <div class="text-2xl my-6">
+            Hurry up! only
+            <b class="main-color">{{ product.quantity }}</b> products left in
+            stock!
+          </div>
+          <p class="text-500 text-2xl">
             It is a long established fact that a reader will be distracted by
             the readable content of a page when looking at its layout. The point
             of using Lorem Ipsum is that it has a more-or-less normal
             distribution of letters,
           </p>
-          <div class="quantity inline-flex align-items-center">
-            <label for="">Quantity:</label>
-            <button class="btn-qty">-</button>
+          <div class="quantity inline-flex align-items-center my-6">
+            <label for="" class="text-3xl mr-4"><b>Quantity: </b></label>
+            <button
+              class="btn-qty"
+              (click)="onChangeQuantity(inputQuantityElement, '-')"
+            >
+              -
+            </button>
             <input
               type="text"
               class="cart-item__infor-quantity-value"
               onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"
               maxlength="3"
-              value="12"
+              [disabled]="true"
               #inputQuantityElement
+              [value]="quantity"
             />
-            <button class="btn-qty">+</button>
+            <button
+              class="btn-qty"
+              (click)="onChangeQuantity(inputQuantityElement, '+')"
+            >
+              +
+            </button>
           </div>
           <div class="">
-            <a class="btn-action inline-block">Add to cart</a>
+            <a
+              class="btn-action md:inline-block block px-7 uppercase text-center"
+              (click)="addToCart()"
+              >Add to cart</a
+            >
+          </div>
+          <div class="service mt-5">
+            <ul>
+              <li class="flex align-items-center">
+                <span class="block max-w-4rem"
+                  ><img
+                    src="../../../../assets/img/background/img_product_service_1.webp"
+                    alt=""
+                    class="w-full"
+                /></span>
+                <p class="text-2xl ml-4">
+                  Canh tác hướng hữu cơ không hóa chất
+                </p>
+              </li>
+              <li class="flex align-items-center">
+                <span class="block max-w-4rem"
+                  ><img
+                    src="../../../../assets/img/background/img_product_service_2.webp"
+                    alt=""
+                    class="w-full"
+                /></span>
+                <p class="text-2xl ml-4">Bảo hành đến từng cọng rau</p>
+              </li>
+              <li class="flex align-items-center">
+                <span class="block max-w-4rem"
+                  ><img
+                    src="../../../../assets/img/background/img_product_service_3.webp"
+                    alt=""
+                    class="w-full"
+                /></span>
+                <p class="text-2xl ml-4">
+                  Freeship cho hóa đơn từ 250k trong 2h.
+                </p>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

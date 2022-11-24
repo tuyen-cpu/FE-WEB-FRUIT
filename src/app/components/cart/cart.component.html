@@ -36,7 +36,8 @@
                     maxlength="3"
                     value="{{ item.quantity }}"
                     #inputQuantityElement
-                    (input)="updateQuantity(inputQuantityElement, item, '')"
+                    [disabled]="true"
+                    (change)="updateQuantity(inputQuantityElement, item, '')"
                   />
                   <button
                     (click)="updateQuantity(inputQuantityElement, item, '+')"

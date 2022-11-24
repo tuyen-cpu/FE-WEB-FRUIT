@@ -39,7 +39,7 @@ export class CartItemService {
           if (carts.find((e) => e.product.id === res.data.product.id)) {
             newCarts = carts.map((e) => {
               if (e.product.id === res.data.product.id) {
-                e.quantity++;
+                e.quantity = e.quantity + cartItem.quantity;
                 return e;
               } else {
                 return e;

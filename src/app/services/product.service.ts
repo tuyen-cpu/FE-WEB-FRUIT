@@ -22,4 +22,7 @@ export default class ProductService {
       `${this.REST_API}/search?key=${key}&page=${page}&size=${size}`
     );
   }
+  getById(id: number): Observable<any> {
+    return this.httpClient.get(`${this.REST_API}/${id}`);
+  }
 }

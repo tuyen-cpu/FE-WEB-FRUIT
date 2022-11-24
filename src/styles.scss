@@ -5,7 +5,9 @@
 html {
   font-smooth: antialiased;
 }
-
+.main-color {
+  color: $main-color;
+}
 ::-webkit-scrollbar {
   width: 0.1px;
 }

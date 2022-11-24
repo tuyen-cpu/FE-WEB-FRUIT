@@ -7,13 +7,19 @@ import { Image, Product } from 'src/app/model/category.model';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 
 @Component({
   selector: 'app-product-item',
   standalone: true,
-  imports: [CommonModule, LazyLoadImageModule, ToastModule, MyCurrency],
+  imports: [
+    CommonModule,
+    LazyLoadImageModule,
+    ToastModule,
+    MyCurrency,
+    RouterModule,
+  ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './product-item.component.html',
   styleUrls: ['./product-item.component.scss'],

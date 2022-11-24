@@ -79,10 +79,12 @@ export class CartComponent implements OnInit, OnDestroy {
     console.log('cart');
     switch (action) {
       case '-':
-        element.value--;
+        // element.value--;
+        cartItem.quantity--;
         break;
       case '+':
-        element.value++;
+        // element.value++;
+        cartItem.quantity++;
         break;
       default:
         // if (!Number(element.value) || Number(element.value) < 0) {
@@ -91,7 +93,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
         break;
     }
-    cartItem.quantity = Number(element.value);
+    // cartItem.quantity = Number(element.value);
     if (cartItem.quantity === 0) {
       this.remove(cartItem);
       return;
@@ -109,8 +111,9 @@ export class CartComponent implements OnInit, OnDestroy {
         },
         error: (res) => {
           this.showErrorMessage('Failed', res.error.message);
-          element.value--;
-          cartItem.quantity = Number(element.value);
+          // element.value--;
+          // cartItem.quantity = Number(element.value);
+          cartItem.quantity--;
           console.log(cartItem.quantity);
         },
       });

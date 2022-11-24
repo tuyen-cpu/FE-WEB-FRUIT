@@ -84,16 +84,16 @@
   &-price {
   }
   &-quantity {
-    $height: 25px;
+    $height: 30px;
     display: flex;
 
     &-value {
       height: $height;
-      width: 35px;
+      width: 40px;
       background: #ededed;
       font-weight: 500;
       font-size: 15px;
-      height: 25px;
+      height: 30px;
       padding: 0;
       text-align: center;
       border: 1px solid #dadbdd;
@@ -129,8 +129,8 @@
   }
 }
 .btn-qty {
-  height: 25px;
-  width: 25px;
+  height: 30px;
+  width: 30px;
   background: #fff;
   font-weight: 500;
   font-size: $text-large;
@@ -141,4 +141,17 @@
   border-radius: 0;
   appearance: none;
   cursor: pointer;
+}
+.sale-title {
+  background-color: red;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 20% 50%);
+  font-size: 13px;
+  padding: 2px 5px 2px 15px;
+  color: #fff;
+  &:before {
+    content: "-";
+  }
+  &:after {
+    content: "%";
+  }
 }

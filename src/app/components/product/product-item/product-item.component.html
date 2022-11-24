@@ -2,7 +2,7 @@
 <div class="product-item-wrapper">
   <div class="product-img">
     <span class="discount-tag">-{{ product.discount }}%</span>
-    <a href="" class="product-img__link">
+    <a [routerLink]="'/product/' + product.id" class="product-img__link">
       <picture>
         <img
           class=""
