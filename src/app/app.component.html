@@ -1,5 +1,5 @@
-<app-header></app-header>
-<div class="body-section mt-6">
+<app-header *ngIf="isShowHeader"></app-header>
+<div class="body-section">
   <router-outlet> </router-outlet>
 </div>
 <!-- <app-footer></app-footer> -->

@@ -5,3 +5,7 @@ export enum EStatusShipping {
   DELIVERING = 'DELIVERING',
   DELIVERED = 'DELIVERED',
 }
+export enum Status {
+  INACTIVE,
+  ACTIVE,
+}

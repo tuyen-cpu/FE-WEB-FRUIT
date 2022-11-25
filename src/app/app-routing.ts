@@ -11,6 +11,7 @@ export const APP_ROUTES: Routes = [
   { path: '', component: HomeComponent },
   {
     path: 'product',
+
     loadChildren: () =>
       import('./components/product/product-routes').then(
         ({ ProductRoutes }) => ProductRoutes
@@ -38,5 +39,12 @@ export const APP_ROUTES: Routes = [
         (c) => c.CheckoutComponent
       ),
     providers: [ProvincesApiService],
+  },
+  {
+    path: 'admin',
+
+    loadChildren: () =>
+      import('./admin/admin-routes').then(({ AdminRoutes }) => AdminRoutes),
+    providers: [UserService],
   },
 ];

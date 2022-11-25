@@ -1,0 +1,60 @@
+<div class="admin-wrapper container" [class.isShowSidebar]="isShowSidebar">
+  <app-header (newItemEvent)="showSidebar($event)"></app-header>
+  <div class="sidebar">
+    <a
+      [routerLink]="['home']"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active"
+      class="p-link sidebar-item"
+      ><i class="pi pi-calendar"></i><span>Home</span></a
+    >
+    <a
+      [routerLink]="['user']"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active"
+      class="p-link sidebar-item"
+      ><i class="pi pi-users"></i><span>User</span></a
+    >
+    <a
+      [routerLink]="['bill']"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active"
+      class="p-link sidebar-item"
+      ><i class="pi pi-money-bill"></i><span>Bill</span></a
+    >
+    <a
+      [routerLink]="['voucher']"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active"
+      class="p-link sidebar-item"
+      ><i class="pi pi-tags"></i><span>Voucher</span></a
+    >
+    <a
+      [routerLink]="['category']"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active"
+      class="p-link sidebar-item"
+      ><i class="pi pi-th-large"></i><span>Category</span></a
+    >
+    <a
+      [routerLink]="['comment']"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active"
+      class="p-link sidebar-item"
+      ><i class="pi pi-comments"></i><span>Comment</span></a
+    >
+    <a
+      [routerLink]="['x']"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active"
+      class="p-link sidebar-item"
+      ><i class="pi pi-cog"></i><span>Settings</span></a
+    >
+    <a class="p-link sidebar-item"
+      ><i class="pi pi-user"></i><span>Profile</span></a
+    >
+  </div>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

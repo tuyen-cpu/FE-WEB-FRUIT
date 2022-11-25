@@ -5,8 +5,10 @@ export interface User {
   lastName?: string;
   username?: string;
   email?: string;
+  status?: number;
   roles?: string[];
 }
+
 export interface Role {
   id?: string;
   name?: string;

@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<div class="product-detail-wrapper" *ngIf="product">
+<div class="product-detail-wrapper mt-6" *ngIf="product">
   <div class="container">
     <div class="main grid">
       <div class="col-12 md:col-5">
@@ -188,6 +188,9 @@
         </div>
       </div>
     </div>
-    <div class="desc"></div>
+    <div class="desc">
+      <h3 class="uppercase text-2xl">Description</h3>
+      <div class="" [innerHTML]="product.description | safeHtml"></div>
+    </div>
   </div>
 </div>

@@ -8,8 +8,10 @@ import { DropdownDirective } from './../../directives/dropdown.directive';
 import {
   Component,
   ElementRef,
+  EventEmitter,
   OnDestroy,
   OnInit,
+  Output,
   Renderer2,
   ViewChild,
 } from '@angular/core';
@@ -90,6 +92,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
   totalQuantity: number = 0;
   totalCart: number = 0;
+
   constructor(
     private el: ElementRef,
     private fb: FormBuilder,
@@ -112,6 +115,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userSubject = this.tokenStorageService.userChange.subscribe({
       next: (data) => {
         this.user = data;
+
         if (data) {
           this.getCartItems(data.id);
         } else {

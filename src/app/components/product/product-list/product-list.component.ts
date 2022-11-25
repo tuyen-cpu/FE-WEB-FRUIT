@@ -1,3 +1,4 @@
+import { MyCurrency } from './../../../pipes/my-currency.pipe';
 import { debounceTime, map } from 'rxjs';
 import {
   NavigationEnd,
@@ -43,6 +44,7 @@ import { LoadingComponent } from 'src/app/utils/loading/loading.component';
     DialogModule,
     ProgressSpinnerModule,
     LoadingComponent,
+    MyCurrency,
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],

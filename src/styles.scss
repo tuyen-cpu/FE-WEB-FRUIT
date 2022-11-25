@@ -149,3 +149,10 @@ p-table {
 
   /* Track */
 }
+p-toast {
+  .p-toast {
+    &.p-component {
+      top: 15%;
+    }
+  }
+}

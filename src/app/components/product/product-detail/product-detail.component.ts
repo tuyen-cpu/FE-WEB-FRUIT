@@ -1,3 +1,4 @@
+import { SafeHtmlPipe } from './../../../pipes/safe-html.pipe';
 import { UserInforService } from 'src/app/services/user-infor.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -17,7 +18,7 @@ SwiperCore.use([FreeMode, Navigation, Thumbs]);
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, SwiperModule, MyCurrency, ToastModule],
+  imports: [CommonModule, SwiperModule, MyCurrency, ToastModule, SafeHtmlPipe],
   providers: [MessageService, ConfirmationService],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
@@ -27,6 +28,7 @@ export class ProductDetailComponent implements OnInit {
   thumbsSwiper: any;
   product!: Product;
   quantity: number = 1;
+
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,

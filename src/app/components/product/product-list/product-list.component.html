@@ -1,4 +1,4 @@
-<div class="product-list-wrapper grid container">
+<div class="product-list-wrapper grid container mt-4">
   <div class="sm:col-2 lg:sticky top-0 lg:h-full">
     <div class="product-list-filter">
       <div class="product-list-filter__category">
@@ -72,7 +72,7 @@
                 [(ngModel)]="filter.price"
                 [inputId]="i + ''"
               ></p-radioButton>
-              <label [for]="i">Dưới {{ price }}</label>
+              <label [for]="i">Dưới {{ price | myCurrency: "vnd" }}</label>
             </div>
           </p-accordionTab>
         </p-accordion>

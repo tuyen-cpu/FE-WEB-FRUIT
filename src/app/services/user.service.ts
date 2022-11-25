@@ -17,4 +17,7 @@ export class UserService {
       changePasswordResquest
     );
   }
+  getAll(page: number, size: number) {
+    return this.http.get(`${this.REST_API}/all?page=${page}&size=${size}`);
+  }
 }
