@@ -1,3 +1,4 @@
+import { FileUploadService } from './../../../services/file-upload.service';
 import { UserInforService } from './../../../services/user-infor.service';
 import { CartItemService } from './../../../services/cart-item.service';
 import { ImageService } from './../../../services/image.service';
@@ -28,15 +29,19 @@ import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 export class ProductItemComponent implements OnInit {
   @Input() product!: Product;
   image!: Image;
+  urlImage!: string;
   constructor(
     private cartItemService: CartItemService,
     private userInforService: UserInforService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private router: Router
+    private router: Router,
+    private fileUploadService: FileUploadService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.urlImage = this.fileUploadService.getLink();
+  }
   addCart(product: Product) {
     if (this.userInforService.user) {
       this.cartItemService

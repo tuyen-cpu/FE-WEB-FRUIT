@@ -13,9 +13,10 @@
           [thumbs]="{ swiper: thumbsSwiper }"
           class="mySwiper2"
         >
-          <ng-template swiperSlide
-            ><img [src]="product.image.link" /></ng-template
-          ><ng-template swiperSlide
+          <ng-template swiperSlide *ngFor="let img of images"
+            ><img [src]="urlImage + '/' + img.link"
+          /></ng-template>
+          <!-- <ng-template swiperSlide
             ><img
               src="https://swiperjs.com/demos/images/nature-2.jpg" /></ng-template
           ><ng-template swiperSlide
@@ -41,7 +42,7 @@
               src="https://swiperjs.com/demos/images/nature-9.jpg" /></ng-template
           ><ng-template swiperSlide
             ><img src="https://swiperjs.com/demos/images/nature-10.jpg"
-          /></ng-template>
+          /></ng-template> -->
         </swiper>
         <swiper
           (swiper)="thumbsSwiper = $event"
@@ -52,44 +53,8 @@
           [watchSlidesProgress]="true"
           class="mySwiper"
         >
-          <ng-template swiperSlide
-            ><img
-              class="cursor-pointer"
-              [src]="product.image.link" /></ng-template
-          ><ng-template swiperSlide
-            ><img
-              class="cursor-pointer"
-              src="https://swiperjs.com/demos/images/nature-2.jpg" /></ng-template
-          ><ng-template swiperSlide
-            ><img
-              class="cursor-pointer"
-              src="https://swiperjs.com/demos/images/nature-3.jpg" /></ng-template
-          ><ng-template swiperSlide
-            ><img
-              class="cursor-pointer"
-              src="https://swiperjs.com/demos/images/nature-4.jpg" /></ng-template
-          ><ng-template swiperSlide
-            ><img
-              class="cursor-pointer"
-              src="https://swiperjs.com/demos/images/nature-5.jpg" /></ng-template
-          ><ng-template swiperSlide
-            ><img
-              class="cursor-pointer"
-              src="https://swiperjs.com/demos/images/nature-6.jpg" /></ng-template
-          ><ng-template swiperSlide
-            ><img
-              class="cursor-pointer"
-              src="https://swiperjs.com/demos/images/nature-7.jpg" /></ng-template
-          ><ng-template swiperSlide
-            ><img
-              class="cursor-pointer"
-              src="https://swiperjs.com/demos/images/nature-8.jpg" /></ng-template
-          ><ng-template swiperSlide
-            ><img
-              class="cursor-pointer"
-              src="https://swiperjs.com/demos/images/nature-9.jpg" /></ng-template
-          ><ng-template swiperSlide
-            ><img src="https://swiperjs.com/demos/images/nature-10.jpg"
+          <ng-template swiperSlide *ngFor="let img of images"
+            ><img class="cursor-pointer" [src]="urlImage + '/' + img.link"
           /></ng-template>
         </swiper>
       </div>

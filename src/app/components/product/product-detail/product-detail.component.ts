@@ -1,3 +1,5 @@
+import { ImageService } from './../../../services/image.service';
+import { FileUploadService } from './../../../services/file-upload.service';
 import { SafeHtmlPipe } from './../../../pipes/safe-html.pipe';
 import { UserInforService } from 'src/app/services/user-infor.service';
 import { ActivatedRoute } from '@angular/router';
@@ -13,6 +15,7 @@ import { CartItemService } from 'src/app/services/cart-item.service';
 import { CartItem } from 'src/app/model/cart.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { switchMap } from 'rxjs';
 // install Swiper modules
 SwiperCore.use([FreeMode, Navigation, Thumbs]);
 @Component({
@@ -28,26 +31,35 @@ export class ProductDetailComponent implements OnInit {
   thumbsSwiper: any;
   product!: Product;
   quantity: number = 1;
-
+  urlImage!: string;
+  images: string[] = [];
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
     private cartItemService: CartItemService,
     private userInforService: UserInforService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private fileUploadService: FileUploadService,
+    private imageService: ImageService
   ) {}
 
   ngOnInit(): void {
     this.getProduct();
+    this.urlImage = this.fileUploadService.getLink();
   }
   getProduct() {
     this.productService
       .getById(+this.route.snapshot.paramMap.get('product-id')!)
+      .pipe(
+        switchMap((res) => {
+          this.product = res.data;
+          return this.imageService.getAllByProductId(res.data.id);
+        })
+      )
       .subscribe({
         next: (res) => {
-          this.product = res.data;
+          this.images = res.data;
         },
-        error: (res) => {},
       });
   }
   onChangeQuantity(e: any, action: string) {

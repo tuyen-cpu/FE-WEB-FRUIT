@@ -12,4 +12,7 @@ export class ImageService {
   getByProductId(productId: number): Observable<any> {
     return this.httpClient.get(`${this.REST_API}?productId=${productId}`);
   }
+  getAllByProductId(productId: number): Observable<any> {
+    return this.httpClient.get(`${this.REST_API}/${productId}`);
+  }
 }
