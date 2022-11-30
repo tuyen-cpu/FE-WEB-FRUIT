@@ -1,6 +1,6 @@
-<div class="admin-wrapper container" [class.isShowSidebar]="isShowSidebar">
+<div class="admin-wrapper" [class.isShowSidebar]="isShowSidebar">
   <app-header (newItemEvent)="showSidebar($event)"></app-header>
-  <div class="sidebar">
+  <div class="sidebar container">
     <a
       [routerLink]="['home']"
       [routerLinkActiveOptions]="{ exact: true }"
@@ -14,6 +14,13 @@
       routerLinkActive="active"
       class="p-link sidebar-item"
       ><i class="pi pi-users"></i><span>User</span></a
+    >
+    <a
+      [routerLink]="['product']"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="active"
+      class="p-link sidebar-item"
+      ><i class="pi pi-circle"></i><span>Product</span></a
     >
     <a
       [routerLink]="['bill']"

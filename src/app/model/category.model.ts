@@ -1,21 +1,33 @@
 export interface Product {
   id?: number;
-  name: string;
-  price: number;
+  name?: string;
+  price?: number;
   description?: string;
   discount?: number;
   quantity?: number;
   status?: number;
-  category?: Category[];
-  image: Image;
+  category?: Category;
+  image?: Image;
+}
+export interface ProductRequest {
+  id?: number;
+  name?: string;
+  price?: number;
+  description?: string;
+  discount?: number;
+  quantity?: number;
+  status?: number;
+  categoryId?: number;
+  file?: FormData;
 }
 export interface Category {
   id?: number;
-  name: string;
+  name?: string;
   status?: number;
 }
 
 export interface Image {
   id?: number;
-  link: string;
+  link?: string;
+  productId?: number;
 }

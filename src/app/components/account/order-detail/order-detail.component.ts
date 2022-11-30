@@ -26,7 +26,7 @@ export class OrderDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private orderService: OrderService,
     private tokenStorageService: TokenStorageService,
-    private orderDetailService: OrderDetailService
+    private orderDetailService: OrderDetailService,
   ) {}
 
   ngOnInit(): void {
@@ -36,22 +36,16 @@ export class OrderDetailComponent implements OnInit {
   }
 
   getOrderDetails() {
-    this.orderDetailService
-      .getByOrderId(+this.route.snapshot.paramMap.get('orderId')!)
-      .subscribe({
-        next: (res) => {
-          this.orderDetails = res.data;
-          console.log(this.orderDetails);
-          this.subTotal = this.orderDetails.reduce((prev, current) => {
-            return (
-              prev +
-              (current.price - (current.price * current.discount) / 100) *
-                current.quantity
-            );
-          }, 0);
-        },
-        error: (res) => {},
-      });
+    this.orderDetailService.getByOrderId(+this.route.snapshot.paramMap.get('orderId')!).subscribe({
+      next: (res) => {
+        this.orderDetails = res.data;
+        console.log(this.orderDetails);
+        this.subTotal = this.orderDetails.reduce((prev, current) => {
+          return prev + (current.price - (current.price * current.discount) / 100) * current.quantity;
+        }, 0);
+      },
+      error: (res) => {},
+    });
   }
   getOrder() {
     this.orderService.getAllById(this.orderId).subscribe({

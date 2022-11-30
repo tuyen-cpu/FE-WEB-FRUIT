@@ -19,6 +19,8 @@
     "@angular/platform-browser": "^14.2.0",
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
+    "@ckeditor/ckeditor5-angular": "^4.0.0",
+    "@ckeditor/ckeditor5-build-classic": "^35.3.2",
     "creditcardpayments": "^1.0.3",
     "ng-lazyload-image": "^9.1.3",
     "primeflex": "^3.2.1",

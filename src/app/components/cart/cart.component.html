@@ -12,8 +12,19 @@
           </p>
         </div>
         <ul class="cart-list">
-          <li *ngFor="let item of carts" class="cart-item">
-            <span><img [src]="item.product.image.link" alt="" /></span>
+          <li *ngFor="let item of carts; trackBy: trackById" class="cart-item">
+            <span>
+              <p-skeleton
+                *ngIf="!item.product.image.link"
+                size="10rem"
+                styleClass="mr-2"
+              ></p-skeleton>
+              <img
+                *ngIf="item.product.image.link"
+                [src]="urlImage + '/' + item.product.image.link"
+                [alt]="item.product.name"
+              />
+            </span>
             <div class="cart-item__infor">
               <p class="cart-item__infor-name">
                 {{ item.product.name }}

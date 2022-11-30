@@ -1,3 +1,4 @@
+import { FileUploadService } from './../../services/file-upload.service';
 import { CategoryService } from './../../services/category.service';
 import { CartItemService } from './../../services/cart-item.service';
 import { CartItem } from './../../model/cart.model';
@@ -5,16 +6,7 @@ import { TokenStorageService } from './../../services/token-storage.service';
 import { UserInforService } from './../../services/user-infor.service';
 import { AuthService } from './../../services/auth.service';
 import { DropdownDirective } from './../../directives/dropdown.directive';
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -22,26 +14,10 @@ import { ButtonModule } from 'primeng/button';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from 'src/app/model/user.model';
-import {
-  debounceTime,
-  mergeMap,
-  of,
-  Subject,
-  Subscription,
-  switchMap,
-} from 'rxjs';
-import {
-  SocialAuthService,
-  SocialLoginModule,
-  SocialUser,
-} from '@abacritt/angularx-social-login';
+import { debounceTime, fromEvent, mergeMap, Observable, of, Subject, Subscription, switchMap } from 'rxjs';
+import { SocialAuthService, SocialLoginModule, SocialUser } from '@abacritt/angularx-social-login';
 import ProductService from 'src/app/services/product.service';
 import { Category, Product } from 'src/app/model/category.model';
 import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
@@ -92,7 +68,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
   totalQuantity: number = 0;
   totalCart: number = 0;
-
+  urlImage!: string;
   constructor(
     private el: ElementRef,
     private fb: FormBuilder,
@@ -104,10 +80,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router,
     private cartItemService: CartItemService,
     private messageService: MessageService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private fileUploadService: FileUploadService,
   ) {}
 
   ngOnInit(): void {
+    this.urlImage = this.fileUploadService.getLink();
     this.listenerSocialAuth();
     this.initForm();
     this.autoLogin();
@@ -124,16 +102,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       },
     });
     this.searchProduct();
-    this.cartItemsSubscription = this.cartItemService.cartItemsChange.subscribe(
-      {
-        next: (response) => {
-          this.carts = response;
-          console.log(this.carts);
-          this.loadTotal();
-        },
-        error: (response) => {},
-      }
-    );
+    this.cartItemsSubscription = this.cartItemService.cartItemsChange.subscribe({
+      next: (response) => {
+        this.carts = response;
+        console.log(this.carts);
+        this.loadTotal();
+      },
+      error: (response) => {},
+    });
   }
   getCartItems(userId: number) {
     this.cartItemService.getAllByUserId(userId).subscribe({
@@ -145,7 +121,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   getCategory() {
     this.categoryService.getAll().subscribe({
       next: (res) => {
-        this.categories = res.data;
+        this.categories = res.data.content;
       },
       error: (res) => {},
     });
@@ -155,14 +131,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       return total + current.quantity;
     }, 0);
     this.totalCart = this.carts.reduce((total, current) => {
-      return (
-        total +
-        this.calcPriceDiscount(
-          current.product.price,
-          current.product.discount
-        ) *
-          current.quantity
-      );
+      return total + this.calcPriceDiscount(current.product.price, current.product.discount) * current.quantity;
     }, 0);
   }
   updateQuantity(element: any, cartItem: CartItem, action: string) {
@@ -186,25 +155,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.remove(cartItem);
       return;
     }
-    this.cartItemService
-      .update(
-        cartItem.id || 1000,
-        cartItem.quantity,
-        cartItem.product.id || 1000,
-        this.user.id
-      )
-      .subscribe({
-        next: (res) => {
-          this.showSuccessMessage('Success', res.message);
-        },
-        error: (res) => {
-          this.showErrorMessage('Failed', res.error.message);
-          element.value--;
-
-          cartItem.quantity = Number(element.value);
-          console.log(cartItem.quantity);
-        },
-      });
+    this.cartItemService.update(cartItem.id || 1000, cartItem.quantity, cartItem.product.id || 1000, this.user.id).subscribe({
+      next: (res) => {
+        this.showSuccessMessage('Success', res.message);
+      },
+      error: (res) => {
+        this.showErrorMessage('Failed', res.error.message);
+        element.value--;
+        cartItem.quantity = Number(element.value);
+        console.log(cartItem.quantity);
+      },
+    });
   }
   remove(cartItem: CartItem) {
     this.cartItemService.delete(cartItem.id || 1000).subscribe({
@@ -285,7 +246,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap((response: any) => {
           return this.authService.loginWithGoogle({ value: response.idToken });
-        })
+        }),
       )
       .subscribe({
         next: (response) => {
@@ -391,9 +352,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     let siteLogin = this.el.nativeElement.querySelector('#site-login');
     let siteForgot = this.el.nativeElement.querySelector('#site-forgot');
 
-    let accountDropdownList = this.el.nativeElement.querySelector(
-      '.account-dropdown-list'
-    );
+    let accountDropdownList = this.el.nativeElement.querySelector('.account-dropdown-list');
     console.log(accountDropdownList.style);
     if (siteLogin.classList.contains('is-selected')) {
       siteLogin.classList.remove('is-selected');
@@ -433,5 +392,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       summary: summary,
       detail: detail,
     });
+  }
+  trackById(index: number, item: any) {
+    return item.id;
   }
 }

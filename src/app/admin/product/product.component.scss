@@ -1,0 +1,41 @@
+.status-default {
+  border-radius: 2px;
+  padding: 0.25em 0.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  &.status-1 {
+    background: #c8e6c9;
+    color: #256029;
+  }
+  &.status-0 {
+    background: #ffcdd2;
+    color: #c63737;
+  }
+  &.status-label-1 {
+    color: #256029;
+  }
+  &.status-label-0 {
+    color: #c63737;
+  }
+}
+.p-dialog-content {
+  overflow: unset !important;
+}
+p-dialog {
+  .p-dialog-mask.p-component-overlay {
+    z-index: 44 !important;
+  }
+}
+
+p-dialog {
+  .p-dialog-mask {
+    .p-element.ng-trigger.ng-trigger-animation {
+      // width: 80vw !important;
+    }
+  }
+  .ck-content.ck-editor__editable {
+    max-height: 200px;
+  }
+}

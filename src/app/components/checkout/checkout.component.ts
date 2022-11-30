@@ -1,3 +1,4 @@
+import { FileUploadService } from './../../services/file-upload.service';
 import { EStatusShipping } from './../../model/status-shipping.enum';
 import { LoadingComponent } from './../../utils/loading/loading.component';
 import { Address } from './../../model/address.model';
@@ -94,6 +95,7 @@ export class CheckoutComponent implements OnInit {
   cartItemsChange!: Subscription;
   addressSeleted!: { name: string };
   addressTemp: { city?: Province; ward?: Ward; district?: District } = {};
+  urlImage!: string;
   constructor(
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
@@ -105,10 +107,12 @@ export class CheckoutComponent implements OnInit {
     private cartItemService: CartItemService,
     private orderService: OrderService,
     private router: Router,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private fileUploadService: FileUploadService
   ) {}
 
   ngOnInit(): void {
+    this.urlImage = this.fileUploadService.getLink();
     this.renderPaypal();
     this.initForm();
     this.primengConfig.ripple = true;

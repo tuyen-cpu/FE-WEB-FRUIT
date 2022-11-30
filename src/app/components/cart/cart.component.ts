@@ -1,3 +1,4 @@
+import { FileUploadService } from './../../services/file-upload.service';
 import { UserInforService } from './../../services/user-infor.service';
 import { Product } from './../../model/category.model';
 import { Router, RouterModule } from '@angular/router';
@@ -10,10 +11,17 @@ import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { CartItemService } from 'src/app/services/cart-item.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { SkeletonModule } from 'primeng/skeleton';
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, RouterModule, InputTextareaModule, ToastModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    InputTextareaModule,
+    ToastModule,
+    SkeletonModule,
+  ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
@@ -24,12 +32,14 @@ export class CartComponent implements OnInit, OnDestroy {
   userSubject!: Subscription;
   totalQuantity: number = 0;
   totalCart: number = 0;
+  urlImage!: string;
   constructor(
     private router: Router,
     private tokenStorageService: TokenStorageService,
     private cartItemService: CartItemService,
     private userInforService: UserInforService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private fileUploadService: FileUploadService
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +51,7 @@ export class CartComponent implements OnInit, OnDestroy {
     //     this.carts = data;
     //   }
     // );
+    this.urlImage = this.fileUploadService.getLink();
     this.userSubject = this.tokenStorageService.userChange.subscribe({
       next: (data) => {
         this.getCartFromLocalStorage();
@@ -144,5 +155,8 @@ export class CartComponent implements OnInit, OnDestroy {
       summary: summary,
       detail: detail,
     });
+  }
+  trackById(index: number, item: any) {
+    return item.id;
   }
 }

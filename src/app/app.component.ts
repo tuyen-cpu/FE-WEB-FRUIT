@@ -1,7 +1,7 @@
 import { TokenStorageService } from './services/token-storage.service';
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { NavigationStart, Router, RouterModule } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { HomeComponent } from './components/home/home.component';
@@ -53,16 +53,22 @@ export class AppComponent implements OnInit {
       behavior: 'smooth',
     });
   }
-  constructor(private tokenStorageService: TokenStorageService) {}
+  constructor(
+    private tokenStorageService: TokenStorageService,
+    private router: Router
+  ) {}
   ngOnInit(): void {
     this.tokenStorageService.userChange.subscribe((data) => {
       console.log(data);
-
-      if (data && data.roles.includes('admin')) {
-        this.isShowHeader = false;
-      } else {
-        this.isShowHeader = true;
-      }
+      this.router.events.forEach((event) => {
+        if (event instanceof NavigationStart) {
+          if (event['url'].includes('/admin')) {
+            this.isShowHeader = false;
+          } else {
+            this.isShowHeader = true;
+          }
+        }
+      });
     });
   }
 }

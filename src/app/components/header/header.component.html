@@ -522,12 +522,12 @@
                 <div class="cart-dropdown__title">CART</div>
                 <ul class="cart-dropdown__list">
                   <li
-                    *ngFor="let item of carts"
+                    *ngFor="let item of carts; trackBy: trackById"
                     class="cart-dropdown-item flex"
                   >
                     <img
                       class="cart-dropdown-item__image"
-                      [src]="item.product.image.link"
+                      [src]="urlImage + '/' + item.product.image.link"
                       alt=""
                     />
                     <div class="cart-dropdown-item__content">

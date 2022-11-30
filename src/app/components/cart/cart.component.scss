@@ -202,11 +202,16 @@
             width: 100%;
             font-weight: 600;
           }
+
           .btn-continue-shopping {
             background-color: #fff;
             color: #003f1f;
             display: block;
             text-align: center;
+            margin-top: 8px;
+            &:hover {
+              background-color: #f3fdf8;
+            }
           }
         }
       }

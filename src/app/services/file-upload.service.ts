@@ -8,9 +8,12 @@ import { Injectable } from '@angular/core';
 export class FileUploadService {
   private REST_API = 'http://localhost:3000/api/file-upload';
   private urlImage = 'http://localhost:3000/api/file-upload/files';
-  constructor(private httpClient: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   getLink() {
     return this.urlImage;
+  }
+  upload(file: FormData) {
+    return this.http.post(`${this.REST_API}`, file);
   }
 }

@@ -1,12 +1,6 @@
 import { MyCurrency } from './../../../pipes/my-currency.pipe';
 import { debounceTime, map } from 'rxjs';
-import {
-  NavigationEnd,
-  Router,
-  RouterModule,
-  ActivatedRoute,
-  ParamMap,
-} from '@angular/router';
+import { NavigationEnd, Router, RouterModule, ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -74,7 +68,7 @@ export class ProductListComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -90,18 +84,10 @@ export class ProductListComponent implements OnInit {
     this.getCategory();
     // this.getProducts(this.filter, this.paginator);
   }
-  getProducts(
-    filter: { categoryId: number; price: number },
-    paginator: Paginator
-  ) {
+  getProducts(filter: { categoryId: number; price: number }, paginator: Paginator) {
     this.isLoading = true;
     this.productService
-      .getProductByCategoryIdAndPriceLessThan(
-        filter.categoryId,
-        filter.price,
-        paginator.pageNumber!,
-        paginator.pageSize!
-      )
+      .getProductByCategoryIdAndPriceLessThan(filter.categoryId, filter.price, paginator.pageNumber!, paginator.pageSize!)
       .subscribe({
         next: (response) => {
           setTimeout(() => {
@@ -137,7 +123,7 @@ export class ProductListComponent implements OnInit {
   getCategory() {
     this.categoryService.getAll().subscribe({
       next: (response) => {
-        this.categories = response.data;
+        this.categories = response.data.content;
       },
       error: (response) => {},
     });

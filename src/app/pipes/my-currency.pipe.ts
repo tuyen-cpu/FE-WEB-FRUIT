@@ -11,7 +11,7 @@ export class MyCurrency implements PipeTransform {
       value =
         parseFloat(value)
           .toFixed(0)
-          .replace(/(\d)(?=(\d{3})+\b)/g, '$1.') + 'đ';
+          .replace(/(\d)(?=(\d{3})+\b)/g, '$1.') + '₫';
     }
 
     return value;

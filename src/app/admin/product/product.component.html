@@ -1,0 +1,278 @@
+<app-loading [hidden]="!isLoadingComponent"></app-loading>
+<p-toast></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<div class="mt-2">
+  <!-- <div class="account-side col-12 sm:col-12 md:12 lg:col-3">
+      <h5 class="title text-3xl uppercase">Account</h5>
+      <ul class="text-2xl">
+        <li>
+          <a routerLink="/account/profile" class="block py-2">
+            <i class="pi pi-circle"></i> Account information</a
+          >
+        </li>
+        <li>
+          <a routerLink="/account/order" class="block py-2"
+            ><i class="pi pi-circle"></i> Orders</a
+          >
+        </li>
+        <li>
+          <a (click)="logout()" class="block py-2"
+            ><i class="pi pi-circle"></i> Logout</a
+          >
+        </li>
+      </ul>
+    </div> -->
+  <div class="col-12 sm:col-12 md:12 lg:col-12 px-0">
+    <div class="card">
+      <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+          <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+          <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="resetView()"></p-button
+        ></ng-template>
+      </p-toolbar>
+      <div *ngIf="products.length === 0" class=" ">
+        <p-message severity="info" text="Products is empty" styleClass="mr-2"></p-message>
+      </div>
+      <p-table
+        *ngIf="products.length !== 0"
+        #dt
+        [value]="products"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['id', 'name', 'quantity', 'price', 'discount', 'status']"
+        [rowHover]="true"
+        dataKey="id"
+        [showCurrentPageReport]="true"
+        responsiveLayout="scroll">
+        <!-- <ng-template pTemplate="summary">
+            <div class="page">
+              <p-paginator
+                [rows]="1"
+                [totalRecords]="paginator.totalElements"
+                [first]="paginator.pageNumber!"
+                (onPageChange)="onPageChange($event)"
+              ></p-paginator>
+            </div>
+          </ng-template> -->
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            <h5 class="m-0">Manage users</h5>
+
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="min-width: 1rem">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="name" style="min-width: 8rem">Product Name</th>
+            <th pSortableColumn="quantity" style="min-width: 8rem">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
+            <th>Price (VNĐ)</th>
+            <th style="min-width: 3rem">Discount</th>
+            <th style="min-width: 2rem">Status</th>
+            <th style="min-width: 2rem">Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>{{ product.id }}</td>
+            <td>
+              {{ product.name }}
+            </td>
+            <td>
+              {{ product.quantity }}
+            </td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.discount + '%' }}</td>
+            <td>
+              <span [class]="'status-default status-' + product.status">{{ product.status === 0 ? 'INACTIVE' : 'ACTIVE' }}</span>
+            </td>
+            <td>
+              <button
+                pButton
+                pRipple
+                title="Edit"
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-success mr-2"
+                (click)="editProduct(product)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7">No user found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <p-dialog
+      [(visible)]="productDialog"
+      [breakpoints]="{ '960px': '90vw', '640px': '95vw' }"
+      [style]="{ width: '50vw', maxHeight: '90vh', overflow: 'hidden' }"
+      header="New address"
+      [modal]="true"
+      styleClass="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="formgrid grid">
+          <div class="field col-6">
+            <label>Category</label>
+            <p-dropdown
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !categorySelected.name
+              }"
+              [options]="categories"
+              [(ngModel)]="categorySelected"
+              optionLabel="id"
+              placeholder="Select a Category">
+              <ng-template pTemplate="selectedItem">
+                <div class="country-item country-item-value" *ngIf="categorySelected">
+                  <div>
+                    <span>{{ categorySelected.name }}</span>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template let-status pTemplate="item">
+                <div class="status-item">
+                  <div>
+                    <span>{{ status.name }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <small class="p-error" *ngIf="submitted && !categorySelected.name">Category name is required.</small>
+          </div>
+          <div class="field col-6">
+            <label>Status</label>
+
+            <p-dropdown
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !statusSelected.label
+              }"
+              [options]="listStatuses"
+              [(ngModel)]="statusSelected"
+              optionLabel="value"
+              placeholder="Select a Country">
+              <ng-template pTemplate="selectedItem">
+                <div class="country-item country-item-value" *ngIf="statusSelected">
+                  <div>
+                    <span [class]="'status-default status-label-' + statusSelected.value">{{ statusSelected.label }}</span>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template let-status pTemplate="item">
+                <div class="status-item">
+                  <div>
+                    <span [class]="'status-default status-' + status.value">{{ status.label }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <small class="p-error" *ngIf="submitted && !statusSelected.label">Status name is required.</small>
+          </div>
+          <div class="field col-6">
+            <label for="firstName">Name</label>
+            <input
+              type="text"
+              pInputText
+              id="firstName"
+              [(ngModel)]="product.name"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !product.name
+              }" />
+            <small class="p-error" *ngIf="submitted && !product.name">Nameis required.</small>
+          </div>
+          <div class="field col-6">
+            <label for="price">Price</label>
+            <p-inputNumber
+              [(ngModel)]="product.price"
+              inputId="price"
+              mode="decimal"
+              locale="vi-VN"
+              [minFractionDigits]="0"
+              mode="currency"
+              currency="VND"
+              [min]="1000"
+              [max]="10000000"
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !product.price
+              }">
+            </p-inputNumber>
+            <small class="p-error" *ngIf="submitted && !product.price">Price name is required.</small>
+          </div>
+
+          <!-- <div class="field">
+            <label>Status</label>
+            <p-dropdown [options]="listStatuses" [(ngModel)]="product.status" placeholder="Select a status" [showClear]="true"></p-dropdown>
+          </div> -->
+
+          <div class="field col-12 md:col-6">
+            <label for="quantity">Quantity</label>
+            <p-inputNumber
+              [(ngModel)]="product.quantity"
+              inputId="quantity"
+              mode="decimal"
+              [maxlength]="5"
+              [minFractionDigits]="0"
+              [min]="1"
+              [max]="10000"
+              [useGrouping]="false"
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !product.quantity
+              }">
+            </p-inputNumber>
+            <small class="p-error" *ngIf="submitted && !product.quantity">Quantity name is required.</small>
+          </div>
+          <div class="field col-12 md:col-6">
+            <label for="discount">Discount</label>
+            <p-inputNumber
+              [(ngModel)]="product.discount"
+              inputId="discount"
+              mode="decimal"
+              [minFractionDigits]="0"
+              [min]="1"
+              [max]="100"
+              [useGrouping]="false"
+              suffix="%">
+            </p-inputNumber>
+            <!-- <small class="p-error" *ngIf="submitted && !product.discount">Discount name is required.</small> -->
+          </div>
+
+          <div class="field col-12">
+            <label for="locale-us">Description</label>
+            <ckeditor [editor]="Editor" [config]="config" [(ngModel)]="dataEditor" (ready)="onReady($event)"></ckeditor>
+          </div>
+          <div class="field col-12">
+            <p-fileUpload
+              name="file"
+              url=""
+              [customUpload]="true"
+              (uploadHandler)="onUpload($event)"
+              #fileUpload
+              [multiple]="true"
+              accept="image/*"
+              [maxFileSize]="1000000">
+              <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                  <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+                </ul>
+              </ng-template>
+            </p-fileUpload>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [loading]="isLoading" (click)="saveProduct()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
+
+<!-- <app-loading [hidden]="!isLoading"></app-loading> -->
