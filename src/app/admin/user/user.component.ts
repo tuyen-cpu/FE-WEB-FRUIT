@@ -2,11 +2,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
-import {
-  ConfirmationService,
-  ConfirmEventType,
-  MessageService,
-} from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
@@ -51,6 +47,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 })
 export class UserComponent implements OnInit {
   @ViewChild('dt') dt!: Table;
+  titleComponent!: string;
   isLoading: boolean = false;
   submitted: boolean = false;
   userDialog: boolean = false;
@@ -73,22 +70,21 @@ export class UserComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
   ) {}
 
   ngOnInit(): void {
+    this.titleComponent = this.route.snapshot.data['title'];
     this.initTable();
     this.changeParams();
   }
   getUsers() {
-    this.userService
-      .getAll(this.paginator.pageNumber, this.paginator.pageSize)
-      .subscribe({
-        next: (res: any) => {
-          this.users = res.data.content;
-        },
-        error: (res) => {},
-      });
+    this.userService.getAll(this.paginator.pageNumber, this.paginator.pageSize).subscribe({
+      next: (res: any) => {
+        this.users = res.data.content;
+      },
+      error: (res) => {},
+    });
   }
   changeParams() {
     this.route.queryParams.subscribe((res) => {

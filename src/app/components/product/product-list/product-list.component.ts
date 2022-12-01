@@ -1,5 +1,5 @@
 import { MyCurrency } from './../../../pipes/my-currency.pipe';
-import { debounceTime, map } from 'rxjs';
+import { debounceTime, delay, map } from 'rxjs';
 import { NavigationEnd, Router, RouterModule, ActivatedRoute, ParamMap } from '@angular/router';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -88,13 +88,12 @@ export class ProductListComponent implements OnInit {
     this.isLoading = true;
     this.productService
       .getProductByCategoryIdAndPriceLessThan(filter.categoryId, filter.price, paginator.pageNumber!, paginator.pageSize!)
+      .pipe(delay(500))
       .subscribe({
         next: (response) => {
-          setTimeout(() => {
-            this.products = response.data.content;
-            this.paginator.totalElements = response.data.totalPages;
-            this.isLoading = false;
-          }, 500);
+          this.products = response.data.content;
+          this.paginator.totalElements = response.data.totalPages;
+          this.isLoading = false;
         },
         error: (response) => {
           console.log(response);

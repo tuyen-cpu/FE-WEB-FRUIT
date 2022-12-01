@@ -2,14 +2,44 @@
   height: 5em;
   z-index: 40;
   width: 100%;
-  padding: 0 2rem;
+  // padding: 0 2rem;
   background-color: var(--surface-card);
   transition: left 0.2s;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 3px 5px #00000005, 0 0 2px #0000000d, 0 1px 4px #00000014;
+  // box-shadow: 0 3px 5px #00000005, 0 0 2px #0000000d, 0 1px 4px #00000014;
   font-size: 14px;
+  .logo-admin-wrapper {
+    transition: width 0.25s ease, background 0.25s ease;
+    transition-duration: 0.25s, 0.25s;
+    transition-timing-function: ease, ease;
+    transition-delay: 0s, 0s;
+    transition-property: width, background;
+
+    // width: 200px;
+    width: 70px;
+    .logo-admin {
+      display: none;
+      img {
+        width: calc(260px - 120px);
+        max-width: 100%;
+        height: 28px;
+        margin: auto;
+        vertical-align: middle;
+      }
+    }
+    .logo-admin-mini {
+      img {
+        width: calc(70px - 50px);
+        max-width: 100%;
+        height: 28px;
+        margin: auto;
+        vertical-align: middle;
+      }
+    }
+  }
+
   .topbar-button {
     display: inline-flex;
     justify-content: center;
@@ -80,5 +110,20 @@
     margin-left: 4px;
     width: 4em;
     color: var(--text-color-secondary);
+  }
+}
+:host {
+  &.isShowSidebar {
+    .topbar {
+      .logo-admin-wrapper {
+        width: 200px;
+        .logo-admin {
+          display: block;
+        }
+        .logo-admin-mini {
+          display: none;
+        }
+      }
+    }
   }
 }

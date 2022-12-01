@@ -17,8 +17,7 @@ export interface ProductRequest {
   discount?: number;
   quantity?: number;
   status?: number;
-  categoryId?: number;
-  file?: FormData;
+  category?: Category;
 }
 export interface Category {
   id?: number;

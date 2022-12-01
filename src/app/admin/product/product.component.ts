@@ -1,9 +1,11 @@
+import { ImageService } from './../../services/image.service';
+import { debounceTime, delay, distinctUntilChanged } from 'rxjs';
 import { FileUploadService } from './../../services/file-upload.service';
 import { LoadingComponent } from 'src/app/utils/loading/loading.component';
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import ProductManagerService from 'src/app/services/admin/product-manager.service';
-import { Category, Product, ProductRequest } from 'src/app/model/category.model';
+import { Category, Image, Product, ProductRequest } from 'src/app/model/category.model';
 import { Table, TableModule } from 'primeng/table';
 import { Paginator } from 'src/app/model/paginator.model';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -23,7 +25,7 @@ import CategoryManagerService from 'src/app/services/admin/cagtegory-manager.ser
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import * as customBuild from '../../../ckeditorCustom/build/ckeditor';
 import { FileUploadModule } from 'primeng/fileupload';
-import { forkJoin, switchMap } from 'rxjs';
+import { ImageModule } from 'primeng/image';
 @Component({
   selector: 'app-product',
   standalone: true,
@@ -45,6 +47,7 @@ import { forkJoin, switchMap } from 'rxjs';
     InputNumberModule,
     CKEditorModule,
     FileUploadModule,
+    ImageModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './product.component.html',
@@ -53,8 +56,10 @@ import { forkJoin, switchMap } from 'rxjs';
 })
 export class ProductComponent implements OnInit {
   @ViewChild('fileUpload') fileUpload!: any;
-  products: Product[] = [];
   @ViewChild('dt') dt!: Table;
+  titleComponent!: string;
+  urlImage!: string;
+  products: Product[] = [];
   isLoading: boolean = false;
   isLoadingComponent: boolean = false;
   submitted: boolean = false;
@@ -62,9 +67,10 @@ export class ProductComponent implements OnInit {
   listRoles: any;
   listStatuses: any;
   cols: any;
-  paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 5 };
+  paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
   paramsURL: {} = {};
   product!: ProductRequest;
+  images: Image[] = [];
   statusSelected!: { label?: string; value?: number };
   selectedProduct!: any[];
   categories: Category[] = [];
@@ -131,9 +137,13 @@ export class ProductComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private categoryManagerService: CategoryManagerService,
     private fileUploadService: FileUploadService,
+    private imageService: ImageService,
   ) {}
 
   ngOnInit(): void {
+    this.titleComponent = this.route.snapshot.data['title'];
+    this.urlImage = this.fileUploadService.getLink();
+    console.log(this.route.snapshot);
     this.changeParams();
     this.initTable();
     this.getCategories();
@@ -157,22 +167,29 @@ export class ProductComponent implements OnInit {
   }
   getProduct() {
     this.isLoadingComponent = true;
-    this.productManagerService.getProductByCategoryIdAndPriceLessThan(0, 9999999999, 0, 10).subscribe({
-      next: (res) => {
-        this.products = res.data.content;
-        this.isLoadingComponent = false;
-      },
-      error: (res) => {
-        this.isLoadingComponent = false;
-      },
-    });
+    this.productManagerService
+      .getProductByCategoryIdAndPriceLessThan(0, 9999999999, this.paginator.pageNumber, this.paginator.pageSize)
+      .pipe(delay(300))
+      .subscribe({
+        next: (res) => {
+          this.products = res.data.content;
+          this.isLoadingComponent = false;
+          this.paginator.totalElements = res.data.totalElements;
+          console.log(this.paginator.totalElements);
+        },
+        error: (res) => {
+          this.isLoadingComponent = false;
+        },
+      });
   }
   onPageChange(event: any) {
     this.paginator.pageNumber = event.page;
+    this.paginator.pageSize = event.rows;
     this.paramsURL = {
       page: this.paginator.pageNumber + 1,
       size: this.paginator.pageSize,
     };
+
     this.addParams();
   }
   addParams() {
@@ -190,49 +207,52 @@ export class ProductComponent implements OnInit {
     this.product = {};
     this.categorySelected = {};
     this.statusSelected = {};
+    this.images = [];
     this.dataEditor = '<p>Enter description here!</p>';
   }
   saveProduct() {
     this.submitted = true;
-    if (this.product.id) {
-      // this.productManagerService.update(this.user).subscribe({
-      //   next: (res) => {
-      //     console.log(res);
-      //     this.messageService.add({
-      //       severity: 'success',
-      //       summary: 'Successful',
-      //       detail: 'Updated',
-      //       life: 1000,
-      //     });
-      //     this.getProduct();
-      //   },
-      //   error: (res) => {},
-      // });
-      // return;
-    }
+
+    if (!this.isValid()) return;
     this.formDataImage = new FormData();
     for (let file of this.fileUpload._files) {
       this.formDataImage.append('file', file);
     }
-    this.product.categoryId = this.categorySelected.id;
+
+    this.product.category = this.categorySelected;
     this.product.status = this.statusSelected.value;
     this.product.description = this.dataEditor;
+
     this.formDataImage.append('product', JSON.stringify(this.product));
+    console.log(this.product);
     this.productManagerService.add(this.formDataImage).subscribe({
       next: (res) => {
         console.log(res);
         this.hideDialog();
         this.submitted = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Added product successfully!',
+          life: 2000,
+        });
+        this.getProduct();
       },
       error: (res) => {
-        this.hideDialog();
         this.submitted = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: res.error.message,
+          life: 3000,
+        });
       },
     });
   }
   hideDialog() {
     this.productDialog = false;
     this.submitted = false;
+
     this.resetValueForm();
   }
   resetView() {
@@ -242,16 +262,33 @@ export class ProductComponent implements OnInit {
       this.isLoadingComponent = false;
     }, 500);
   }
+  pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
+    const copy = {} as Pick<T, K>;
+    keys.forEach((key) => (copy[key] = obj[key]));
+    return copy;
+  }
   editProduct(product: Product) {
     this.isLoadingComponent = true;
-    setTimeout(() => {
-      this.productDialog = true;
-      this.product = { ...product };
-      this.dataEditor = product.description!;
-      this.statusSelected = { label: this.product.status ? 'ACTIVE' : 'INACTIVE', value: this.product.status! };
-      this.categorySelected = { name: product.category!.name, id: product.category?.id, status: product.category?.status };
-      this.isLoadingComponent = false;
-    }, 50);
+    this.imageService
+      .getAllByProductId(product.id)
+      .pipe(delay(10))
+      .subscribe({
+        next: (res) => {
+          this.images = res.data;
+          this.productDialog = true;
+
+          this.product = this.pick(product, 'id', 'name', 'category', 'quantity', 'price', 'status', 'discount', 'description');
+
+          this.dataEditor = product.description!;
+          this.statusSelected = { label: this.product.status ? 'ACTIVE' : 'INACTIVE', value: this.product.status! };
+          this.categorySelected = { name: product.category!.name, id: product.category?.id, status: product.category?.status };
+          this.isLoadingComponent = false;
+        },
+        error: (res) => {
+          this.isLoadingComponent = false;
+          this.hideDialog();
+        },
+      });
   }
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
@@ -290,5 +327,11 @@ export class ProductComponent implements OnInit {
       this.formDataImage.append('file', file);
     }
     console.log(this.formDataImage);
+  }
+  isValid(): boolean {
+    if (!this.product.name || !this.product.price || !this.product.quantity || !this.statusSelected.value || !this.categorySelected) {
+      return false;
+    }
+    return true;
   }
 }

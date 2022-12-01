@@ -1,27 +1,8 @@
-<app-loading [hidden]="!isLoadingComponent"></app-loading>
+<!-- <app-loading [hidden]="!isLoadingComponent"></app-loading> -->
 <p-toast></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <div class="mt-2">
-  <!-- <div class="account-side col-12 sm:col-12 md:12 lg:col-3">
-      <h5 class="title text-3xl uppercase">Account</h5>
-      <ul class="text-2xl">
-        <li>
-          <a routerLink="/account/profile" class="block py-2">
-            <i class="pi pi-circle"></i> Account information</a
-          >
-        </li>
-        <li>
-          <a routerLink="/account/order" class="block py-2"
-            ><i class="pi pi-circle"></i> Orders</a
-          >
-        </li>
-        <li>
-          <a (click)="logout()" class="block py-2"
-            ><i class="pi pi-circle"></i> Logout</a
-          >
-        </li>
-      </ul>
-    </div> -->
+  <div class="text-3xl font-semibold mb-4">{{ titleComponent }}</div>
   <div class="col-12 sm:col-12 md:12 lg:col-12 px-0">
     <div class="card">
       <p-toolbar styleClass="mb-4 gap-2">
@@ -32,34 +13,31 @@
           <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="resetView()"></p-button
         ></ng-template>
       </p-toolbar>
-      <div *ngIf="products.length === 0" class=" ">
-        <p-message severity="info" text="Products is empty" styleClass="mr-2"></p-message>
-      </div>
+
       <p-table
-        *ngIf="products.length !== 0"
+        [loading]="isLoadingComponent"
         #dt
         [value]="products"
-        [rows]="10"
-        [paginator]="true"
         [globalFilterFields]="['id', 'name', 'quantity', 'price', 'discount', 'status']"
         [rowHover]="true"
         dataKey="id"
         [showCurrentPageReport]="true"
-        responsiveLayout="scroll">
-        <!-- <ng-template pTemplate="summary">
-            <div class="page">
-              <p-paginator
-                [rows]="1"
-                [totalRecords]="paginator.totalElements"
-                [first]="paginator.pageNumber!"
-                (onPageChange)="onPageChange($event)"
-              ></p-paginator>
-            </div>
-          </ng-template> -->
+        [responsive]="true"
+        responsiveLayout="scroll"
+        [scrollable]="true"
+        scrollHeight="61vh">
+        <ng-template pTemplate="summary">
+          <div class="page">
+            <p-paginator
+              [rows]="paginator.pageSize"
+              [totalRecords]="paginator.totalElements"
+              (onPageChange)="onPageChange($event)"
+              [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+          </div>
+        </ng-template>
+
         <ng-template pTemplate="caption">
           <div class="flex align-items-center justify-content-between">
-            <h5 class="m-0">Manage users</h5>
-
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
@@ -68,30 +46,30 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id" style="min-width: 1rem">Id <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="name" style="min-width: 8rem">Product Name</th>
-            <th pSortableColumn="quantity" style="min-width: 8rem">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
-            <th>Price (VNĐ)</th>
-            <th style="min-width: 3rem">Discount</th>
-            <th style="min-width: 2rem">Status</th>
-            <th style="min-width: 2rem">Action</th>
+            <th pSortableColumn="id" style="flex: 0.5">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="name" style="flex: 3">Product Name</th>
+            <th pSortableColumn="quantity" style="flex: 1">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
+            <th style="flex: 1">Price (VNĐ)</th>
+            <th style="flex: 1">Discount</th>
+            <th style="flex: 1">Status</th>
+            <th style="flex: 0.5">Action</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-product>
           <tr>
-            <td>{{ product.id }}</td>
-            <td>
+            <td style="flex: 0.5">{{ product.id }}</td>
+            <td style="flex: 3">
               {{ product.name }}
             </td>
-            <td>
+            <td style="flex: 1">
               {{ product.quantity }}
             </td>
-            <td>{{ product.price }}</td>
-            <td>{{ product.discount + '%' }}</td>
-            <td>
+            <td style="flex: 1">{{ product.price }}</td>
+            <td style="flex: 1">{{ product.discount + '%' }}</td>
+            <td style="flex: 1">
               <span [class]="'status-default status-' + product.status">{{ product.status === 0 ? 'INACTIVE' : 'ACTIVE' }}</span>
             </td>
-            <td>
+            <td style="flex: 0.5">
               <button
                 pButton
                 pRipple
@@ -104,7 +82,12 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="7">No user found.</td>
+            <td colspan="7">No product found.</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <tr>
+            <td colspan="3">Total: {{ paginator.totalElements }}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -113,14 +96,14 @@
     <p-dialog
       [(visible)]="productDialog"
       [breakpoints]="{ '960px': '90vw', '640px': '95vw' }"
-      [style]="{ width: '50vw', maxHeight: '90vh', overflow: 'hidden' }"
-      header="New address"
+      [style]="{ width: '50vw', maxHeight: '92vh', overflow: 'hidden' }"
+      header="New Product"
       [modal]="true"
       styleClass="p-fluid">
       <ng-template pTemplate="content">
         <div class="formgrid grid">
           <div class="field col-6">
-            <label>Category</label>
+            <label class="font-medium">Category*</label>
             <p-dropdown
               [ngClass]="{
                 'ng-invalid ng-dirty': submitted && !categorySelected.name
@@ -147,7 +130,7 @@
             <small class="p-error" *ngIf="submitted && !categorySelected.name">Category name is required.</small>
           </div>
           <div class="field col-6">
-            <label>Status</label>
+            <label class="font-medium">Status*</label>
 
             <p-dropdown
               [ngClass]="{
@@ -175,7 +158,7 @@
             <small class="p-error" *ngIf="submitted && !statusSelected.label">Status name is required.</small>
           </div>
           <div class="field col-6">
-            <label for="firstName">Name</label>
+            <label for="firstName" class="font-medium">Name*</label>
             <input
               type="text"
               pInputText
@@ -188,7 +171,7 @@
             <small class="p-error" *ngIf="submitted && !product.name">Nameis required.</small>
           </div>
           <div class="field col-6">
-            <label for="price">Price</label>
+            <label for="price" class="font-medium">Price*</label>
             <p-inputNumber
               [(ngModel)]="product.price"
               inputId="price"
@@ -212,7 +195,7 @@
           </div> -->
 
           <div class="field col-12 md:col-6">
-            <label for="quantity">Quantity</label>
+            <label for="quantity" class="font-medium">Quantity*</label>
             <p-inputNumber
               [(ngModel)]="product.quantity"
               inputId="quantity"
@@ -229,7 +212,7 @@
             <small class="p-error" *ngIf="submitted && !product.quantity">Quantity name is required.</small>
           </div>
           <div class="field col-12 md:col-6">
-            <label for="discount">Discount</label>
+            <label for="discount" class="font-medium">Discount</label>
             <p-inputNumber
               [(ngModel)]="product.discount"
               inputId="discount"
@@ -244,10 +227,19 @@
           </div>
 
           <div class="field col-12">
-            <label for="locale-us">Description</label>
+            <label for="locale-us" class="font-medium">Description</label>
             <ckeditor [editor]="Editor" [config]="config" [(ngModel)]="dataEditor" (ready)="onReady($event)"></ckeditor>
           </div>
           <div class="field col-12">
+            <label for="">Image</label>
+            <div class="flex">
+              <div class="max-h-29rem" *ngFor="let image of images">
+                <p-image [src]="urlImage + '/' + image.link" alt="Image" width="80" [preview]="true"></p-image>
+              </div>
+            </div>
+          </div>
+          <div class="field col-12">
+            <label for="">Upload Image</label>
             <p-fileUpload
               name="file"
               url=""
