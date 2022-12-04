@@ -135,6 +135,19 @@
             <small class="p-error" *ngIf="submitted && !user.lastName">Last name is required.</small>
           </div>
           <div class="field col-12">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              pInputText
+              id="email "
+              [(ngModel)]="user.lastName"
+              required
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !user.email
+              }" />
+            <small class="p-error" *ngIf="submitted && !user.email">Email name is required.</small>
+          </div>
+          <div class="field col-12">
             <label>Role</label>
             <p-multiSelect
               [options]="listRoles"

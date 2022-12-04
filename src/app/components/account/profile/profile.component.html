@@ -1,125 +1,76 @@
 <p-toast position="bottom-right"></p-toast>
 <div class="profile-wrapper">
-  <div class="profile-wrapper col-12 sm:col-12 md:col-6">
+  <div class="profile-wrapper col-12 sm:col-12 md:col-8">
     <div class="profile-site">
       <div class="profile-title">
-        <h2>My account</h2>
+        <h2 class="title-account-component">My account</h2>
       </div>
-      <form
-        action=""
-        [formGroup]="profileForm"
-        (ngSubmit)="onSubmit()"
-        class="profile-form"
-      >
+      <form action="" [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
         <div class="profile-form__field">
-          <input
-            id="email"
-            class="profile-form__field-input"
-            placeholder="Email"
-            formControlName="email"
-            type="email"
-            pInputText
-          />
+          <label for="email" class="mb-2 text-2xl inline-block">Email</label>
+          <input id="email" class="profile-form__field-input" placeholder="Email" formControlName="email" type="email" pInputText />
           <span *ngIf="getEmail.dirty">
             <small
               *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
               id="password-help"
-              class="profile-form__field-message p-error block"
-            >
+              class="profile-form__field-message p-error block">
               Email không được bỏ trống.</small
             >
-            <small
-              *ngIf="getEmail.errors?.['email']"
-              id="password-help"
-              class="profile-form__field-message p-error block"
-            >
+            <small *ngIf="getEmail.errors?.['email']" id="password-help" class="profile-form__field-message p-error block">
               Email sai định dạng. Vd:tuyen@gmail.com</small
             >
           </span>
         </div>
 
         <div class="profile-form__field">
+          <label for="first-name" class="mb-2 text-2xl inline-block">First Name</label>
           <input
             id="first-name"
             class="profile-form__field-input"
             placeholder="First name"
             formControlName="firstName"
             type="first-name"
-            pInputText
-          />
+            pInputText />
           <span *ngIf="firstName.dirty">
-            <small
-              *ngIf="firstName.errors?.['required']"
-              class="profile-form__field-message p-error block"
-            >
-              First name is not empty.</small
-            >
-            <small
-              *ngIf="firstName.errors?.['minlength']"
-              class="profile-form__field-message p-error block"
-            >
+            <small *ngIf="firstName.errors?.['required']" class="profile-form__field-message p-error block"> First name is not empty.</small>
+            <small *ngIf="firstName.errors?.['minlength']" class="profile-form__field-message p-error block">
               Minimum length must be 3 characters.</small
             >
-            <small
-              *ngIf="firstName.errors?.['maxlength']"
-              class="profile-form__field-message p-error block"
-            >
+            <small *ngIf="firstName.errors?.['maxlength']" class="profile-form__field-message p-error block">
               Maximum length must be 40 characters.</small
             >
           </span>
         </div>
         <div class="profile-form__field">
-          <input
-            id="last-name"
-            class="profile-form__field-input"
-            placeholder="Last name"
-            formControlName="lastName"
-            type="last-name"
-            pInputText
-          />
+          <label for="last-name" class="mb-2 text-2xl inline-block">Last Name</label>
+          <input id="last-name" class="profile-form__field-input" placeholder="Last name" formControlName="lastName" type="last-name" pInputText />
           <span *ngIf="lastName.dirty">
-            <small
-              *ngIf="lastName.errors?.['required']"
-              class="profile-form__field-message p-error block"
-            >
-              Last name không được bỏ trống.</small
-            >
-            <small
-              *ngIf="lastName.errors?.['minlength']"
-              class="profile-form__field-message p-error block"
-            >
+            <small *ngIf="lastName.errors?.['required']" class="profile-form__field-message p-error block"> Last name không được bỏ trống.</small>
+            <small *ngIf="lastName.errors?.['minlength']" class="profile-form__field-message p-error block">
               Minimum length must be 3 characters.</small
             >
-            <small
-              *ngIf="lastName.errors?.['maxlength']"
-              class="profile-form__field-message p-error block"
-            >
+            <small *ngIf="lastName.errors?.['maxlength']" class="profile-form__field-message p-error block">
               Maximum length must be 20 characters.</small
             >
           </span>
         </div>
-        <div class="grid action-wrapper">
+        <div class="grid action-wrapper mt-3">
           <button
             type="submit"
             [disabled]="!profileForm.valid || isDisable"
             class="btn-action profile-form__btn col-5 sm:col-4 md:col-4"
             pButton
-            [loading]="isLoading"
-          >
+            [loading]="isLoading">
             Save
           </button>
         </div>
       </form>
     </div>
     <div class="change-password mt-7">
-      <h2>Change password</h2>
-      <form
-        action=""
-        [formGroup]="resetForm"
-        (ngSubmit)="changePassword()"
-        class="profile-form"
-      >
+      <h2 class="text-center text-3xl">Change password</h2>
+      <form action="" [formGroup]="resetForm" (ngSubmit)="changePassword()" class="profile-form">
         <div class="profile-form__field">
+          <label for="old-password" class="mb-2 text-2xl inline-block">Password</label>
           <input
             id="old-password"
             class="profile-form__field-input"
@@ -127,95 +78,71 @@
             formControlName="oldPassword"
             type="password"
             title="Password"
-            pInputText
-          />
+            pInputText />
           <span *ngIf="getOldPassword.dirty">
             <small
               *ngIf="getOldPassword.errors?.['minlength']||getOldPassword.errors?.['required']"
               id="password-help"
-              class="profile-form__field-message p-error block"
-            >
+              class="profile-form__field-message p-error block">
               Mật khẩu phải có ít nhất 6 kí tự.</small
             >
-            <small
-              *ngIf="getOldPassword.errors?.['maxlength']"
-              id="password-help"
-              class="profile-form__field-message p-error block"
-            >
+            <small *ngIf="getOldPassword.errors?.['maxlength']" id="password-help" class="profile-form__field-message p-error block">
               Mật khẩu không được nhiều hơn 40 kí tự.</small
             >
-            <small
-              *ngIf="errorMessageInvalidPassword"
-              id="password-help"
-              class="profile-form__field-message p-error block"
-            >
+            <small *ngIf="errorMessageInvalidPassword" id="password-help" class="profile-form__field-message p-error block">
               {{ errorMessageInvalidPassword }}</small
             >
           </span>
         </div>
         <div class="profile-form__field">
+          <label for="password" class="mb-2 text-2xl inline-block">New Password</label>
           <input
             id="password"
             class="profile-form__field-input"
-            placeholder="New password"
+            placeholder="New Password"
             formControlName="newPassword"
             type="password"
-            title="New password"
-            pInputText
-          />
+            title="New Password"
+            pInputText />
           <span *ngIf="getNewPassword.dirty">
             <small
               *ngIf="getNewPassword.errors?.['minlength']||getNewPassword.errors?.['required']"
               id="password-help"
-              class="profile-form__field-message p-error block"
-            >
+              class="profile-form__field-message p-error block">
               Mật khẩu phải có ít nhất 6 kí tự.</small
             >
-            <small
-              *ngIf="getNewPassword.errors?.['maxlength']"
-              id="password-help"
-              class="profile-form__field-message p-error block"
-            >
+            <small *ngIf="getNewPassword.errors?.['maxlength']" id="password-help" class="profile-form__field-message p-error block">
               Mật khẩu không được nhiều hơn 40 kí tự.</small
             >
           </span>
         </div>
         <div class="profile-form__field">
+          <label for="confirmpassword" class="mb-2 text-2xl inline-block">Confirm Password</label>
+
           <input
             id="confirmpassword"
             class="profile-form__field-input"
-            placeholder="Confirm password"
+            placeholder="Confirm Password"
             type="password"
             pInputText
             formControlName="confirmPassword"
-            placeholder="Xác nhận mật khẩu"
-            title="Confirm password"
-          />
+            title="Confirm Password" />
           <span *ngIf="getConfirmPassword.dirty">
-            <small
-              *ngIf="getConfirmPassword.errors?.['matching']"
-              id="password-help"
-              class="profile-form__field-message p-error block"
-            >
+            <small *ngIf="getConfirmPassword.errors?.['matching']" id="password-help" class="profile-form__field-message p-error block">
               Mật khẩu không khớp</small
             >
-            <small
-              *ngIf="getConfirmPassword.errors?.['required']"
-              id="password-help"
-              class="profile-form__field-message p-error block"
-            >
+            <small *ngIf="getConfirmPassword.errors?.['required']" id="password-help" class="profile-form__field-message p-error block">
               Mật khẩu trống</small
             >
           </span>
         </div>
-        <div class="grid action-wrapper">
+        <div class="grid action-wrapper mt-3">
           <button
             type="submit"
             [disabled]="!resetForm.valid"
             class="btn-action reset-form__btn col-5 sm:col-4 md:col-4 m-0 border-noround profile-form__btn"
             pButton
-            [loading]="isLoadingChangePassword"
-          >
+            [loading]="isLoadingChangePassword">
             Change
           </button>
         </div>

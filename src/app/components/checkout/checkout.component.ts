@@ -3,22 +3,11 @@ import { EStatusShipping } from './../../model/status-shipping.enum';
 import { LoadingComponent } from './../../utils/loading/loading.component';
 import { Address } from './../../model/address.model';
 import { OrderService } from './../../services/order.service';
-import {
-  Checkout,
-  EStatusPayment,
-  OrderDetail,
-  PaymentMethod,
-} from './../../model/bill.model';
+import { Checkout, EStatusPayment, OrderDetail, PaymentMethod } from './../../model/bill.model';
 import { Subscription, switchMap, map } from 'rxjs';
 import { CartItemService } from './../../services/cart-item.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
@@ -27,11 +16,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
-import {
-  MessageService,
-  PrimeNGConfig,
-  ConfirmationService,
-} from 'primeng/api';
+import { MessageService, PrimeNGConfig, ConfirmationService } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 
@@ -77,6 +62,7 @@ export class CheckoutComponent implements OnInit {
   voucherInput!: string;
   vouchers: any[] = [];
   isLoading = false;
+  isLoadingComponent = false;
   regexNumPhone: any = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
   payment: any = 'PAYPAL';
   payer!: string;
@@ -108,7 +94,7 @@ export class CheckoutComponent implements OnInit {
     private orderService: OrderService,
     private router: Router,
     private addressService: AddressService,
-    private fileUploadService: FileUploadService
+    private fileUploadService: FileUploadService,
   ) {}
 
   ngOnInit(): void {
@@ -121,15 +107,13 @@ export class CheckoutComponent implements OnInit {
     this.getAddresses();
   }
   getCartItems() {
-    this.cartItemsChange = this.cartItemService.cartItemsChange.subscribe(
-      (data) => {
-        if (data.length === 0) {
-          this.router.navigate(['/']);
-        }
-        this.cartItems = data;
-        this.loadTotal();
+    this.cartItemsChange = this.cartItemService.cartItemsChange.subscribe((data) => {
+      if (data.length === 0) {
+        this.router.navigate(['/']);
       }
-    );
+      this.cartItems = data;
+      this.loadTotal();
+    });
   }
   getProvinces() {
     this.provincesApi.getProvinces().subscribe({
@@ -158,29 +142,21 @@ export class CheckoutComponent implements OnInit {
   onChangeAddress(e: any) {
     this.isLoading = true;
     let { value } = e;
-    this.addressTemp.city = this.provinces.find(
-      (e) => e.name === value.address.city
-    )!;
+    this.addressTemp.city = this.provinces.find((e) => e.name === value.address.city)!;
     if (this.addressTemp.city) {
       this.provincesApi
         .getDistricts(this.addressTemp.city.code!)
         .pipe(
           switchMap((province: Province) => {
             this.districts = province.districts!;
-            this.addressTemp.district = this.districts.find(
-              (e) => e.name === value.address.district
-            )!;
-            return this.provincesApi.getCommunes(
-              this.addressTemp.district.code!
-            );
-          })
+            this.addressTemp.district = this.districts.find((e) => e.name === value.address.district)!;
+            return this.provincesApi.getCommunes(this.addressTemp.district.code!);
+          }),
         )
         .subscribe({
           next: (district: District) => {
             this.wards = district.wards!;
-            this.addressTemp.ward = this.wards.find(
-              (e) => e.name === value.address.ward
-            )!;
+            this.addressTemp.ward = this.wards.find((e) => e.name === value.address.ward)!;
             this.infoForm.patchValue({
               firstName: value.address.firstName,
               lastName: value.address.lastName,
@@ -208,8 +184,7 @@ export class CheckoutComponent implements OnInit {
       value: '' + 10000,
       onApprove: (details) => {
         console.log(details);
-        this.payer =
-          details.payer.name.given_name + ' ' + details.payer.name.surname;
+        this.payer = details.payer.name.given_name + ' ' + details.payer.name.surname;
         this.emailPayer = details.payer.email_address;
         this.statusPayment = EStatusPayment.PAID;
         this.paymentMethod = PaymentMethod.PAYPAL;
@@ -235,7 +210,7 @@ export class CheckoutComponent implements OnInit {
   }
   onSubmit() {
     console.log(this.payer, this.paymentMethod, this.statusPayment);
-    this.isLoading = true;
+    this.isLoadingComponent = true;
     const valueForm = this.infoForm.value;
     let orderDetails: OrderDetail[] = this.cartItems.map((item) => {
       return {
@@ -263,9 +238,7 @@ export class CheckoutComponent implements OnInit {
       payment: {
         email: this.emailPayer || '',
         payer: this.payer || this.getUser().name,
-        paymentMethod: this.payInAdvace
-          ? this.paymentMethod
-          : PaymentMethod.COD,
+        paymentMethod: this.payInAdvace ? this.paymentMethod : PaymentMethod.COD,
         status: this.payInAdvace ? this.statusPayment : EStatusPayment.UNPAID,
       },
     };
@@ -275,24 +248,20 @@ export class CheckoutComponent implements OnInit {
       accept: () => {
         this.orderService
           .checkout(checkout)
-          .pipe(
-            switchMap((_) =>
-              this.cartItemService.deleteByUserId(this.getUser().id!)
-            )
-          )
+          .pipe(switchMap((_) => this.cartItemService.deleteByUserId(this.getUser().id!)))
           .subscribe({
             next: (res) => {
-              this.isLoading = false;
+              this.isLoadingComponent = false;
               this.router.navigate(['/account/order']);
             },
             error: (res) => {
-              this.isLoading = false;
+              this.isLoadingComponent = false;
               alert(res.error.message);
             },
           });
       },
       reject: (type: any) => {
-        this.isLoading = false;
+        this.isLoadingComponent = false;
       },
     });
   }
@@ -369,14 +338,7 @@ export class CheckoutComponent implements OnInit {
       return total + current.quantity;
     }, 0);
     this.totalCart = this.cartItems.reduce((total, current) => {
-      return (
-        total +
-        this.calcPriceDiscount(
-          current.product.price,
-          current.product.discount
-        ) *
-          current.quantity
-      );
+      return total + this.calcPriceDiscount(current.product.price, current.product.discount) * current.quantity;
     }, 0);
   }
   calcPriceDiscount(price: number, discount: number = 0): number {

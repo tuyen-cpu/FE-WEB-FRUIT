@@ -6,6 +6,7 @@ export interface Product {
   discount?: number;
   quantity?: number;
   status?: number;
+  slug?: string;
   category?: Category;
   image?: Image;
 }
@@ -17,12 +18,14 @@ export interface ProductRequest {
   discount?: number;
   quantity?: number;
   status?: number;
+  slug?: string;
   category?: Category;
 }
 export interface Category {
   id?: number;
   name?: string;
   status?: number;
+  slug?: string;
 }
 
 export interface Image {

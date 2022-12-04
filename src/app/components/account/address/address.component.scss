@@ -1,23 +1,5 @@
-@import "../../../scss/utils/variable";
-.title-account-component {
-  display: inline-block;
-  font-size: 32px;
-  font-weight: 700;
+@import '../../../scss/utils/variable';
 
-  padding-bottom: 8px;
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    right: 0;
-    transform: translateX(-50%);
-    width: 50%;
-    height: 4px;
-    background-color: #131313;
-  }
-}
 .p-element {
   .p-datatable .p-datatable-tbody > tr > td {
     font-size: 1.4rem;

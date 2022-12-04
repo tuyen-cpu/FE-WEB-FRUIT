@@ -7,10 +7,10 @@
       <div class="order-information">
         <div class="title text-2xl mb-3">
           <b class="font-medium">Order: H-{{ orderId }}</b
-          >, Đặt lúc — {{ order.createdDate | date: 'M/d/yy, h:mm a' }}
+          >, Đặt lúc — {{ order.createdDate | date : 'M/d/yy, h:mm a' }}
         </div>
-        <div class="text-xl mb-2">Đơn hàng của bạn đã hủy lúc 09/11/2022, 11:05SA</div>
-        <a class="inline-block text-2xl mt-3">Back to account</a>
+        <!-- <div class="text-xl mb-2">Đơn hàng của bạn đã hủy lúc 09/11/2022, 11:05SA</div> -->
+        <!-- <a class="inline-block text-2xl mt-3">Back to account</a> -->
       </div>
       <div class="mt-4">
         <p-table
@@ -37,16 +37,16 @@
             <tr>
               <td>
                 <span class="p-column-title"></span
-                ><a routerLink="/" class="order-detail-link"><img [src]="orderdetail.product.image.link" width="100px" alt="" /></a>
+                ><a routerLink="/" class="order-detail-link"><img [src]="urlImage + '/' + orderdetail.product.image.link" width="100px" alt="" /></a>
               </td>
               <td><span class="p-column-title">Product</span>{{ orderdetail.product.name }}</td>
               <td><span class="p-column-title">ID Product</span>{{ orderdetail.product.id }}</td>
               <td><span class="p-column-title">Quantity</span>{{ orderdetail.quantity }}</td>
-              <td><span class="p-column-title">Price</span>{{ orderdetail.price | myCurrency: 'VND' }}</td>
+              <td><span class="p-column-title">Price</span>{{ orderdetail.price | myCurrency : 'VND' }}</td>
               <td><span class="p-column-title">Discount</span>-{{ orderdetail.discount }}%</td>
               <td>
                 <span class="p-column-title">Total</span>
-                {{ (orderdetail.price - (orderdetail.price * orderdetail.discount) / 100) * orderdetail.quantity | myCurrency: 'VND' }}
+                {{ (orderdetail.price - (orderdetail.price * orderdetail.discount) / 100) * orderdetail.quantity | myCurrency : 'VND' }}
               </td>
             </tr>
           </ng-template>
@@ -62,7 +62,7 @@
             <tr>
               <td colspan="3">Totals</td>
               <td>$506,202</td>
-              <td>{{ subTotal | myCurrency: 'vnd' }}</td>
+              <td>{{ subTotal | myCurrency : 'vnd' }}</td>
             </tr>
           </ng-template>
         </p-table>

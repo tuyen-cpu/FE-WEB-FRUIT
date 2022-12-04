@@ -1,7 +1,7 @@
 import { TokenStorageService } from './../../../services/token-storage.service';
 import { Subscription } from 'rxjs';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserInforService } from 'src/app/services/user-infor.service';
 import { OrderService } from './../../../services/order.service';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
@@ -11,16 +11,12 @@ import { Order, OrderDetail } from 'src/app/model/bill.model';
 import { EStatusShipping } from 'src/app/model/status-shipping.enum';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { Paginator } from 'src/app/model/paginator.model';
+import { PaginatorModule } from 'primeng/paginator';
 @Component({
   selector: 'app-order',
   standalone: true,
-  imports: [
-    CommonModule,
-    TableModule,
-    RouterModule,
-    MyCurrency,
-    ConfirmDialogModule,
-  ],
+  imports: [CommonModule, TableModule, RouterModule, MyCurrency, ConfirmDialogModule, PaginatorModule],
   providers: [ConfirmationService],
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
@@ -29,38 +25,42 @@ import { ConfirmationService } from 'primeng/api';
 export class OrderComponent implements OnInit, OnDestroy {
   orders: Order[] = [];
   userSupscription!: Subscription;
+  paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
+  paramsURL: {} = {};
+  isLoadingComponent = false;
   constructor(
     private orderService: OrderService,
     private userInforService: UserInforService,
     private tokenStorageService: TokenStorageService,
     private router: Router,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     console.log(EStatusShipping.UNVERIFIED);
-    this.userSupscription = this.tokenStorageService.userChange.subscribe(
-      (data) => {
-        if (data) {
-          this.getAll();
-          return;
-        }
-        this.router.navigate(['/']);
+    this.userSupscription = this.tokenStorageService.userChange.subscribe((data) => {
+      if (data) {
+        this.getAll();
+        return;
       }
-    );
+      this.router.navigate(['/']);
+    });
   }
   getAll() {
-    this.orderService
-      .getAllByUserId(this.userInforService.user!.id!, 0, 20)
-      .subscribe({
-        next: (res) => {
-          this.orders = res.data.content;
-          console.log(this.orders);
-        },
-        error: (res) => {
-          console.log(res.error.message);
-        },
-      });
+    this.isLoadingComponent = true;
+    this.orderService.getAllByUserId(this.userInforService.user!.id!, this.paginator.pageNumber, this.paginator.pageSize).subscribe({
+      next: (res) => {
+        this.orders = res.data.content;
+        console.log(this.orders);
+        this.isLoadingComponent = false;
+        this.paginator.totalElements = res.data.totalElements;
+      },
+      error: (res) => {
+        console.log(res.error.message);
+        this.isLoadingComponent = false;
+      },
+    });
   }
   onCancelOrder(order: Order) {
     this.confirmationService.confirm({
@@ -93,6 +93,34 @@ export class OrderComponent implements OnInit, OnDestroy {
         //     break;
         // }
       },
+    });
+  }
+  changeParams() {
+    this.route.queryParams.subscribe((res) => {
+      if (res['page'] === undefined || res['page'] === null || +res['page'] <= 0) {
+        this.paginator.pageNumber = 0;
+      } else {
+        this.paginator.pageNumber = res['page'] - 1;
+      }
+      this.paginator.pageSize = Number(res['size']) || 10;
+
+      this.getAll();
+    });
+  }
+  onPageChange(event: any) {
+    this.paginator.pageNumber = event.page;
+    this.paginator.pageSize = event.rows;
+    this.paramsURL = {
+      page: this.paginator.pageNumber + 1,
+      size: this.paginator.pageSize,
+    };
+
+    this.addParams();
+  }
+  addParams() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.paramsURL,
     });
   }
   ngOnDestroy(): void {

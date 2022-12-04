@@ -40,7 +40,7 @@ export class ProductDetailComponent implements OnInit {
     private userInforService: UserInforService,
     private messageService: MessageService,
     private fileUploadService: FileUploadService,
-    private imageService: ImageService
+    private imageService: ImageService,
   ) {}
 
   ngOnInit(): void {
@@ -49,12 +49,12 @@ export class ProductDetailComponent implements OnInit {
   }
   getProduct() {
     this.productService
-      .getById(+this.route.snapshot.paramMap.get('product-id')!)
+      .getBySlug(this.route.snapshot.paramMap.get('slug')!)
       .pipe(
         switchMap((res) => {
           this.product = res.data;
           return this.imageService.getAllByProductId(res.data.id);
-        })
+        }),
       )
       .subscribe({
         next: (res) => {

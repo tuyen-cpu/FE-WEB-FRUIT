@@ -1,9 +1,37 @@
 .account-side {
   color: #00381a;
+
+  .account-list-nav {
+    // background-color: #f7f7f7;
+  }
   a {
     cursor: pointer;
+    padding: 24px 6px;
+    color: #000;
+    font-size: 1.6rem;
     &.active {
+      font-weight: 600;
       color: #00381a;
+      background-color: #f3fdf8;
     }
   }
+}
+::ng-deep .title-account-component {
+  display: inline-block;
+  font-size: 32px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+  position: relative;
+
+  // &::after {
+  //   content: '';
+  //   position: absolute;
+  //   top: 100%;
+  //   right: 0;
+  //   transform: translateX(-50%);
+  //   width: 50%;
+  //   height: 4px;
+  //   background-color: #131313;
+  // }
 }

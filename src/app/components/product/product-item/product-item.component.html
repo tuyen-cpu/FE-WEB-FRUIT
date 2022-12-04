@@ -1,18 +1,21 @@
 <p-toast></p-toast>
 <div class="product-item-wrapper">
   <div class="product-img">
-    <span class="discount-tag">-{{ product.discount }}%</span>
-    <a [routerLink]="'/product/' + product.id" class="product-img__link">
+    <span *ngIf="product.discount" class="discount-tag">-{{ product.discount }}%</span>
+    <a [routerLink]="'/product/' + product.slug" class="product-img__link">
       <picture>
         <img
           class=""
-          alt=" Dừa xiêm trọc Bến Tre size M (450-600g/trái) "
+          [alt]="product.name"
           data-src="//product.hstatic.net/200000271661/product/traicay-duaxiem_7ca1dbab69fe45d5a64f9e3b43cbbb01_large.jpg"
           data-lowsrc="//product.hstatic.net/200000271661/product/traicay-duaxiem_7ca1dbab69fe45d5a64f9e3b43cbbb01_large.jpg"
           data-sizes="auto"
-          [lazyLoad]="urlImage + '/' + product.image.link"
-          sizes="197px"
-        />
+          [lazyLoad]="
+            product.image
+              ? urlImage + '/' + product.image.link
+              : 'https://cdn.shopify.com/s/files/1/0644/5639/2960/products/2_7ecb6e3f-f567-40a9-879f-6d8bd41dab25_590X668_crop_center.jpg?v=1655376938'
+          "
+          sizes="197px" />
       </picture>
     </a>
   </div>
@@ -22,13 +25,9 @@
     </h3>
     <div class="product-detail__price">
       <span class="product-detail__price-new">{{
-        (product.price || 0) -
-          ((product.price || 0) * (product.discount || 0)) / 100
-          | myCurrency: "VND"
+        (product.price || 0) - ((product.price || 0) * (product.discount || 0)) / 100 | myCurrency : 'VND'
       }}</span>
-      <del class="product-detail__price-old">{{
-        product.price | currency: "VND"
-      }}</del>
+      <del *ngIf="product.discount" class="product-detail__price-old">{{ product.price | currency : 'VND' }}</del>
     </div>
     <div class="product-wrapper">
       <button class="btn-action" (click)="addCart(product)">Add to cart</button>

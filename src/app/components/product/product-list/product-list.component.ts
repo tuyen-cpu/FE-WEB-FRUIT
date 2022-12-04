@@ -1,7 +1,7 @@
 import { MyCurrency } from './../../../pipes/my-currency.pipe';
 import { debounceTime, delay, map } from 'rxjs';
 import { NavigationEnd, Router, RouterModule, ActivatedRoute, ParamMap } from '@angular/router';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductItemComponent } from '../product-item/product-item.component';
@@ -82,6 +82,7 @@ export class ProductListComponent implements OnInit {
     this.changeRouter();
     this.changeParams();
     this.getCategory();
+
     // this.getProducts(this.filter, this.paginator);
   }
   getProducts(filter: { categoryId: number; price: number }, paginator: Paginator) {
@@ -92,7 +93,7 @@ export class ProductListComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.products = response.data.content;
-          this.paginator.totalElements = response.data.totalPages;
+          this.paginator.totalElements = response.data.totalElements;
           this.isLoading = false;
         },
         error: (response) => {
@@ -109,7 +110,7 @@ export class ProductListComponent implements OnInit {
   }
   changeParams() {
     this.route.queryParams.subscribe((res) => {
-      if (res['page'] === undefined) {
+      if (res['page'] === undefined || +res['page'] <= 0) {
         this.paginator.pageNumber = 0;
       } else {
         this.paginator.pageNumber = res['page'] - 1;
@@ -138,16 +139,20 @@ export class ProductListComponent implements OnInit {
     this.addParams();
   }
   onPageChange(event: any) {
+    console.log('Change page: ', event);
     this.paginator.pageNumber = event.page;
     this.paramsURL = {
       ...this.paramsURL,
       page: this.paginator.pageNumber! + 1,
       size: this.paginator.pageSize,
     };
+
+    console.log('Change page: ', event);
     // this.getProducts(this.filter, this.paginator);
     this.addParams();
   }
   addParams() {
+    console.log('Add params');
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: this.paramsURL,

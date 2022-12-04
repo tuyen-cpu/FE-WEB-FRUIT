@@ -22,7 +22,7 @@ export const ProductRoutes: Routes = [
         component: SearchComponent,
       },
       {
-        path: ':product-id',
+        path: ':slug',
         component: ProductDetailComponent,
       },
     ],

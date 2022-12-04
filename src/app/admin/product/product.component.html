@@ -31,6 +31,7 @@
             <p-paginator
               [rows]="paginator.pageSize"
               [totalRecords]="paginator.totalElements"
+              [first]="paginator.pageSize * paginator.pageNumber"
               (onPageChange)="onPageChange($event)"
               [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
           </div>
@@ -65,7 +66,7 @@
               {{ product.quantity }}
             </td>
             <td style="flex: 1">{{ product.price }}</td>
-            <td style="flex: 1">{{ product.discount + '%' }}</td>
+            <td style="flex: 1">{{ product.discount ? product.discount + '%' : '' }}</td>
             <td style="flex: 1">
               <span [class]="'status-default status-' + product.status">{{ product.status === 0 ? 'INACTIVE' : 'ACTIVE' }}</span>
             </td>
@@ -96,7 +97,7 @@
     <p-dialog
       [(visible)]="productDialog"
       [breakpoints]="{ '960px': '90vw', '640px': '95vw' }"
-      [style]="{ width: '50vw', maxHeight: '92vh', overflow: 'hidden' }"
+      [style]="{ width: '50vw', maxHeight: '92vh', overflowY: 'scroll' }"
       header="New Product"
       [modal]="true"
       styleClass="p-fluid">
@@ -128,6 +129,9 @@
               </ng-template>
             </p-dropdown>
             <small class="p-error" *ngIf="submitted && !categorySelected.name">Category name is required.</small>
+          </div>
+          <div class="field">
+            <label for="">{{ toSlug(product.name) }}</label>
           </div>
           <div class="field col-6">
             <label class="font-medium">Status*</label>
@@ -230,8 +234,8 @@
             <label for="locale-us" class="font-medium">Description</label>
             <ckeditor [editor]="Editor" [config]="config" [(ngModel)]="dataEditor" (ready)="onReady($event)"></ckeditor>
           </div>
-          <div class="field col-12">
-            <label for="">Image</label>
+          <div class="field col-12" *ngIf="product.id">
+            <label for="" class="font-medium">Image</label>
             <div class="flex">
               <div class="max-h-29rem" *ngFor="let image of images">
                 <p-image [src]="urlImage + '/' + image.link" alt="Image" width="80" [preview]="true"></p-image>
@@ -239,7 +243,7 @@
             </div>
           </div>
           <div class="field col-12">
-            <label for="">Upload Image</label>
+            <label for="" class="font-medium">Upload Image</label>
             <p-fileUpload
               name="file"
               url=""

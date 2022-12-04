@@ -1,38 +1,18 @@
-import {
-  BehaviorSubject,
-  debounceTime,
-  fromEvent,
-  isEmpty,
-  of,
-  Subscription,
-  switchMap,
-  timeout,
-} from 'rxjs';
+import { BehaviorSubject, debounceTime, delay, fromEvent, isEmpty, of, Subscription, switchMap, timeout } from 'rxjs';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserInforService } from 'src/app/services/user-infor.service';
 import { AddressService } from './../../../services/address.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation,
-  OnDestroy,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
-import {
-  ConfirmationService,
-  ConfirmEventType,
-  MessageService,
-} from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
 import { Table, TableModule } from 'primeng/table';
-
+import { TooltipModule } from 'primeng/tooltip';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Address } from 'src/app/model/address.model';
 import { ButtonModule } from 'primeng/button';
@@ -69,6 +49,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     MessageModule,
     MessagesModule,
     ConfirmDialogModule,
+    TooltipModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './address.component.html',
@@ -108,7 +89,7 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
     private userInforService: UserInforService,
     private provincesApi: ProvincesApiService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -125,16 +106,19 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
   getAddresses() {
     this.isLoading = true;
     console.log(this.isLoading);
-    this.addressService.getByUserId(this.getUserId(), 0, 1000).subscribe({
-      next: (res) => {
-        this.addresses = res.data.content;
-        // this.addressesChange.next(this.addresses);
-        this.isLoading = false;
-      },
-      error: (res) => {
-        this.isLoading = false;
-      },
-    });
+    this.addressService
+      .getByUserId(this.getUserId(), 0, 1000)
+      .pipe(delay(200))
+      .subscribe({
+        next: (res) => {
+          this.addresses = res.data.content;
+          // this.addressesChange.next(this.addresses);
+          this.isLoading = false;
+        },
+        error: (res) => {
+          this.isLoading = false;
+        },
+      });
   }
   logout() {
     this.tokenStorageService.signOut();
@@ -167,11 +151,9 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
         .pipe(
           switchMap((province: Province) => {
             this.districts = province.districts!;
-            this.district = this.districts.find(
-              (e) => e.name === address.district
-            )!;
+            this.district = this.districts.find((e) => e.name === address.district)!;
             return this.provincesApi.getCommunes(this.district.code!);
-          })
+          }),
         )
         .subscribe({
           next: (district: District) => {
@@ -191,14 +173,13 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
     this.address = { ...address };
   }
   deleteAddress(address: Address, event: Event) {
-    this.isLoading = true;
     this.confirmationService.confirm({
       message: 'Are you sure that you want to perform this action?',
       accept: () => {
         this.addressService.delete(address.id!).subscribe({
           next: (res) => {
             this.getAddresses();
-            this.isLoading = false;
+
             this.messageService.add({
               severity: 'success',
               summary: 'Confirmed',
@@ -206,7 +187,6 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
             });
           },
           error: (res) => {
-            this.isLoading = false;
             this.messageService.add({
               severity: 'error',
               summary: 'Rejected',
@@ -216,7 +196,6 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       },
       reject: (type: any) => {
-        this.isLoading = false;
         // switch (type) {
         //   case ConfirmEventType.REJECT:
         //     this.messageService.add({
@@ -224,7 +203,6 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
         //       summary: 'Rejected',
         //       detail: 'You have rejected',
         //     });
-
         //     break;
         //   case ConfirmEventType.CANCEL:
         //     this.messageService.add({
@@ -232,7 +210,6 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
         //       summary: 'Cancelled',
         //       detail: 'You have cancelled',
         //     });
-
         //     break;
         // }
       },

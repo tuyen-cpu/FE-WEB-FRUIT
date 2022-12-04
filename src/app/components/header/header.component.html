@@ -1,12 +1,8 @@
 <p-toast></p-toast>
 <header>
   <div class="sub-header container">
-    <div
-      class="sub-header__site flex py-2 justify-content-center lg:justify-content-between align-items-center"
-    >
-      <span class="sub-header__site-left"
-        >Freeship với đơn từ 250k. Giao hàng hỏa tốc 2h.</span
-      >
+    <div class="sub-header__site flex py-2 justify-content-center lg:justify-content-between align-items-center">
+      <span class="sub-header__site-left">Freeship với đơn từ 250k. Giao hàng hỏa tốc 2h.</span>
       <ul class="sub-header__site-right align-items-center hidden lg:flex">
         <li class="email mr-5">
           <i class="pi pi-telegram pi-envelope mr-2"></i>
@@ -20,48 +16,30 @@
     </div>
   </div>
   <div class="main-header-wrapper">
-    <div
-      class="container main-header grid justify-content-between align-items-center mt-0"
-    >
+    <div class="container main-header grid justify-content-between align-items-center mt-0">
       <div
         [ngClass]="
           isShowCategoryDropdown
             ? 'menu-mobile-wrapper open col-2 sm:col-2 md:col-2 lg:hidden'
             : 'menu-mobile-wrapper col-2 sm:col-2 md:col-2 lg:hidden'
-        "
-      >
+        ">
         <div class="menu-mobile-site">
-          <i
-            (click)="changeShowCategoryDropdown()"
-            [ngClass]="isShowCategoryDropdown ? 'pi pi-times' : 'pi pi-bars'"
-          ></i>
+          <i (click)="changeShowCategoryDropdown()" [ngClass]="isShowCategoryDropdown ? 'pi pi-times' : 'pi pi-bars'"></i>
           <div class="category-dropdown-mobile">
             <ul class="category-dropdown-mobile__list">
               <li class="category-dropdown-mobile__item">
-                <a href="" class="category-dropdown-mobile__item-link"
-                  >Sản phẩm</a
-                >
+                <a href="" class="category-dropdown-mobile__item-link">Sản phẩm</a>
                 <ul class="category-dropdown-mobile__sub">
                   <li>
-                    <a
-                      (click)="changeShowCategoryDropdown()"
-                      routerLink="/product/list"
-                      >Tất cả sản phẩm</a
-                    >
+                    <a (click)="changeShowCategoryDropdown()" routerLink="/product/list">Tất cả sản phẩm</a>
                   </li>
                   <li *ngFor="let cate of categories">
-                    <a
-                      (click)="changeShowCategoryDropdown()"
-                      routerLink="/product/list/{{ cate.id }}"
-                      >{{ cate.name }}</a
-                    >
+                    <a (click)="changeShowCategoryDropdown()" routerLink="/product/list/{{ cate.id }}">{{ cate.name }}</a>
                   </li>
                 </ul>
               </li>
               <li class="category-dropdown-mobile__item">
-                <a href="" class="category-dropdown-mobile__item-link"
-                  >Sản phẩm</a
-                >
+                <a href="" class="category-dropdown-mobile__item-link">Sản phẩm</a>
                 <ul class="category-dropdown-mobile__sub">
                   <li>
                     <a href="">Tất cả sản phẩm</a>
@@ -76,9 +54,7 @@
                 </ul>
               </li>
               <li class="category-dropdown-mobile__item">
-                <a href="" class="category-dropdown-mobile__item-link"
-                  >Sản phẩm</a
-                >
+                <a href="" class="category-dropdown-mobile__item-link">Sản phẩm</a>
                 <ul class="category-dropdown-mobile__sub">
                   <li>
                     <a href="">Tất cả sản phẩm</a>
@@ -98,109 +74,53 @@
       </div>
       <div class="logo-wrapper col-2 sm:col-2 md:col-2 lg:col-2">
         <a routerLink="/" class="logo-wrappe-link">
-          <img
-            class="logo-wrappe-link__img max-w-full"
-            src="../../../assets/img/logo/logo.png"
-            alt=""
-          />
+          <img class="logo-wrappe-link__img max-w-full" src="../../../assets/img/logo/logo.png" alt="" />
         </a>
       </div>
-      <div
-        class="cate-search-wrapper grid col-4 sm:col-3 md:col-3 lg:col-10 mt-0"
-      >
+      <div class="cate-search-wrapper grid col-4 sm:col-3 md:col-3 lg:col-10 mt-0">
         <div class="nav-wrapper hidden lg:block md:col-4">
           <ul class="navbar__list">
             <li class="navbar__item">
-              <a
-                [routerLink]="['/']"
-                class="navbar__item-link"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-              >
-                Home
-              </a>
+              <a [routerLink]="['/']" class="navbar__item-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Home </a>
             </li>
             <li class="navbar__item">
-              <a
-                [routerLink]="['/product']"
-                class="navbar__item-link"
-                routerLinkActive="active"
-              >
+              <a [routerLink]="['/product']" class="navbar__item-link" routerLinkActive="active">
                 Product
-                <i
-                  class="pi pi-angle-down navbar__item-link-icon"
-                  aria-hidden="true"
-                ></i>
+                <i class="pi pi-angle-down navbar__item-link-icon" aria-hidden="true"></i>
               </a>
 
               <ul class="navbar__sub-menu-list">
                 <li class="navbar__sub-menu-item">
-                  <a
-                    routerLink="/product/list"
-                    class="navbar__sub-menu-item-link"
-                    >All product</a
-                  >
+                  <a routerLink="/product/list" class="navbar__sub-menu-item-link">All product</a>
                 </li>
-                <li
-                  *ngFor="let cate of categories"
-                  class="navbar__sub-menu-item"
-                >
-                  <a
-                    routerLink="/product/list/{{ cate.id }}"
-                    class="navbar__sub-menu-item-link"
-                    >{{ cate.name }}</a
-                  >
+                <li *ngFor="let cate of categories" class="navbar__sub-menu-item">
+                  <a routerLink="/product/list/{{ cate.id }}" class="navbar__sub-menu-item-link">{{ cate.name }}</a>
                 </li>
               </ul>
             </li>
             <li class="navbar__item">
-              <a
-                [routerLink]="['/about']"
-                class="navbar__item-link"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-              >
-                About
-              </a>
+              <a [routerLink]="['/about']" class="navbar__item-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> About </a>
             </li>
           </ul>
         </div>
-        <form
-          (ngSubmit)="onSubmit(searchInput)"
-          [formGroup]="searchForm"
-          class="form-search relative relative hidden lg:block md:col-6"
-        >
+        <form (ngSubmit)="onSubmit(searchInput)" [formGroup]="searchForm" class="form-search relative relative hidden lg:block md:col-6">
           <input
             #searchInput
             (keyup)="instantSearch($event)"
             type="text"
             formControlName="inputSearch"
             class="input-search"
-            placeholder="Search product at here..."
-          />
+            placeholder="Search product at here..." />
           <div class="search-dropdown">
-            <p-progressBar
-              [hidden]="!isLoading"
-              mode="indeterminate"
-              [style]="{ height: '2px' }"
-            ></p-progressBar>
+            <p-progressBar [hidden]="!isLoading" mode="indeterminate" [style]="{ height: '2px' }"></p-progressBar>
             <ul class="search-result">
               <li *ngFor="let product of products" class="search-result__item">
                 <a routerLink="/product/list" class="search-result__item-link">
-                  <span class="image"
-                    ><img [src]="product.image.link" alt="" width="60px"
-                  /></span>
+                  <span class="image"><img [src]="product.image.link" alt="" width="60px" /></span>
                   <span class="content">
-                    <p
-                      class="name"
-                      [innerHtml]="
-                        product.name | highlighter: keySearch:'partial'
-                      "
-                    ></p>
+                    <p class="name" [innerHtml]="product.name | highlighter : keySearch : 'partial'"></p>
                     <span class="price">
-                      <span class="mx-3">{{
-                        product.price | currency: "VND"
-                      }}</span
+                      <span class="mx-3">{{ product.price | currency : 'VND' }}</span
                       ><del>60,000đ</del>
                     </span>
                   </span>
@@ -208,16 +128,8 @@
               </li>
 
               <div class="result-more">
-                <a
-                  [hidden]="products.length === 0"
-                  class="cursor-pointer"
-                  (click)="goSearchPage()"
-                >
-                  Xem thêm kết quả.</a
-                >
-                <span [hidden]="products.length !== 0"
-                  >No matching results.</span
-                >
+                <a [hidden]="products.length === 0" class="cursor-pointer" (click)="goSearchPage()"> Xem thêm kết quả.</a>
+                <span [hidden]="products.length !== 0">No matching results.</span>
               </div>
             </ul>
           </div>
@@ -231,39 +143,17 @@
               y="0px"
               viewBox="0 0 24 27"
               style="enable-background: new 0 0 24 27"
-              xml:space="preserve"
-            >
+              xml:space="preserve">
               <path
-                d="M10,2C4.5,2,0,6.5,0,12s4.5,10,10,10s10-4.5,10-10S15.5,2,10,2z M10,19c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S13.9,19,10,19z"
-              ></path>
-              <rect
-                x="17"
-                y="17"
-                transform="matrix(0.7071 -0.7071 0.7071 0.7071 -9.2844 19.5856)"
-                width="4"
-                height="8"
-              ></rect>
+                d="M10,2C4.5,2,0,6.5,0,12s4.5,10,10,10s10-4.5,10-10S15.5,2,10,2z M10,19c-3.9,0-7-3.1-7-7s3.1-7,7-7s7,3.1,7,7S13.9,19,10,19z"></path>
+              <rect x="17" y="17" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -9.2844 19.5856)" width="4" height="8"></rect>
             </svg>
           </button>
         </form>
-        <ul
-          class="header-icon-list col-12 md:col-12 lg:col-2 grid mt-0 justify-content-end"
-        >
-          <li
-            [ngClass]="
-              isShowAccountDropdown
-                ? 'header-icon ml-2 open col-5 sm:col-4'
-                : 'header-icon ml-2 col-5 sm:col-4'
-            "
-          >
-            <a
-              class="header-icon-list__link block"
-              (click)="changeShowAccountDropdown()"
-            >
-              <span
-                *ngIf="!isShowAccountDropdown"
-                class="icon-box icon-account"
-              >
+        <ul class="header-icon-list col-12 md:col-12 lg:col-2 grid mt-0 justify-content-end">
+          <li [ngClass]="isShowAccountDropdown ? 'header-icon ml-2 open col-5 sm:col-4' : 'header-icon ml-2 col-5 sm:col-4'">
+            <a class="header-icon-list__link block" (click)="changeShowAccountDropdown()">
+              <span *ngIf="!isShowAccountDropdown" class="icon-box icon-account">
                 <svg
                   class=""
                   aria-hidden="true"
@@ -272,13 +162,11 @@
                   data-icon="user"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 448 512"
-                >
+                  viewBox="0 0 448 512">
                   <path
                     fill="currentColor"
                     d="M313.6 304c-28.7 0-42.5 16-89.6 16-47.1 0-60.8-16-89.6-16C60.2 304 0 364.2 0 438.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-25.6c0-74.2-60.2-134.4-134.4-134.4zM400 464H48v-25.6c0-47.6 38.8-86.4 86.4-86.4 14.6 0 38.3 16 89.6 16 51.7 0 74.9-16 89.6-16 47.6 0 86.4 38.8 86.4 86.4V464zM224 288c79.5 0 144-64.5 144-144S303.5 0 224 0 80 64.5 80 144s64.5 144 144 144zm0-240c52.9 0 96 43.1 96 96s-43.1 96-96 96-96-43.1-96-96 43.1-96 96-96z"
-                    class=""
-                  ></path>
+                    class=""></path>
                 </svg>
               </span>
               <span *ngIf="isShowAccountDropdown" class="icon-box icon--close">
@@ -286,18 +174,11 @@
                   <path
                     d="M9.1923882 8.39339828l7.7781745-7.7781746 1.4142136 1.41421357-7.7781746 7.77817459 7.7781746 7.77817456L16.9705627 19l-7.7781745-7.7781746L1.41421356 19 0 17.5857864l7.7781746-7.77817456L0 2.02943725 1.41421356.61522369 9.1923882 8.39339828z"
                     fill="currentColor"
-                    fill-rule="evenodd"
-                  ></path>
+                    fill-rule="evenodd"></path>
                 </svg>
               </span>
             </a>
-            <div
-              [ngClass]="
-                user
-                  ? 'account-dropdown-wrapper user-info'
-                  : 'account-dropdown-wrapper'
-              "
-            >
+            <div [ngClass]="user ? 'account-dropdown-wrapper user-info' : 'account-dropdown-wrapper'">
               <div *ngIf="!user" class="account-dropdown-list height-login">
                 <div id="site-login" class="account-wrapper is-selected">
                   <div class="account-site">
@@ -311,56 +192,20 @@
                         <input id="fname" name="fname" type="text" required />
                         <span></span>
                       </form> -->
-                      <form
-                        action=""
-                        [formGroup]="loginForm"
-                        (ngSubmit)="onLogin()"
-                      >
+                      <form action="" [formGroup]="loginForm" (ngSubmit)="onLogin()">
                         <div class="account-content__group">
-                          <input
-                            id="account-content__email"
-                            class="account-content__input"
-                            formControlName="email"
-                            type="text"
-                            required
-                          />
-                          <label
-                            for="account-content__email"
-                            class="account-content__label"
-                            >Email
-                          </label>
+                          <input id="account-content__email" class="account-content__input" formControlName="email" type="text" required />
+                          <label for="account-content__email" class="account-content__label">Email </label>
                         </div>
                         <div class="account-content__group">
-                          <input
-                            id="account-content__password"
-                            class="account-content__input"
-                            formControlName="password"
-                            type="password"
-                            required
-                          />
-                          <label
-                            for="account-content__password"
-                            class="account-content__label"
-                            >Password</label
-                          >
+                          <input id="account-content__password" class="account-content__input" formControlName="password" type="password" required />
+                          <label for="account-content__password" class="account-content__label">Password</label>
                         </div>
-                        <button
-                          class="btn-action"
-                          type="submit"
-                          pButton
-                          pRipple
-                          [loading]="isLoading"
-                        >
-                          LOGIN
-                        </button>
+                        <button class="btn-action" type="submit" pButton pRipple [loading]="isLoading">LOGIN</button>
                       </form>
                       <div class="social-btn-wrapper">
                         <div class="social-btn">
-                          <asl-google-signin-button
-                            type="standard"
-                            size="medium"
-                            shape="rectangular"
-                          ></asl-google-signin-button>
+                          <asl-google-signin-button type="standard" size="medium" shape="rectangular"></asl-google-signin-button>
                         </div>
 
                         <!-- <button class="social-btn" type="button">
@@ -385,11 +230,7 @@
                       <div class="switch-site-action">
                         <div class="switch-action__text">
                           Are you a new customer?
-                          <a
-                            routerLink="/account/register"
-                            (click)="changeShowAccountDropdown()"
-                            >Create a account</a
-                          >
+                          <a routerLink="/account/register" (click)="changeShowAccountDropdown()">Create a account</a>
                         </div>
                         <div class="switch-action__text">
                           Forgot password
@@ -408,27 +249,11 @@
                     <div class="account-content">
                       <form action="">
                         <div class="account-content__group">
-                          <input
-                            id="account-content__email-forgot"
-                            class="account-content__input"
-                            type="text"
-                            required
-                          />
-                          <label
-                            for="account-content__email-forgot"
-                            class="account-content__label"
-                            >Email</label
-                          >
+                          <input id="account-content__email-forgot" class="account-content__input" type="text" required />
+                          <label for="account-content__email-forgot" class="account-content__label">Email</label>
                         </div>
 
-                        <button
-                          class="btn-action w-100"
-                          pButton
-                          pRipple
-                          type="button"
-                        >
-                          RESET
-                        </button>
+                        <button class="btn-action w-100" pButton pRipple type="button">RESET</button>
                       </form>
 
                       <div class="switch-site-action">
@@ -450,35 +275,17 @@
                     </div>
                     <ul>
                       <li>
-                        <a
-                          routerLink="/account/profile"
-                          (click)="changeShowAccountDropdown()"
-                          class="item-info"
-                          >My account</a
-                        >
+                        <a routerLink="/account/profile" (click)="changeShowAccountDropdown()" class="item-info">My account</a>
                       </li>
                       <li>
-                        <a
-                          routerLink="/account/address"
-                          (click)="changeShowAccountDropdown()"
-                          class="item-info"
-                          >Address list</a
-                        >
+                        <a routerLink="/account/address" (click)="changeShowAccountDropdown()" class="item-info">Address list</a>
                       </li>
                       <li>
-                        <a
-                          routerLink="/account/order"
-                          (click)="changeShowAccountDropdown()"
-                          class="item-info"
-                          >Orders list</a
-                        >
+                        <a routerLink="/account/order" (click)="changeShowAccountDropdown()" class="item-info">Orders list</a>
                       </li>
+
                       <li>
-                        <a
-                          (click)="logout(); changeShowAccountDropdown()"
-                          class="item-info"
-                          >Logout</a
-                        >
+                        <a (click)="logout(); changeShowAccountDropdown()" class="item-info">Logout</a>
                       </li>
                     </ul>
                   </div>
@@ -488,21 +295,11 @@
           </li>
 
           <li class="header-icon header-icon__cart col-5 sm:col-4">
-            <a
-              class="header-icon-list__link relative block"
-              [routerLink]="['cart']"
-            >
+            <a class="header-icon-list__link relative block" [routerLink]="['cart']">
               <span class="icon-box icon-cart cart-menu" title="Giỏ hàng">
-                <svg
-                  class=""
-                  height="511pt"
-                  viewBox="0 0 511 511.99913"
-                  width="511pt"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg class="" height="511pt" viewBox="0 0 511 511.99913" width="511pt" xmlns="http://www.w3.org/2000/svg">
                   <path
-                    d="m512.496094 172v80c0 11.046875-8.953125 20-20 20h-13.152344l-8.425781 74.988281c-1.148438 10.21875-9.804688 17.765625-19.851563 17.769531-.746094 0-1.496094-.042968-2.257812-.128906-10.976563-1.230468-18.875-11.132812-17.640625-22.105468l10.421875-92.753907c1.136718-10.117187 9.691406-17.769531 19.875-17.769531h11.035156v-40h-432v40h341c11.046875 0 20 8.957031 20 20 0 11.046875-8.953125 20-20 20h-307.226562l19.75 164.761719c2.40625 20.089843 19.480468 35.238281 39.714843 35.238281h247.125c20.382813 0 37.472657-15.277344 39.75-35.535156 1.230469-10.976563 11.128907-18.871094 22.105469-17.640625 10.976562 1.234375 18.875 11.132812 17.644531 22.109375-4.554687 40.511718-38.730469 71.066406-79.5 71.066406h-247.125c-40.46875 0-74.617187-30.300781-79.433593-70.480469l-20.316407-169.519531h-13.488281c-11.046875 0-20-8.953125-20-20v-80c0-11.046875 8.953125-20 20-20h70.9375l105.683594-143.839844c6.539062-8.898437 19.054687-10.816406 27.957031-4.273437 8.902344 6.539062 10.816406 19.054687 4.277344 27.957031l-88.28125 120.15625h231.589843l-88.285156-120.15625c-6.539062-8.902344-4.625-21.417969 4.277344-27.957031 8.902344-6.542969 21.417969-4.628907 27.960938 4.273437l105.679687 143.839844h70.199219c11.046875 0 20 8.957031 20 20zm-275.996094 160v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm80 0v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm-160 0v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm0 0"
-                  ></path>
+                    d="m512.496094 172v80c0 11.046875-8.953125 20-20 20h-13.152344l-8.425781 74.988281c-1.148438 10.21875-9.804688 17.765625-19.851563 17.769531-.746094 0-1.496094-.042968-2.257812-.128906-10.976563-1.230468-18.875-11.132812-17.640625-22.105468l10.421875-92.753907c1.136718-10.117187 9.691406-17.769531 19.875-17.769531h11.035156v-40h-432v40h341c11.046875 0 20 8.957031 20 20 0 11.046875-8.953125 20-20 20h-307.226562l19.75 164.761719c2.40625 20.089843 19.480468 35.238281 39.714843 35.238281h247.125c20.382813 0 37.472657-15.277344 39.75-35.535156 1.230469-10.976563 11.128907-18.871094 22.105469-17.640625 10.976562 1.234375 18.875 11.132812 17.644531 22.109375-4.554687 40.511718-38.730469 71.066406-79.5 71.066406h-247.125c-40.46875 0-74.617187-30.300781-79.433593-70.480469l-20.316407-169.519531h-13.488281c-11.046875 0-20-8.953125-20-20v-80c0-11.046875 8.953125-20 20-20h70.9375l105.683594-143.839844c6.539062-8.898437 19.054687-10.816406 27.957031-4.273437 8.902344 6.539062 10.816406 19.054687 4.277344 27.957031l-88.28125 120.15625h231.589843l-88.285156-120.15625c-6.539062-8.902344-4.625-21.417969 4.277344-27.957031 8.902344-6.542969 21.417969-4.628907 27.960938 4.273437l105.679687 143.839844h70.199219c11.046875 0 20 8.957031 20 20zm-275.996094 160v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm80 0v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm-160 0v80c0 11.046875 8.953125 20 20 20 11.042969 0 20-8.953125 20-20v-80c0-11.046875-8.957031-20-20-20-11.046875 0-20 8.953125-20 20zm0 0"></path>
                 </svg>
               </span>
               <span class="cart-quantity"> {{ totalQuantity }} </span>
@@ -521,89 +318,28 @@
               <div class="cart-dropdown-site">
                 <div class="cart-dropdown__title">CART</div>
                 <ul class="cart-dropdown__list">
-                  <li
-                    *ngFor="let item of carts; trackBy: trackById"
-                    class="cart-dropdown-item flex"
-                  >
-                    <img
-                      class="cart-dropdown-item__image"
-                      [src]="urlImage + '/' + item.product.image.link"
-                      alt=""
-                    />
+                  <li *ngFor="let item of carts; trackBy: trackById" class="cart-dropdown-item flex">
+                    <img class="cart-dropdown-item__image" [src]="urlImage + '/' + item.product.image.link" alt="" />
                     <div class="cart-dropdown-item__content">
                       <h4 class="name">{{ item.product.name }}</h4>
                       <span class="quantity">
-                        <button
-                          (click)="
-                            updateQuantity(
-                              inputQuantityElementHeader,
-                              item,
-                              '-'
-                            )
-                          "
-                          class="quantity__btn"
-                        >
-                          -
-                        </button>
-                        <input
-                          type="text"
-                          min="1"
-                          class="value"
-                          value="{{ item.quantity }}"
-                          #inputQuantityElementHeader
-                        />
-                        <button
-                          (click)="
-                            updateQuantity(
-                              inputQuantityElementHeader,
-                              item,
-                              '+'
-                            )
-                          "
-                          class="quantity__btn"
-                        >
-                          +
-                        </button>
+                        <button (click)="updateQuantity(inputQuantityElementHeader, item, '-')" class="quantity__btn">-</button>
+                        <input type="text" min="1" class="value" value="{{ item.quantity }}" #inputQuantityElementHeader />
+                        <button (click)="updateQuantity(inputQuantityElementHeader, item, '+')" class="quantity__btn">+</button>
                       </span>
-                      <span class="price">{{
-                        calcPriceDiscount(
-                          item.product.price,
-                          item.product.discount
-                        ) * item.quantity | currency: "VND"
-                      }}</span>
+                      <span class="price">{{ calcPriceDiscount(item.product.price, item.product.discount) * item.quantity | currency : 'VND' }}</span>
                       <span (click)="remove(item)" class="close">
                         <i class="pi pi-times"></i>
                       </span>
                     </div>
                   </li>
                 </ul>
-                <div
-                  *ngIf="carts.length === 0"
-                  class="flex flex-column align-items-center py-4"
-                >
+                <div *ngIf="carts.length === 0" class="flex flex-column align-items-center py-4">
                   <svg width="81" height="70" viewBox="0 0 81 70">
-                    <g
-                      transform="translate(0 2)"
-                      stroke-width="4"
-                      stroke="#2A7D2E"
-                      fill="none"
-                      fill-rule="evenodd"
-                    >
-                      <circle
-                        stroke-linecap="square"
-                        cx="34"
-                        cy="60"
-                        r="6"
-                      ></circle>
-                      <circle
-                        stroke-linecap="square"
-                        cx="67"
-                        cy="60"
-                        r="6"
-                      ></circle>
-                      <path
-                        d="M22.9360352 15h54.8070373l-4.3391876 30H30.3387146L19.6676025 0H.99560547"
-                      ></path>
+                    <g transform="translate(0 2)" stroke-width="4" stroke="#2A7D2E" fill="none" fill-rule="evenodd">
+                      <circle stroke-linecap="square" cx="34" cy="60" r="6"></circle>
+                      <circle stroke-linecap="square" cx="67" cy="60" r="6"></circle>
+                      <path d="M22.9360352 15h54.8070373l-4.3391876 30H30.3387146L19.6676025 0H.99560547"></path>
                     </g>
                   </svg>
                   <p class="mt-4">Cart is empty</p>
@@ -611,28 +347,11 @@
                 <div class="cart-dropdown-footer">
                   <div class="total-wrapper flex justify-content-between">
                     <span class="total_title">Subtotal</span>
-                    <span class="total_value">{{
-                      totalCart | currency: "VND"
-                    }}</span>
+                    <span class="total_value">{{ totalCart | currency : 'VND' }}</span>
                   </div>
                   <div class="btn-action-wrapper flex">
-                    <a
-                      class="btn-action"
-                      routerLink="/cart"
-                      pButton
-                      pRipple
-                      type="button"
-                      >MY CART</a
-                    >
-                    <button
-                      routerLink="/checkout"
-                      class="btn-action"
-                      pButton
-                      pRipple
-                      [disabled]="carts.length === 0"
-                    >
-                      CHECKOUT
-                    </button>
+                    <a class="btn-action" routerLink="/cart" pButton pRipple type="button">MY CART</a>
+                    <button routerLink="/checkout" class="btn-action" pButton pRipple [disabled]="carts.length === 0">CHECKOUT</button>
                   </div>
                 </div>
               </div>
@@ -643,76 +362,36 @@
 
       <div class="search-mobile-wrapper">
         <div class="search-mobile-site">
-          <form
-            (ngSubmit)="onSubmit(searchInputMobile)"
-            [formGroup]="searchForm"
-          >
+          <form (ngSubmit)="onSubmit(searchInputMobile)" [formGroup]="searchForm">
             <div class="search-mobile-site__inner">
               <input
                 type="text"
-                [ngClass]="
-                  isShowSearchDropdownMobile
-                    ? 'search-mobile-site__inner-input open'
-                    : 'search-mobile-site__inner-input'
-                "
+                [ngClass]="isShowSearchDropdownMobile ? 'search-mobile-site__inner-input open' : 'search-mobile-site__inner-input'"
                 #searchInputMobile
                 (keyup)="instantSearch($event)"
                 formControlName="inputSearch"
-                placeholder="Search product at here..."
-              />
+                placeholder="Search product at here..." />
               <div class="search-dropdown search-dropdown--mobile">
-                <p-progressBar
-                  [hidden]="!isLoading"
-                  mode="indeterminate"
-                  [style]="{ height: '2px' }"
-                ></p-progressBar>
+                <p-progressBar [hidden]="!isLoading" mode="indeterminate" [style]="{ height: '2px' }"></p-progressBar>
                 <ul class="search-result">
-                  <li
-                    *ngFor="let product of products"
-                    class="search-result__item"
-                  >
+                  <li *ngFor="let product of products" class="search-result__item">
                     <a href="" class="search-result__item-link">
-                      <span class="image"
-                        ><img [src]="product.image.link" width="60px" alt=""
-                      /></span>
+                      <span class="image"><img [src]="product.image.link" width="60px" alt="" /></span>
                       <span class="content">
-                        <p
-                          class="name"
-                          [innerHtml]="
-                            product.name | highlighter: keySearch:'partial'
-                          "
-                        ></p>
-                        <span class="price">
-                          <span class="mx-3">54,000đ</span><del>60,000đ</del>
-                        </span>
+                        <p class="name" [innerHtml]="product.name | highlighter : keySearch : 'partial'"></p>
+                        <span class="price"> <span class="mx-3">54,000đ</span><del>60,000đ</del> </span>
                       </span>
                     </a>
                   </li>
 
                   <div class="result-more">
-                    <a
-                      [hidden]="products.length === 0"
-                      class="cursor-pointer"
-                      (click)="goSearchPage()"
-                    >
-                      Xem thêm kết quả.</a
-                    >
-                    <span [hidden]="products.length !== 0"
-                      >Không có kết quả phù hợp.</span
-                    >
+                    <a [hidden]="products.length === 0" class="cursor-pointer" (click)="goSearchPage()"> Xem thêm kết quả.</a>
+                    <span [hidden]="products.length !== 0">Không có kết quả phù hợp.</span>
                   </div>
                 </ul>
               </div>
-              <a
-                (click)="changeShowSearchDropdownMobile(searchInputMobile)"
-                class="search-mobile-site__inner-btn"
-                ><i
-                  [ngClass]="
-                    isShowSearchDropdownMobile
-                      ? 'p-button-icon pi pi-times'
-                      : 'p-button-icon pi pi-search'
-                  "
-                ></i
+              <a (click)="changeShowSearchDropdownMobile(searchInputMobile)" class="search-mobile-site__inner-btn"
+                ><i [ngClass]="isShowSearchDropdownMobile ? 'p-button-icon pi pi-times' : 'p-button-icon pi pi-search'"></i
               ></a>
             </div>
           </form>

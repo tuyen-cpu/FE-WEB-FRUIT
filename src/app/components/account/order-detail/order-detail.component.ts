@@ -1,3 +1,4 @@
+import { FileUploadService } from './../../../services/file-upload.service';
 import { OrderDetailService } from './../../../services/order-detail.service';
 import { OrderService } from './../../../services/order.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
@@ -22,15 +23,18 @@ export class OrderDetailComponent implements OnInit {
   subTotal: number = 0;
   order!: Order;
   orderId!: number;
+  urlImage!: string;
   constructor(
     private route: ActivatedRoute,
     private orderService: OrderService,
     private tokenStorageService: TokenStorageService,
     private orderDetailService: OrderDetailService,
+    private fileUploadService: FileUploadService,
   ) {}
 
   ngOnInit(): void {
     this.orderId = +this.route.snapshot.paramMap.get('orderId')!;
+    this.urlImage = this.fileUploadService.getLink();
     this.getOrderDetails();
     this.getOrder();
   }

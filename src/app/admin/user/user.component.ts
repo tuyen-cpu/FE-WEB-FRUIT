@@ -22,6 +22,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { User } from 'src/app/model/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { MultiSelectModule } from 'primeng/multiselect';
+import UserManagerService from 'src/app/services/admin/user-manager.service';
 @Component({
   selector: 'app-user',
   standalone: true,
@@ -67,6 +68,7 @@ export class UserComponent implements OnInit {
   selectedRoles!: any[];
   constructor(
     private userService: UserService,
+    private userManagerService: UserManagerService,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
@@ -119,25 +121,27 @@ export class UserComponent implements OnInit {
     this.submitted = false;
     this.userDialog = true;
   }
-  resetValueForm() {}
+  resetValueForm() {
+    this.user = {};
+  }
   saveAddress() {
     this.submitted = true;
-    if (this.user.id) {
-      this.userService.update(this.user).subscribe({
-        next: (res) => {
-          console.log(res);
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Successful',
-            detail: 'Updated',
-            life: 1000,
-          });
-          this.getUsers();
-        },
-        error: (res) => {},
-      });
-      return;
-    }
+    // if (this.user.id) {
+    this.userManagerService.add(this.user).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Updated',
+          life: 2000,
+        });
+        this.getUsers();
+      },
+      error: (res) => {},
+    });
+    return;
+    // }
   }
   hideDialog() {
     this.userDialog = false;
@@ -145,11 +149,18 @@ export class UserComponent implements OnInit {
   }
   resetView() {}
   editUser(user: User) {
+    console.log(user);
     this.userDialog = true;
     this.user = { ...user };
   }
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
+  }
+  isValid(): boolean {
+    if (!this.user.firstName || !this.user.lastName || !this.user.email) {
+      return false;
+    }
+    return true;
   }
   initTable() {
     this.listRoles = [

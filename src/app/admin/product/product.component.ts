@@ -26,6 +26,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import * as customBuild from '../../../ckeditorCustom/build/ckeditor';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageModule } from 'primeng/image';
+import * as slug from 'vietnamese-slug';
 @Component({
   selector: 'app-product',
   standalone: true,
@@ -155,7 +156,7 @@ export class ProductComponent implements OnInit {
   }
   changeParams() {
     this.route.queryParams.subscribe((res) => {
-      if (res['page'] === undefined || res['page'] === null) {
+      if (res['page'] === undefined || res['page'] === null || +res['page'] <= 0) {
         this.paginator.pageNumber = 0;
       } else {
         this.paginator.pageNumber = res['page'] - 1;
@@ -183,6 +184,7 @@ export class ProductComponent implements OnInit {
       });
   }
   onPageChange(event: any) {
+    console.log('Change page: ', event);
     this.paginator.pageNumber = event.page;
     this.paginator.pageSize = event.rows;
     this.paramsURL = {
@@ -193,6 +195,7 @@ export class ProductComponent implements OnInit {
     this.addParams();
   }
   addParams() {
+    console.log('Add params');
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: this.paramsURL,
@@ -222,7 +225,7 @@ export class ProductComponent implements OnInit {
     this.product.category = this.categorySelected;
     this.product.status = this.statusSelected.value;
     this.product.description = this.dataEditor;
-
+    this.product.slug = slug(this.product.name);
     this.formDataImage.append('product', JSON.stringify(this.product));
     console.log(this.product);
     this.productManagerService.add(this.formDataImage).subscribe({
@@ -333,5 +336,11 @@ export class ProductComponent implements OnInit {
       return false;
     }
     return true;
+  }
+  trackById(index: number, item: any) {
+    return item.id;
+  }
+  toSlug(dfsd: string) {
+    return slug(dfsd);
   }
 }

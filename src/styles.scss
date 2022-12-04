@@ -1,7 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import url(./app/scss/base/_reset.scss);
-@import "../src/app/scss/utils/variable";
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import '../src/app/scss/utils/variable';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 html {
   font-smooth: antialiased;
 }
@@ -85,7 +86,7 @@ html {
   isolation: isolate;
   border-radius: 0;
   &:before {
-    content: "";
+    content: '';
     height: 100%;
     width: 0;
     position: absolute;
@@ -118,7 +119,7 @@ html {
   isolation: isolate;
   border-radius: 0;
   &:before {
-    content: "";
+    content: '';
     height: 100%;
     width: 0;
     position: absolute;
@@ -136,8 +137,22 @@ html {
     }
   }
 }
+p-dialog {
+  .p-component {
+    font-family: $font-family;
+  }
+  .p-dialog-title {
+    font-family: $font-family;
+    font-size: 1.6rem !important;
+  }
+  .p-dialog-footer {
+    .p-button-text {
+    }
+  }
+}
 .p-component {
   font-size: 1.4rem !important;
+
   .p-link {
     font-size: 1.4rem !important;
   }

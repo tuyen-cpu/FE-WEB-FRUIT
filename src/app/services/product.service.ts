@@ -17,4 +17,7 @@ export default class ProductService {
   getById(id: number): Observable<any> {
     return this.httpClient.get(`${this.REST_API}/${id}`);
   }
+  getBySlug(slug: string): Observable<any> {
+    return this.httpClient.get(`${this.REST_API}?slug=${slug}`);
+  }
 }

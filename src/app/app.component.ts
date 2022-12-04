@@ -10,14 +10,7 @@ import { User } from './model/user.model';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    HeaderComponent,
-    FooterComponent,
-    RouterModule,
-    HomeComponent,
-    SocialLoginModule,
-  ],
+  imports: [CommonModule, HeaderComponent, FooterComponent, RouterModule, HomeComponent, SocialLoginModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
@@ -32,11 +25,7 @@ export class AppComponent implements OnInit {
     // window의 scroll top
     // Both window.pageYOffset and document.documentElement.scrollTop returns the same result in all the cases. window.pageYOffset is not supported below IE 9.
 
-    const scrollPosition =
-      window.pageYOffset ||
-      document.documentElement.scrollTop ||
-      document.body.scrollTop ||
-      0;
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
     if (scrollPosition >= this.topPosToStartShowing) {
       this.isShow = true;
@@ -53,13 +42,9 @@ export class AppComponent implements OnInit {
       behavior: 'smooth',
     });
   }
-  constructor(
-    private tokenStorageService: TokenStorageService,
-    private router: Router
-  ) {}
+  constructor(private tokenStorageService: TokenStorageService, private router: Router) {}
   ngOnInit(): void {
     this.tokenStorageService.userChange.subscribe((data) => {
-      console.log(data);
       this.router.events.forEach((event) => {
         if (event instanceof NavigationStart) {
           if (event['url'].includes('/admin')) {

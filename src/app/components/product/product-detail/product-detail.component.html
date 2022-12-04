@@ -4,18 +4,12 @@
     <div class="main grid">
       <div class="col-12 md:col-5">
         <swiper
-          style="
-            --swiper-navigation-color: #fff;
-            --swiper-pagination-color: #fff;
-          "
+          style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
           [loop]="true"
           [spaceBetween]="10"
           [thumbs]="{ swiper: thumbsSwiper }"
-          class="mySwiper2"
-        >
-          <ng-template swiperSlide *ngFor="let img of images"
-            ><img [src]="urlImage + '/' + img.link"
-          /></ng-template>
+          class="mySwiper2">
+          <ng-template swiperSlide *ngFor="let img of images"><img [src]="urlImage + '/' + img.link" /></ng-template>
           <!-- <ng-template swiperSlide
             ><img
               src="https://swiperjs.com/demos/images/nature-2.jpg" /></ng-template
@@ -51,11 +45,8 @@
           [slidesPerView]="4"
           [freeMode]="true"
           [watchSlidesProgress]="true"
-          class="mySwiper"
-        >
-          <ng-template swiperSlide *ngFor="let img of images"
-            ><img class="cursor-pointer" [src]="urlImage + '/' + img.link"
-          /></ng-template>
+          class="mySwiper">
+          <ng-template swiperSlide *ngFor="let img of images"><img class="cursor-pointer" [src]="urlImage + '/' + img.link" /></ng-template>
         </swiper>
       </div>
       <div class="col-12 md:col-7 md:pl-5">
@@ -64,34 +55,22 @@
           <div class="stock text-2xl my-6"><b>Availability:</b> Instock</div>
           <div class="price my-6 text-2xl flex align-items-center">
             <span class="new-price mr-2"
-              ><b>{{
-                calcPrice(product.price, product.discount) | myCurrency: "VND"
-              }}</b></span
+              ><b>{{ calcPrice(product.price, product.discount) | myCurrency : 'VND' }}</b></span
             >
-            <del class="old-price mr-2 text-black-alpha-60 font-semibold"
-              >{{ product.price | myCurrency: "VND" }}
-            </del>
-            <span class="sale-title">{{ product.discount }}</span>
+            <del *ngIf="product.discount" class="old-price mr-2 text-black-alpha-60 font-semibold">{{ product.price | myCurrency : 'VND' }} </del>
+            <span *ngIf="product.discount" class="sale-title">{{ product.discount }}</span>
           </div>
           <div class="text-2xl my-6">
             Hurry up! only
-            <b class="main-color">{{ product.quantity }}</b> products left in
-            stock!
+            <b class="main-color">{{ product.quantity }}</b> products left in stock!
           </div>
           <p class="text-500 text-2xl">
-            It is a long established fact that a reader will be distracted by
-            the readable content of a page when looking at its layout. The point
-            of using Lorem Ipsum is that it has a more-or-less normal
-            distribution of letters,
+            It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of
+            using Lorem Ipsum is that it has a more-or-less normal distribution of letters,
           </p>
           <div class="quantity inline-flex align-items-center my-6">
             <label for="" class="text-3xl mr-4"><b>Quantity: </b></label>
-            <button
-              class="btn-qty"
-              (click)="onChangeQuantity(inputQuantityElement, '-')"
-            >
-              -
-            </button>
+            <button class="btn-qty" (click)="onChangeQuantity(inputQuantityElement, '-')">-</button>
             <input
               type="text"
               class="cart-item__infor-quantity-value"
@@ -99,54 +78,25 @@
               maxlength="3"
               [disabled]="true"
               #inputQuantityElement
-              [value]="quantity"
-            />
-            <button
-              class="btn-qty"
-              (click)="onChangeQuantity(inputQuantityElement, '+')"
-            >
-              +
-            </button>
+              [value]="quantity" />
+            <button class="btn-qty" (click)="onChangeQuantity(inputQuantityElement, '+')">+</button>
           </div>
           <div class="">
-            <a
-              class="btn-action md:inline-block block px-7 uppercase text-center"
-              (click)="addToCart()"
-              >Add to cart</a
-            >
+            <a class="btn-action md:inline-block block px-7 uppercase text-center" (click)="addToCart()">Add to cart</a>
           </div>
           <div class="service mt-5">
             <ul>
               <li class="flex align-items-center">
-                <span class="block max-w-4rem"
-                  ><img
-                    src="../../../../assets/img/background/img_product_service_1.webp"
-                    alt=""
-                    class="w-full"
-                /></span>
-                <p class="text-2xl ml-4">
-                  Canh tác hướng hữu cơ không hóa chất
-                </p>
+                <span class="block max-w-4rem"><img src="../../../../assets/img/background/img_product_service_1.webp" alt="" class="w-full" /></span>
+                <p class="text-2xl ml-4">Canh tác hướng hữu cơ không hóa chất</p>
               </li>
               <li class="flex align-items-center">
-                <span class="block max-w-4rem"
-                  ><img
-                    src="../../../../assets/img/background/img_product_service_2.webp"
-                    alt=""
-                    class="w-full"
-                /></span>
+                <span class="block max-w-4rem"><img src="../../../../assets/img/background/img_product_service_2.webp" alt="" class="w-full" /></span>
                 <p class="text-2xl ml-4">Bảo hành đến từng cọng rau</p>
               </li>
               <li class="flex align-items-center">
-                <span class="block max-w-4rem"
-                  ><img
-                    src="../../../../assets/img/background/img_product_service_3.webp"
-                    alt=""
-                    class="w-full"
-                /></span>
-                <p class="text-2xl ml-4">
-                  Freeship cho hóa đơn từ 250k trong 2h.
-                </p>
+                <span class="block max-w-4rem"><img src="../../../../assets/img/background/img_product_service_3.webp" alt="" class="w-full" /></span>
+                <p class="text-2xl ml-4">Freeship cho hóa đơn từ 250k trong 2h.</p>
               </li>
             </ul>
           </div>

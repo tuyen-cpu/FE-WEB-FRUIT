@@ -3,30 +3,19 @@
     <div class="product-list-filter">
       <div class="product-list-filter__category">
         <p-accordion>
-          <div
-            class="product-list-filter__title"
-            (click)="toggleFilterCategory()"
-          >
+          <div class="product-list-filter__title" (click)="toggleFilterCategory()">
             <span class="product-list-filter__title-name">Categories</span>
             <span class="product-list-filter__title-icon">
-              <i
-                [ngClass]="isShowFilterCategory ? 'pi pi-minus' : 'pi pi-plus'"
-              ></i>
+              <i [ngClass]="isShowFilterCategory ? 'pi pi-minus' : 'pi pi-plus'"></i>
             </span>
           </div>
 
           <p-accordionTab [(selected)]="isShowFilterCategory">
             <ul class="product-list-filter__list">
-              <li
-                *ngFor="let category of categories"
-                class="product-list-filter__item is-selected"
-              >
-                <a
-                  [routerLink]="['/product/list/' + category.id]"
-                  routerLinkActive="active"
-                  class="product-list-filter__item-link"
-                  >{{ category.name }}</a
-                >
+              <li *ngFor="let category of categories" class="product-list-filter__item is-selected">
+                <a [routerLink]="['/product/list/' + category.id]" routerLinkActive="active" class="product-list-filter__item-link">{{
+                  category.name
+                }}</a>
               </li>
 
               <!-- <li class="product-list-filter__item">
@@ -54,70 +43,43 @@
           <div class="product-list-filter__title" (click)="toggleFilterPrice()">
             <span class="product-list-filter__title-name">Price</span>
             <span class="product-list-filter__title-icon">
-              <i
-                [ngClass]="isShowFilterPrice ? 'pi pi-minus' : 'pi pi-plus'"
-              ></i>
+              <i [ngClass]="isShowFilterPrice ? 'pi pi-minus' : 'pi pi-plus'"></i>
             </span>
           </div>
 
           <p-accordionTab [(selected)]="isShowFilterPrice">
-            <div
-              class="field-radiobutton"
-              *ngFor="let price of priceList; let i = index"
-            >
-              <p-radioButton
-                (onClick)="changePrice()"
-                name="price"
-                [value]="price"
-                [(ngModel)]="filter.price"
-                [inputId]="i + ''"
-              ></p-radioButton>
-              <label [for]="i">Dưới {{ price | myCurrency: "vnd" }}</label>
+            <div class="field-radiobutton" *ngFor="let price of priceList; let i = index">
+              <p-radioButton (onClick)="changePrice()" name="price" [value]="price" [(ngModel)]="filter.price" [inputId]="i + ''"></p-radioButton>
+              <label [for]="i">Dưới {{ price | myCurrency : 'vnd' }}</label>
             </div>
           </p-accordionTab>
         </p-accordion>
       </div>
     </div>
   </div>
-  <div
-    [hidden]="products.length === 0"
-    class="col-12 sm:col-12 md:col-12 lg:col-10"
-  >
+  <div [hidden]="products.length === 0" class="col-12 sm:col-12 md:col-12 lg:col-10">
     <div class="product-list-sort">
       <p-dropdown
         [options]="sortOptions"
         [(ngModel)]="sortOptionSelected"
         (onChange)="changeSort()"
         placeholder="Sắp xếp theo"
-        optionLabel="name"
-      ></p-dropdown>
+        optionLabel="name"></p-dropdown>
     </div>
     <div class="product-list grid">
-      <div
-        *ngFor="let product of products; trackBy: trackById"
-        class="col-6 sm:col-6 md:col-4 lg:col-3"
-      >
-        <app-product-item
-          *ngIf="product"
-          [product]="product"
-        ></app-product-item>
+      <div *ngFor="let product of products; trackBy: trackById" class="col-6 sm:col-6 md:col-4 lg:col-3">
+        <app-product-item *ngIf="product" [product]="product"></app-product-item>
       </div>
     </div>
     <div class="product-list-paginator">
       <p-paginator
-        [rows]="1"
+        [rows]="paginator.pageSize"
+        [first]="paginator.pageSize * paginator.pageNumber"
         [totalRecords]="paginator.totalElements"
-        [first]="paginator.pageNumber!"
-        (onPageChange)="onPageChange($event)"
-      ></p-paginator>
+        (onPageChange)="onPageChange($event)"></p-paginator>
     </div>
   </div>
-  <div
-    [hidden]="products.length !== 0"
-    class="col-12 sm:col-12 md:col-12 lg:col-9 m-auto text-center text-2xl"
-  >
-    Không có sản phẩm nào phù hợp.
-  </div>
+  <div [hidden]="products.length !== 0" class="col-12 sm:col-12 md:col-12 lg:col-9 m-auto text-center text-2xl">Không có sản phẩm nào phù hợp.</div>
   <!-- <p-dialog
     header="Loading"
     [(visible)]="isLoading"

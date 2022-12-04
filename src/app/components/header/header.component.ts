@@ -105,7 +105,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.cartItemsSubscription = this.cartItemService.cartItemsChange.subscribe({
       next: (response) => {
         this.carts = response;
-        console.log(this.carts);
         this.loadTotal();
       },
       error: (response) => {},
