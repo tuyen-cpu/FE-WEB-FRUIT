@@ -34,15 +34,18 @@
       </p-toolbar>
 
       <p-table
+        [loading]="isLoadingTable"
         #dt
         [value]="users"
         [rows]="10"
-        [paginator]="true"
         [globalFilterFields]="['id', 'firstName', 'lastName', 'userName', 'email']"
         [rowHover]="true"
         dataKey="id"
         [showCurrentPageReport]="true"
-        responsiveLayout="scroll">
+        [responsive]="true"
+        responsiveLayout="scroll"
+        [scrollable]="true"
+        scrollHeight="61vh">
         <!-- <ng-template pTemplate="summary">
             <div class="page">
               <p-paginator
@@ -63,30 +66,30 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id" style="min-width: 1rem">Id <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="userName" style="min-width: 8rem">User Name</th>
-            <th pSortableColumn="email" style="min-width: 8rem">Email <p-sortIcon field="email"></p-sortIcon></th>
-            <th>Full name</th>
-            <th style="min-width: 3rem">Role</th>
-            <th style="min-width: 2rem">Status</th>
-            <th style="min-width: 2rem">Action</th>
+            <th pSortableColumn="id" style="flex: 1">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <!-- <th pSortableColumn="userName" style="flex: 1">User Name</th> -->
+            <th pSortableColumn="email" style="flex: 5">Email <p-sortIcon field="email"></p-sortIcon></th>
+            <th style="flex: 3">Full name</th>
+            <th style="flex: 2">Role</th>
+            <th style="flex: 1">Status</th>
+            <th style="flex: 1">Action</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-user>
           <tr>
-            <td>{{ user.id }}</td>
-            <td>
+            <td style="flex: 1">{{ user.id }}</td>
+            <!-- <td>
               {{ user.userName }}
-            </td>
-            <td>
+            </td> -->
+            <td style="flex: 5">
               {{ user.email }}
             </td>
-            <td>{{ user.firstName + ' ' + user.lastName }}</td>
-            <td>{{ user.roles !== null && user.roles[0] }}</td>
-            <td>
+            <td style="flex: 3">{{ user.lastName + ' ' + user.firstName }}</td>
+            <td style="flex: 2">{{ user.roles !== null && user.roles[0] }}</td>
+            <td style="flex: 1">
               <span [class]="'status-default status-' + user.status">{{ user.status === 0 ? 'INACTIVE' : 'ACTIVE' }}</span>
             </td>
-            <td>
+            <td style="flex: 1">
               <button
                 pButton
                 pRipple
@@ -96,6 +99,27 @@
                 (click)="editUser(user)"></button>
             </td>
           </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="page grid align-items-center">
+            <div class="absolute">
+              Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
+              {{
+                users.length === paginator.pageSize
+                  ? paginator.pageSize * paginator.pageNumber + paginator.pageSize
+                  : paginator.pageSize * paginator.pageNumber + users.length
+              }}
+              of {{ paginator.totalElements }} products.
+            </div>
+            <div class="col-12">
+              <p-paginator
+                [rows]="paginator.pageSize"
+                [totalRecords]="paginator.totalElements"
+                [first]="paginator.pageSize * paginator.pageNumber"
+                (onPageChange)="onPageChange($event)"
+                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+            </div>
+          </div>
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
@@ -109,12 +133,13 @@
       <ng-template pTemplate="content">
         <div class="formgrid grid">
           <div class="field col">
-            <label for="firstName">First name</label>
+            <label for="firstName" class="font-semibold">First name*</label>
             <input
               type="text"
               pInputText
               id="firstName"
               [(ngModel)]="user.firstName"
+              [maxLength]="20"
               required
               [ngClass]="{
                 'ng-invalid ng-dirty': submitted && !user.firstName
@@ -122,62 +147,96 @@
             <small class="p-error" *ngIf="submitted && !user.firstName">First name is required.</small>
           </div>
           <div class="field col">
-            <label for="lastName">Last name</label>
+            <label for="lastName" class="font-semibold">Last name*</label>
             <input
               type="text"
               pInputText
               id="lastName "
               [(ngModel)]="user.lastName"
               required
+              [maxLength]="20"
               [ngClass]="{
                 'ng-invalid ng-dirty': submitted && !user.lastName
               }" />
             <small class="p-error" *ngIf="submitted && !user.lastName">Last name is required.</small>
           </div>
           <div class="field col-12">
-            <label for="email">Email</label>
+            <label for="email" class="font-semibold">Email*</label>
             <input
               type="email"
               pInputText
+              [pattern]="emailPattern"
               id="email "
-              [(ngModel)]="user.lastName"
+              [(ngModel)]="user.email"
+              [disabled]="user.id ? true : false"
               required
+              #email="ngModel"
               [ngClass]="{
                 'ng-invalid ng-dirty': submitted && !user.email
               }" />
             <small class="p-error" *ngIf="submitted && !user.email">Email name is required.</small>
+            <small class="p-error" *ngIf="email.errors?.['pattern']">Email is invalid.</small>
           </div>
-          <div class="field col-12">
-            <label>Role</label>
+
+          <div class="field col-6">
+            <label class="font-semibold">Role*</label>
             <p-multiSelect
               [options]="listRoles"
-              [(ngModel)]="selectedRoles"
+              [(ngModel)]="rolesSelected"
               defaultLabel="Select a role"
               optionLabel="label"
-              class="multiselect-custom">
+              class="multiselect-custom"
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !statusSelected.label
+              }">
               <ng-template let-value pTemplate="selectedItems">
-                <div class="inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedRoles">
-                  <div>{{ option.label }}</div>
+                <div class="inline-flex align-items-center px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of rolesSelected">
+                  <div>{{ option.label | uppercase }}</div>
                 </div>
-                <div *ngIf="!selectedRoles || selectedRoles.length === 0">Select Roles</div>
+                <div *ngIf="!rolesSelected || rolesSelected.length === 0">Select Roles</div>
               </ng-template>
-              <ng-template let-country pTemplate="item">
-                <div class="flex align-items-center country-item">
-                  <div>{{ country.label }}</div>
+              <ng-template let-role pTemplate="item">
+                <div class="flex align-items-center role-item">
+                  <div>{{ role.label | uppercase }}</div>
                 </div>
               </ng-template>
             </p-multiSelect>
+            <small class="p-error" *ngIf="submitted && !rolesSelected.length">Role is required.</small>
           </div>
-          <div class="field col-12">
-            <label>Status</label>
-            <p-dropdown [options]="listStatuses" [(ngModel)]="user.status" placeholder="Select a status" [showClear]="true"></p-dropdown>
+
+          <div class="field col-6">
+            <label class="font-semibold">Status*</label>
+            <p-dropdown
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !statusSelected.label
+              }"
+              [options]="listStatuses"
+              [(ngModel)]="statusSelected"
+              optionLabel="value"
+              placeholder="Select a Status">
+              <ng-template pTemplate="selectedItem">
+                <div class="status-item status-item-value" *ngIf="statusSelected">
+                  <div>
+                    <span [class]="'status-default status-label-' + statusSelected.value">{{ statusSelected.label }}</span>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template let-status pTemplate="item">
+                <div class="status-item">
+                  <div>
+                    <span [class]="'status-default status-' + status.value">{{ status.label }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <small class="p-error" *ngIf="submitted && !statusSelected.label">Status name is required.</small>
           </div>
         </div>
       </ng-template>
 
       <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [loading]="isLoading" (click)="saveAddress()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [loading]="isLoading" (click)="saveUser()"></button>
       </ng-template>
     </p-dialog>
   </div>

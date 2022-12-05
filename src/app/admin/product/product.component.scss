@@ -78,4 +78,15 @@ p-dialog {
   .p-image-preview {
     max-height: 60vh;
   }
+  p-fileupload {
+    .p-fileupload {
+      .p-fileupload-buttonbar {
+        .p-element {
+          &:nth-child(2) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 }

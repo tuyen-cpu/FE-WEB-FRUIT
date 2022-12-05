@@ -27,13 +27,19 @@
         [scrollable]="true"
         scrollHeight="61vh">
         <ng-template pTemplate="summary">
-          <div class="page">
-            <p-paginator
-              [rows]="paginator.pageSize"
-              [totalRecords]="paginator.totalElements"
-              [first]="paginator.pageSize * paginator.pageNumber"
-              (onPageChange)="onPageChange($event)"
-              [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+          <div class="page grid align-items-center">
+            <div class="absolute">
+              Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to {{ paginator.pageSize * paginator.pageNumber + paginator.pageSize }} of
+              {{ paginator.totalElements }} products.
+            </div>
+            <div class="col-12">
+              <p-paginator
+                [rows]="paginator.pageSize"
+                [totalRecords]="paginator.totalElements"
+                [first]="paginator.pageSize * paginator.pageNumber"
+                (onPageChange)="onPageChange($event)"
+                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+            </div>
           </div>
         </ng-template>
 
@@ -86,11 +92,11 @@
             <td colspan="7">No product found.</td>
           </tr>
         </ng-template>
-        <ng-template pTemplate="footer">
+        <!-- <ng-template pTemplate="footer">
           <tr>
             <td colspan="3">Total: {{ paginator.totalElements }}</td>
           </tr>
-        </ng-template>
+        </ng-template> -->
       </p-table>
     </div>
 
@@ -104,7 +110,7 @@
       <ng-template pTemplate="content">
         <div class="formgrid grid">
           <div class="field col-6">
-            <label class="font-medium">Category*</label>
+            <label class="font-semibold">Category*</label>
             <p-dropdown
               [ngClass]="{
                 'ng-invalid ng-dirty': submitted && !categorySelected.name
@@ -130,12 +136,9 @@
             </p-dropdown>
             <small class="p-error" *ngIf="submitted && !categorySelected.name">Category name is required.</small>
           </div>
-          <div class="field">
-            <label for="">{{ toSlug(product.name) }}</label>
-          </div>
-          <div class="field col-6">
-            <label class="font-medium">Status*</label>
 
+          <div class="field col-6">
+            <label class="font-semibold">Status*</label>
             <p-dropdown
               [ngClass]="{
                 'ng-invalid ng-dirty': submitted && !statusSelected.label
@@ -143,7 +146,7 @@
               [options]="listStatuses"
               [(ngModel)]="statusSelected"
               optionLabel="value"
-              placeholder="Select a Country">
+              placeholder="Select a Status">
               <ng-template pTemplate="selectedItem">
                 <div class="country-item country-item-value" *ngIf="statusSelected">
                   <div>
@@ -162,20 +165,21 @@
             <small class="p-error" *ngIf="submitted && !statusSelected.label">Status name is required.</small>
           </div>
           <div class="field col-6">
-            <label for="firstName" class="font-medium">Name*</label>
+            <label for="firstName" class="font-semibold">Name*</label>
             <input
               type="text"
               pInputText
               id="firstName"
               [(ngModel)]="product.name"
               required
+              [maxlength]="100"
               [ngClass]="{
                 'ng-invalid ng-dirty': submitted && !product.name
               }" />
             <small class="p-error" *ngIf="submitted && !product.name">Nameis required.</small>
           </div>
           <div class="field col-6">
-            <label for="price" class="font-medium">Price*</label>
+            <label for="price" class="font-semibold">Price*</label>
             <p-inputNumber
               [(ngModel)]="product.price"
               inputId="price"
@@ -199,7 +203,7 @@
           </div> -->
 
           <div class="field col-12 md:col-6">
-            <label for="quantity" class="font-medium">Quantity*</label>
+            <label for="quantity" class="font-semibold">Quantity*</label>
             <p-inputNumber
               [(ngModel)]="product.quantity"
               inputId="quantity"
@@ -216,7 +220,7 @@
             <small class="p-error" *ngIf="submitted && !product.quantity">Quantity name is required.</small>
           </div>
           <div class="field col-12 md:col-6">
-            <label for="discount" class="font-medium">Discount</label>
+            <label for="discount" class="font-semibold">Discount</label>
             <p-inputNumber
               [(ngModel)]="product.discount"
               inputId="discount"
@@ -231,11 +235,11 @@
           </div>
 
           <div class="field col-12">
-            <label for="locale-us" class="font-medium">Description</label>
+            <label for="locale-us" class="font-semibold">Description</label>
             <ckeditor [editor]="Editor" [config]="config" [(ngModel)]="dataEditor" (ready)="onReady($event)"></ckeditor>
           </div>
           <div class="field col-12" *ngIf="product.id">
-            <label for="" class="font-medium">Image</label>
+            <label for="" class="font-semibold">Image</label>
             <div class="flex">
               <div class="max-h-29rem" *ngFor="let image of images">
                 <p-image [src]="urlImage + '/' + image.link" alt="Image" width="80" [preview]="true"></p-image>
@@ -243,7 +247,7 @@
             </div>
           </div>
           <div class="field col-12">
-            <label for="" class="font-medium">Upload Image</label>
+            <label for="" class="font-semibold">Upload Image</label>
             <p-fileUpload
               name="file"
               url=""

@@ -13,6 +13,12 @@
     background: #ffcdd2;
     color: #c63737;
   }
+  &.status-label-1 {
+    color: #256029;
+  }
+  &.status-label-0 {
+    color: #c63737;
+  }
 }
 .p-dialog-content {
   overflow: unset !important;

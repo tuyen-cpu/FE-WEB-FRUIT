@@ -1,41 +1,17 @@
 import { UserInforService } from './user-infor.service';
 import { TokenStorageService } from './token-storage.service';
-import {
-  Observable,
-  BehaviorSubject,
-  catchError,
-  switchMap,
-  throwError,
-  filter,
-  take,
-  tap,
-} from 'rxjs';
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
+import { Observable, BehaviorSubject, catchError, switchMap, throwError, filter, take, tap } from 'rxjs';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 const TOKEN_HEADER_KEY = 'Authorization';
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
   private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
-    null
-  );
-  constructor(
-    private tokenService: TokenStorageService,
-    private authService: AuthService,
-    private userInforServicel: UserInforService
-  ) {}
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  constructor(private tokenService: TokenStorageService, private authService: AuthService, private userInforServicel: UserInforService) {}
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<Object>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<Object>> {
     if (req.url.includes('provinces.open-api.vn')) {
       return next.handle(req);
     }
@@ -45,16 +21,12 @@ export class AppInterceptor implements HttpInterceptor {
     }
     return next.handle(req).pipe(
       catchError((error) => {
-        if (
-          error instanceof HttpErrorResponse &&
-          !req.url.includes('auth/signin') &&
-          error.status === 401
-        ) {
+        if (error instanceof HttpErrorResponse && !req.url.includes('auth/signin') && error.status === 401) {
           return this.handle401Error(req, next);
         }
 
         return throwError(error);
-      })
+      }),
     );
   }
 
@@ -73,9 +45,7 @@ export class AppInterceptor implements HttpInterceptor {
             this.tokenService.saveRefreshToken(response.data.refreshToken);
             this.refreshTokenSubject.next(response.data.accessToken);
 
-            return next.handle(
-              this.addTokenHeader(request, response.data.accessToken)
-            );
+            return next.handle(this.addTokenHeader(request, response.data.accessToken));
           }),
           catchError((err) => {
             this.isRefreshing = false;
@@ -84,13 +54,13 @@ export class AppInterceptor implements HttpInterceptor {
 
             alert('Đã hết phiên đăng nhập!');
             return throwError(err);
-          })
+          }),
         );
       }
     }
 
     this.isRefreshing = false;
-    alert('vui lòng đăng nhập');
+    // alert('vui lòng đăng nhập');
     return next.handle(request);
   }
   private addTokenHeader(request: HttpRequest<any>, token: string) {

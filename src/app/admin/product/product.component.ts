@@ -78,7 +78,6 @@ export class ProductComponent implements OnInit {
   categorySelected!: Category;
   uploadedFiles: any[] = [];
   formDataImage!: FormData;
-  tests: any[] = [];
   public Editor = customBuild;
   dataEditor!: string;
   config = {
@@ -209,7 +208,7 @@ export class ProductComponent implements OnInit {
   resetValueForm() {
     this.product = {};
     this.categorySelected = {};
-    this.statusSelected = {};
+    this.statusSelected = { label: 'ACTIVE', value: 1 };
     this.images = [];
     this.dataEditor = '<p>Enter description here!</p>';
   }
@@ -255,15 +254,12 @@ export class ProductComponent implements OnInit {
   hideDialog() {
     this.productDialog = false;
     this.submitted = false;
-
     this.resetValueForm();
   }
   resetView() {
     this.isLoadingComponent = true;
-    setTimeout(() => {
-      this.getProduct();
-      this.isLoadingComponent = false;
-    }, 500);
+    this.getProduct();
+    this.isLoadingComponent = false;
   }
   pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
     const copy = {} as Pick<T, K>;
@@ -307,11 +303,6 @@ export class ProductComponent implements OnInit {
       { label: 'ACTIVE', value: 1 },
       { label: 'INACTIVE', value: 0 },
     ];
-    this.tests = [
-      { id: 'Admin', name: 'admin', status: 1 },
-      { id: 'Client', name: 'client', status: 1 },
-      { id: 'Manager', name: 'manager', status: 1 },
-    ];
   }
   getCategories() {
     this.categoryManagerService.getAll(0, 10).subscribe({
@@ -332,15 +323,12 @@ export class ProductComponent implements OnInit {
     console.log(this.formDataImage);
   }
   isValid(): boolean {
-    if (!this.product.name || !this.product.price || !this.product.quantity || !this.statusSelected.value || !this.categorySelected) {
+    if (!this.product.name || !this.product.price || !this.product.quantity || !this.statusSelected.label || !this.categorySelected) {
       return false;
     }
     return true;
   }
   trackById(index: number, item: any) {
     return item.id;
-  }
-  toSlug(dfsd: string) {
-    return slug(dfsd);
   }
 }
