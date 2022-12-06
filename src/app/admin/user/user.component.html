@@ -58,6 +58,10 @@
           </ng-template> -->
         <ng-template pTemplate="caption">
           <div class="flex align-items-center justify-content-between">
+            <span>
+              Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to {{ paginator.pageSize * paginator.pageNumber + paginator.pageSize }} of
+              {{ paginator.totalElements }} products.</span
+            >
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
@@ -102,15 +106,6 @@
         </ng-template>
         <ng-template pTemplate="summary">
           <div class="page grid align-items-center">
-            <div class="absolute">
-              Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
-              {{
-                users.length === paginator.pageSize
-                  ? paginator.pageSize * paginator.pageNumber + paginator.pageSize
-                  : paginator.pageSize * paginator.pageNumber + users.length
-              }}
-              of {{ paginator.totalElements }} products.
-            </div>
             <div class="col-12">
               <p-paginator
                 [rows]="paginator.pageSize"
@@ -129,7 +124,7 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" header="New address" [modal]="true" styleClass="p-fluid">
+    <p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" header="New User" [modal]="true" styleClass="p-fluid">
       <ng-template pTemplate="content">
         <div class="formgrid grid">
           <div class="field col">
@@ -235,8 +230,10 @@
       </ng-template>
 
       <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [loading]="isLoading" (click)="saveUser()"></button>
+        <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [loading]="isLoading" (click)="saveUser()"></button> -->
+        <button pButton pRipple type="button" label="Cancel" class="p-button-secondary p-button-plain" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" [loading]="isLoading" (click)="saveUser()"></button>
       </ng-template>
     </p-dialog>
   </div>

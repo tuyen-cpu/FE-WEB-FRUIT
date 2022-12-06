@@ -6,45 +6,35 @@ import { HomeComponent } from './components/home/home.component';
 
 import { Routes } from '@angular/router';
 import { ProvincesApiService } from './services/provinces-api.service';
+import { MessageService } from 'primeng/api';
 
 export const APP_ROUTES: Routes = [
   { path: '', component: HomeComponent },
   {
     path: 'product',
 
-    loadChildren: () =>
-      import('./components/product/product-routes').then(
-        ({ ProductRoutes }) => ProductRoutes
-      ),
+    loadChildren: () => import('./components/product/product-routes').then(({ ProductRoutes }) => ProductRoutes),
   },
   {
     path: 'cart',
-    loadComponent: () =>
-      import(`./components/cart/cart.component`).then((c) => c.CartComponent),
+    loadComponent: () => import(`./components/cart/cart.component`).then((c) => c.CartComponent),
   },
   {
     path: 'account',
 
-    loadChildren: () =>
-      import('./components/account/account-routes').then(
-        ({ AccountRoutes }) => AccountRoutes
-      ),
+    loadChildren: () => import('./components/account/account-routes').then(({ AccountRoutes }) => AccountRoutes),
     providers: [SocialLoginModule, ProvincesApiService, AuthGuard, UserService],
   },
   {
     path: 'checkout',
     canActivate: [AuthGuard],
-    loadComponent: () =>
-      import('./components/checkout/checkout.component').then(
-        (c) => c.CheckoutComponent
-      ),
-    providers: [ProvincesApiService],
+    loadComponent: () => import('./components/checkout/checkout.component').then((c) => c.CheckoutComponent),
+    providers: [ProvincesApiService, MessageService],
   },
   {
     path: 'admin',
 
-    loadChildren: () =>
-      import('./admin/admin-routes').then(({ AdminRoutes }) => AdminRoutes),
+    loadChildren: () => import('./admin/admin-routes').then(({ AdminRoutes }) => AdminRoutes),
     providers: [UserService],
   },
 ];

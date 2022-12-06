@@ -103,9 +103,11 @@
         </div>
       </div>
     </div>
-    <div class="desc">
-      <h3 class="uppercase text-2xl">Description</h3>
-      <div class="" [innerHTML]="product.description | safeHtml"></div>
+    <div class="desc mt-8">
+      <div class="desc-title">
+        <h3 class="uppercase text-2xl">Description</h3>
+      </div>
+      <div class="desc-content text-2xl" [innerHTML]="product.description | safeHtml"></div>
     </div>
   </div>
 </div>

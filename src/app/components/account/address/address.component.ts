@@ -26,6 +26,7 @@ import { LoadingComponent } from 'src/app/utils/loading/loading.component';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 @Component({
   selector: 'app-address',
   standalone: true,
@@ -94,7 +95,7 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     // this.isLoading = true;
-    this.getAddresses();
+    this.changeParams();
     this.getProvinces();
     // this.addressSubscription = this.addressesChange.subscribe((data) => {
     //   this.addresses = data;
@@ -107,12 +108,13 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = true;
     console.log(this.isLoading);
     this.addressService
-      .getByUserId(this.getUserId(), 0, 1000)
+      .getByUserId(this.getUserId(), this.paginator.pageNumber, this.paginator.pageSize)
       .pipe(delay(200))
       .subscribe({
         next: (res) => {
           this.addresses = res.data.content;
           // this.addressesChange.next(this.addresses);
+          this.paginator.totalElements = res.data.totalElements;
           this.isLoading = false;
         },
         error: (res) => {
@@ -136,9 +138,18 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isDefault = false;
   }
   deleteSelectedAddresses(event: Event) {
-    this.selectedAddresses.forEach((e: Address) => {
-      this.deleteAddress(e, event);
-      this.selectedAddresses = [];
+    this.addressService.deleteMulti(this.selectedAddresses.map((address) => address.id)).subscribe({
+      next: (res) => {
+        this.selectedAddresses = [];
+        this.getAddresses();
+      },
+      error: (res) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: res.error.message,
+        });
+      },
     });
   }
   editAddress(address: Address) {
@@ -322,34 +333,34 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.userInforService.user?.id!;
   }
 
-  // changeParams() {
-  //   this.route.queryParams.subscribe((res) => {
-  //     console.log('change param');
-  //     if (res['page'] === undefined || res['page'] === null) {
-  //       this.paginator.pageNumber = 0;
-  //     } else {
-  //       this.paginator.pageNumber = res['page'] - 1;
-  //     }
-  //     this.paginator.pageSize = Number(res['size']) || 12;
+  changeParams() {
+    this.route.queryParams.subscribe((res) => {
+      if (res['page'] === undefined || res['page'] === null || +res['page'] <= 0) {
+        this.paginator.pageNumber = 0;
+      } else {
+        this.paginator.pageNumber = res['page'] - 1;
+      }
+      this.paginator.pageSize = Number(res['size']) || 10;
 
-  //     this.getAddresses();
-  //   });
-  // }
-  // onPageChange(event: any) {
-  //   this.paginator.pageNumber = event.page;
-  //   this.paramsURL = {
-  //     page: this.paginator.pageNumber + 1,
-  //     size: this.paginator.pageSize,
-  //   };
-  //   this.addParams();
-  // }
-  // addParams() {
-  //   console.log(this.route);
-  //   this.router.navigate([], {
-  //     relativeTo: this.route,
-  //     queryParams: this.paramsURL,
-  //   });
-  // }
+      this.getAddresses();
+    });
+  }
+  onPageChange(event: any) {
+    this.paginator.pageNumber = event.page;
+    this.paginator.pageSize = event.rows;
+    this.paramsURL = {
+      page: this.paginator.pageNumber + 1,
+      size: this.paginator.pageSize,
+    };
+
+    this.addParams();
+  }
+  addParams() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.paramsURL,
+    });
+  }
 
   ngOnDestroy(): void {
     // if (this.addressesChange) {

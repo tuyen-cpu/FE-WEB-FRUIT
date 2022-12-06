@@ -1,5 +1,6 @@
 <p-toast></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
 <div class="">
   <div class="title text-center mb-6">
     <h2 class="title-account-component">My Address</h2>
@@ -48,12 +49,10 @@
         #dt
         [value]="addresses"
         [rows]="row"
-        [paginator]="true"
         [globalFilterFields]="['ward', 'city', 'district', 'street', 'firstName', 'lastName']"
         [(selection)]="selectedAddresses"
         [rowHover]="true"
         dataKey="id"
-        [showCurrentPageReport]="true"
         responsiveLayout="scroll">
         <!-- <ng-template pTemplate="summary" *ngIf="orders.length !== 0">
             <div class="page">
@@ -67,6 +66,7 @@
           </ng-template> -->
         <ng-template pTemplate="caption">
           <div class="flex align-items-center justify-content-between">
+            <span class="text-2xl">Total: {{ paginator.totalElements }}</span>
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
@@ -117,6 +117,16 @@
                 (click)="deleteAddress(address, $event)"></button>
             </td>
           </tr>
+        </ng-template>
+        <ng-template pTemplate="summary" *ngIf="addresses">
+          <div class="page">
+            <p-paginator
+              [rows]="paginator.pageSize"
+              [totalRecords]="paginator.totalElements"
+              [first]="paginator.pageSize * paginator.pageNumber"
+              (onPageChange)="onPageChange($event)"
+              [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+          </div>
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
@@ -231,8 +241,10 @@
       </ng-template>
 
       <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [loading]="isLoading" (click)="saveAddress()"></button>
+        <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button> -->
+        <button pButton pRipple type="button" label="Cancel" class="p-button-secondary p-button-plain" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" [loading]="isLoading" (click)="saveAddress()"></button>
+        <!-- <button pButton pRipple label="Save" icon="pi pi-check"></button> -->
       </ng-template>
     </p-dialog>
   </div>

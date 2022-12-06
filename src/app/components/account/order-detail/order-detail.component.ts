@@ -5,7 +5,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, ParamMap, RouterModule } from '@angular/router';
 import { Order, OrderDetailRequest } from 'src/app/model/bill.model';
-
+import { Location } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
@@ -30,6 +30,7 @@ export class OrderDetailComponent implements OnInit {
     private tokenStorageService: TokenStorageService,
     private orderDetailService: OrderDetailService,
     private fileUploadService: FileUploadService,
+    private _location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -61,5 +62,8 @@ export class OrderDetailComponent implements OnInit {
   }
   logout() {
     this.tokenStorageService.signOut();
+  }
+  backToPreviousPage() {
+    this._location.back();
   }
 }

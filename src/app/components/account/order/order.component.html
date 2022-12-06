@@ -1,22 +1,39 @@
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-toast></p-toast>
 <div class="order-wrapper container">
   <div class="title text-center mb-6">
     <h2 class="title-account-component">ORDERED LIST</h2>
   </div>
-  <p-table [value]="orders" styleClass="p-datatable-striped" [responsive]="true" responsiveLayout="scroll" [scrollable]="true" scrollHeight="61vh">
+  <p-table
+    #dt
+    [value]="orders"
+    styleClass="p-datatable-striped"
+    [responsive]="true"
+    responsiveLayout="scroll"
+    [scrollable]="true"
+    scrollHeight="61vh">
     <!-- <ng-template pTemplate="caption"> List of latest orders </ng-template> -->
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <span class="text-2xl">Total: {{ paginator.totalElements }}</span>
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
+        </span>
+      </div>
+    </ng-template>
     <ng-template pTemplate="header">
       <tr>
         <th style="flex: 1.5">ID</th>
         <th style="flex: 2">Order date</th>
         <th style="flex: 1.5">Total</th>
         <th style="flex: 7">Address</th>
-        <th style="flex: 2">Status Shipping</th>
-        <th style="flex: 1.5">Status Payment</th>
+        <th style="flex: 2.5">Status Shipping</th>
+        <th style="flex: 2.5">Status Payment</th>
         <th style="flex: 0.8">Action</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="summary" *ngIf="orders.length !== 0">
+    <ng-template pTemplate="summary" *ngIf="orders">
       <div class="page">
         <p-paginator
           [rows]="paginator.pageSize"
@@ -45,10 +62,10 @@
           }} -->
           <div class="text-right md:text-left">{{ order.address }}</div>
         </td>
-        <td style="flex: 2">
+        <td style="flex: 2.5">
           {{ order.shippingStatus.name }}
         </td>
-        <td style="flex: 1.5">
+        <td style="flex: 2.5">
           {{ order.payment.status }}
         </td>
         <td style="flex: 0.8">

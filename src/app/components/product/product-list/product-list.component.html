@@ -12,8 +12,17 @@
 
           <p-accordionTab [(selected)]="isShowFilterCategory">
             <ul class="product-list-filter__list">
+              <li class="product-list-filter__item">
+                <a
+                  [routerLink]="['/product/list']"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  routerLinkActive="active"
+                  class="product-list-filter__item-link"
+                  >All products</a
+                >
+              </li>
               <li *ngFor="let category of categories" class="product-list-filter__item is-selected">
-                <a [routerLink]="['/product/list/' + category.id]" routerLinkActive="active" class="product-list-filter__item-link">{{
+                <a [routerLink]="['/product/list/' + category.slug]" routerLinkActive="active" class="product-list-filter__item-link">{{
                   category.name
                 }}</a>
               </li>

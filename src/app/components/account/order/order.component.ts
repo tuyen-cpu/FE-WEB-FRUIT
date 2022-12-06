@@ -4,25 +4,28 @@ import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserInforService } from 'src/app/services/user-infor.service';
 import { OrderService } from './../../../services/order.service';
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
+import { Table, TableModule } from 'primeng/table';
 import { Order, OrderDetail } from 'src/app/model/bill.model';
 import { EStatusShipping } from 'src/app/model/status-shipping.enum';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Paginator } from 'src/app/model/paginator.model';
 import { PaginatorModule } from 'primeng/paginator';
+import { ToastModule } from 'primeng/toast';
+import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-order',
   standalone: true,
-  imports: [CommonModule, TableModule, RouterModule, MyCurrency, ConfirmDialogModule, PaginatorModule],
-  providers: [ConfirmationService],
+  imports: [CommonModule, ToastModule, TableModule, InputTextModule, RouterModule, MyCurrency, ConfirmDialogModule, PaginatorModule],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class OrderComponent implements OnInit, OnDestroy {
+  @ViewChild('dt') dt!: Table;
   orders: Order[] = [];
   userSupscription!: Subscription;
   paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
@@ -38,10 +41,10 @@ export class OrderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    console.log(EStatusShipping.UNVERIFIED);
+    this.changeParams();
     this.userSupscription = this.tokenStorageService.userChange.subscribe((data) => {
       if (data) {
-        this.getAll();
+        // this.getAll();
         return;
       }
       this.router.navigate(['/']);
@@ -127,5 +130,8 @@ export class OrderComponent implements OnInit, OnDestroy {
     if (this.userSupscription) {
       this.userSupscription.unsubscribe();
     }
+  }
+  applyFilterGlobal($event: any, stringVal: any) {
+    this.dt.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
 }

@@ -1,4 +1,4 @@
-@import "../../scss/utils/variable";
+@import '../../scss/utils/variable';
 $border: 1px solid #ced4da;
 $border-bottom: 1px solid #e1e1e1;
 $color-btn: #357ebd;
@@ -119,7 +119,7 @@ $color-btn: #357ebd;
             line-height: 1.75em;
           }
           &:before {
-            content: "";
+            content: '';
             display: block;
             position: absolute;
             top: 0;
@@ -168,17 +168,18 @@ $color-btn: #357ebd;
           filter: grayscale(40%);
         }
       }
-      &:hover {
-        .back-icon {
-          transform: translateX(-3px);
-        }
-      }
-      .back-cart {
-        color: $main-color;
-        .back-icon {
-          transition: all 0.2s ease-out;
-        }
-      }
+
+      // .back-page {
+      //   color: $main-color;
+      //   .back-icon {
+      //     transition: all 0.2s ease-out;
+      //   }
+      //   &:hover {
+      //     .back-icon {
+      //       transform: translateX(-3px);
+      //     }
+      //   }
+      // }
     }
   }
 }

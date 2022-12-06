@@ -7,10 +7,13 @@
       <div class="order-information">
         <div class="title text-2xl mb-3">
           <b class="font-medium">Order: H-{{ orderId }}</b
-          >, Đặt lúc — {{ order.createdDate | date : 'M/d/yy, h:mm a' }}
+          >, Ordered at — {{ order.createdDate | date : 'M/d/yy, h:mm a' }}
         </div>
         <!-- <div class="text-xl mb-2">Đơn hàng của bạn đã hủy lúc 09/11/2022, 11:05SA</div> -->
-        <!-- <a class="inline-block text-2xl mt-3">Back to account</a> -->
+        <a class="inline-block text-2xl mt-3 cursor-pointer back-page" (click)="backToPreviousPage()">
+          <i class="pi pi-angle-left back-icon"></i>
+          <span> Back to Order List</span>
+        </a>
       </div>
       <div class="mt-4">
         <p-table

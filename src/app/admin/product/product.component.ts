@@ -280,7 +280,13 @@ export class ProductComponent implements OnInit {
 
           this.dataEditor = product.description!;
           this.statusSelected = { label: this.product.status ? 'ACTIVE' : 'INACTIVE', value: this.product.status! };
-          this.categorySelected = { name: product.category!.name, id: product.category?.id, status: product.category?.status };
+          this.categorySelected = {
+            name: product.category!.name,
+            id: product.category?.id,
+            status: product.category?.status,
+            slug: product.category.slug,
+          };
+
           this.isLoadingComponent = false;
         },
         error: (res) => {
@@ -308,6 +314,7 @@ export class ProductComponent implements OnInit {
     this.categoryManagerService.getAll(0, 10).subscribe({
       next: (res) => {
         this.categories = res.data.content;
+        console.log(this.categories);
       },
     });
   }

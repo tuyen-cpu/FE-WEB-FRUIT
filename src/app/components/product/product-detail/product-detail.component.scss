@@ -155,3 +155,18 @@
     content: '%';
   }
 }
+
+.desc {
+  &-title {
+    border-bottom: 1px solid #ededed;
+  }
+  &-content {
+    p {
+      line-height: 1.3;
+    }
+    a {
+      color: $main-color;
+      font-weight: 500;
+    }
+  }
+}

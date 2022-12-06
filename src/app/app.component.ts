@@ -1,3 +1,4 @@
+import { MessageService } from 'primeng/api';
 import { TokenStorageService } from './services/token-storage.service';
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
@@ -7,10 +8,25 @@ import { HeaderComponent } from './components/header/header.component';
 import { HomeComponent } from './components/home/home.component';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { User } from './model/user.model';
+import { ToastModule } from 'primeng/toast';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
+import { ShareMessageService } from './services/share-message.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, FooterComponent, RouterModule, HomeComponent, SocialLoginModule],
+  imports: [
+    CommonModule,
+    MessagesModule,
+    MessageModule,
+    HeaderComponent,
+    ToastModule,
+    FooterComponent,
+    RouterModule,
+    HomeComponent,
+    SocialLoginModule,
+  ],
+  providers: [MessageService],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
@@ -42,8 +58,21 @@ export class AppComponent implements OnInit {
       behavior: 'smooth',
     });
   }
-  constructor(private tokenStorageService: TokenStorageService, private router: Router) {}
+  constructor(
+    private tokenStorageService: TokenStorageService,
+    private messageService: MessageService,
+    private router: Router,
+    private shareMessageService: ShareMessageService,
+  ) {}
   ngOnInit(): void {
+    this.shareMessageService.message.subscribe((data: any) => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: data,
+        life: 5000,
+      });
+    });
     this.tokenStorageService.userChange.subscribe((data) => {
       this.router.events.forEach((event) => {
         if (event instanceof NavigationStart) {

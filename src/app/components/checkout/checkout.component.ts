@@ -9,7 +9,7 @@ import { CartItemService } from './../../services/cart-item.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Output, ViewEncapsulation, EventEmitter } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
@@ -19,7 +19,7 @@ import { RippleModule } from 'primeng/ripple';
 import { MessageService, PrimeNGConfig, ConfirmationService } from 'primeng/api';
 import { Router, RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
-
+import { DialogModule } from 'primeng/dialog';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { District, Province, Ward } from 'src/app/model/province.model';
@@ -32,6 +32,7 @@ import { AddressService } from 'src/app/services/address.service';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { phoneNum } from 'src/app/utils/regex';
+import { ShareMessageService } from 'src/app/services/share-message.service';
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -52,6 +53,7 @@ import { phoneNum } from 'src/app/utils/regex';
     LoadingComponent,
     MyCurrency,
     ConfirmDialogModule,
+    DialogModule,
   ],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
@@ -82,6 +84,8 @@ export class CheckoutComponent implements OnInit {
   addressSeleted!: { name: string };
   addressTemp: { city?: Province; ward?: Ward; district?: District } = {};
   urlImage!: string;
+  displayConfirm: boolean = false;
+  contentConfirm = '';
   constructor(
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
@@ -95,16 +99,18 @@ export class CheckoutComponent implements OnInit {
     private router: Router,
     private addressService: AddressService,
     private fileUploadService: FileUploadService,
+    private shareMessageService: ShareMessageService,
   ) {}
 
   ngOnInit(): void {
     this.urlImage = this.fileUploadService.getLink();
-    this.renderPaypal();
+
     this.initForm();
     this.primengConfig.ripple = true;
     this.getProvinces();
     this.getCartItems();
     this.getAddresses();
+    this.renderPaypal();
   }
   getCartItems() {
     this.cartItemsChange = this.cartItemService.cartItemsChange.subscribe((data) => {
@@ -179,17 +185,15 @@ export class CheckoutComponent implements OnInit {
     render({
       id: '#myPaypalButton',
       currency: 'USD',
-      // value:
-      //   '' + ~~((this.totalCart + this.shippingCost - this.discount) / 23.4),
-      value: '' + 10000,
+      value: '' + this.totalCart / 25,
+      // value: '' + 7266690 / 25,
       onApprove: (details) => {
-        console.log(details);
+        console.log(~~(this.totalCart / 25));
         this.payer = details.payer.name.given_name + ' ' + details.payer.name.surname;
         this.emailPayer = details.payer.email_address;
         this.statusPayment = EStatusPayment.PAID;
         this.paymentMethod = PaymentMethod.PAYPAL;
         this.payInAdvace = true;
-        console.log();
         this.onSubmit();
       },
     });
@@ -243,27 +247,55 @@ export class CheckoutComponent implements OnInit {
       },
     };
     console.log(checkout);
-    this.confirmationService.confirm({
-      message: 'Are you sure that you want to order?',
-      accept: () => {
-        this.orderService
-          .checkout(checkout)
-          .pipe(switchMap((_) => this.cartItemService.deleteByUserId(this.getUser().id!)))
-          .subscribe({
-            next: (res) => {
-              this.isLoadingComponent = false;
-              this.router.navigate(['/account/order']);
-            },
-            error: (res) => {
-              this.isLoadingComponent = false;
-              alert(res.error.message);
-            },
-          });
-      },
-      reject: (type: any) => {
-        this.isLoadingComponent = false;
-      },
-    });
+    if (!this.paymentMethod) {
+      this.confirmationService.confirm({
+        message: 'Are you sure that you want to order?',
+        accept: () => {
+          this.orderService
+            .checkout(checkout)
+            .pipe(switchMap((_) => this.cartItemService.deleteByUserId(this.getUser().id!)))
+            .subscribe({
+              next: (res: any) => {
+                this.isLoadingComponent = false;
+                this.shareMessageService.message.next('Ordered successfully. The store staff will contact you to confirm your order.');
+
+                this.router.navigate(['/account/order']);
+              },
+              error: (res) => {
+                this.isLoadingComponent = false;
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Error',
+                  detail: res.error.message,
+                });
+              },
+            });
+        },
+        reject: (type: any) => {
+          this.isLoadingComponent = false;
+        },
+      });
+    } else {
+      this.orderService
+        .checkout(checkout)
+        .pipe(switchMap((_) => this.cartItemService.deleteByUserId(this.getUser().id!)))
+        .subscribe({
+          next: (res: any) => {
+            this.isLoadingComponent = false;
+            this.shareMessageService.message.next('Checkout successfully. The store staff will contact you to confirm your order ');
+
+            this.router.navigate(['/account/order']);
+          },
+          error: (res) => {
+            this.isLoadingComponent = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: res.error.message,
+            });
+          },
+        });
+    }
   }
   onCheckVoucher() {
     this.isLoading = true;
@@ -343,5 +375,8 @@ export class CheckoutComponent implements OnInit {
   }
   calcPriceDiscount(price: number, discount: number = 0): number {
     return price - (price * discount) / 100;
+  }
+  goHome() {
+    this.router.navigate(['/']);
   }
 }

@@ -14,10 +14,10 @@
               *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
               id="password-help"
               class="profile-form__field-message p-error block">
-              Email không được bỏ trống.</small
+              Email is not empty.</small
             >
             <small *ngIf="getEmail.errors?.['email']" id="password-help" class="profile-form__field-message p-error block">
-              Email sai định dạng. Vd:tuyen@gmail.com</small
+              Invalid Email. Vd:tuyen@gmail.com</small
             >
           </span>
         </div>
@@ -67,7 +67,7 @@
       </form>
     </div>
     <div class="change-password mt-7">
-      <h2 class="text-center text-3xl">Change password</h2>
+      <h2 class="text-center text-4xl">Change Password</h2>
       <form action="" [formGroup]="resetForm" (ngSubmit)="changePassword()" class="profile-form">
         <div class="profile-form__field">
           <label for="old-password" class="mb-2 text-2xl inline-block">Password</label>
@@ -84,10 +84,10 @@
               *ngIf="getOldPassword.errors?.['minlength']||getOldPassword.errors?.['required']"
               id="password-help"
               class="profile-form__field-message p-error block">
-              Mật khẩu phải có ít nhất 6 kí tự.</small
+              Password must be at least 6 characters.</small
             >
             <small *ngIf="getOldPassword.errors?.['maxlength']" id="password-help" class="profile-form__field-message p-error block">
-              Mật khẩu không được nhiều hơn 40 kí tự.</small
+              Password cannot be more than 40 characters.</small
             >
             <small *ngIf="errorMessageInvalidPassword" id="password-help" class="profile-form__field-message p-error block">
               {{ errorMessageInvalidPassword }}</small
@@ -109,10 +109,10 @@
               *ngIf="getNewPassword.errors?.['minlength']||getNewPassword.errors?.['required']"
               id="password-help"
               class="profile-form__field-message p-error block">
-              Mật khẩu phải có ít nhất 6 kí tự.</small
+              Password must be at least 6 characters.</small
             >
             <small *ngIf="getNewPassword.errors?.['maxlength']" id="password-help" class="profile-form__field-message p-error block">
-              Mật khẩu không được nhiều hơn 40 kí tự.</small
+              Password cannot be more than 40 characters.</small
             >
           </span>
         </div>
@@ -129,10 +129,10 @@
             title="Confirm Password" />
           <span *ngIf="getConfirmPassword.dirty">
             <small *ngIf="getConfirmPassword.errors?.['matching']" id="password-help" class="profile-form__field-message p-error block">
-              Mật khẩu không khớp</small
+              Password don't match.</small
             >
             <small *ngIf="getConfirmPassword.errors?.['required']" id="password-help" class="profile-form__field-message p-error block">
-              Mật khẩu trống</small
+              Password is not empty.</small
             >
           </span>
         </div>

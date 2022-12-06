@@ -12,13 +12,7 @@ import { CategoryService } from 'src/app/services/category.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    CommonModule,
-    ButtonModule,
-    RouterModule,
-    CarouselModule,
-    ProductItemComponent,
-  ],
+  imports: [CommonModule, ButtonModule, RouterModule, CarouselModule, ProductItemComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -30,10 +24,7 @@ export class HomeComponent implements OnInit {
   responsiveCateOptions: any;
   products: Product[] = [];
   categories: Category[] = [];
-  constructor(
-    private productService: ProductService,
-    private categoryService: CategoryService
-  ) {}
+  constructor(private productService: ProductService, private categoryService: CategoryService) {}
 
   ngOnInit(): void {
     this.getProducts();
@@ -87,13 +78,11 @@ export class HomeComponent implements OnInit {
     ];
   }
   getProducts() {
-    this.productService
-      .getProductByCategoryIdAndPriceLessThan(3, 999999, 0, 24)
-      .subscribe({
-        next: (res) => {
-          this.products = res.data.content;
-        },
-        error: (res) => {},
-      });
+    this.productService.getProductByCategorySlugAndPriceLessThan('nuoc-ep', 999999, 0, 24).subscribe({
+      next: (res) => {
+        this.products = res.data.content;
+      },
+      error: (res) => {},
+    });
   }
 }

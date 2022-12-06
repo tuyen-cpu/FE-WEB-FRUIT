@@ -10,7 +10,7 @@ export const ProductRoutes: Routes = [
     children: [
       { path: '', redirectTo: 'list', pathMatch: 'full' },
       {
-        path: 'list/:categoryId',
+        path: 'list/:categorySlug',
         component: ProductListComponent,
       },
       {

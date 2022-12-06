@@ -1,15 +1,8 @@
-import { MyCurrency } from './../../../pipes/my-currency.pipe';
-import { debounceTime, delay, map } from 'rxjs';
-import { NavigationEnd, Router, RouterModule, ActivatedRoute, ParamMap } from '@angular/router';
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { delay } from 'rxjs';
+import { Router, RouterModule, ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProductItemComponent } from '../product-item/product-item.component';
-
-import ProductService from 'src/app/services/product.service';
-import { Category, Product } from 'src/app/model/category.model';
-import { Paginator } from 'src/app/model/paginator.model';
-import { CategoryService } from 'src/app/services/category.service';
 
 //primeNg
 import { AccordionModule } from 'primeng/accordion';
@@ -21,6 +14,15 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoadingComponent } from 'src/app/utils/loading/loading.component';
+
+//component
+import { MyCurrency } from './../../../pipes/my-currency.pipe';
+import ProductService from 'src/app/services/product.service';
+import { CategoryService } from 'src/app/services/category.service';
+import { ProductItemComponent } from '../product-item/product-item.component';
+import { Category, Product } from 'src/app/model/category.model';
+import { Paginator } from 'src/app/model/paginator.model';
+
 @Component({
   selector: 'app-product-list',
   standalone: true,
@@ -58,8 +60,8 @@ export class ProductListComponent implements OnInit {
   categories: Category[] = [];
   paramsURL: {} = {};
 
-  filter: { categoryId: number; price: number } = {
-    categoryId: 1,
+  filter: { categorySlug: string; price: number } = {
+    categorySlug: '0',
     price: this.priceList[0],
   };
   isLoading: boolean = false;
@@ -85,10 +87,10 @@ export class ProductListComponent implements OnInit {
 
     // this.getProducts(this.filter, this.paginator);
   }
-  getProducts(filter: { categoryId: number; price: number }, paginator: Paginator) {
+  getProducts(filter: { categorySlug: string; price: number }, paginator: Paginator) {
     this.isLoading = true;
     this.productService
-      .getProductByCategoryIdAndPriceLessThan(filter.categoryId, filter.price, paginator.pageNumber!, paginator.pageSize!)
+      .getProductByCategorySlugAndPriceLessThan(filter.categorySlug, filter.price, paginator.pageNumber!, paginator.pageSize!)
       .pipe(delay(500))
       .subscribe({
         next: (response) => {
@@ -98,13 +100,14 @@ export class ProductListComponent implements OnInit {
         },
         error: (response) => {
           console.log(response);
+          this.products = [];
           this.isLoading = false;
         },
       });
   }
   changeRouter() {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
-      this.filter.categoryId = Number(paramMap.get('categoryId'));
+      this.filter.categorySlug = paramMap.get('categorySlug');
       this.getProducts(this.filter, this.paginator);
     });
   }

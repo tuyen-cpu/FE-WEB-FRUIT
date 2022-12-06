@@ -2,7 +2,7 @@
 <header>
   <div class="sub-header container">
     <div class="sub-header__site flex py-2 justify-content-center lg:justify-content-between align-items-center">
-      <span class="sub-header__site-left">Freeship với đơn từ 250k. Giao hàng hỏa tốc 2h.</span>
+      <span class="sub-header__site-left">Freeship with orders from 250k. Express delivery 2 hours.</span>
       <ul class="sub-header__site-right align-items-center hidden lg:flex">
         <li class="email mr-5">
           <i class="pi pi-telegram pi-envelope mr-2"></i>
@@ -34,7 +34,7 @@
                     <a (click)="changeShowCategoryDropdown()" routerLink="/product/list">Tất cả sản phẩm</a>
                   </li>
                   <li *ngFor="let cate of categories">
-                    <a (click)="changeShowCategoryDropdown()" routerLink="/product/list/{{ cate.id }}">{{ cate.name }}</a>
+                    <a (click)="changeShowCategoryDropdown()" routerLink="/product/list/{{ cate.slug }}">{{ cate.name }}</a>
                   </li>
                 </ul>
               </li>
@@ -94,7 +94,7 @@
                   <a routerLink="/product/list" class="navbar__sub-menu-item-link">All product</a>
                 </li>
                 <li *ngFor="let cate of categories" class="navbar__sub-menu-item">
-                  <a routerLink="/product/list/{{ cate.id }}" class="navbar__sub-menu-item-link">{{ cate.name }}</a>
+                  <a routerLink="/product/list/{{ cate.slug }}" class="navbar__sub-menu-item-link">{{ cate.name }}</a>
                 </li>
               </ul>
             </li>
@@ -116,7 +116,7 @@
             <ul class="search-result">
               <li *ngFor="let product of products" class="search-result__item">
                 <a routerLink="/product/list" class="search-result__item-link">
-                  <span class="image"><img [src]="product.image.link" alt="" width="60px" /></span>
+                  <span class="image"><img [src]="urlImage + '/' + product.image.link" alt="" width="60px" /></span>
                   <span class="content">
                     <p class="name" [innerHtml]="product.name | highlighter : keySearch : 'partial'"></p>
                     <span class="price">

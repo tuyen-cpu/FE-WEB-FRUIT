@@ -19,12 +19,12 @@ export interface OrderDetail {
   billId?: number;
 }
 export interface Order {
-  id: number;
-  total: number;
-  createdDate: Date;
-  shippingStatus: ShippingStatus;
-  address: string;
-  payment: Payment;
+  id?: number;
+  total?: number;
+  createdDate?: Date;
+  shippingStatus?: ShippingStatus;
+  address?: string;
+  payment?: Payment;
 }
 export interface ShippingStatus {
   id: number;

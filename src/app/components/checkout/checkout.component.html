@@ -1,32 +1,19 @@
 <div class="checkout-wrapper grid container justify-content-center mt-3">
   <div class="col-12">
     <div class="sm:pl-6">
-      <div
-        *ngIf="getUser()"
-        class="user-information flex align-items-center mb-3"
-      >
+      <div *ngIf="getUser()" class="user-information flex align-items-center mb-3">
         <span class="avatar">
           <img
             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDUwIDUwIj48dGl0bGU+QXJ0Ym9hcmQ8L3RpdGxlPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PHBhdGggZD0iTTAgMGg1MHY1MEgwVjB6IiBmaWxsPSIjRDhEOEQ4Ii8+PHBhdGggZD0iTTI1LjEwMyAyNi4yNDJjMy4yMTIgMCA1LjY0Mi0yLjkyIDUuNjQyLTYuNzg3IDAtMy4wODYtMi41OC01LjcwNS01LjY0Mi01LjcwNS0zLjA2IDAtNS42NCAyLjYyLTUuNjQgNS43MDUgMCAzLjg2NiAyLjQzIDYuNzg3IDUuNjQgNi43ODd6bTAtMTAuNTRjMS45NTIgMCAzLjY3OCAxLjc2MyAzLjY3OCAzLjc1MyAwIDIuNzU3LTEuNTc0IDQuODM1LTMuNjc3IDQuODM1LTIuMTAzIDAtMy42NzctMi4wNzgtMy42NzctNC44MzUgMC0xLjk5IDEuNzI2LTMuNzUzIDMuNjc3LTMuNzUzem0tOC40NSAyMC42MTVsLjE3Ny0xLjg3N2MuMzktMy43NzggNC42OTctNC42MSA4LjI3My00LjYxIDMuNTc3IDAgNy44ODQuODMyIDguMjc0IDQuNTk4bC4xNzYgMS44OWgyLjAxNWwtLjE3Ni0yLjA4Yy0uNDQtNC4xMTctNC4wNjgtNi4zODQtMTAuMjktNi4zODQtNi4yMiAwLTkuODQ2IDIuMjY3LTEwLjI4NyA2LjM5N2wtLjE3NiAyLjA2N2gyLjAxNHoiIGZpbGw9IiNGRkYiLz48L2c+PC9zdmc+"
-            alt=""
-          />
+            alt="" />
         </span>
         <div class="content ml-4">
           <p class="m-0 mb-2">alanwalker (tranquangtuyen3263263@gmail.com)</p>
           <a (click)="logout()" class="btn-v cursor-pointer">Logout</a>
         </div>
       </div>
-      <div
-        *ngIf="!getUser()"
-        class="user-information flex align-items-center mb-3"
-      >
-        <span
-          >Do you already have an account?<a
-            routerLink="/account/login"
-            class="btn-v cursor-pointer"
-            >Login</a
-          ></span
-        >
+      <div *ngIf="!getUser()" class="user-information flex align-items-center mb-3">
+        <span>Do you already have an account?<a routerLink="/account/login" class="btn-v cursor-pointer">Login</a></span>
       </div>
     </div>
   </div>
@@ -44,40 +31,18 @@
                 [options]="addresses"
                 formControlName="address"
                 placeholder="Select a stored address"
-                optionLabel="name"
-              ></p-dropdown>
+                optionLabel="name"></p-dropdown>
             </div>
             <div class="field">
               <input
                 id="firstName"
                 placeholder="First Name"
                 formControlName="firstName"
-                [class]="
-                  firstName?.invalid
-                    ? 'ng-invalid ng-dirty w-full input-custom'
-                    : 'w-full input-custom'
-                "
-                pInputText
-              />
-              <div
-                class="mt-1"
-                *ngIf="
-                  firstName?.invalid && firstName?.dirty && firstName?.touched
-                "
-                id="firstName-help"
-              >
-                <small
-                  class="p-error message-error"
-                  [hidden]="!firstName?.errors?.['required']"
-                >
-                  firstName is required.
-                </small>
-                <small
-                  class="p-error message-error"
-                  [hidden]="!firstName?.errors?.['firstName']"
-                >
-                  firstName is invalid.
-                </small>
+                [class]="firstName?.invalid ? 'ng-invalid ng-dirty w-full input-custom' : 'w-full input-custom'"
+                pInputText />
+              <div class="mt-1" *ngIf="firstName?.invalid && firstName?.dirty && firstName?.touched" id="firstName-help">
+                <small class="p-error message-error" [hidden]="!firstName?.errors?.['required']"> firstName is required. </small>
+                <small class="p-error message-error" [hidden]="!firstName?.errors?.['firstName']"> firstName is invalid. </small>
               </div>
             </div>
             <div class="field">
@@ -85,32 +50,11 @@
                 id="lastName"
                 placeholder="Last Name"
                 formControlName="lastName"
-                [class]="
-                  lastName?.invalid
-                    ? 'ng-invalid ng-dirty w-full input-custom'
-                    : 'w-full input-custom'
-                "
-                pInputText
-              />
-              <div
-                class="mt-1"
-                *ngIf="
-                  lastName?.invalid && lastName?.dirty && lastName?.touched
-                "
-                id="name-help"
-              >
-                <small
-                  class="p-error message-error"
-                  [hidden]="!lastName?.errors?.['required']"
-                >
-                  Last name is required.
-                </small>
-                <small
-                  class="p-error message-error"
-                  [hidden]="!lastName?.errors?.['minlength']"
-                >
-                  Min length of last name is 3.
-                </small>
+                [class]="lastName?.invalid ? 'ng-invalid ng-dirty w-full input-custom' : 'w-full input-custom'"
+                pInputText />
+              <div class="mt-1" *ngIf="lastName?.invalid && lastName?.dirty && lastName?.touched" id="name-help">
+                <small class="p-error message-error" [hidden]="!lastName?.errors?.['required']"> Last name is required. </small>
+                <small class="p-error message-error" [hidden]="!lastName?.errors?.['minlength']"> Min length of last name is 3. </small>
               </div>
             </div>
             <div class="field"></div>
@@ -119,30 +63,11 @@
               id="phone"
               placeholder="Phone number"
               formControlName="phoneNum"
-              [class]="
-                phoneNum?.invalid
-                  ? 'ng-invalid ng-dirty w-full input-custom'
-                  : 'w-full input-custom'
-              "
-              pInputText
-            />
-            <div
-              class="mt-1"
-              *ngIf="phoneNum?.invalid && phoneNum?.dirty && phoneNum?.touched"
-              id="phoneNum-help"
-            >
-              <small
-                class="p-error message-error"
-                [hidden]="!phoneNum?.errors?.['required']"
-              >
-                Phone number is required.
-              </small>
-              <small
-                class="p-error message-error"
-                [hidden]="!phoneNum?.errors?.['pattern']"
-              >
-                Phone number is invalid.
-              </small>
+              [class]="phoneNum?.invalid ? 'ng-invalid ng-dirty w-full input-custom' : 'w-full input-custom'"
+              pInputText />
+            <div class="mt-1" *ngIf="phoneNum?.invalid && phoneNum?.dirty && phoneNum?.touched" id="phoneNum-help">
+              <small class="p-error message-error" [hidden]="!phoneNum?.errors?.['required']"> Phone number is required. </small>
+              <small class="p-error message-error" [hidden]="!phoneNum?.errors?.['pattern']"> Phone number is invalid. </small>
             </div>
           </div>
         </div>
@@ -154,30 +79,11 @@
                 id="street"
                 placeholder="Street"
                 formControlName="street"
-                [class]="
-                  street?.invalid
-                    ? 'ng-invalid ng-dirty w-full input-custom'
-                    : 'w-full input-custom'
-                "
-                pInputText
-              />
-              <div
-                class="mt-1"
-                *ngIf="street?.invalid && street?.dirty && street?.touched"
-                id="street"
-              >
-                <small
-                  class="p-error message-error"
-                  [hidden]="!street?.errors?.['required']"
-                >
-                  Street number is required.
-                </small>
-                <small
-                  class="p-error message-error"
-                  [hidden]="!street?.errors?.['minlength']"
-                >
-                  Street number is invalid.
-                </small>
+                [class]="street?.invalid ? 'ng-invalid ng-dirty w-full input-custom' : 'w-full input-custom'"
+                pInputText />
+              <div class="mt-1" *ngIf="street?.invalid && street?.dirty && street?.touched" id="street">
+                <small class="p-error message-error" [hidden]="!street?.errors?.['required']"> Street number is required. </small>
+                <small class="p-error message-error" [hidden]="!street?.errors?.['minlength']"> Street number is invalid. </small>
               </div>
             </div>
             <div class="grid">
@@ -188,8 +94,7 @@
                   [options]="provinces"
                   formControlName="province"
                   placeholder="Select a City"
-                  optionLabel="name"
-                ></p-dropdown>
+                  optionLabel="name"></p-dropdown>
               </div>
               <div class="col-12 sm:col-12 md:col-12 lg:col-4">
                 <p-dropdown
@@ -198,8 +103,7 @@
                   [options]="districts"
                   formControlName="district"
                   placeholder="Select a district"
-                  optionLabel="name"
-                ></p-dropdown>
+                  optionLabel="name"></p-dropdown>
               </div>
               <div class="col-12 sm:col-12 md:col-12 lg:col-4">
                 <p-dropdown
@@ -207,21 +111,13 @@
                   [options]="wards"
                   formControlName="ward"
                   placeholder="Select a ward"
-                  optionLabel="name"
-                ></p-dropdown>
+                  optionLabel="name"></p-dropdown>
               </div>
             </div>
           </div>
         </div>
         <div class="col-12">
-          <textarea
-            class="input-custom w-full"
-            placeholder="Notes (Option)"
-            rows="5"
-            cols="30"
-            formControlName="notes"
-            pInputTextarea
-          ></textarea>
+          <textarea class="input-custom w-full" placeholder="Notes (Option)" rows="5" cols="30" formControlName="notes" pInputTextarea></textarea>
         </div>
         <!-- <button type="submit" [disabled]="!infoForm.valid">Submit</button> -->
       </form>
@@ -282,19 +178,14 @@
     </div> -->
   </div>
 
-  <div
-    class="flex-order-1 md:flex-order-2 col-12 sm:col-12 md:col-12 lg:col-4 mt-4"
-  >
+  <div class="flex-order-1 md:flex-order-2 col-12 sm:col-12 md:col-12 lg:col-4 mt-4">
     <div class="sidebar grid px-3">
       <div class="w-full sidebar__title">
         <h4>Orders ({{ totalQuantity }})</h4>
       </div>
       <div class="col-12">
         <ul class="product-list max-h-24rem overflow-y-scroll">
-          <li
-            *ngFor="let item of cartItems"
-            class="product-item flex align-items-center justify-content-between"
-          >
+          <li *ngFor="let item of cartItems" class="product-item flex align-items-center justify-content-between">
             <span class="relative img-wrapper">
               <img [src]="urlImage + '/' + item.product.image.link" alt="" />
               <small class="quantity">{{ item.quantity }}</small>
@@ -303,20 +194,12 @@
               <p>{{ item.product.name }}</p>
               <!-- <span>Size: M</span> -->
             </div>
-            <span class="price">{{
-              item.product.price | currency: "VND"
-            }}</span>
+            <span class="price">{{ item.product.price | currency : 'VND' }}</span>
           </li>
         </ul>
         <div class="voucher-wrapper">
           <div class="flex justify-content-between">
-            <input
-              class="input-custom flex-grow-1"
-              type="text"
-              [(ngModel)]="voucherInput"
-              pInputText
-              placeholder="Voucher"
-            />
+            <input class="input-custom flex-grow-1" type="text" [(ngModel)]="voucherInput" pInputText placeholder="Voucher" />
             <button
               pButton
               pRipple
@@ -325,8 +208,7 @@
               [disabled]="!voucherInput"
               class="ml-2 px-3"
               [loading]="isLoading"
-              label="Apply"
-            ></button>
+              label="Apply"></button>
           </div>
           <div *ngIf="vouchers" class="voucher-list py-2">
             <button
@@ -337,29 +219,28 @@
               type="button"
               [label]="v"
               icon="pi pi-times"
-              class="p-button-outlined mr-1"
-            ></button>
+              class="p-button-outlined mr-1"></button>
             <p-toast></p-toast>
           </div>
         </div>
         <div class="fee-wrapper py-2">
           <div class="flex justify-content-between pt-2">
             <span>Subtotal ({{ totalQuantity }} items):</span>
-            <span>{{ totalCart | myCurrency: "VND" }}</span>
+            <span>{{ totalCart | myCurrency : 'VND' }}</span>
           </div>
           <div class="flex justify-content-between pt-2">
             <span>Shipping fee:</span>
-            <span>{{ 30000 | currency: "VND" }}</span>
+            <span>{{ 30000 | currency : 'VND' }}</span>
           </div>
         </div>
         <div class="total-wrapper py-3">
           <div class="flex justify-content-between">
             <span>Total:</span>
-            <span class="total-value">{{ totalCart | currency: "VND" }}</span>
+            <span class="total-value">{{ totalCart | currency : 'VND' }}</span>
           </div>
         </div>
         <div class="btn-action-wrapper flex justify-content-between">
-          <a routerLink="/cart" class="flex align-items-center back-cart">
+          <a routerLink="/cart" class="flex align-items-center back-page">
             <i class="pi pi-angle-left back-icon"></i>
             <span>Back to cart</span>
           </a>
@@ -371,8 +252,7 @@
             label="Checkout"
             (click)="onSubmit()"
             [disabled]="infoForm.invalid"
-            [loading]="isLoading"
-          ></button>
+            [loading]="isLoading"></button>
         </div>
         <div [hidden]="infoForm.invalid" id="myPaypalButton"></div>
       </div>
@@ -380,7 +260,10 @@
   </div>
 </div>
 <app-loading [hidden]="!isLoading || infoForm.invalid"></app-loading>
-<p-confirmDialog
-  header="Confirmation"
-  icon="pi pi-exclamation-triangle"
-></p-confirmDialog>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-dialog header="Dialog" [modal]="true" [(visible)]="displayConfirm" [style]="{ width: '50vw' }">
+  <p>{{ contentConfirm }}</p>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="displayConfirm = false; goHome()" label="Ok" styleClass="p-button-success"></p-button>
+  </ng-template>
+</p-dialog>

@@ -165,7 +165,7 @@ p-dialog {
     border-radius: 0;
   }
   .p-button {
-    border-radius: 0;
+    border-radius: 2px;
     padding: 1rem 2rem;
     font-family: $font-family;
   }
@@ -181,6 +181,17 @@ p-toast {
   .p-toast {
     &.p-component {
       top: 15%;
+    }
+  }
+}
+.back-page {
+  color: $main-color;
+  .back-icon {
+    transition: all 0.2s ease-out;
+  }
+  &:hover {
+    .back-icon {
+      transform: translateX(-3px);
     }
   }
 }
