@@ -12,12 +12,9 @@ export class UserService {
     return this.http.put(`${this.REST_API}/update`, user);
   }
   changePassword(changePasswordResquest: ChangePasswordResquest) {
-    return this.http.post(
-      `${this.REST_API}/change-password`,
-      changePasswordResquest
-    );
+    return this.http.post(`${this.REST_API}/change-password`, changePasswordResquest);
   }
-  getAll(page: number, size: number) {
-    return this.http.get(`${this.REST_API}/all?page=${page}&size=${size}`);
-  }
+  // getAll(page: number, size: number) {
+  //   return this.http.get(`${this.REST_API}/all?page=${page}&size=${size}`);
+  // }
 }

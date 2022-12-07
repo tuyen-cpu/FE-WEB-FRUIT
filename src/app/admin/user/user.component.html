@@ -100,6 +100,7 @@
                 title="Edit"
                 icon="pi pi-pencil"
                 class="p-button-rounded p-button-success mr-2"
+                [disabled]="!includesRole(currentUser, 'admin') && includesRole(user, 'admin')"
                 (click)="editUser(user)"></button>
             </td>
           </tr>
@@ -175,7 +176,7 @@
 
           <div class="field col-6">
             <label class="font-semibold">Role*</label>
-            <p-multiSelect
+            <!-- <p-multiSelect
               [options]="listRoles"
               [(ngModel)]="rolesSelected"
               defaultLabel="Select a role"
@@ -195,8 +196,31 @@
                   <div>{{ role.label | uppercase }}</div>
                 </div>
               </ng-template>
-            </p-multiSelect>
-            <small class="p-error" *ngIf="submitted && !rolesSelected.length">Role is required.</small>
+            </p-multiSelect> -->
+            <p-dropdown
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !roleSelected.label
+              }"
+              [options]="listRoles"
+              [(ngModel)]="roleSelected"
+              optionLabel="value"
+              placeholder="Select a Status">
+              <ng-template pTemplate="selectedItem">
+                <div class="status-item status-item-value" *ngIf="roleSelected.label">
+                  <div>
+                    <span [class]="'status-default status-label-' + roleSelected.value">{{ roleSelected.label }}</span>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template let-role pTemplate="item">
+                <div class="status-item" [hidden]="!includesRole(currentUser, 'admin') && role.value === 'admin'">
+                  <div>
+                    <span [class]="'status-default status-' + role.value">{{ role.label }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <small class="p-error" *ngIf="submitted && !roleSelected.value">Role is required.</small>
           </div>
 
           <div class="field col-6">

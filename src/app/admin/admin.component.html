@@ -2,32 +2,16 @@
   <app-header-manager [class.isShowSidebar]="isShowSidebar" (newItemEvent)="showSidebar($event)"></app-header-manager>
   <div class="body-content flex">
     <div class="sidebar">
-      <a
-        [routerLink]="['home']"
-        [routerLinkActiveOptions]="{ exact: true }"
-        routerLinkActive="active"
-        class="p-link sidebar-item flex justify-content-between mt-4"
+      <a [routerLink]="['home']" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between mt-4"
         ><span>Home</span> <i class="pi pi-calendar"></i
       ></a>
-      <a
-        [routerLink]="['user']"
-        [routerLinkActiveOptions]="{ exact: true }"
-        routerLinkActive="active"
-        class="p-link sidebar-item flex justify-content-between"
+      <a [routerLink]="['user']" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between"
         ><span>User</span> <i class="pi pi-users"></i
       ></a>
-      <a
-        [routerLink]="['product']"
-        [routerLinkActiveOptions]="{ exact: true }"
-        routerLinkActive="active"
-        class="p-link sidebar-item flex justify-content-between"
+      <a [routerLink]="['product']" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between"
         ><span>Product</span> <i class="pi pi-circle"></i
       ></a>
-      <a
-        [routerLink]="['bill']"
-        [routerLinkActiveOptions]="{ exact: true }"
-        routerLinkActive="active"
-        class="p-link sidebar-item flex justify-content-between"
+      <a [routerLink]="['bill']" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between"
         ><span>Bill</span> <i class="pi pi-money-bill"></i
       ></a>
       <!-- <a

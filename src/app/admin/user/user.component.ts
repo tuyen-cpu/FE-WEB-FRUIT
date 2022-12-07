@@ -1,8 +1,9 @@
+import { UserInforService } from './../../services/user-infor.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
-import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, FilterMatchMode, MessageService, SelectItem } from 'primeng/api';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
@@ -68,8 +69,11 @@ export class UserComponent implements OnInit {
   email!: string;
   role!: string[];
   status!: number;
-  rolesSelected!: { label?: string; value?: string }[];
+  // rolesSelected!: { label?: string; value?: string }[];
+  roleSelected: { label?: string; value?: string };
   statusSelected!: { label?: string; value?: number };
+  currentUser: User;
+  matchModeOptions: SelectItem[];
   constructor(
     private userService: UserService,
     private userManagerService: UserManagerService,
@@ -77,16 +81,22 @@ export class UserComponent implements OnInit {
     private router: Router,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private userInforService: UserInforService,
   ) {}
 
   ngOnInit(): void {
     this.titleComponent = this.route.snapshot.data['title'];
+    this.currentUser = this.userInforService.user;
     this.initTable();
     this.changeParams();
+    this.matchModeOptions = [
+      { label: 'Starts With', value: FilterMatchMode.STARTS_WITH },
+      { label: 'Contains', value: FilterMatchMode.CONTAINS },
+    ];
   }
   getUsers() {
     this.isLoadingTable = true;
-    this.userService
+    this.userManagerService
       .getAll(this.paginator.pageNumber, this.paginator.pageSize)
       .pipe(delay(100))
       .subscribe({
@@ -136,28 +146,51 @@ export class UserComponent implements OnInit {
   resetValueForm() {
     this.user = {};
     this.statusSelected = { label: 'ACTIVE', value: 1 };
-    this.rolesSelected = [];
+    // this.rolesSelected = [];
+    this.roleSelected = { label: 'client', value: 'client' };
   }
   saveUser() {
     this.submitted = true;
     if (!this.isValid()) return;
 
     this.user.status = this.statusSelected.value;
-    this.user.roles = this.rolesSelected.map((role) => role.value);
+    // this.user.roles = this.rolesSelected.map((role) => role.value);
+    this.user.roles = [...[], this.roleSelected.value];
+    if (this.user.id) {
+      this.userManagerService.edit(this.user).subscribe({
+        next: (res: any) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: res.message,
+            life: 2000,
+          });
+          this.getUsers();
+          this.hideDialog();
+        },
+        error: (res) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: res.error.message,
+            life: 2000,
+          });
+        },
+      });
+      return;
+    }
     this.userManagerService.add(this.user).subscribe({
-      next: (res) => {
-        console.log(res);
+      next: (res: any) => {
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
-          detail: 'Added!',
+          detail: res.message,
           life: 2000,
         });
         this.getUsers();
         this.hideDialog();
       },
       error: (res) => {
-        console.log(res.status);
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -166,7 +199,6 @@ export class UserComponent implements OnInit {
         });
       },
     });
-    return;
     // }
   }
   hideDialog() {
@@ -179,7 +211,8 @@ export class UserComponent implements OnInit {
     console.log(user);
     this.userDialog = true;
     this.user = { ...user };
-    this.rolesSelected = user.roles.map((e) => ({ label: e, value: e }));
+    // this.rolesSelected = user.roles.map((e) => ({ label: e, value: e }));
+    this.roleSelected = { label: user.roles[0], value: user.roles[0] };
     this.statusSelected = { label: user.status ? 'ACTIVE' : 'INACTIVE', value: user.status! };
     console.log(this.statusSelected);
   }
@@ -191,7 +224,8 @@ export class UserComponent implements OnInit {
       !this.user.firstName ||
       !this.user.lastName ||
       !this.user.email ||
-      !this.rolesSelected.length ||
+      // !this.rolesSelected.length ||
+      !this.roleSelected.value ||
       !this.statusSelected.label ||
       !this.emailPattern.test(this.user.email)
     ) {
@@ -200,14 +234,25 @@ export class UserComponent implements OnInit {
     return true;
   }
   initTable() {
-    this.listRoles = [
-      { label: 'admin', value: 'admin' },
-      { label: 'client', value: 'client' },
-      { label: 'manager', value: 'manager' },
-    ];
+    if (this.includesRole(this.currentUser, 'admin')) {
+      this.listRoles = [
+        { label: 'client', value: 'client' },
+        { label: 'manager', value: 'manager' },
+        { label: 'admin', value: 'admin' },
+      ];
+    } else {
+      this.listRoles = [
+        { label: 'client', value: 'client' },
+        { label: 'manager', value: 'manager' },
+      ];
+    }
+
     this.listStatuses = [
       { label: 'ACTIVE', value: 1 },
       { label: 'INACTIVE', value: 0 },
     ];
+  }
+  includesRole(user: User, role: string): boolean {
+    return user.roles.includes(role);
   }
 }
