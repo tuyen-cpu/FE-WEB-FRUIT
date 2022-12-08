@@ -1,54 +1,60 @@
-import { UserInforService } from './../../services/user-infor.service';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ToastModule } from 'primeng/toast';
-import { ConfirmationService, ConfirmEventType, FilterMatchMode, MessageService, SelectItem } from 'primeng/api';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { DropdownModule } from 'primeng/dropdown';
-import { DialogModule } from 'primeng/dialog';
-import { Table, TableModule } from 'primeng/table';
-
-import { ToolbarModule } from 'primeng/toolbar';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { ProvincesApiService } from 'src/app/services/provinces-api.service';
-import { CheckboxModule } from 'primeng/checkbox';
-import { Paginator } from 'src/app/model/paginator.model';
-import { PaginatorModule } from 'primeng/paginator';
-import { LoadingComponent } from 'src/app/utils/loading/loading.component';
-import { MessagesModule } from 'primeng/messages';
-import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { User } from 'src/app/model/user.model';
+import { delay, Subject, Subscription, BehaviorSubject, debounceTime } from 'rxjs';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+//component
 import { UserService } from 'src/app/services/user.service';
-import { MultiSelectModule } from 'primeng/multiselect';
+import { UserInforService } from './../../services/user-infor.service';
 import UserManagerService from 'src/app/services/admin/user-manager.service';
-import { delay } from 'rxjs';
+
+//model
+import { User } from 'src/app/model/user.model';
+import { Filter } from 'src/app/model/filter.model';
+import { Paginator } from 'src/app/model/paginator.model';
+
+//primeNg
+
+import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
+import { TooltipModule } from 'primeng/tooltip';
+import { ButtonModule } from 'primeng/button';
+import { ToolbarModule } from 'primeng/toolbar';
+import { MessageModule } from 'primeng/message';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { PaginatorModule } from 'primeng/paginator';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { Table, TableModule } from 'primeng/table';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, FilterMatchMode, MessageService, SelectItem } from 'primeng/api';
+import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
+
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
+    HighlighterPipe,
     TableModule,
+    ToastModule,
+    RouterModule,
+    ButtonModule,
+    DialogModule,
+    TooltipModule,
+    MessageModule,
+    ToolbarModule,
+    DropdownModule,
     InputTextModule,
     PaginatorModule,
-    DropdownModule,
-    ButtonModule,
-    ToolbarModule,
-    ConfirmDialogModule,
-    ToastModule,
-    MessageModule,
-    DialogModule,
     MultiSelectModule,
+    ConfirmDialogModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
   @ViewChild('dt') dt!: Table;
   titleComponent!: string;
   isLoading: boolean = false;
@@ -62,8 +68,6 @@ export class UserComponent implements OnInit {
   paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 5 };
   paramsURL: {} = {};
   user!: User;
-  emailPattern: RegExp =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   firstName!: string;
   lastName!: string;
   email!: string;
@@ -74,13 +78,19 @@ export class UserComponent implements OnInit {
   statusSelected!: { label?: string; value?: number };
   currentUser: User;
   matchModeOptions: SelectItem[];
+  filter: Filter = { page: 0, size: 5 };
+  roleFilterSelected: { label?: string; value?: string };
+  statusFilterSelected: { label?: string; value?: number };
+  private subjectKeyup = new BehaviorSubject<any>(null);
+  emailPattern: RegExp =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   constructor(
     private userService: UserService,
     private userManagerService: UserManagerService,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService,
     private userInforService: UserInforService,
   ) {}
 
@@ -89,10 +99,7 @@ export class UserComponent implements OnInit {
     this.currentUser = this.userInforService.user;
     this.initTable();
     this.changeParams();
-    this.matchModeOptions = [
-      { label: 'Starts With', value: FilterMatchMode.STARTS_WITH },
-      { label: 'Contains', value: FilterMatchMode.CONTAINS },
-    ];
+    this.filterUserKeyup();
   }
   getUsers() {
     this.isLoadingTable = true;
@@ -110,32 +117,55 @@ export class UserComponent implements OnInit {
         },
       });
   }
-  changeParams() {
-    this.route.queryParams.subscribe((res) => {
-      console.log('change param');
-      if (res['page'] === undefined || res['page'] === null) {
-        this.paginator.pageNumber = 0;
-      } else {
-        this.paginator.pageNumber = res['page'] - 1;
-      }
-      this.paginator.pageSize = Number(res['size']) || 5;
 
+  onFilter(event) {
+    console.log(this.roleFilterSelected);
+    console.log(this.isEmptyFilter());
+    if (this.isEmptyFilter()) {
       this.getUsers();
-    });
+      return;
+    }
+
+    this.roleFilterSelected && this.roleFilterSelected.label ? (this.filter.role_name = this.roleFilterSelected.value) : (this.filter.role_name = '');
+    this.statusFilterSelected && this.statusFilterSelected.label
+      ? (this.filter.status = this.statusFilterSelected.value)
+      : (this.filter.status = undefined);
+
+    // if (!this.filter.email && !this.filter.firstName && !this.filter.lastName && !this.filter.role_name) {
+    //   return;
+    // }
+    this.subjectKeyup.next(this.filter);
   }
-  onPageChange(event: any) {
-    this.paginator.pageNumber = event.page;
-    this.paginator.pageSize = event.rows;
-    this.paramsURL = {
-      page: this.paginator.pageNumber + 1,
-      size: this.paginator.pageSize,
-    };
-    this.addParams();
+  clearFilter() {
+    this.filter = { page: 0, size: 5 };
+    this.roleFilterSelected = undefined;
+    this.statusFilterSelected = undefined;
+    this.getUsers();
   }
-  addParams() {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: this.paramsURL,
+  isEmptyFilter(): boolean {
+    return !this.filter.email && !this.filter.firstName && !this.filter.lastName && !this.roleFilterSelected && !this.statusFilterSelected;
+  }
+  filterUser() {
+    this.isLoadingTable = true;
+    this.userManagerService
+      .filter(this.filter)
+      .pipe(delay(500))
+      .subscribe({
+        next: (res: any) => {
+          this.users = res.data.content;
+          this.paginator.totalElements = res.data.totalElements;
+          console.log(res.data);
+          this.isLoadingTable = false;
+        },
+        error: (res) => {
+          console.log(res);
+          this.isLoadingTable = false;
+        },
+      });
+  }
+  filterUserKeyup() {
+    this.subjectKeyup.pipe(debounceTime(800)).subscribe((key) => {
+      this.filterUser();
     });
   }
   openNew() {
@@ -148,6 +178,22 @@ export class UserComponent implements OnInit {
     this.statusSelected = { label: 'ACTIVE', value: 1 };
     // this.rolesSelected = [];
     this.roleSelected = { label: 'client', value: 'client' };
+  }
+
+  hideDialog() {
+    this.userDialog = false;
+    this.submitted = false;
+    this.resetValueForm();
+  }
+  resetView() {}
+  editUser(user: User) {
+    console.log(user);
+    this.userDialog = true;
+    this.user = { ...user };
+    // this.rolesSelected = user.roles.map((e) => ({ label: e, value: e }));
+    this.roleSelected = { label: user.roles[0], value: user.roles[0] };
+    this.statusSelected = { label: user.status ? 'ACTIVE' : 'INACTIVE', value: user.status! };
+    console.log(this.statusSelected);
   }
   saveUser() {
     this.submitted = true;
@@ -201,21 +247,6 @@ export class UserComponent implements OnInit {
     });
     // }
   }
-  hideDialog() {
-    this.userDialog = false;
-    this.submitted = false;
-    this.resetValueForm();
-  }
-  resetView() {}
-  editUser(user: User) {
-    console.log(user);
-    this.userDialog = true;
-    this.user = { ...user };
-    // this.rolesSelected = user.roles.map((e) => ({ label: e, value: e }));
-    this.roleSelected = { label: user.roles[0], value: user.roles[0] };
-    this.statusSelected = { label: user.status ? 'ACTIVE' : 'INACTIVE', value: user.status! };
-    console.log(this.statusSelected);
-  }
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
   }
@@ -254,5 +285,43 @@ export class UserComponent implements OnInit {
   }
   includesRole(user: User, role: string): boolean {
     return user.roles.includes(role);
+  }
+
+  changeParams() {
+    this.route.queryParams.subscribe((res) => {
+      if (res['page'] === undefined || res['page'] === null) {
+        this.paginator.pageNumber = 0;
+      } else {
+        this.paginator.pageNumber = res['page'] - 1;
+      }
+      this.paginator.pageSize = Number(res['size']) || 5;
+      if (this.filter) {
+        this.filter.page = res['page'] - 1;
+        this.filter.size = Number(res['size']);
+        this.filterUser();
+        return;
+      }
+      this.getUsers();
+    });
+  }
+  onPageChange(event: any) {
+    this.paginator.pageNumber = event.page;
+    this.paginator.pageSize = event.rows;
+    this.paramsURL = {
+      page: this.paginator.pageNumber + 1,
+      size: this.paginator.pageSize,
+    };
+    this.addParams();
+  }
+  addParams() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.paramsURL,
+    });
+  }
+  ngOnDestroy() {
+    if (this.subjectKeyup) {
+      this.subjectKeyup.unsubscribe();
+    }
   }
 }

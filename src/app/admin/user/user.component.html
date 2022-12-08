@@ -62,6 +62,7 @@
               Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to {{ paginator.pageSize * paginator.pageNumber + paginator.pageSize }} of
               {{ paginator.totalElements }} products.</span
             >
+
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
@@ -70,26 +71,67 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id" style="flex: 1">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="id" style="flex: 0.5">Id <p-sortIcon field="id"></p-sortIcon></th>
             <!-- <th pSortableColumn="userName" style="flex: 1">User Name</th> -->
             <th pSortableColumn="email" style="flex: 5">Email <p-sortIcon field="email"></p-sortIcon></th>
-            <th style="flex: 3">Full name</th>
-            <th style="flex: 2">Role</th>
+            <th style="flex: 2">Last Name</th>
+            <th style="flex: 2">First name</th>
+            <th style="flex: 1">Role</th>
             <th style="flex: 1">Status</th>
             <th style="flex: 1">Action</th>
+          </tr>
+          <tr>
+            <th style="flex: 0.5"></th>
+            <th style="flex: 5">
+              <input [disabled]="isLoadingTable" class="w-6" type="text" pInputText [(ngModel)]="filter.email" (keyup)="onFilter($event)" />
+            </th>
+            <th style="flex: 2">
+              <input [disabled]="isLoadingTable" class="w-full" type="text" pInputText [(ngModel)]="filter.lastName" (keyup)="onFilter($event)" />
+            </th>
+            <th style="flex: 2">
+              <input [disabled]="isLoadingTable" class="w-full" type="text" pInputText [(ngModel)]="filter.firstName" (keyup)="onFilter($event)" />
+            </th>
+            <th style="flex: 1">
+              <p-dropdown
+                [options]="listRoles"
+                [(ngModel)]="roleFilterSelected"
+                placeholder="Select"
+                (onChange)="onFilter($event)"
+                optionLabel="label"
+                [showClear]="true"></p-dropdown>
+            </th>
+            <th style="flex: 1">
+              <p-dropdown
+                [options]="listStatuses"
+                [(ngModel)]="statusFilterSelected"
+                placeholder="Select"
+                (onChange)="onFilter($event)"
+                optionLabel="label"
+                [showClear]="true"></p-dropdown>
+            </th>
+            <th style="flex: 1">
+              <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clearFilter()"></button> -->
+              <button
+                *ngIf="!isEmptyFilter()"
+                type="button"
+                class="p-column-filter-clear-button p-link"
+                (click)="clearFilter()"
+                pTooltip="Clear Filter">
+                <span class="pi pi-filter-slash"></span>
+              </button>
+            </th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-user>
           <tr>
-            <td style="flex: 1">{{ user.id }}</td>
+            <td style="flex: 0.5">{{ user.id }}</td>
             <!-- <td>
               {{ user.userName }}
             </td> -->
-            <td style="flex: 5">
-              {{ user.email }}
-            </td>
-            <td style="flex: 3">{{ user.lastName + ' ' + user.firstName }}</td>
-            <td style="flex: 2">{{ user.roles !== null && user.roles[0] }}</td>
+            <td style="flex: 5"><div class="" [innerHTML]="user.email | highlighter : filter.email : 'full'"></div></td>
+            <td style="flex: 2"><div [innerHTML]="user.lastName | highlighter : filter.lastName : 'full'"></div></td>
+            <td style="flex: 2"><div [innerHTML]="user.firstName | highlighter : filter.firstName : 'full'"></div></td>
+            <td style="flex: 1">{{ user.roles !== null && user.roles[0] }}</td>
             <td style="flex: 1">
               <span [class]="'status-default status-' + user.status">{{ user.status === 0 ? 'INACTIVE' : 'ACTIVE' }}</span>
             </td>
@@ -113,7 +155,7 @@
                 [totalRecords]="paginator.totalElements"
                 [first]="paginator.pageSize * paginator.pageNumber"
                 (onPageChange)="onPageChange($event)"
-                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+                [rowsPerPageOptions]="[1, 10, 20, 30]"></p-paginator>
             </div>
           </div>
         </ng-template>
