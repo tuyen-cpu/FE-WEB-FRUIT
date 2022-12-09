@@ -1,4 +1,4 @@
-import { AuthService } from './../../../../services/auth.service';
+import { AuthService } from '../../../../services/auth.service';
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,11 +12,8 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
   styleUrls: ['./verify.component.scss'],
 })
 export class VerifyComponent implements OnInit {
-  message: string = 'ss';
-  constructor(
-    private authService: AuthService,
-    private route: ActivatedRoute
-  ) {}
+  message: string = '';
+  constructor(private authService: AuthService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.authService.verify(this.route.snapshot.queryParams['code']).subscribe({

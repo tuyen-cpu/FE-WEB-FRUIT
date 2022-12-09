@@ -76,7 +76,7 @@ export class CheckoutComponent implements OnInit {
   districts!: District[];
   wards!: Ward[];
   infoForm!: FormGroup;
-  addresses: { name: string }[] = [];
+  addresses: { name: string; address: Address }[] = [];
   cartItems: CartItem[] = [];
   totalQuantity: number = 0;
   totalCart: number = 0;
@@ -109,8 +109,44 @@ export class CheckoutComponent implements OnInit {
     this.primengConfig.ripple = true;
     this.getProvinces();
     this.getCartItems();
-    this.getAddresses();
+    // this.getAddresses();
     this.renderPaypal();
+  }
+  autoSelectAddressDefault() {
+    this.isLoading = true;
+    let { address } = this.addresses.find((e) => e.address.isDefault);
+    this.addressTemp.city = this.provinces.find((e) => e.name === address.city)!;
+    if (this.addressTemp.city) {
+      this.provincesApi
+        .getDistricts(this.addressTemp.city.code!)
+        .pipe(
+          switchMap((province: Province) => {
+            this.districts = province.districts!;
+            this.addressTemp.district = this.districts.find((e) => e.name === address.district)!;
+            return this.provincesApi.getCommunes(this.addressTemp.district.code!);
+          }),
+        )
+        .subscribe({
+          next: (district: District) => {
+            this.wards = district.wards!;
+            this.addressTemp.ward = this.wards.find((e) => e.name === address.ward)!;
+            this.infoForm.patchValue({
+              firstName: address.firstName,
+              lastName: address.lastName,
+              phoneNum: address.phone,
+              street: address.street,
+              province: this.addressTemp.city,
+              district: this.addressTemp.district,
+              ward: this.addressTemp.ward,
+            });
+          },
+          error: (res) => {
+            this.isLoading = false;
+          },
+        });
+    }
+
+    this.isLoading = false;
   }
   getCartItems() {
     this.cartItemsChange = this.cartItemService.cartItemsChange.subscribe((data) => {
@@ -125,6 +161,7 @@ export class CheckoutComponent implements OnInit {
     this.provincesApi.getProvinces().subscribe({
       next: (provinces: Province[]) => {
         this.provinces = provinces;
+        this.getAddresses();
       },
     });
   }
@@ -138,6 +175,11 @@ export class CheckoutComponent implements OnInit {
             address: <Address>{ ...e },
           };
         });
+
+        if (this.addresses.length !== 0) {
+          this.autoSelectAddressDefault();
+        }
+
         this.isLoading = false;
       },
       error: (res) => {
@@ -146,6 +188,7 @@ export class CheckoutComponent implements OnInit {
     });
   }
   onChangeAddress(e: any) {
+    console.log(e);
     this.isLoading = true;
     let { value } = e;
     this.addressTemp.city = this.provinces.find((e) => e.name === value.address.city)!;

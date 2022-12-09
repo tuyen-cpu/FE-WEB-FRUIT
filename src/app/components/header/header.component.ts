@@ -308,7 +308,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
         console.log(response);
       },
       error: (err) => {
-        alert(err.error.message);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error.message,
+          life: 3000,
+        });
         this.isLoading = false;
       },
     });

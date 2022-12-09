@@ -105,7 +105,9 @@
       <div class="desc-title">
         <h3 class="uppercase text-2xl">Description</h3>
       </div>
-      <div class="desc-content text-2xl" [innerHTML]="product.description | safeHtml"></div>
+      <div
+        class="desc-content text-2xl"
+        [innerHTML]="product.description ? product.description : ('There is no description for this product' | safeHtml)"></div>
     </div>
   </div>
 </div>

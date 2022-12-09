@@ -1,3 +1,4 @@
+import { ShareMessageService } from 'src/app/services/share-message.service';
 import { TokenStorageService } from '../../../services/token-storage.service';
 import { UserInforService } from '../../../services/user-infor.service';
 import { AuthService } from '../../../services/auth.service';
@@ -6,28 +7,17 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Validation } from 'src/app/utils/Validation';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    ButtonModule,
-    RouterModule,
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, RouterModule, ToastModule],
+  providers: [MessageService],
   templateUrl: './reset.component.html',
   styleUrls: ['./reset.component.scss'],
 })
@@ -41,7 +31,9 @@ export class ResetComponent implements OnInit {
     private userInforService: UserInforService,
     private tokenStorageService: TokenStorageService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService,
+    private shareMessageService: ShareMessageService,
   ) {}
 
   ngOnInit(): void {
@@ -50,19 +42,12 @@ export class ResetComponent implements OnInit {
   initForm() {
     this.resetForm = this.fb.group(
       {
-        password: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(6),
-            Validators.maxLength(40),
-          ],
-        ],
+        password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
         confirmPassword: ['', [Validators.required]],
       },
       {
         validators: [Validation.match('password', 'confirmPassword')],
-      }
+      },
     );
   }
   onSubmit() {
@@ -74,13 +59,18 @@ export class ResetComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          alert(response.data);
           this.isLoading = false;
-          this.router.navigate(['/']);
+          this.shareMessageService.message.next(response.data);
+          this.router.navigate(['/auth/login']);
         },
         error: (response) => {
           this.isLoading = false;
-          console.log(response);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: response.error.message,
+            life: 3000,
+          });
         },
       });
   }

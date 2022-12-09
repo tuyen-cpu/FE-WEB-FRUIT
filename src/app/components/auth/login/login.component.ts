@@ -1,21 +1,14 @@
 import { Subscription } from 'rxjs';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
-import { TokenStorageService } from './../../../services/token-storage.service';
-import { UserInforService } from './../../../services/user-infor.service';
-import { AuthService } from './../../../services/auth.service';
+import { TokenStorageService } from '../../../services/token-storage.service';
+import { UserInforService } from '../../../services/user-infor.service';
+import { AuthService } from '../../../services/auth.service';
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Validation } from 'src/app/utils/Validation';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -24,15 +17,7 @@ import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    ButtonModule,
-    RouterModule,
-    ToastModule,
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, RouterModule, ToastModule],
   providers: [MessageService, ConfirmationService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -50,28 +35,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     private tokenStorageService: TokenStorageService,
     private router: Router,
     private route: ActivatedRoute,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    this.userSupscription = this.tokenStorageService.userChange.subscribe(
-      (data) => {
-        if (data) {
-          this.router.navigate(['/']);
-        }
+    this.userSupscription = this.tokenStorageService.userChange.subscribe((data) => {
+      if (data) {
+        this.router.navigate(['/']);
       }
-    );
+    });
     this.loginForm = this.fb.group({
       email: ['', [Validators.email, Validators.required]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(40),
-        ],
-      ],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
     });
   }
   onSubmit() {

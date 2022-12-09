@@ -1,18 +1,12 @@
-import { RouterModule } from '@angular/router';
+import { ShareMessageService } from 'src/app/services/share-message.service';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from './../../../services/auth.service';
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { Validation } from 'src/app/utils/Validation';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -20,15 +14,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    ButtonModule,
-    RouterModule,
-    ToastModule,
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, RouterModule, ToastModule],
   providers: [MessageService, ConfirmationService],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
@@ -41,7 +27,9 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private shareMessageService: ShareMessageService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -53,19 +41,12 @@ export class RegisterComponent implements OnInit {
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
         email: ['', [Validators.email, Validators.required]],
-        password: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(6),
-            Validators.maxLength(40),
-          ],
-        ],
+        password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
         confirmPassword: ['', [Validators.required]],
       },
       {
         validators: [Validation.match('password', 'confirmPassword')],
-      }
+      },
     );
   }
   onSubmit() {
@@ -73,7 +54,9 @@ export class RegisterComponent implements OnInit {
     console.log(this.registerForm.value);
     this.authService.register(this.registerForm.value).subscribe({
       next: (response) => {
-        this.showSuccessMessage('Success', response.message);
+        // this.showSuccessMessage('Success', response.message);
+        this.router.navigate(['/account/login']);
+        this.shareMessageService.message.next(response.message);
         this.isLoading = false;
       },
       error: (e) => {

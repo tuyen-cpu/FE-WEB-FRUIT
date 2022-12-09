@@ -41,6 +41,14 @@ $color-btn: #357ebd;
     padding: 1rem;
     box-shadow: 0 0 0 1px #d9d9d9;
     border-radius: 4px;
+    .btn-add {
+      color: $main-color;
+      font-weight: 600;
+      font-size: 1.4rem;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
   .message-error {
     font-size: $text-medium;

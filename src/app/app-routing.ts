@@ -32,6 +32,11 @@ export const APP_ROUTES: Routes = [
     providers: [ProvincesApiService, MessageService],
   },
   {
+    path: 'auth',
+    loadChildren: () => import('./components/auth/auth-routes').then(({ AuthRoutes }) => AuthRoutes),
+    providers: [UserService],
+  },
+  {
     path: 'admin',
 
     loadChildren: () => import('./admin/admin-routes').then(({ AdminRoutes }) => AdminRoutes),

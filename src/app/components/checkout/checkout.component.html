@@ -24,6 +24,9 @@
         <div class="col-12">
           <div class="section-wrapper">
             <h4 class="info-title">Information delivery</h4>
+            <div class="field" *ngIf="!addresses.length">
+              <span> Don't have an address yet? <a class="btn-add" routerLink="/account/address">Add now</a></span>
+            </div>
             <div class="field">
               <p-dropdown
                 (onChange)="onChangeAddress($event)"
@@ -41,8 +44,8 @@
                 [class]="firstName?.invalid ? 'ng-invalid ng-dirty w-full input-custom' : 'w-full input-custom'"
                 pInputText />
               <div class="mt-1" *ngIf="firstName?.invalid && firstName?.dirty && firstName?.touched" id="firstName-help">
-                <small class="p-error message-error" [hidden]="!firstName?.errors?.['required']"> firstName is required. </small>
-                <small class="p-error message-error" [hidden]="!firstName?.errors?.['firstName']"> firstName is invalid. </small>
+                <small class="p-error message-error" [hidden]="!firstName?.errors?.['required']"> FirstName is required. </small>
+                <small class="p-error message-error" [hidden]="!firstName?.errors?.['firstName']"> FirstName is invalid. </small>
               </div>
             </div>
             <div class="field">

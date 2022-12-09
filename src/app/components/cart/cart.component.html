@@ -22,7 +22,7 @@
                 {{ item.product.name }}
               </p>
               <p class="cart-item__infor-price">
-                {{ calcPriceDiscount(item.product.price, item.product.discount) | currency : 'VND' }}
+                <b>{{ calcPriceDiscount(item.product.price, item.product.discount) | currency : 'VND' }}&nbsp;&nbsp;</b>
                 <del *ngIf="item.product.price">{{ item.product.price | myCurrency : 'VND' }}</del>
               </p>
               <div class="flex justify-content-between">

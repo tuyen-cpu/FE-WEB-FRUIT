@@ -1,0 +1,82 @@
+<div class="register-wrapper col-12 sm:col-12 md:col-6">
+  <div class="register-site">
+    <div class="register-title">
+      <h2>CREATE A NEW ACCOUNT</h2>
+    </div>
+    <form action="" [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      <div class="register-form__field">
+        <input id="lastName" class="register-form__field-input" placeholder="Last name" formControlName="lastName" type="text" pInputText />
+        <span *ngIf="getLastName.dirty">
+          <small
+            *ngIf="getLastName.errors?.['minlength']||getLastName.errors?.['required']"
+            id="password-help"
+            class="register-form__field-message p-error block">
+            Họ không được bỏ trống.</small
+          >
+        </span>
+      </div>
+      <div class="register-form__field">
+        <input id="firstName" class="register-form__field-input" placeholder="First name" formControlName="firstName" type="text" pInputText />
+        <span *ngIf="getFirstName.dirty">
+          <small
+            *ngIf="getFirstName.errors?.['minlength']||getFirstName.errors?.['required']"
+            id="password-help"
+            class="register-form__field-message p-error block">
+            Tên không được bỏ trống.</small
+          >
+        </span>
+      </div>
+
+      <div class="register-form__field">
+        <input id="email" class="register-form__field-input" placeholder="Email" formControlName="email" type="email" pInputText />
+        <span *ngIf="getEmail.dirty">
+          <small
+            *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
+            id="password-help"
+            class="register-form__field-message p-error block">
+            Email không được bỏ trống.</small
+          >
+          <small *ngIf="getEmail.errors?.['email']" id="password-help" class="register-form__field-message p-error block">
+            Email sai định dạng. Vd:tuyen@gmail.com</small
+          >
+        </span>
+      </div>
+
+      <div class="register-form__field">
+        <input id="password" class="register-form__field-input" placeholder="Password" formControlName="password" type="password" pInputText />
+        <span *ngIf="getPassword.dirty">
+          <small
+            *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
+            id="password-help"
+            class="register-form__field-message p-error block">
+            Mật khẩu phải có ít nhất 6 kí tự.</small
+          >
+          <small *ngIf="getPassword.errors?.['maxlength']" id="password-help" class="register-form__field-message p-error block">
+            Mật khẩu không được nhiều hơn 40 kí tự.</small
+          >
+        </span>
+      </div>
+      <div class="register-form__field">
+        <input
+          id="confirmpassword"
+          class="register-form__field-input"
+          placeholder="Re-password"
+          type="password"
+          pInputText
+          formControlName="confirmPassword" />
+        <span *ngIf="getConfirmPassword.dirty">
+          <small *ngIf="getConfirmPassword.errors?.['matching']" id="password-help" class="register-form__field-message p-error block">
+            Mật khẩu không khớp</small
+          >
+          <small *ngIf="getConfirmPassword.errors?.['required']" id="password-help" class="register-form__field-message p-error block">
+            Mật khẩu trống</small
+          >
+        </span>
+      </div>
+      <button type="submit" [disabled]="!registerForm.valid" class="btn-action register-form__btn" pButton [loading]="isLoading">CREATE</button>
+    </form>
+
+    <button pButton [routerLink]="['/auth/login']" label="Back to login" icon="pi pi-arrow-left" class="p-button-text back-login-btn"></button>
+  </div>
+</div>
+<p-toast></p-toast>

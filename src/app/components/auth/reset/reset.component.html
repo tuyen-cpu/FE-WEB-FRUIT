@@ -1,0 +1,52 @@
+<div class="reset-wrapper col-12 sm:col-12 md:col-6">
+  <div class="reset-site">
+    <div class="reset-title">
+      <h2>ĐẶT LẠI MẬT KHẨU</h2>
+    </div>
+    <form action="" [formGroup]="resetForm" (ngSubmit)="onSubmit()" class="reset-form">
+      <div class="reset-form__field">
+        <input id="password" class="reset-form__field-input" placeholder="Mật khẩu" formControlName="password" type="password" pInputText />
+        <span *ngIf="getPassword.dirty">
+          <small
+            *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
+            id="password-help"
+            class="reset-form__field-message p-error block">
+            Mật khẩu phải có ít nhất 6 kí tự.</small
+          >
+          <small *ngIf="getPassword.errors?.['maxlength']" id="password-help" class="reset-form__field-message p-error block">
+            Mật khẩu không được nhiều hơn 40 kí tự.</small
+          >
+        </span>
+      </div>
+      <div class="reset-form__field">
+        <input
+          id="confirmpassword"
+          class="reset-form__field-input"
+          placeholder="Mật khẩu"
+          type="password"
+          pInputText
+          formControlName="confirmPassword"
+          placeholder="Xác nhận mật khẩu" />
+        <span *ngIf="getConfirmPassword.dirty">
+          <small *ngIf="getConfirmPassword.errors?.['matching']" id="password-help" class="reset-form__field-message p-error block">
+            Mật khẩu không khớp</small
+          >
+          <small *ngIf="getConfirmPassword.errors?.['required']" id="password-help" class="reset-form__field-message p-error block">
+            Mật khẩu trống</small
+          >
+        </span>
+      </div>
+      <div class="grid action-wrapper mt-3">
+        <button type="submit" [disabled]="!resetForm.valid" class="btn-action reset-form__btn col-5 sm:col-4 md:col-4" pButton [loading]="isLoading">
+          ĐẶT LẠI
+        </button>
+        <div class="link-action-wrapper col-5 sm:col-4 md:col-4">
+          <a class="link-action" [routerLink]="['/auth/login']">Đăng nhập?</a><br />
+          hoặc
+          <a class="link-action" [routerLink]="['/auth/register']">Đăng ký</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<p-toast></p-toast>
