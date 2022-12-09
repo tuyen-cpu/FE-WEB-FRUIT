@@ -358,6 +358,7 @@ header {
       position: unset;
       .header-icon {
         position: relative;
+        user-select: none;
         svg {
           opacity: 0.8;
         }
@@ -660,9 +661,12 @@ header {
             }
             .cart-dropdown-item {
               border-bottom: 1px dotted #bcbcbc;
+              padding: 12px 0;
               &__image {
                 width: 80px;
-                padding: 12px 12px 12px 0;
+                height: 80px;
+                object-fit: contain;
+                padding: 0 12px 0 0;
               }
               &__content {
                 flex: 1;
@@ -686,6 +690,9 @@ header {
                     width: 20px;
                     height: 20px;
                     cursor: pointer;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
                   }
                   .value {
                     width: 30px;
@@ -702,6 +709,9 @@ header {
                   color: #f30;
                   font-weight: 700;
                   padding: 0 12px;
+                  del {
+                    color: rgb(0, 0, 0);
+                  }
                 }
                 .close {
                   position: absolute;

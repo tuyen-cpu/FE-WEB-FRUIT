@@ -115,7 +115,7 @@
             <p-progressBar [hidden]="!isLoading" mode="indeterminate" [style]="{ height: '2px' }"></p-progressBar>
             <ul class="search-result">
               <li *ngFor="let product of products" class="search-result__item">
-                <a routerLink="/product/list" class="search-result__item-link">
+                <a [routerLink]="['/product/' + product.slug]" class="search-result__item-link">
                   <span class="image"><img [src]="urlImage + '/' + product.image.link" alt="" width="60px" /></span>
                   <span class="content">
                     <p class="name" [innerHtml]="product.name | highlighter : keySearch : 'partial'"></p>
@@ -327,7 +327,10 @@
                         <input type="text" min="1" class="value" value="{{ item.quantity }}" #inputQuantityElementHeader />
                         <button (click)="updateQuantity(inputQuantityElementHeader, item, '+')" class="quantity__btn">+</button>
                       </span>
-                      <span class="price">{{ calcPriceDiscount(item.product.price, item.product.discount) * item.quantity | currency : 'VND' }}</span>
+                      <span class="price"
+                        >{{ calcPriceDiscount(item.product.price, item.product.discount) * item.quantity | myCurrency : 'VND' }}
+                        <del class="text-black text-xl"> {{ item.product.price | myCurrency : 'VND' }}</del></span
+                      >
                       <span (click)="remove(item)" class="close">
                         <i class="pi pi-times"></i>
                       </span>

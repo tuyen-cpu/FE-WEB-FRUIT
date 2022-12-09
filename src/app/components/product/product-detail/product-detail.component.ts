@@ -44,14 +44,17 @@ export class ProductDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getProduct();
     this.urlImage = this.fileUploadService.getLink();
+    this.getProduct();
   }
   getProduct() {
-    this.productService
-      .getBySlug(this.route.snapshot.paramMap.get('slug')!)
+    this.route.paramMap
       .pipe(
-        switchMap((res) => {
+        switchMap((res: any) => {
+          console.log(res.params?.slug);
+          return this.productService.getBySlug(res.params?.slug!);
+        }),
+        switchMap((res: any) => {
           this.product = res.data;
           return this.imageService.getAllByProductId(res.data.id);
         }),

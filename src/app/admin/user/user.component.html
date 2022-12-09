@@ -28,9 +28,9 @@
         <ng-template pTemplate="left">
           <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
         </ng-template>
-        <ng-template pTemplate="right">
+        <!-- <ng-template pTemplate="right">
           <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="resetView()"></p-button
-        ></ng-template>
+        ></ng-template> -->
       </p-toolbar>
 
       <p-table
@@ -63,10 +63,10 @@
               {{ paginator.totalElements }} products.</span
             >
 
-            <span class="p-input-icon-left">
+            <!-- <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
-            </span>
+            </span> -->
           </div>
         </ng-template>
         <ng-template pTemplate="header">
@@ -155,7 +155,7 @@
                 [totalRecords]="paginator.totalElements"
                 [first]="paginator.pageSize * paginator.pageNumber"
                 (onPageChange)="onPageChange($event)"
-                [rowsPerPageOptions]="[1, 10, 20, 30]"></p-paginator>
+                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
             </div>
           </div>
         </ng-template>

@@ -1,4 +1,4 @@
-@import "../../scss/utils/variable";
+@import '../../scss/utils/variable';
 .container {
   margin-left: auto;
   margin-right: auto;
@@ -41,7 +41,7 @@
         position: relative;
 
         &::after {
-          content: "";
+          content: '';
           position: absolute;
           top: 100%;
           right: 0;
@@ -65,8 +65,12 @@
           }
         }
         .cart-list {
-          max-height: 60vh;
+          max-height: 80vh;
           overflow-y: scroll;
+          padding-right: 12px;
+          &::-webkit-scrollbar {
+            width: 3px;
+          }
           p {
             margin-top: 0;
           }

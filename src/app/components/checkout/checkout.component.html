@@ -184,7 +184,7 @@
         <h4>Orders ({{ totalQuantity }})</h4>
       </div>
       <div class="col-12">
-        <ul class="product-list max-h-24rem overflow-y-scroll">
+        <ul class="product-list max-h-24rem">
           <li *ngFor="let item of cartItems" class="product-item flex align-items-center justify-content-between">
             <span class="relative img-wrapper">
               <img [src]="urlImage + '/' + item.product.image.link" alt="" />
@@ -194,10 +194,13 @@
               <p>{{ item.product.name }}</p>
               <!-- <span>Size: M</span> -->
             </div>
-            <span class="price">{{ item.product.price | currency : 'VND' }}</span>
+            <span class="price">
+              <del class="mr-2 opacity-70">{{ item.product.price | myCurrency : 'VND' }} </del>
+              {{ calcPriceDiscount(item.product.price, item.product.discount) | myCurrency : 'VND' }}
+            </span>
           </li>
         </ul>
-        <div class="voucher-wrapper">
+        <!-- <div class="voucher-wrapper">
           <div class="flex justify-content-between">
             <input class="input-custom flex-grow-1" type="text" [(ngModel)]="voucherInput" pInputText placeholder="Voucher" />
             <button
@@ -222,7 +225,7 @@
               class="p-button-outlined mr-1"></button>
             <p-toast></p-toast>
           </div>
-        </div>
+        </div> -->
         <div class="fee-wrapper py-2">
           <div class="flex justify-content-between pt-2">
             <span>Subtotal ({{ totalQuantity }} items):</span>

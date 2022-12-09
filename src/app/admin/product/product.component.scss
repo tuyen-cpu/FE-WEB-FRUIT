@@ -37,7 +37,7 @@ p-dialog {
   }
   .ck-content.ck-editor__editable {
     max-height: 200px;
-    overflow-y: scroll;
+    overflow-y: auto;
     &::-webkit-scrollbar {
       width: 3px;
     }
@@ -50,7 +50,7 @@ p-dialog {
   .p-fileupload {
     .p-fileupload-content {
       max-height: 200px;
-      overflow-y: scroll;
+      overflow-y: auto;
       &::-webkit-scrollbar {
         width: 3px;
       }

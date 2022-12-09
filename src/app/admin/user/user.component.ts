@@ -9,7 +9,7 @@ import UserManagerService from 'src/app/services/admin/user-manager.service';
 
 //model
 import { User } from 'src/app/model/user.model';
-import { Filter } from 'src/app/model/filter.model';
+import { UserFilter } from 'src/app/model/filter.model';
 import { Paginator } from 'src/app/model/paginator.model';
 
 //primeNg
@@ -78,7 +78,7 @@ export class UserComponent implements OnInit, OnDestroy {
   statusSelected!: { label?: string; value?: number };
   currentUser: User;
   matchModeOptions: SelectItem[];
-  filter: Filter = { page: 0, size: 5 };
+  filter: UserFilter = { page: 0, size: 5 };
   roleFilterSelected: { label?: string; value?: string };
   statusFilterSelected: { label?: string; value?: number };
   private subjectKeyup = new BehaviorSubject<any>(null);
@@ -295,9 +295,13 @@ export class UserComponent implements OnInit, OnDestroy {
         this.paginator.pageNumber = res['page'] - 1;
       }
       this.paginator.pageSize = Number(res['size']) || 5;
-      if (this.filter) {
+
+      if (this.filter.email || this.filter.firstName || this.filter.lastName || this.filter.role_name || this.filter.status !== undefined) {
+        console.log(this.filter);
+        console.log('vao dy');
         this.filter.page = res['page'] - 1;
         this.filter.size = Number(res['size']);
+        console.log(this.filter);
         this.filterUser();
         return;
       }

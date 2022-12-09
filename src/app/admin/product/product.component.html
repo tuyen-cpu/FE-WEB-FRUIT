@@ -15,7 +15,7 @@
       </p-toolbar>
 
       <p-table
-        [loading]="isLoadingComponent"
+        [loading]="isLoadingTable"
         #dt
         [value]="products"
         [globalFilterFields]="['id', 'name', 'quantity', 'price', 'discount', 'status']"
@@ -61,12 +61,73 @@
             <th style="flex: 1">Status</th>
             <th style="flex: 0.5">Action</th>
           </tr>
+          <tr>
+            <th style="flex: 0.5"></th>
+            <th style="flex: 3">
+              <input [disabled]="isLoadingTable" class="w-6" type="text" pInputText [(ngModel)]="filter.name" (keyup)="onFilter($event)" />
+            </th>
+            <th style="flex: 1">
+              <input [disabled]="isLoadingTable" class="w-full" type="text" pInputText [(ngModel)]="filter.quantity" (keyup)="onFilter($event)" />
+            </th>
+            <th style="flex: 1">
+              <p-inputNumber
+                [(ngModel)]="filter.price"
+                (keyup)="onFilter($event)"
+                [disabled]="isLoadingTable"
+                class="w-full"
+                mode="decimal"
+                locale="vi-VN"
+                [minFractionDigits]="0"
+                mode="currency"
+                currency="VND"
+                [min]="1000"
+                [max]="10000000"
+                [ngClass]="{
+                  'ng-invalid ng-dirty': submitted && !product.price
+                }">
+              </p-inputNumber>
+            </th>
+            <th style="flex: 1">
+              <p-inputNumber
+                class="w-full"
+                [disabled]="isLoadingTable"
+                [(ngModel)]="filter.discount"
+                (keyup)="onFilter($event)"
+                mode="decimal"
+                [minFractionDigits]="0"
+                [min]="1"
+                [max]="100"
+                [useGrouping]="false"
+                suffix="%">
+              </p-inputNumber>
+            </th>
+            <th style="flex: 1">
+              <p-dropdown
+                [options]="listStatuses"
+                [(ngModel)]="statusFilterSelected"
+                placeholder="Select"
+                (onChange)="onFilter($event)"
+                optionLabel="label"
+                [showClear]="true"></p-dropdown>
+            </th>
+            <th style="flex: 0.5">
+              <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clearFilter()"></button> -->
+              <button
+                *ngIf="!isEmptyFilter()"
+                type="button"
+                class="p-column-filter-clear-button p-link"
+                (click)="clearFilter()"
+                pTooltip="Clear Filter">
+                <span class="pi pi-filter-slash"></span>
+              </button>
+            </th>
+          </tr>
         </ng-template>
         <ng-template pTemplate="body" let-product>
           <tr>
             <td style="flex: 0.5">{{ product.id }}</td>
             <td style="flex: 3">
-              {{ product.name }}
+              <div class="" [innerHTML]="product.name | highlighter : filter.name : 'full'"></div>
             </td>
             <td style="flex: 1">
               {{ product.quantity }}

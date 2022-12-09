@@ -67,14 +67,14 @@
     </div>
   </div>
   <div [hidden]="products.length === 0" class="col-12 sm:col-12 md:col-12 lg:col-10">
-    <div class="product-list-sort">
+    <!-- <div class="product-list-sort">
       <p-dropdown
         [options]="sortOptions"
         [(ngModel)]="sortOptionSelected"
         (onChange)="changeSort()"
         placeholder="Sắp xếp theo"
         optionLabel="name"></p-dropdown>
-    </div>
+    </div> -->
     <div class="product-list grid">
       <div *ngFor="let product of products; trackBy: trackById" class="col-6 sm:col-6 md:col-4 lg:col-3">
         <app-product-item *ngIf="product" [product]="product"></app-product-item>

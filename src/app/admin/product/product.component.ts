@@ -1,8 +1,8 @@
 import { ImageService } from './../../services/image.service';
-import { debounceTime, delay, distinctUntilChanged } from 'rxjs';
+import { BehaviorSubject, debounceTime, delay, distinctUntilChanged } from 'rxjs';
 import { FileUploadService } from './../../services/file-upload.service';
 import { LoadingComponent } from 'src/app/utils/loading/loading.component';
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import ProductManagerService from 'src/app/services/admin/product-manager.service';
 import { Category, Image, Product, ProductRequest } from 'src/app/model/category.model';
@@ -27,12 +27,16 @@ import * as customBuild from '../../../ckeditorCustom/build/ckeditor';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageModule } from 'primeng/image';
 import * as slug from 'vietnamese-slug';
+import { ProductFilter } from 'src/app/model/filter.model';
+import { ThisReceiver } from '@angular/compiler';
+import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
 @Component({
   selector: 'app-product',
   standalone: true,
   imports: [
     LoadingComponent,
     CommonModule,
+    HighlighterPipe,
     RouterModule,
     TableModule,
     InputTextModule,
@@ -55,14 +59,14 @@ import * as slug from 'vietnamese-slug';
   styleUrls: ['./product.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent implements OnInit, OnDestroy {
   @ViewChild('fileUpload') fileUpload!: any;
   @ViewChild('dt') dt!: Table;
   titleComponent!: string;
   urlImage!: string;
   products: Product[] = [];
   isLoading: boolean = false;
-  isLoadingComponent: boolean = false;
+  isLoadingTable: boolean = false;
   submitted: boolean = false;
   productDialog: boolean = false;
   listRoles: any;
@@ -80,6 +84,9 @@ export class ProductComponent implements OnInit {
   formDataImage!: FormData;
   public Editor = customBuild;
   dataEditor!: string;
+  statusFilterSelected: { label?: string; value?: number };
+  filter: ProductFilter = { page: 0, size: 10 };
+  private subjectKeyup = new BehaviorSubject<any>(null);
   config = {
     toolbar: {
       items: ['heading', '|', 'bold', 'italic', 'link', 'insertTable', 'alignment', 'bulletedList', 'numberedList', 'blockQuote', 'uploadImage'],
@@ -141,13 +148,64 @@ export class ProductComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.listStatuses = [
+      { label: 'ACTIVE', value: 1 },
+      { label: 'INACTIVE', value: 0 },
+    ];
     this.titleComponent = this.route.snapshot.data['title'];
     this.urlImage = this.fileUploadService.getLink();
     console.log(this.route.snapshot);
     this.changeParams();
     this.initTable();
     this.getCategories();
+    this.filterUserKeyup();
   }
+  onFilter(event) {
+    console.log(this.isEmptyFilter());
+    if (this.isEmptyFilter()) {
+      this.getProduct();
+      return;
+    }
+
+    this.statusFilterSelected && this.statusFilterSelected.label
+      ? (this.filter.status = this.statusFilterSelected.value)
+      : (this.filter.status = undefined);
+
+    // if (!this.filter.email && !this.filter.firstName && !this.filter.lastName && !this.filter.role_name) {
+    //   return;
+    // }
+    this.subjectKeyup.next(this.filter);
+  }
+  clearFilter() {
+    this.filter = { page: 0, size: 10 };
+    this.statusFilterSelected = undefined;
+    this.getProduct();
+  }
+  isEmptyFilter(): boolean {
+    return !this.filter.name && !this.filter.discount && !this.filter.price && !this.filter.quantity && !this.statusFilterSelected;
+  }
+  filterUser() {
+    this.isLoadingTable = true;
+    this.productManagerService
+      .filter(this.filter)
+      .pipe(delay(500))
+      .subscribe({
+        next: (res: any) => {
+          this.products = res.data.content;
+          this.paginator.totalElements = res.data.totalElements;
+          this.isLoadingTable = false;
+        },
+        error: (res) => {
+          this.isLoadingTable = false;
+        },
+      });
+  }
+  filterUserKeyup() {
+    this.subjectKeyup.pipe(debounceTime(800)).subscribe((key) => {
+      this.filterUser();
+    });
+  }
+
   onReady(editor: any) {
     if (editor.model.schema.isRegistered('image')) {
       editor.model.schema.extend('image', { allowAttributes: 'blockIndent' });
@@ -161,24 +219,32 @@ export class ProductComponent implements OnInit {
         this.paginator.pageNumber = res['page'] - 1;
       }
       this.paginator.pageSize = Number(res['size']) || 10;
-
+      if (this.filter.name || this.filter.price || this.filter.discount || this.filter.quantity || this.filter.status !== undefined) {
+        console.log(this.filter);
+        console.log('vao dy');
+        this.filter.page = res['page'] - 1;
+        this.filter.size = Number(res['size']);
+        console.log(this.filter);
+        this.filterUser();
+        return;
+      }
       this.getProduct();
     });
   }
   getProduct() {
-    this.isLoadingComponent = true;
+    this.isLoadingTable = true;
     this.productManagerService
       .getProductByCategoryIdAndPriceLessThan(0, 9999999999, this.paginator.pageNumber, this.paginator.pageSize)
       .pipe(delay(300))
       .subscribe({
         next: (res) => {
           this.products = res.data.content;
-          this.isLoadingComponent = false;
+          this.isLoadingTable = false;
           this.paginator.totalElements = res.data.totalElements;
           console.log(this.paginator.totalElements);
         },
         error: (res) => {
-          this.isLoadingComponent = false;
+          this.isLoadingTable = false;
         },
       });
   }
@@ -257,9 +323,9 @@ export class ProductComponent implements OnInit {
     this.resetValueForm();
   }
   resetView() {
-    this.isLoadingComponent = true;
+    this.isLoadingTable = true;
     this.getProduct();
-    this.isLoadingComponent = false;
+    this.isLoadingTable = false;
   }
   pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K> {
     const copy = {} as Pick<T, K>;
@@ -267,7 +333,7 @@ export class ProductComponent implements OnInit {
     return copy;
   }
   editProduct(product: Product) {
-    this.isLoadingComponent = true;
+    this.isLoadingTable = true;
     this.imageService
       .getAllByProductId(product.id)
       .pipe(delay(10))
@@ -287,10 +353,10 @@ export class ProductComponent implements OnInit {
             slug: product.category.slug,
           };
 
-          this.isLoadingComponent = false;
+          this.isLoadingTable = false;
         },
         error: (res) => {
-          this.isLoadingComponent = false;
+          this.isLoadingTable = false;
           this.hideDialog();
         },
       });
@@ -337,5 +403,10 @@ export class ProductComponent implements OnInit {
   }
   trackById(index: number, item: any) {
     return item.id;
+  }
+  ngOnDestroy() {
+    if (this.subjectKeyup) {
+      this.subjectKeyup.unsubscribe();
+    }
   }
 }

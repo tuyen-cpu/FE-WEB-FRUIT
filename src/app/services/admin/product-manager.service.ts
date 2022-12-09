@@ -1,6 +1,7 @@
+import { ProductFilter } from 'src/app/model/filter.model';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product, ProductRequest } from 'src/app/model/category.model';
 
 @Injectable({ providedIn: 'root' })
@@ -13,5 +14,14 @@ export default class ProductManagerService {
   }
   add(form: FormData) {
     return this.httpClient.post(`${this.REST_API}/add`, form);
+  }
+  filter(filter: ProductFilter) {
+    let params = new HttpParams();
+    Object.keys(filter).forEach((key) => {
+      if (filter[key] !== '' && filter[key] !== null && filter[key] !== undefined) {
+        params = params.append(key, filter[key]);
+      }
+    });
+    return this.httpClient.get(`${this.REST_API}/filter`, { params: params });
   }
 }

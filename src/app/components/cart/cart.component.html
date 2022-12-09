@@ -14,32 +14,20 @@
         <ul class="cart-list">
           <li *ngFor="let item of carts; trackBy: trackById" class="cart-item">
             <span>
-              <p-skeleton
-                *ngIf="!item.product.image.link"
-                size="10rem"
-                styleClass="mr-2"
-              ></p-skeleton>
-              <img
-                *ngIf="item.product.image.link"
-                [src]="urlImage + '/' + item.product.image.link"
-                [alt]="item.product.name"
-              />
+              <p-skeleton *ngIf="!item.product.image.link" size="10rem" styleClass="mr-2"></p-skeleton>
+              <img *ngIf="item.product.image.link" [src]="urlImage + '/' + item.product.image.link" [alt]="item.product.name" />
             </span>
             <div class="cart-item__infor">
               <p class="cart-item__infor-name">
                 {{ item.product.name }}
               </p>
               <p class="cart-item__infor-price">
-                {{ item.product.price | currency: "VND" }}
+                {{ calcPriceDiscount(item.product.price, item.product.discount) | currency : 'VND' }}
+                <del *ngIf="item.product.price">{{ item.product.price | myCurrency : 'VND' }}</del>
               </p>
               <div class="flex justify-content-between">
                 <div class="cart-item__infor-quantity">
-                  <button
-                    (click)="updateQuantity(inputQuantityElement, item, '-')"
-                    class="btn-qty"
-                  >
-                    -
-                  </button>
+                  <button (click)="updateQuantity(inputQuantityElement, item, '-')" class="btn-qty">-</button>
                   <input
                     type="text"
                     class="cart-item__infor-quantity-value"
@@ -48,23 +36,12 @@
                     value="{{ item.quantity }}"
                     #inputQuantityElement
                     [disabled]="true"
-                    (change)="updateQuantity(inputQuantityElement, item, '')"
-                  />
-                  <button
-                    (click)="updateQuantity(inputQuantityElement, item, '+')"
-                    class="btn-qty"
-                  >
-                    +
-                  </button>
+                    (change)="updateQuantity(inputQuantityElement, item, '')" />
+                  <button (click)="updateQuantity(inputQuantityElement, item, '+')" class="btn-qty">+</button>
                 </div>
                 <span class="cart-item__infor-total"
                   >Thành tiền:
-                  <b>{{
-                    calcPriceDiscount(
-                      item.product.price,
-                      item.product.discount
-                    ) * item.quantity | currency: "VND"
-                  }}</b>
+                  <b>{{ calcPriceDiscount(item.product.price, item.product.discount) * item.quantity | myCurrency : 'VND' }}</b>
                 </span>
               </div>
 
@@ -74,64 +51,36 @@
             </div>
           </li>
         </ul>
-        <div class="cart-note">
+        <!-- <div class="cart-note">
           <div class="cart-note__title">Order notes:</div>
           <div class="cart-note__content">
-            <textarea
-              rows="5"
-              cols="30"
-              pInputTextarea
-              [autoResize]="true"
-            ></textarea>
+            <textarea rows="5" cols="30" pInputTextarea [autoResize]="true"></textarea>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="cart-total lg:col-4 md:col-12 sm:col-12">
         <div class="cart-total-box">
           <div class="cart-total__title">Order information</div>
           <div class="cart-total__value">
-            <span class="cart-total__value-name"
-              >Subtotal ({{ totalQuantity }} items):</span
-            >
-            <span class="cart-total__value-number">{{
-              totalCart | currency: "VND"
-            }}</span>
+            <span class="cart-total__value-name">Subtotal ({{ totalQuantity }} items):</span>
+            <span class="cart-total__value-number">{{ totalCart | currency : 'VND' }}</span>
           </div>
           <div class="cart-total__desc">
-            Shipping fee will be calculated at the checkout page. You can also
-            enter the discount code at the checkout page.
+            Shipping fee will be calculated at the checkout page. You can also enter the discount code at the checkout page.
           </div>
           <div class="cart-total__action">
-            <button class="btn-action" routerLink="/checkout">
-              PROCEED TO CHECKOUT
-            </button>
-            <a
-              [routerLink]="['/product']"
-              class="btn-action btn-continue-shopping"
-            >
-              Continue shopping
-            </a>
+            <button class="btn-action" routerLink="/checkout">PROCEED TO CHECKOUT</button>
+            <a [routerLink]="['/product']" class="btn-action btn-continue-shopping"> Continue shopping </a>
           </div>
         </div>
       </div>
     </div>
-    <div
-      *ngIf="carts.length === 0"
-      class="flex flex-column align-items-center py-4"
-    >
+    <div *ngIf="carts.length === 0" class="flex flex-column align-items-center py-4">
       <svg width="81" height="70" viewBox="0 0 81 70">
-        <g
-          transform="translate(0 2)"
-          stroke-width="4"
-          stroke="#2A7D2E"
-          fill="none"
-          fill-rule="evenodd"
-        >
+        <g transform="translate(0 2)" stroke-width="4" stroke="#2A7D2E" fill="none" fill-rule="evenodd">
           <circle stroke-linecap="square" cx="34" cy="60" r="6"></circle>
           <circle stroke-linecap="square" cx="67" cy="60" r="6"></circle>
-          <path
-            d="M22.9360352 15h54.8070373l-4.3391876 30H30.3387146L19.6676025 0H.99560547"
-          ></path>
+          <path d="M22.9360352 15h54.8070373l-4.3391876 30H30.3387146L19.6676025 0H.99560547"></path>
         </g>
       </svg>
       <p class="mt-4 text-2xl">Cart is empty.</p>

@@ -1,27 +1,27 @@
-import { FileUploadService } from './../../services/file-upload.service';
-import { UserInforService } from './../../services/user-infor.service';
-import { Product } from './../../model/category.model';
 import { Router, RouterModule } from '@angular/router';
-import { Component, OnDestroy, OnInit, Injectable } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InputTextareaModule } from 'primeng/inputtextarea';
-import { mergeMap, of, Subscription } from 'rxjs';
-import { CartItem } from 'src/app/model/cart.model';
+import { Subscription } from 'rxjs';
+
+//component
+import { MyCurrency } from './../../pipes/my-currency.pipe';
+import { FileUploadService } from './../../services/file-upload.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
+import { UserInforService } from './../../services/user-infor.service';
 import { CartItemService } from 'src/app/services/cart-item.service';
+
+//model
+import { CartItem } from 'src/app/model/cart.model';
+
+//primeNg
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    InputTextareaModule,
-    ToastModule,
-    SkeletonModule,
-  ],
+  imports: [CommonModule, RouterModule, InputTextareaModule, ToastModule, MyCurrency, SkeletonModule],
   providers: [MessageService, ConfirmationService],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
@@ -39,7 +39,7 @@ export class CartComponent implements OnInit, OnDestroy {
     private cartItemService: CartItemService,
     private userInforService: UserInforService,
     private messageService: MessageService,
-    private fileUploadService: FileUploadService
+    private fileUploadService: FileUploadService,
   ) {}
 
   ngOnInit(): void {
@@ -72,14 +72,7 @@ export class CartComponent implements OnInit, OnDestroy {
       return total + current.quantity;
     }, 0);
     this.totalCart = this.carts.reduce((total, current) => {
-      return (
-        total +
-        this.calcPriceDiscount(
-          current.product.price,
-          current.product.discount
-        ) *
-          current.quantity
-      );
+      return total + this.calcPriceDiscount(current.product.price, current.product.discount) * current.quantity;
     }, 0);
   }
 
@@ -109,25 +102,18 @@ export class CartComponent implements OnInit, OnDestroy {
       this.remove(cartItem);
       return;
     }
-    this.cartItemService
-      .update(
-        cartItem.id || 1000,
-        cartItem.quantity,
-        cartItem.product.id || 1000,
-        this.userInforService.user?.id
-      )
-      .subscribe({
-        next: (res) => {
-          this.showSuccessMessage('Success', res.message);
-        },
-        error: (res) => {
-          this.showErrorMessage('Failed', res.error.message);
-          // element.value--;
-          // cartItem.quantity = Number(element.value);
-          cartItem.quantity--;
-          console.log(cartItem.quantity);
-        },
-      });
+    this.cartItemService.update(cartItem.id || 1000, cartItem.quantity, cartItem.product.id || 1000, this.userInforService.user?.id).subscribe({
+      next: (res) => {
+        this.showSuccessMessage('Success', res.message);
+      },
+      error: (res) => {
+        this.showErrorMessage('Failed', res.error.message);
+        // element.value--;
+        // cartItem.quantity = Number(element.value);
+        cartItem.quantity--;
+        console.log(cartItem.quantity);
+      },
+    });
   }
   remove(cartItem: CartItem) {
     this.cartItemService.delete(cartItem.id || 1000).subscribe({

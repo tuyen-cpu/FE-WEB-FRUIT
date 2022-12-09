@@ -22,6 +22,7 @@ import ProductService from 'src/app/services/product.service';
 import { Category, Product } from 'src/app/model/category.model';
 import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 
 @Component({
   selector: 'app-header',
@@ -37,6 +38,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     SocialLoginModule,
     HighlighterPipe,
     ToastModule,
+    MyCurrency,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './header.component.html',

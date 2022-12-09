@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { User } from 'src/app/model/user.model';
-import { Filter } from 'src/app/model/filter.model';
+import { UserFilter } from 'src/app/model/filter.model';
 
 @Injectable({ providedIn: 'root' })
 export default class UserManagerService {
@@ -18,7 +18,7 @@ export default class UserManagerService {
   getAll(page: number, size: number) {
     return this.httpClient.get(`${this.REST_API}/all?page=${page}&size=${size}`);
   }
-  filter(filter: Filter) {
+  filter(filter: UserFilter) {
     let params = new HttpParams();
     Object.keys(filter).forEach((key) => {
       if (filter[key] !== '' && filter[key] !== null && filter[key] !== undefined) {
