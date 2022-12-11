@@ -65,7 +65,7 @@ export class UserComponent implements OnInit, OnDestroy {
   listStatuses: any;
   cols: any;
   users: User[] = [];
-  paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 5 };
+  paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
   paramsURL: {} = {};
   user!: User;
   firstName!: string;
@@ -78,10 +78,10 @@ export class UserComponent implements OnInit, OnDestroy {
   statusSelected!: { label?: string; value?: number };
   currentUser: User;
   matchModeOptions: SelectItem[];
-  filter: UserFilter = { page: 0, size: 5 };
+  filter: UserFilter = { page: 0, size: 10 };
   roleFilterSelected: { label?: string; value?: string };
   statusFilterSelected: { label?: string; value?: number };
-  private subjectKeyup = new BehaviorSubject<any>(null);
+  private subjectKeyup = new Subject<any>();
   emailPattern: RegExp =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -137,7 +137,7 @@ export class UserComponent implements OnInit, OnDestroy {
     this.subjectKeyup.next(this.filter);
   }
   clearFilter() {
-    this.filter = { page: 0, size: 5 };
+    this.filter = { page: 0, size: 10 };
     this.roleFilterSelected = undefined;
     this.statusFilterSelected = undefined;
     this.getUsers();

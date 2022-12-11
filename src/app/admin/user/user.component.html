@@ -24,14 +24,12 @@
     </div> -->
   <div class="col-12 sm:col-12 md:12 lg:col-12 px-0">
     <div class="card">
-      <p-toolbar styleClass="mb-4 gap-2">
+      <!-- <p-toolbar styleClass="mb-4 gap-2">
         <ng-template pTemplate="left">
           <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
         </ng-template>
-        <!-- <ng-template pTemplate="right">
-          <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="resetView()"></p-button
-        ></ng-template> -->
-      </p-toolbar>
+      
+      </p-toolbar> -->
 
       <p-table
         [loading]="isLoadingTable"
@@ -58,9 +56,16 @@
           </ng-template> -->
         <ng-template pTemplate="caption">
           <div class="flex align-items-center justify-content-between">
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+
             <span>
-              Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to {{ paginator.pageSize * paginator.pageNumber + paginator.pageSize }} of
-              {{ paginator.totalElements }} products.</span
+              Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
+              {{
+                users.length <= paginator.pageNumber
+                  ? paginator.pageSize * paginator.pageNumber + users.length
+                  : paginator.pageSize * paginator.pageNumber + paginator.pageSize
+              }}
+              of {{ paginator.totalElements }} products.</span
             >
 
             <!-- <span class="p-input-icon-left">
@@ -83,7 +88,7 @@
           <tr>
             <th style="flex: 0.5"></th>
             <th style="flex: 5">
-              <input [disabled]="isLoadingTable" class="w-6" type="text" pInputText [(ngModel)]="filter.email" (keyup)="onFilter($event)" />
+              <input [disabled]="isLoadingTable" class="w-full" type="text" pInputText [(ngModel)]="filter.email" (keyup)="onFilter($event)" />
             </th>
             <th style="flex: 2">
               <input [disabled]="isLoadingTable" class="w-full" type="text" pInputText [(ngModel)]="filter.lastName" (keyup)="onFilter($event)" />
@@ -128,9 +133,9 @@
             <!-- <td>
               {{ user.userName }}
             </td> -->
-            <td style="flex: 5"><div class="" [innerHTML]="user.email | highlighter : filter.email : 'full'"></div></td>
-            <td style="flex: 2"><div [innerHTML]="user.lastName | highlighter : filter.lastName : 'full'"></div></td>
-            <td style="flex: 2"><div [innerHTML]="user.firstName | highlighter : filter.firstName : 'full'"></div></td>
+            <td style="flex: 5"><div class="" [innerHTML]="user.email | highlighter : filter.email : ''"></div></td>
+            <td style="flex: 2"><div [innerHTML]="user.lastName | highlighter : filter.lastName : ''"></div></td>
+            <td style="flex: 2"><div [innerHTML]="user.firstName | highlighter : filter.firstName : ''"></div></td>
             <td style="flex: 1">{{ user.roles !== null && user.roles[0] }}</td>
             <td style="flex: 1">
               <span [class]="'status-default status-' + user.status">{{ user.status === 0 ? 'INACTIVE' : 'ACTIVE' }}</span>
@@ -161,7 +166,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="7">No user found.</td>
+            <td colspan="7" class="justify-content-center">No user found.</td>
           </tr>
         </ng-template>
       </p-table>

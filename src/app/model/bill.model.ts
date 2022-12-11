@@ -25,6 +25,7 @@ export interface Order {
   shippingStatus?: ShippingStatus;
   address?: string;
   payment?: Payment;
+  orderDetails: OrderDetail[];
 }
 export interface ShippingStatus {
   id: number;

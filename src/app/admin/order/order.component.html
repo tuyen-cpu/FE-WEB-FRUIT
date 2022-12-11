@@ -1,0 +1,217 @@
+<!-- <app-loading [hidden]="!isLoadingComponent"></app-loading> -->
+<p-toast></p-toast>
+<div class="mt-2">
+  <div class="text-3xl font-semibold mb-4">{{ titleComponent }}</div>
+  <div class="col-12 sm:col-12 md:12 lg:col-12 px-0">
+    <div class="card">
+      <!-- <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+          <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+          <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="resetView()"></p-button
+        ></ng-template>
+      </p-toolbar> -->
+
+      <p-table
+        [loading]="isLoadingTable"
+        #dt
+        [value]="orders"
+        [globalFilterFields]="['id', 'name', 'quantity', 'price', 'discount', 'status']"
+        [rowHover]="true"
+        dataKey="id"
+        [showCurrentPageReport]="true"
+        [responsive]="true"
+        responsiveLayout="scroll"
+        [scrollable]="true"
+        scrollHeight="61vh">
+        <ng-template pTemplate="summary" *ngIf="!orders.length">
+          <div class="page grid align-items-center">
+            <div class="col-12">
+              <p-paginator
+                [rows]="paginator.pageSize"
+                [totalRecords]="paginator.totalElements"
+                [first]="paginator.pageSize * paginator.pageNumber"
+                (onPageChange)="onPageChange($event)"
+                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            <!-- <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button> -->
+
+            <span>
+              Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
+              {{
+                orders.length <= paginator.pageNumber
+                  ? paginator.pageSize * paginator.pageNumber + orders.length
+                  : paginator.pageSize * paginator.pageNumber + paginator.pageSize
+              }}
+              of {{ paginator.totalElements }} products.</span
+            >
+            <!-- <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
+            </span> -->
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id" style="flex: 0.5">Id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="createdDate" style="flex: 2">Order date</th>
+            <th style="flex: 5">Address</th>
+            <th style="flex: 1">Status<p-sortIcon field="price"></p-sortIcon></th>
+            <th style="flex: 1">Payment</th>
+            <th style="flex: 1">Total</th>
+            <!-- <th style="flex: 0.5">Action</th> -->
+          </tr>
+          <!-- <tr>
+            <th style="flex: 0.5"></th>
+            <th style="flex: 3">
+              <input
+                [disabled]="isLoadingTable"
+                placeholder="Search by name here..."
+                class="w-full"
+                type="text"
+                pInputText
+                [(ngModel)]="filter.name"
+                (keyup)="onFilter($event)" />
+            </th>
+            <th style="flex: 0.5">
+              <input
+                [disabled]="isLoadingTable"
+                class="w-full"
+                type="text"
+                pInputText
+                [(ngModel)]="filter.quantity"
+                [minlength]="1"
+                [maxlength]="4"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"
+                (keyup)="onFilter($event)" />
+            </th>
+            <th style="flex: 1">
+              <input
+                [disabled]="isLoadingTable"
+                class="w-full"
+                type="text"
+                pInputText
+                [(ngModel)]="filter.price"
+                [min]="1000"
+                [minlength]="1"
+                [maxlength]="8"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"
+                (keyup)="onFilter($event)" />
+            </th>
+            <th style="flex: 0.4">
+              <input
+                [disabled]="isLoadingTable"
+                class="w-full"
+                type="text"
+                pInputText
+                [(ngModel)]="filter.discount"
+                [minlength]="1"
+                [maxlength]="2"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"
+                (keyup)="onFilter($event)" />
+            </th>
+            <th style="flex: 1">
+              <p-dropdown
+                [options]="listStatuses"
+                [(ngModel)]="statusFilterSelected"
+                placeholder="Select"
+                (onChange)="onFilter($event)"
+                optionLabel="label"
+                [showClear]="true"></p-dropdown>
+            </th>
+            <th style="flex: 0.5">
+             
+              <button
+                *ngIf="!isEmptyFilter()"
+                type="button"
+                class="p-column-filter-clear-button p-link"
+                (click)="clearFilter()"
+                pTooltip="Clear Filter">
+                <span class="pi pi-filter-slash"></span>
+              </button>
+            </th>
+          </tr> -->
+        </ng-template>
+        <ng-template pTemplate="body" let-order>
+          <tr>
+            <td style="flex: 0.5">{{ order.id }}</td>
+            <td style="flex: 2">
+              <div class="">{{ order.createdDate | date : 'M/d/yy, h:mm a' }}</div>
+            </td>
+            <td style="flex: 5">
+              {{ order.address }}
+            </td>
+            <td style="flex: 1">
+              <span [class]="'status-default status-' + order.shippingStatus.id">{{ order.shippingStatus.name }}</span>
+            </td>
+            <td style="flex: 1">{{ order.payment.status }} <i (click)="showDialogPayment(order.payment)" class="pi pi-eye"></i></td>
+            <td style="flex: 1">
+              <span>{{ order.total | myCurrency : 'VND' }}</span>
+            </td>
+            <!-- <td style="flex: 0.5">
+              <button
+                pButton
+                pRipple
+                title="Edit"
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-success mr-2"
+                (click)="editProduct(product)"></button>
+            </td> -->
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7">No product found.</td>
+          </tr>
+        </ng-template>
+        <!-- <ng-template pTemplate="footer">
+          <tr>
+            <td colspan="3">Total: {{ paginator.totalElements }}</td>
+          </tr>
+        </ng-template> -->
+      </p-table>
+    </div>
+  </div>
+</div>
+<p-dialog
+  header="Payment"
+  [resizable]="false"
+  [modal]="true"
+  [maximizable]="true"
+  appendTo="body"
+  [(visible)]="isShowDialogPayment"
+  [style]="{ width: '50vw' }">
+  <p-table [value]="payments" responsiveLayout="stack" [breakpoint]="'1600px'">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th>ID</th>
+        <th>Payer</th>
+        <th>Payment Method</th>
+        <th>Email</th>
+        <th>Status</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-payment let-columns="columns">
+      <tr>
+        <td><span class="p-column-title">ID</span>{{ payment.id }}</td>
+        <td><span class="p-column-title">Payer</span>{{ payment.payer }}</td>
+        <td><span class="p-column-title">Payment Method</span>{{ payment.paymentMethod }}</td>
+        <td><span class="p-column-title">Email</span>{{ payment.email }}</td>
+        <td>
+          <span class="p-column-title">Status</span><span>{{ payment.status }}</span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <ng-template pTemplate="footer">
+    <button type="button" pButton pRipple icon="pi pi-times" (click)="isShowDialogPayment = false" label="Dismiss" class=""></button>
+  </ng-template>
+</p-dialog>
+
+<!-- <app-loading [hidden]="!isLoading"></app-loading> -->

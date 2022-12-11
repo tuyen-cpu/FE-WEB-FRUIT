@@ -7,6 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 import { Routes } from '@angular/router';
 import { ProvincesApiService } from './services/provinces-api.service';
 import { MessageService } from 'primeng/api';
+import OrderManagerService from './services/admin/order-manager.service';
 
 export const APP_ROUTES: Routes = [
   { path: '', component: HomeComponent },
@@ -40,6 +41,6 @@ export const APP_ROUTES: Routes = [
     path: 'admin',
 
     loadChildren: () => import('./admin/admin-routes').then(({ AdminRoutes }) => AdminRoutes),
-    providers: [UserService],
+    providers: [UserService, OrderManagerService],
   },
 ];

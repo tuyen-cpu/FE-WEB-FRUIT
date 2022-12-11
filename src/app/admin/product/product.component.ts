@@ -1,14 +1,24 @@
-import { ImageService } from './../../services/image.service';
-import { BehaviorSubject, debounceTime, delay, distinctUntilChanged } from 'rxjs';
-import { FileUploadService } from './../../services/file-upload.service';
-import { LoadingComponent } from 'src/app/utils/loading/loading.component';
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { BehaviorSubject, debounceTime, delay, distinctUntilChanged, of, Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import ProductManagerService from 'src/app/services/admin/product-manager.service';
-import { Category, Image, Product, ProductRequest } from 'src/app/model/category.model';
-import { Table, TableModule } from 'primeng/table';
-import { Paginator } from 'src/app/model/paginator.model';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+
+//component
+import CategoryManagerService from 'src/app/services/admin/cagtegory-manager.service';
+import ProductManagerService from 'src/app/services/admin/product-manager.service';
+import { ImageService } from './../../services/image.service';
+import { FileUploadService } from './../../services/file-upload.service';
+import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
+import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
+import { LoadingComponent } from 'src/app/utils/loading/loading.component';
+
+//model
+import { ProductFilter } from 'src/app/model/filter.model';
+import { Category, Image, Product, ProductRequest } from 'src/app/model/category.model';
+import { Paginator } from 'src/app/model/paginator.model';
+
+//primeNg
+import { Table, TableModule } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
@@ -21,15 +31,13 @@ import { MessageModule } from 'primeng/message';
 import { DialogModule } from 'primeng/dialog';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputNumberModule } from 'primeng/inputnumber';
-import CategoryManagerService from 'src/app/services/admin/cagtegory-manager.service';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import * as customBuild from '../../../ckeditorCustom/build/ckeditor';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageModule } from 'primeng/image';
+
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import * as customBuild from '../../../ckeditorCustom/build/ckeditor';
 import * as slug from 'vietnamese-slug';
-import { ProductFilter } from 'src/app/model/filter.model';
-import { ThisReceiver } from '@angular/compiler';
-import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
+
 @Component({
   selector: 'app-product',
   standalone: true,
@@ -53,6 +61,7 @@ import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
     CKEditorModule,
     FileUploadModule,
     ImageModule,
+    MyCurrency,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './product.component.html',
@@ -86,7 +95,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   dataEditor!: string;
   statusFilterSelected: { label?: string; value?: number };
   filter: ProductFilter = { page: 0, size: 10 };
-  private subjectKeyup = new BehaviorSubject<any>(null);
+  private subjectKeyup = new Subject<any>();
   config = {
     toolbar: {
       items: ['heading', '|', 'bold', 'italic', 'link', 'insertTable', 'alignment', 'bulletedList', 'numberedList', 'blockQuote', 'uploadImage'],
@@ -154,14 +163,13 @@ export class ProductComponent implements OnInit, OnDestroy {
     ];
     this.titleComponent = this.route.snapshot.data['title'];
     this.urlImage = this.fileUploadService.getLink();
-    console.log(this.route.snapshot);
+
+    this.filterUserKeyup();
     this.changeParams();
     this.initTable();
     this.getCategories();
-    this.filterUserKeyup();
   }
   onFilter(event) {
-    console.log(this.isEmptyFilter());
     if (this.isEmptyFilter()) {
       this.getProduct();
       return;
@@ -201,7 +209,8 @@ export class ProductComponent implements OnInit, OnDestroy {
       });
   }
   filterUserKeyup() {
-    this.subjectKeyup.pipe(debounceTime(800)).subscribe((key) => {
+    this.subjectKeyup.pipe(distinctUntilChanged(), debounceTime(800)).subscribe((key) => {
+      console.log('filter');
       this.filterUser();
     });
   }
@@ -220,11 +229,8 @@ export class ProductComponent implements OnInit, OnDestroy {
       }
       this.paginator.pageSize = Number(res['size']) || 10;
       if (this.filter.name || this.filter.price || this.filter.discount || this.filter.quantity || this.filter.status !== undefined) {
-        console.log(this.filter);
-        console.log('vao dy');
-        this.filter.page = res['page'] - 1;
+        this.filter.page = this.paginator.pageNumber;
         this.filter.size = Number(res['size']);
-        console.log(this.filter);
         this.filterUser();
         return;
       }
@@ -232,6 +238,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     });
   }
   getProduct() {
+    console.log('chạy prod trc');
     this.isLoadingTable = true;
     this.productManagerService
       .getProductByCategoryIdAndPriceLessThan(0, 9999999999, this.paginator.pageNumber, this.paginator.pageSize)
@@ -249,7 +256,6 @@ export class ProductComponent implements OnInit, OnDestroy {
       });
   }
   onPageChange(event: any) {
-    console.log('Change page: ', event);
     this.paginator.pageNumber = event.page;
     this.paginator.pageSize = event.rows;
     this.paramsURL = {
