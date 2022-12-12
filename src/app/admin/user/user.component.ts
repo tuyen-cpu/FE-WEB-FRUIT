@@ -26,7 +26,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { Table, TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, FilterMatchMode, MessageService, SelectItem } from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, FilterMatchMode, MessageService, SelectItem } from 'primeng/api';
 import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
 
 @Component({
@@ -86,12 +86,13 @@ export class UserComponent implements OnInit, OnDestroy {
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   constructor(
-    private userService: UserService,
-    private userManagerService: UserManagerService,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private userInforService: UserInforService,
+    private userService: UserService,
+    private userManagerService: UserManagerService,
   ) {}
 
   ngOnInit(): void {
@@ -193,12 +194,10 @@ export class UserComponent implements OnInit, OnDestroy {
     // this.rolesSelected = user.roles.map((e) => ({ label: e, value: e }));
     this.roleSelected = { label: user.roles[0], value: user.roles[0] };
     this.statusSelected = { label: user.status ? 'ACTIVE' : 'INACTIVE', value: user.status! };
-    console.log(this.statusSelected);
   }
   saveUser() {
     this.submitted = true;
     if (!this.isValid()) return;
-
     this.user.status = this.statusSelected.value;
     // this.user.roles = this.rolesSelected.map((role) => role.value);
     this.user.roles = [...[], this.roleSelected.value];
@@ -246,6 +245,36 @@ export class UserComponent implements OnInit, OnDestroy {
       },
     });
     // }
+  }
+  remove(user: User) {
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this user?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        const userDelete = { ...user };
+        userDelete.status = 0;
+        this.userManagerService.edit(userDelete).subscribe({
+          next: (res) => {
+            user.status = 0;
+            this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Record deleted' });
+          },
+          error: (res) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: res.error.message });
+          },
+        });
+      },
+      reject: (type) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            break;
+          case ConfirmEventType.CANCEL:
+            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+            break;
+        }
+      },
+    });
   }
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt.filterGlobal(($event.target as HTMLInputElement).value, stringVal);

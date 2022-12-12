@@ -149,6 +149,14 @@
                 class="p-button-rounded p-button-success mr-2"
                 [disabled]="!includesRole(currentUser, 'admin') && includesRole(user, 'admin')"
                 (click)="editUser(user)"></button>
+              <button
+                pButton
+                pRipple
+                title="Delete"
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-warning mr-2"
+                [disabled]="(!includesRole(currentUser, 'admin') && includesRole(user, 'admin')) || !user.status"
+                (click)="remove(user)"></button>
             </td>
           </tr>
         </ng-template>

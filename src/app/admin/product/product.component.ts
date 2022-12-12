@@ -19,7 +19,7 @@ import { Paginator } from 'src/app/model/paginator.model';
 
 //primeNg
 import { Table, TableModule } from 'primeng/table';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { DropdownModule } from 'primeng/dropdown';
@@ -320,6 +320,39 @@ export class ProductComponent implements OnInit, OnDestroy {
           detail: res.error.message,
           life: 3000,
         });
+      },
+    });
+  }
+  remove(product: Product) {
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this product?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      accept: () => {
+        this.formDataImage = new FormData();
+
+        let productDelete = this.pick(product, 'id', 'name', 'category', 'quantity', 'price', 'status', 'discount', 'description');
+        productDelete.status = 0;
+        this.formDataImage.append('product', JSON.stringify(productDelete));
+        this.productManagerService.add(this.formDataImage).subscribe({
+          next: (res) => {
+            product.status = 0;
+            this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Record deleted' });
+          },
+          error: (res) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: res.error.message });
+          },
+        });
+      },
+      reject: (type) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+            break;
+          case ConfirmEventType.CANCEL:
+            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+            break;
+        }
       },
     });
   }
