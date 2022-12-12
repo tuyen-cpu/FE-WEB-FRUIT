@@ -1,3 +1,4 @@
+@import '../../scss/utils/variable';
 .status-default {
   border-radius: 2px;
   padding: 0.25em 0.5rem;
@@ -24,5 +25,38 @@
   &.status-5 {
     background: #ffcdd2;
     color: #c63737;
+  }
+}
+.payment {
+  &:hover {
+    color: $main-color;
+  }
+}
+p-calendar {
+  width: 100%;
+  span.p-calendar {
+    width: 100% !important;
+    display: block;
+    input {
+      width: 100% !important;
+
+      .p-datepicker {
+        table {
+          font-size: 1.4rem;
+        }
+      }
+    }
+    .p-datepicker {
+      table {
+        font-size: 1.4rem;
+      }
+    }
+  }
+}
+.p-column-filter-clear-button {
+  width: 3rem;
+  height: 3rem;
+  .pi {
+    font-size: 1.4rem;
   }
 }
