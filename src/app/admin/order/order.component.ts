@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, delay, Subject } from 'rxjs';
+import { debounceTime, delay, Subject, map } from 'rxjs';
 import { DatePipe } from '@angular/common';
 //component
 import OrderManagerService from 'src/app/services/admin/order-manager.service';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
-import { Order, Payment, ShippingStatus } from 'src/app/model/bill.model';
+import { Order, OrderDetail, Payment, ShippingStatus } from 'src/app/model/bill.model';
 import { OrderFilter } from 'src/app/model/filter.model';
 //primeNg
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -41,7 +41,7 @@ import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
   styleUrls: ['./order.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnDestroy {
   isLoadingTable = false;
   paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
   paramsURL: {} = {};
@@ -53,7 +53,9 @@ export class OrderComponent implements OnInit {
   private subjectKeyup = new Subject<any>();
   listStatuses: any[] = [];
   statusFilterSelected: ShippingStatus;
-
+  isExpanded: boolean = false;
+  orderDetails: OrderDetail[] = [];
+  expandedRows = {};
   constructor(
     private route: ActivatedRoute,
     private messageService: MessageService,
@@ -75,7 +77,9 @@ export class OrderComponent implements OnInit {
       { name: 'CANCELED', id: 5 },
     ];
   }
+
   onFilter(event) {
+    console.log(event);
     this.statusFilterSelected && this.statusFilterSelected.name
       ? (this.filter.shippingStatus_id = this.statusFilterSelected.id)
       : (this.filter.shippingStatus_id = undefined);
@@ -201,5 +205,18 @@ export class OrderComponent implements OnInit {
     this.filter = { page: 0, size: 10 };
 
     this.getOrders();
+  }
+  ngOnDestroy(): void {
+    if (this.subjectKeyup) {
+      this.subjectKeyup.unsubscribe();
+    }
+  }
+  expandAll() {
+    if (!this.isExpanded) {
+      this.orderDetails.forEach((orderDetail) => (this.expandedRows[orderDetail.id] = true));
+    } else {
+      this.expandedRows = {};
+    }
+    this.isExpanded = !this.isExpanded;
   }
 }

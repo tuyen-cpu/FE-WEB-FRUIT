@@ -1,11 +1,10 @@
 import { ShippingStatus } from './bill.model';
 
 export interface UserFilter {
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  role_name?: string;
   status?: number;
+  role?: string;
+  createdAt?: string[];
+  email?: string;
   page?: number;
   size?: number;
 }

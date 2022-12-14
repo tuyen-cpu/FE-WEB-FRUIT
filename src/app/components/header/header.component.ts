@@ -330,6 +330,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       email: response.data.email,
       roles: response.data.roles,
     };
+    console.log(response);
     this.tokenStorageService.saveToken(response.data.token);
     this.tokenStorageService.saveRefreshToken(response.data.refreshToken);
     this.tokenStorageService.userChange.next(this.userInforService.user);

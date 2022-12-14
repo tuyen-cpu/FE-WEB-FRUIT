@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { delay, Subject, Subscription, BehaviorSubject, debounceTime } from 'rxjs';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 //component
 import { UserService } from 'src/app/services/user.service';
 import { UserInforService } from './../../services/user-infor.service';
 import UserManagerService from 'src/app/services/admin/user-manager.service';
-
+import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
 //model
 import { User } from 'src/app/model/user.model';
 import { UserFilter } from 'src/app/model/filter.model';
@@ -27,7 +27,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { Table, TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, ConfirmEventType, FilterMatchMode, MessageService, SelectItem } from 'primeng/api';
-import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-user',
@@ -43,13 +43,14 @@ import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
     TooltipModule,
     MessageModule,
     ToolbarModule,
+    CalendarModule,
     DropdownModule,
     InputTextModule,
     PaginatorModule,
     MultiSelectModule,
     ConfirmDialogModule,
   ],
-  providers: [MessageService, ConfirmationService],
+  providers: [MessageService, ConfirmationService, DatePipe],
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -81,6 +82,7 @@ export class UserComponent implements OnInit, OnDestroy {
   filter: UserFilter = { page: 0, size: 10 };
   roleFilterSelected: { label?: string; value?: string };
   statusFilterSelected: { label?: string; value?: number };
+  datesFilter: Date[] = [];
   private subjectKeyup = new Subject<any>();
   emailPattern: RegExp =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -93,6 +95,7 @@ export class UserComponent implements OnInit, OnDestroy {
     private userInforService: UserInforService,
     private userService: UserService,
     private userManagerService: UserManagerService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -100,7 +103,6 @@ export class UserComponent implements OnInit, OnDestroy {
     this.currentUser = this.userInforService.user;
     this.initTable();
     this.changeParams();
-    this.filterUserKeyup();
   }
   getUsers() {
     this.isLoadingTable = true;
@@ -118,35 +120,55 @@ export class UserComponent implements OnInit, OnDestroy {
         },
       });
   }
+  resetFilterPaginator() {
+    this.filter.page = 0;
+    this.filter.size = 10;
+  }
+  resetPaginator() {
+    this.paginator.pageNumber = 0;
+    this.paginator.pageSize = 10;
+  }
+  onChangeRoleFilter() {
+    this.filter.role = this.roleFilterSelected ? this.roleFilterSelected.label : undefined;
+    this.checkAllWithoutFilter();
+  }
+  onChangeStatusFilter() {
+    this.filter.status = this.statusFilterSelected ? this.statusFilterSelected.value : undefined;
+    this.checkAllWithoutFilter();
+  }
+  clearFilterEmail() {
+    this.filter.email = undefined;
+    this.checkAllWithoutFilter();
+  }
+  onClearDate() {
+    this.checkAllWithoutFilter();
+  }
+  onSelectDateFilter() {
+    this.filter.createdAt = this.convertDateToString(this.datesFilter);
+  }
+  onFilter(event: any) {
+    console.log(this.filter.createdAt);
+  }
+  hasValueFilter() {
+    return this.statusFilterSelected || this.roleFilterSelected || this.filter.email || (this.datesFilter && this.datesFilter.length);
+  }
 
-  onFilter(event) {
-    console.log(this.roleFilterSelected);
-    console.log(this.isEmptyFilter());
-    if (this.isEmptyFilter()) {
+  checkAllWithoutFilter() {
+    if (!this.hasValueFilter()) {
+      this.paginator.pageNumber = 0;
+      this.paginator.pageSize = 10;
       this.getUsers();
-      return;
     }
-
-    this.roleFilterSelected && this.roleFilterSelected.label ? (this.filter.role_name = this.roleFilterSelected.value) : (this.filter.role_name = '');
-    this.statusFilterSelected && this.statusFilterSelected.label
-      ? (this.filter.status = this.statusFilterSelected.value)
-      : (this.filter.status = undefined);
-
-    // if (!this.filter.email && !this.filter.firstName && !this.filter.lastName && !this.filter.role_name) {
-    //   return;
-    // }
-    this.subjectKeyup.next(this.filter);
   }
-  clearFilter() {
-    this.filter = { page: 0, size: 10 };
-    this.roleFilterSelected = undefined;
-    this.statusFilterSelected = undefined;
-    this.getUsers();
-  }
-  isEmptyFilter(): boolean {
-    return !this.filter.email && !this.filter.firstName && !this.filter.lastName && !this.roleFilterSelected && !this.statusFilterSelected;
+  onFilterUser() {
+    this.resetFilterPaginator();
+    this.resetPaginator();
+    this.filterUser();
   }
   filterUser() {
+    this.filter.page = this.paginator.pageNumber;
+    this.filter.size = this.paginator.pageSize;
+
     this.isLoadingTable = true;
     this.userManagerService
       .filter(this.filter)
@@ -164,10 +186,9 @@ export class UserComponent implements OnInit, OnDestroy {
         },
       });
   }
-  filterUserKeyup() {
-    this.subjectKeyup.pipe(debounceTime(800)).subscribe((key) => {
-      this.filterUser();
-    });
+
+  convertDateToString(dates: Date[]): string[] {
+    return dates.map((date) => this.datePipe.transform(date, 'yyyy-MM-dd'));
   }
   openNew() {
     this.resetValueForm();
@@ -211,6 +232,7 @@ export class UserComponent implements OnInit, OnDestroy {
             life: 2000,
           });
           this.getUsers();
+
           this.hideDialog();
         },
         error: (res) => {
@@ -233,6 +255,7 @@ export class UserComponent implements OnInit, OnDestroy {
           life: 2000,
         });
         this.getUsers();
+        this.goLastPage();
         this.hideDialog();
       },
       error: (res) => {
@@ -246,6 +269,13 @@ export class UserComponent implements OnInit, OnDestroy {
     });
     // }
   }
+  goLastPage() {
+    this.paginator.pageNumber = this.calculatePagesCount(this.paginator.pageSize, this.paginator.totalElements);
+  }
+  calculatePagesCount = (pageSize, totalCount) => {
+    // we suppose that if we have 0 items we want 1 empty page
+    return totalCount < pageSize ? 1 : Math.ceil(totalCount / pageSize);
+  };
   remove(user: User) {
     this.confirmationService.confirm({
       message: 'Do you want to delete this user?',
@@ -323,17 +353,12 @@ export class UserComponent implements OnInit, OnDestroy {
       } else {
         this.paginator.pageNumber = res['page'] - 1;
       }
-      this.paginator.pageSize = Number(res['size']) || 5;
-
-      if (this.filter.email || this.filter.firstName || this.filter.lastName || this.filter.role_name || this.filter.status !== undefined) {
-        console.log(this.filter);
-        console.log('vao dy');
-        this.filter.page = res['page'] - 1;
-        this.filter.size = Number(res['size']);
-        console.log(this.filter);
+      this.paginator.pageSize = Number(res['size']) || 10;
+      if (this.hasValueFilter()) {
         this.filterUser();
         return;
       }
+      console.log('change para');
       this.getUsers();
     });
   }

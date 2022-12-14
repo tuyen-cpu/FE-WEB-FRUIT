@@ -25,6 +25,7 @@
         [responsive]="true"
         responsiveLayout="scroll"
         [scrollable]="true"
+        [expandedRowKeys]="expandedRows"
         scrollHeight="61vh">
         <ng-template pTemplate="summary" *ngIf="!orders.length">
           <div class="page grid align-items-center">
@@ -42,7 +43,11 @@
         <ng-template pTemplate="caption">
           <div class="flex align-items-center justify-content-between">
             <!-- <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button> -->
-
+            <button
+              pButton
+              icon="pi pi-fw {{ isExpanded ? 'pi-minus' : 'pi-plus' }}"
+              label="{{ isExpanded ? 'Collapse All' : 'Expand All' }}"
+              (click)="expandAll()"></button>
             <span>
               Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
               {{
@@ -60,6 +65,7 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
+            <th style="flex: 0.5"></th>
             <th pSortableColumn="id" style="flex: 0.5">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="createdDate" style="flex: 2">Order date</th>
             <th style="flex: 5">Address</th>
@@ -192,8 +198,17 @@
             </th>
           </tr> -->
         </ng-template>
-        <ng-template pTemplate="body" let-order style="min-height: 300px">
+        <ng-template pTemplate="body" let-order style="min-height: 300px" let-expanded="expanded">
           <tr>
+            <td style="flex: 0.5">
+              <button
+                type="button"
+                pButton
+                pRipple
+                [pRowToggler]="order"
+                class="p-button-text p-button-rounded p-button-plain"
+                [icon]="isExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
             <td style="flex: 0.5">{{ order.id }}</td>
             <td style="flex: 2">
               <div class="">{{ order.createdDate | date : 'M/d/yy, h:mm a' }}</div>
@@ -243,6 +258,84 @@
             </td> -->
           </tr>
         </ng-template>
+
+        <ng-template pTemplate="rowexpansion" let-product>
+          <tr>
+            <td colspan="7">
+              <div class="p-3">
+                <p-table [value]="product.orders" dataKey="id" responsiveLayout="scroll">
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th pSortableColumn="id">
+                        Id
+                        <p-sortIcon field="price"></p-sortIcon>
+                      </th>
+                      <!-- <th pSortableColumn="customer">
+                                      Customer
+                                      <p-sortIcon
+                                          field="customer"
+                                      ></p-sortIcon>
+                                  </th>
+                                  <th pSortableColumn="date">
+                                      Date
+                                      <p-sortIcon
+                                          field="date"
+                                      ></p-sortIcon>
+                                  </th>
+                                  <th pSortableColumn="amount">
+                                      Amount
+                                      <p-sortIcon
+                                          field="amount"
+                                      ></p-sortIcon>
+                                  </th>
+                                  <th pSortableColumn="stats">
+                                      Status
+                                      <p-sortIcon
+                                          field="status"
+                                      ></p-sortIcon>
+                                  </th>
+                                  <th style="width: 4rem"></th> -->
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-order>
+                    <tr>
+                      <td>{{ order.id }}</td>
+                      <!-- <td>{{ order.customer }}</td>
+                                  <td>{{ order.date }}</td>
+                                  <td>
+                                      {{
+                                          order.amount
+                                              | currency : "USD"
+                                      }}
+                                  </td>
+                                  <td>
+                                      <span
+                                          [class]="
+                                              'order-badge order-' +
+                                              order.status.toLowerCase()
+                                          "
+                                          >{{ order.status }}</span
+                                      >
+                                  </td>
+                                  <td>
+                                      <p-button
+                                          type="button"
+                                          icon="pi pi-search"
+                                      ></p-button>
+                                  </td> -->
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="6">There are no order for this product yet.</td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
         <ng-template pTemplate="emptymessage">
           <tr>
             <td colspan="7">No product found.</td>
@@ -257,6 +350,7 @@
     </div>
   </div>
 </div>
+
 <p-dialog
   header="Payment"
   [resizable]="false"

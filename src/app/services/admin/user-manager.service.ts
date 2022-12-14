@@ -18,13 +18,16 @@ export default class UserManagerService {
   getAll(page: number, size: number) {
     return this.httpClient.get(`${this.REST_API}/all?page=${page}&size=${size}`);
   }
-  filter(filter: UserFilter) {
-    let params = new HttpParams();
-    Object.keys(filter).forEach((key) => {
-      if (filter[key] !== '' && filter[key] !== null && filter[key] !== undefined) {
-        params = params.append(key, filter[key]);
-      }
-    });
-    return this.httpClient.get(`${this.REST_API}/filter`, { params: params });
+  // filter(filter: UserFilter) {
+  //   let params = new HttpParams();
+  //   Object.keys(filter).forEach((key) => {
+  //     if (filter[key] !== '' && filter[key] !== null && filter[key] !== undefined) {
+  //       params = params.append(key, filter[key]);
+  //     }
+  //   });
+  //   return this.httpClient.get(`${this.REST_API}/filter`, { params: params });
+  // }
+  filter(userFilter: UserFilter) {
+    return this.httpClient.post(`${this.REST_API}/filter`, userFilter);
   }
 }
