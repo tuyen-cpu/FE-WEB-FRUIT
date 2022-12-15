@@ -266,7 +266,7 @@
   </div>
 </div>
 <app-loading [hidden]="!isLoading || infoForm.invalid"></app-loading>
-<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog header="Confirmation" rejectButtonStyleClass="p-button-secondary p-button-plain" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <p-dialog header="Dialog" [modal]="true" [(visible)]="displayConfirm" [style]="{ width: '50vw' }">
   <p>{{ contentConfirm }}</p>
   <ng-template pTemplate="footer">

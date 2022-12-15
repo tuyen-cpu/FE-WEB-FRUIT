@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { BehaviorSubject, debounceTime, delay, distinctUntilChanged, of, Subject } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 //component
@@ -33,7 +33,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageModule } from 'primeng/image';
-
+import { CalendarModule } from 'primeng/calendar';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import * as customBuild from '../../../ckeditorCustom/build/ckeditor';
 import * as slug from 'vietnamese-slug';
@@ -62,8 +62,9 @@ import * as slug from 'vietnamese-slug';
     FileUploadModule,
     ImageModule,
     MyCurrency,
+    CalendarModule,
   ],
-  providers: [MessageService, ConfirmationService],
+  providers: [MessageService, ConfirmationService, DatePipe],
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -95,7 +96,10 @@ export class ProductComponent implements OnInit, OnDestroy {
   dataEditor!: string;
   statusFilterSelected: { label?: string; value?: number };
   filter: ProductFilter = { page: 0, size: 10 };
+  datesFilter: Date[] = [];
+  categoryFilterSelected: Category;
   private subjectKeyup = new Subject<any>();
+  flagFilter = false;
   config = {
     toolbar: {
       items: ['heading', '|', 'bold', 'italic', 'link', 'insertTable', 'alignment', 'bulletedList', 'numberedList', 'blockQuote', 'uploadImage'],
@@ -154,6 +158,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     private categoryManagerService: CategoryManagerService,
     private fileUploadService: FileUploadService,
     private imageService: ImageService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -169,30 +174,62 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.initTable();
     this.getCategories();
   }
-  onFilter(event) {
-    if (this.isEmptyFilter()) {
-      this.getProduct();
-      return;
-    }
-
-    this.statusFilterSelected && this.statusFilterSelected.label
-      ? (this.filter.status = this.statusFilterSelected.value)
-      : (this.filter.status = undefined);
-
-    // if (!this.filter.email && !this.filter.firstName && !this.filter.lastName && !this.filter.role_name) {
-    //   return;
-    // }
-    this.subjectKeyup.next(this.filter);
+  clearFilterName() {
+    this.filter.name = undefined;
+    this.checkAllWithoutFilter();
   }
+  onChangeStatusFilter() {
+    this.filter.status = this.statusFilterSelected ? this.statusFilterSelected.value : undefined;
+    this.checkAllWithoutFilter();
+  }
+  onChangeCategoryFilter() {
+    this.filter.categoryId = this.categoryFilterSelected ? this.categoryFilterSelected.id : undefined;
+    this.checkAllWithoutFilter();
+  }
+  onFilterUser() {
+    this.resetFilterPaginator();
+    this.resetPaginator();
+    this.filterUser();
+  }
+  resetPaginator() {
+    this.paginator.pageNumber = 0;
+    this.paginator.pageSize = 10;
+  }
+  resetFilterPaginator() {
+    this.filter.page = 0;
+    this.filter.size = 10;
+  }
+  onSelectDateFilter() {
+    this.filter.createdAt = this.convertDateToString(this.datesFilter);
+  }
+  convertDateToString(dates: Date[]): string[] {
+    return dates.map((date) => this.datePipe.transform(date, 'yyyy-MM-dd'));
+  }
+  onClearDate() {
+    this.checkAllWithoutFilter();
+  }
+  hasValueFilter() {
+    return this.statusFilterSelected || this.categoryFilterSelected || this.filter.name || (this.datesFilter && this.datesFilter.length);
+  }
+
+  checkAllWithoutFilter() {
+    if (!this.hasValueFilter()) {
+      this.paginator.pageNumber = 0;
+      this.paginator.pageSize = 10;
+      if (this.flagFilter) {
+        this.getProduct();
+      }
+    }
+  }
+
   clearFilter() {
     this.filter = { page: 0, size: 10 };
     this.statusFilterSelected = undefined;
     this.getProduct();
   }
-  isEmptyFilter(): boolean {
-    return !this.filter.name && !this.filter.discount && !this.filter.price && !this.filter.quantity && !this.statusFilterSelected;
-  }
+
   filterUser() {
+    this.flagFilter = true;
     this.isLoadingTable = true;
     this.productManagerService
       .filter(this.filter)
@@ -228,9 +265,13 @@ export class ProductComponent implements OnInit, OnDestroy {
         this.paginator.pageNumber = res['page'] - 1;
       }
       this.paginator.pageSize = Number(res['size']) || 10;
-      if (this.filter.name || this.filter.price || this.filter.discount || this.filter.quantity || this.filter.status !== undefined) {
-        this.filter.page = this.paginator.pageNumber;
-        this.filter.size = Number(res['size']);
+      // if (this.filter.name || this.filter.price || this.filter.discount || this.filter.quantity || this.filter.status !== undefined) {
+      //   this.filter.page = this.paginator.pageNumber;
+      //   this.filter.size = Number(res['size']);
+      //   this.filterUser();
+      //   return;
+      // }
+      if (this.hasValueFilter()) {
         this.filterUser();
         return;
       }
@@ -238,7 +279,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     });
   }
   getProduct() {
-    console.log('chạy prod trc');
+    this.flagFilter = false;
     this.isLoadingTable = true;
     this.productManagerService
       .getProductByCategoryIdAndPriceLessThan(0, 9999999999, this.paginator.pageNumber, this.paginator.pageSize)

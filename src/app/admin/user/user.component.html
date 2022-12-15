@@ -79,20 +79,6 @@
             </span> -->
           </div>
           <div class="grid pt-4 p-fluid align-items-end filter-bar">
-            <div class="col-4">
-              <label for="" class="block mb-1">Create Date</label>
-              <p-calendar
-                [(ngModel)]="datesFilter"
-                (onSelect)="onSelectDateFilter()"
-                (onClearClick)="onClearDate()"
-                [showButtonBar]="true"
-                placeholder="Select Date here"
-                selectionMode="range"
-                [readonlyInput]="true"
-                inputId="range"
-                todayButtonStyleClass="p-secondary-button"
-                [showIcon]="true"></p-calendar>
-            </div>
             <div class="col-3">
               <label for="email-filter" class="block mb-1">Email</label>
               <span class="p-input-icon-right">
@@ -150,6 +136,20 @@
                   </div>
                 </ng-template>
               </p-dropdown>
+            </div>
+            <div class="col-4">
+              <label for="" class="block mb-1">Create Date</label>
+              <p-calendar
+                [(ngModel)]="datesFilter"
+                (onSelect)="onSelectDateFilter()"
+                (onClearClick)="onClearDate()"
+                [showButtonBar]="true"
+                placeholder="Select Date here"
+                selectionMode="range"
+                [readonlyInput]="true"
+                inputId="range"
+                todayButtonStyleClass="p-secondary-button"
+                [showIcon]="true"></p-calendar>
             </div>
             <div class="col-1">
               <p-button *ngIf="hasValueFilter()" label="Filter" styleClass="p-button-sm" (click)="onFilterUser()"></p-button>

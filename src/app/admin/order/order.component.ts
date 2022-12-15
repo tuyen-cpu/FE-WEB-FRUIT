@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 //component
 import OrderManagerService from 'src/app/services/admin/order-manager.service';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
-import { Order, OrderDetail, Payment, ShippingStatus } from 'src/app/model/bill.model';
+import { EStatusPayment, Order, OrderDetail, Payment, ShippingStatus } from 'src/app/model/bill.model';
 import { OrderFilter } from 'src/app/model/filter.model';
 //primeNg
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
@@ -56,6 +56,12 @@ export class OrderComponent implements OnInit, OnDestroy {
   isExpanded: boolean = false;
   orderDetails: OrderDetail[] = [];
   expandedRows = {};
+  datesFilter: Date[] = [];
+  paymentStatusList = ['PAID', 'UNPAID'];
+  paymentMethodList = ['PAYPAL', 'COD'];
+  paymentStatusFilter: string;
+  paymentMethodFilter: string;
+  flagFilter = false;
   constructor(
     private route: ActivatedRoute,
     private messageService: MessageService,
@@ -63,12 +69,13 @@ export class OrderComponent implements OnInit, OnDestroy {
     private orderManagerService: OrderManagerService,
     public datepipe: DatePipe,
     private confirmationService: ConfirmationService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
     this.titleComponent = this.route.snapshot.data['title'];
     this.changeParams();
-    this.filterUserKeyup();
+
     this.listStatuses = [
       { name: 'VERIFIED', id: 1 },
       { name: 'DELIVERING', id: 2 },
@@ -78,23 +85,72 @@ export class OrderComponent implements OnInit, OnDestroy {
     ];
   }
 
-  onFilter(event) {
-    console.log(event);
-    this.statusFilterSelected && this.statusFilterSelected.name
-      ? (this.filter.shippingStatus_id = this.statusFilterSelected.id)
-      : (this.filter.shippingStatus_id = undefined);
-    this.subjectKeyup.next(this.filter);
+  clearFilterAddress() {
+    this.filter.address = undefined;
+    this.checkAllWithoutFilter();
   }
-  filterUserKeyup() {
-    this.subjectKeyup.pipe(debounceTime(800)).subscribe((key) => {
-      console.log('filter');
-      this.filterOrder();
-    });
+  onChangeStatusFilter() {
+    this.filter.shippingStatusId = this.statusFilterSelected ? this.statusFilterSelected.id : undefined;
+    this.checkAllWithoutFilter();
+  }
+  onChangePaymentStatusFilter() {
+    this.filter.payment.status = this.paymentStatusFilter ? this.paymentStatusFilter : undefined;
+    this.checkAllWithoutFilter();
+  }
+  onChangePaymentMethodFilter() {
+    this.filter.payment.paymentMethod = this.paymentMethodFilter ? this.paymentMethodFilter : undefined;
+    this.checkAllWithoutFilter();
+  }
+  onFilterUser() {
+    this.resetFilterPaginator();
+    this.resetPaginator();
+    this.filterOrder();
+  }
+  resetPaginator() {
+    this.paginator.pageNumber = 0;
+    this.paginator.pageSize = 10;
+  }
+  resetFilterPaginator() {
+    this.filter.page = 0;
+    this.filter.size = 10;
+  }
+  onSelectDateFilter() {
+    this.filter.createdDate = this.convertDateToString(this.datesFilter);
+  }
+  convertDateToString(dates: Date[]): string[] {
+    return dates.map((date) => this.datePipe.transform(date, 'yyyy-MM-dd'));
+  }
+  onClearDate() {
+    this.checkAllWithoutFilter();
+  }
+  hasValueFilter() {
+    return (
+      this.statusFilterSelected ||
+      this.statusFilterSelected ||
+      this.paymentStatusFilter ||
+      this.filter.address ||
+      (this.datesFilter && this.datesFilter.length)
+    );
   }
 
+  checkAllWithoutFilter() {
+    if (!this.hasValueFilter()) {
+      this.paginator.pageNumber = 0;
+      this.paginator.pageSize = 10;
+      if (this.flagFilter) {
+        this.getOrders();
+      }
+    }
+  }
+
+  clearFilter() {
+    this.filter = { page: 0, size: 10 };
+    this.statusFilterSelected = undefined;
+    this.getOrders();
+  }
   filterOrder() {
     this.isLoadingTable = true;
-
+    this.flagFilter = true;
     this.orderManagerService
       .filter(this.filter)
       .pipe(delay(500))
@@ -118,17 +174,18 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.paginator.pageNumber = res['page'] - 1;
       }
       this.paginator.pageSize = Number(res['size']) || 10;
-      if (this.filter.address || this.filter.createdDate) {
-        this.filter.page = res['page'] - 1;
-        this.filter.size = Number(res['size']);
-        console.log(this.filter);
-        this.filterOrder();
-        return;
-      }
+      // if (this.filter.address || this.filter.createdDate) {
+      //   this.filter.page = res['page'] - 1;
+      //   this.filter.size = Number(res['size']);
+      //   console.log(this.filter);
+      //   this.filterOrder();
+      //   return;
+      // }
       this.getOrders();
     });
   }
   getOrders() {
+    this.flagFilter = false;
     this.isLoadingTable = true;
     this.orderManagerService
       .getAll(this.paginator.pageNumber, this.paginator.pageSize)
@@ -148,6 +205,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
   changeShippingStatus(event, order: Order) {
     console.log(event.value);
+    this.isLoadingTable = true;
     this.confirmationService.confirm({
       message: 'Do you want to update this order?',
       header: 'Update Confirmation',
@@ -156,6 +214,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         let orderUpdate = { ...order };
         this.orderManagerService.updateStatus(orderUpdate).subscribe({
           next: (res) => {
+            this.isLoadingTable = false;
             this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Record updated' });
           },
           error: (res) => {
@@ -201,11 +260,11 @@ export class OrderComponent implements OnInit, OnDestroy {
   isEmptyFilter(): boolean {
     return !this.filter.createdDate && !this.filter.address;
   }
-  clearFilter() {
-    this.filter = { page: 0, size: 10 };
+  // clearFilter() {
+  //   this.filter = { page: 0, size: 10 };
 
-    this.getOrders();
-  }
+  //   this.getOrders();
+  // }
   ngOnDestroy(): void {
     if (this.subjectKeyup) {
       this.subjectKeyup.unsubscribe();

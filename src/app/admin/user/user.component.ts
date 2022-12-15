@@ -86,7 +86,7 @@ export class UserComponent implements OnInit, OnDestroy {
   private subjectKeyup = new Subject<any>();
   emailPattern: RegExp =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
+  flagFilter = false;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -105,6 +105,7 @@ export class UserComponent implements OnInit, OnDestroy {
     this.changeParams();
   }
   getUsers() {
+    this.flagFilter = false;
     this.isLoadingTable = true;
     this.userManagerService
       .getAll(this.paginator.pageNumber, this.paginator.pageSize)
@@ -140,14 +141,15 @@ export class UserComponent implements OnInit, OnDestroy {
     this.filter.email = undefined;
     this.checkAllWithoutFilter();
   }
-  onClearDate() {
-    this.checkAllWithoutFilter();
-  }
+
   onSelectDateFilter() {
     this.filter.createdAt = this.convertDateToString(this.datesFilter);
   }
   onFilter(event: any) {
     console.log(this.filter.createdAt);
+  }
+  onClearDate() {
+    this.checkAllWithoutFilter();
   }
   hasValueFilter() {
     return this.statusFilterSelected || this.roleFilterSelected || this.filter.email || (this.datesFilter && this.datesFilter.length);
@@ -157,7 +159,9 @@ export class UserComponent implements OnInit, OnDestroy {
     if (!this.hasValueFilter()) {
       this.paginator.pageNumber = 0;
       this.paginator.pageSize = 10;
-      this.getUsers();
+      if (this.flagFilter) {
+        this.getUsers();
+      }
     }
   }
   onFilterUser() {
@@ -168,7 +172,7 @@ export class UserComponent implements OnInit, OnDestroy {
   filterUser() {
     this.filter.page = this.paginator.pageNumber;
     this.filter.size = this.paginator.pageSize;
-
+    this.flagFilter = true;
     this.isLoadingTable = true;
     this.userManagerService
       .filter(this.filter)

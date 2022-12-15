@@ -1,4 +1,5 @@
-import { ShippingStatus } from './bill.model';
+import { Category } from 'src/app/model/category.model';
+import { Payment, ShippingStatus } from './bill.model';
 
 export interface UserFilter {
   status?: number;
@@ -10,18 +11,18 @@ export interface UserFilter {
 }
 export interface ProductFilter {
   name?: string;
-  quantity?: number;
-  discount?: number;
+  createdAt?: string[];
+  categoryId?: number;
   price?: number;
   status?: number;
   page?: number;
   size?: number;
 }
 export interface OrderFilter {
-  createdDate?: any;
-  shippingStatus_id?: number;
+  createdDate?: string[];
+  shippingStatusId?: number;
   address?: string;
-  // payment?: Payment;
+  payment?: any;
   page?: number;
   size?: number;
 }

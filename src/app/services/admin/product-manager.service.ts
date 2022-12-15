@@ -16,12 +16,12 @@ export default class ProductManagerService {
     return this.httpClient.post(`${this.REST_API}/add`, form);
   }
   filter(filter: ProductFilter) {
-    let params = new HttpParams();
-    Object.keys(filter).forEach((key) => {
-      if (filter[key] !== '' && filter[key] !== null && filter[key] !== undefined) {
-        params = params.append(key, filter[key]);
-      }
-    });
-    return this.httpClient.get(`${this.REST_API}/filter`, { params: params });
+    // let params = new HttpParams();
+    // Object.keys(filter).forEach((key) => {
+    //   if (filter[key] !== '' && filter[key] !== null && filter[key] !== undefined) {
+    //     params = params.append(key, filter[key]);
+    //   }
+    // });
+    return this.httpClient.post(`${this.REST_API}/filter`, filter);
   }
 }

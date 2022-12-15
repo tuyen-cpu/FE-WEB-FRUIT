@@ -44,18 +44,122 @@
             <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
 
             <span>
-              Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
+              <!-- Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
               {{
                 products.length <= paginator.pageNumber
                   ? paginator.pageSize * paginator.pageNumber + products.length
                   : paginator.pageSize * paginator.pageNumber + paginator.pageSize
-              }}
-              of {{ paginator.totalElements }} products.</span
+              }} -->
+              Total: {{ paginator.totalElements }} products</span
             >
             <!-- <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
             </span> -->
+          </div>
+          <div class="grid pt-4 p-fluid align-items-end filter-bar">
+            <div class="col-3">
+              <label for="email-filter" class="block mb-1">Name</label>
+              <span class="p-input-icon-right">
+                <i class="pi pi-times cursor-pointer" (click)="clearFilterName()" *ngIf="filter.name"></i>
+                <input type="text" placeholder="Search Email here" [(ngModel)]="filter.name" pInputText id="email-filter" [maxLength]="30" />
+              </span>
+            </div>
+            <div class="col-2">
+              <label class="block mb-1">Category</label>
+              <p-dropdown
+                [options]="categories"
+                [(ngModel)]="categoryFilterSelected"
+                (onChange)="onChangeCategoryFilter()"
+                optionLabel="id"
+                [showClear]="true"
+                placeholder="Select a Category">
+                <ng-template pTemplate="selectedItem">
+                  <div class="country-item country-item-value" *ngIf="categoryFilterSelected">
+                    <div>
+                      <span>{{ categoryFilterSelected.name }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template let-status pTemplate="item">
+                  <div class="status-item">
+                    <div>
+                      <span>{{ status.name }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+              <small class="p-error" *ngIf="submitted && !categorySelected.name">Category name is required.</small>
+            </div>
+
+            <!-- <div class="col-2">
+              <label for="" class="block mb-1">Role</label>
+              <p-dropdown
+                [options]="listRoles"
+                dateFormat="dd.mm.yy"
+                [(ngModel)]="roleFilterSelected"
+                optionLabel="value"
+                (onChange)="onChangeRoleFilter()"
+                [showClear]="true"
+                placeholder="Select a Role">
+                <ng-template pTemplate="selectedItem">
+                  <div class="status-item status-item-value" *ngIf="roleFilterSelected.label">
+                    <div>
+                      <span [class]="'status-default status-label-' + roleFilterSelected.value">{{ roleFilterSelected.label }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template let-role pTemplate="item">
+                  <div class="status-item" [hidden]="!includesRole(currentUser, 'admin') && role.value === 'admin'">
+                    <div>
+                      <span [class]="'status-default status-' + role.value">{{ role.label }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div> -->
+            <div class="col-2">
+              <label for="" class="block mb-1">Status</label>
+              <p-dropdown
+                [options]="listStatuses"
+                [(ngModel)]="statusFilterSelected"
+                optionLabel="value"
+                (onChange)="onChangeStatusFilter()"
+                [showClear]="true"
+                placeholder="Select a Status">
+                <ng-template pTemplate="selectedItem">
+                  <div class="status-item status-item-value" *ngIf="statusFilterSelected">
+                    <div>
+                      <span [class]="'status-default status-label-' + statusFilterSelected.value">{{ statusFilterSelected.label }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template let-status pTemplate="item">
+                  <div class="status-item">
+                    <div>
+                      <span [class]="'status-default status-' + status.value">{{ status.label }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="col-4">
+              <label for="" class="block mb-1">Create Date</label>
+              <p-calendar
+                [(ngModel)]="datesFilter"
+                (onSelect)="onSelectDateFilter()"
+                (onClearClick)="onClearDate()"
+                [showButtonBar]="true"
+                placeholder="Select Date here"
+                selectionMode="range"
+                [readonlyInput]="true"
+                inputId="range"
+                todayButtonStyleClass="p-secondary-button"
+                [showIcon]="true"></p-calendar>
+            </div>
+            <div class="col-1">
+              <p-button *ngIf="hasValueFilter()" label="Filter" styleClass="p-button-sm" (click)="onFilterUser()"></p-button>
+            </div>
           </div>
         </ng-template>
         <ng-template pTemplate="header">
@@ -68,7 +172,7 @@
             <th style="flex: 1">Status</th>
             <th style="flex: 0.5">Action</th>
           </tr>
-          <tr>
+          <!-- <tr>
             <th style="flex: 0.5"></th>
             <th style="flex: 3">
               <input
@@ -127,7 +231,7 @@
                 [showClear]="true"></p-dropdown>
             </th>
             <th style="flex: 0.5">
-              <!-- <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clearFilter()"></button> -->
+              <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clearFilter()"></button> 
               <button
                 *ngIf="!isEmptyFilter()"
                 type="button"
@@ -137,7 +241,7 @@
                 <span class="pi pi-filter-slash"></span>
               </button>
             </th>
-          </tr>
+          </tr> -->
         </ng-template>
         <ng-template pTemplate="body" let-product>
           <tr>

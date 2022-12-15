@@ -62,6 +62,107 @@
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
             </span> -->
           </div>
+          <div class="grid pt-4 p-fluid align-items-end filter-bar">
+            <div class="col-3">
+              <label for="email-filter" class="block mb-1">Name</label>
+              <span class="p-input-icon-right">
+                <i class="pi pi-times cursor-pointer" (click)="clearFilterAddress()" *ngIf="filter.address"></i>
+                <input type="text" placeholder="Search Email here" [(ngModel)]="filter.address" pInputText id="email-filter" [maxLength]="30" />
+              </span>
+            </div>
+            <div class="col-2">
+              <label class="block mb-1">Shipping</label>
+              <p-dropdown
+                [options]="listStatuses"
+                [(ngModel)]="statusFilterSelected"
+                (onChange)="onChangeStatusFilter()"
+                optionLabel="id"
+                [showClear]="true"
+                placeholder="Select a Category">
+                <ng-template pTemplate="selectedItem">
+                  <div class="country-item country-item-value" *ngIf="statusFilterSelected">
+                    <div>
+                      <span>{{ statusFilterSelected.name }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template let-status pTemplate="item">
+                  <div class="status-item">
+                    <div>
+                      <span>{{ status.name }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="col-1">
+              <label for="" class="block mb-1">Payment Status</label>
+              <p-dropdown
+                [options]="paymentStatusList"
+                [(ngModel)]="paymentStatusFilter"
+                optionLabel="value"
+                (onChange)="onChangeStatusFilter()"
+                [showClear]="true"
+                placeholder="Select a Status">
+                <ng-template pTemplate="selectedItem">
+                  <div class="status-item status-item-value" *ngIf="paymentStatusFilter">
+                    <div>
+                      <span>{{ paymentStatusFilter }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template let-method pTemplate="item">
+                  <div class="status-item">
+                    <div>
+                      <span>{{ method }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="col-1">
+              <label for="" class="block mb-1">Payment Status</label>
+              <p-dropdown
+                [options]="paymentStatusList"
+                [(ngModel)]="paymentStatusFilter"
+                optionLabel="value"
+                (onChange)="onChangeStatusFilter()"
+                [showClear]="true"
+                placeholder="Select a Status">
+                <ng-template pTemplate="selectedItem">
+                  <div class="status-item status-item-value" *ngIf="paymentStatusFilter">
+                    <div>
+                      <span>{{ paymentStatusFilter }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template let-status pTemplate="item">
+                  <div class="status-item">
+                    <div>
+                      <span>{{ status }}</span>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+            </div>
+            <div class="col-4">
+              <label for="" class="block mb-1">Create Date</label>
+              <p-calendar
+                [(ngModel)]="datesFilter"
+                (onSelect)="onSelectDateFilter()"
+                (onClearClick)="onClearDate()"
+                [showButtonBar]="true"
+                placeholder="Select Date here"
+                selectionMode="range"
+                [readonlyInput]="true"
+                inputId="range"
+                todayButtonStyleClass="p-secondary-button"
+                [showIcon]="true"></p-calendar>
+            </div>
+            <div class="col-1">
+              <p-button *ngIf="hasValueFilter()" label="Filter" styleClass="p-button-sm" (click)="onFilterUser()"></p-button>
+            </div>
+          </div>
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
@@ -74,129 +175,6 @@
             <th style="flex: 1">Total</th>
             <th style="flex: 0.5">Action</th>
           </tr>
-          <tr>
-            <th style="flex: 0.5"></th>
-            <th style="flex: 2">
-              <!-- <p-calendar inputId="basic" dateFormat="mm-dd-yy" [(ngModel)]="filter.createdDate" (onSelect)="onFilter($event)"></p-calendar> -->
-            </th>
-            <th style="flex: 5">
-              <input
-                [disabled]="isLoadingTable"
-                placeholder="Search by address here..."
-                class="w-full"
-                type="text"
-                pInputText
-                [(ngModel)]="filter.address"
-                (keyup)="onFilter($event)" />
-            </th>
-
-            <th style="flex: 1">
-              <p-dropdown
-                [options]="listStatuses"
-                [showClear]="true"
-                [(ngModel)]="statusFilterSelected"
-                optionLabel="name"
-                (onChange)="onFilter($event)"
-                placeholder="Select a Status">
-                <ng-template pTemplate="selectedItem">
-                  <div class="status-item status-item-value">
-                    <div>
-                      <span [class]="'status-default status-' + statusFilterSelected.id">{{ statusFilterSelected.name }}</span>
-                    </div>
-                  </div>
-                </ng-template>
-                <ng-template let-status pTemplate="item">
-                  <div class="status-item">
-                    <div>
-                      <span [class]="'status-default status-' + status.id">{{ status.name }}</span>
-                    </div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </th>
-            <th style="flex: 1"></th>
-            <th style="flex: 1"></th>
-            <th style="flex: 0.5">
-              <button
-                *ngIf="!isEmptyFilter()"
-                type="button"
-                class="p-column-filter-clear-button p-link"
-                (click)="clearFilter()"
-                pTooltip="Clear Filter">
-                <span class="pi pi-filter-slash"></span>
-              </button>
-            </th>
-          </tr>
-          <!-- <tr>
-            <th style="flex: 0.5"></th>
-            <th style="flex: 3">
-              <input
-                [disabled]="isLoadingTable"
-                placeholder="Search by name here..."
-                class="w-full"
-                type="text"
-                pInputText
-                [(ngModel)]="filter.name"
-                (keyup)="onFilter($event)" />
-            </th>
-            <th style="flex: 0.5">
-              <input
-                [disabled]="isLoadingTable"
-                class="w-full"
-                type="text"
-                pInputText
-                [(ngModel)]="filter.quantity"
-                [minlength]="1"
-                [maxlength]="4"
-                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"
-                (keyup)="onFilter($event)" />
-            </th>
-            <th style="flex: 1">
-              <input
-                [disabled]="isLoadingTable"
-                class="w-full"
-                type="text"
-                pInputText
-                [(ngModel)]="filter.price"
-                [min]="1000"
-                [minlength]="1"
-                [maxlength]="8"
-                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"
-                (keyup)="onFilter($event)" />
-            </th>
-            <th style="flex: 0.4">
-              <input
-                [disabled]="isLoadingTable"
-                class="w-full"
-                type="text"
-                pInputText
-                [(ngModel)]="filter.discount"
-                [minlength]="1"
-                [maxlength]="2"
-                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"
-                (keyup)="onFilter($event)" />
-            </th>
-            <th style="flex: 1">
-              <p-dropdown
-                [options]="listStatuses"
-                [(ngModel)]="statusFilterSelected"
-                placeholder="Select"
-                (onChange)="onFilter($event)"
-                optionLabel="label"
-                [showClear]="true"></p-dropdown>
-            </th>
-            <th style="flex: 0.5">
-             
-              <button
-                *ngIf="!isEmptyFilter()"
-                type="button"
-                class="p-column-filter-clear-button p-link"
-                (click)="clearFilter()"
-                pTooltip="Clear Filter">
-                <span class="pi pi-filter-slash"></span>
-              </button>
-            </th>
-          </tr> -->
         </ng-template>
         <ng-template pTemplate="body" let-order style="min-height: 300px" let-expanded="expanded">
           <tr>

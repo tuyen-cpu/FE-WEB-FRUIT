@@ -1,6 +1,6 @@
 import { distinctUntilChanged, Subscription } from 'rxjs';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Component, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 //component
@@ -17,7 +17,7 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
-
+import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 @Component({
@@ -33,12 +33,14 @@ import { ToastModule } from 'primeng/toast';
     DropdownDirective,
     DialogModule,
     ButtonModule,
+    InputTextModule,
     PasswordModule,
     ToastModule,
   ],
   providers: [MessageService],
   templateUrl: './header-manager.component.html',
   styleUrls: ['./header-manager.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class HeaderManagerComponent implements OnInit, OnDestroy {
   @Output() newItemEvent = new EventEmitter<boolean>();

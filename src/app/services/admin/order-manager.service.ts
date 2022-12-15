@@ -13,13 +13,13 @@ export default class OrderManagerService {
     return this.httpClient.get(`${this.REST_API}/all?page=${page}&size=${size}`);
   }
   filter(filter: OrderFilter) {
-    let params = new HttpParams();
-    Object.keys(filter).forEach((key) => {
-      if (filter[key] !== '' && filter[key] !== null && filter[key] !== undefined) {
-        params = params.append(key, filter[key]);
-      }
-    });
-    return this.httpClient.get(`${this.REST_API}/filter`, { params: params });
+    // let params = new HttpParams();
+    // Object.keys(filter).forEach((key) => {
+    //   if (filter[key] !== '' && filter[key] !== null && filter[key] !== undefined) {
+    //     params = params.append(key, filter[key]);
+    //   }
+    // });
+    return this.httpClient.post(`${this.REST_API}/filter`, filter);
   }
   updateStatus(order: Order) {
     return this.httpClient.post(`${this.REST_API}/update-status`, order);

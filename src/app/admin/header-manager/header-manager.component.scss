@@ -134,3 +134,20 @@
   position: absolute;
   top: 97%;
 }
+.p-password {
+  .pi {
+    font-size: 1.4rem;
+    cursor: pointer;
+  }
+  .p-inputtext {
+    padding: 1rem;
+  }
+}
+.change-password-form__field-message {
+  font-size: 90%;
+}
+input[type='password']:not(:placeholder-shown) {
+  font-weight: 900;
+  font-family: Verdana;
+  letter-spacing: 5px;
+}
