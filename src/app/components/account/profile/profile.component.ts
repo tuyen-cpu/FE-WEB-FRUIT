@@ -2,22 +2,10 @@ import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TokenStorageService } from './../../../services/token-storage.service';
 import { UserInforService } from './../../../services/user-infor.service';
 import { AuthService } from './../../../services/auth.service';
-import {
-  Subscription,
-  debounceTime,
-  distinctUntilKeyChanged,
-  distinctUntilChanged,
-} from 'rxjs';
+import { Subscription, distinctUntilChanged } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { User } from 'src/app/model/user.model';
@@ -30,15 +18,7 @@ import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    ButtonModule,
-    RouterModule,
-    ToastModule,
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, RouterModule, ToastModule],
   providers: [MessageService, ConfirmationService],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
@@ -62,7 +42,7 @@ export class ProfileComponent implements OnInit {
     private tokenStorageService: TokenStorageService,
     private messageService: MessageService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
   ngOnInit(): void {
     // this.userSupscription = this.tokenStorageService.userChange.subscribe(
@@ -77,24 +57,20 @@ export class ProfileComponent implements OnInit {
 
     this.initForm();
     this.profileForm.controls['email'].disable();
-    this.valueFormSubscription = this.profileForm.valueChanges
-      .pipe(distinctUntilChanged())
-      .subscribe({
-        next: (res) => {
-          this.isDisable = false;
-        },
-        error: (res) => {
-          this.isLoading = false;
-        },
-      });
-    this.resetFormSubscription = this.resetForm.valueChanges
-      .pipe(distinctUntilChanged())
-      .subscribe({
-        next: (res) => {
-          this.errorMessageInvalidPassword = '';
-        },
-        error: (res) => {},
-      });
+    this.valueFormSubscription = this.profileForm.valueChanges.pipe(distinctUntilChanged()).subscribe({
+      next: (res) => {
+        this.isDisable = false;
+      },
+      error: (res) => {
+        this.isLoading = false;
+      },
+    });
+    this.resetFormSubscription = this.resetForm.valueChanges.pipe(distinctUntilChanged()).subscribe({
+      next: (res) => {
+        this.errorMessageInvalidPassword = '';
+      },
+      error: (res) => {},
+    });
   }
   onSubmit() {
     this.isLoading = true;
@@ -182,50 +158,19 @@ export class ProfileComponent implements OnInit {
   }
   initForm() {
     this.profileForm = this.fb.group({
-      email: [
-        this.userInforService.user?.email,
-        [Validators.email, Validators.required],
-      ],
-      firstName: [
-        this.userInforService.user?.firstName,
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(40),
-        ],
-      ],
-      lastName: [
-        this.userInforService.user?.lastName,
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(20),
-        ],
-      ],
+      email: [this.userInforService.user?.email, [Validators.email, Validators.required]],
+      firstName: [this.userInforService.user?.firstName, [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+      lastName: [this.userInforService.user?.lastName, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
     });
     this.resetForm = this.fb.group(
       {
-        newPassword: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(6),
-            Validators.maxLength(40),
-          ],
-        ],
-        oldPassword: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(6),
-            Validators.maxLength(40),
-          ],
-        ],
+        newPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
+        oldPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
         confirmPassword: ['', [Validators.required]],
       },
       {
         validators: [Validation.match('newPassword', 'confirmPassword')],
-      }
+      },
     );
   }
 

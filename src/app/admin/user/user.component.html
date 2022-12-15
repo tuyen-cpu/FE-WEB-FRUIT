@@ -1,5 +1,9 @@
 <p-toast></p-toast>
-<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog
+  header="Confirmation"
+  icon="pi pi-exclamation-triangle"
+  defaultFocus="none"
+  rejectButtonStyleClass="p-button-secondary p-button-plain"></p-confirmDialog>
 <div class="mt-2">
   <div class="text-3xl font-semibold mb-4">{{ titleComponent }}</div>
   <!-- <div class="account-side col-12 sm:col-12 md:12 lg:col-3">
@@ -86,6 +90,7 @@
                 selectionMode="range"
                 [readonlyInput]="true"
                 inputId="range"
+                todayButtonStyleClass="p-secondary-button"
                 [showIcon]="true"></p-calendar>
             </div>
             <div class="col-3">

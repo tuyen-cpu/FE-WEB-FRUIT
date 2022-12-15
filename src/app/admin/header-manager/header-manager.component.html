@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="topbar">
   <div class="logo-admin-wrapper">
     <div class="logo-admin text-center"><img src="../../../assets/img/logo/logo-admin.svg" alt="" /></div>
@@ -14,8 +15,70 @@
       <span class="user-name">Hello, {{ currentUser && currentUser.firstName }}</span>
       <div class="dropdown-user-name">
         <a class="dropdown-user-name__item" (click)="logout()"><i class="pi pi-sign-out"></i><span>Logout</span></a>
+        <a class="dropdown-user-name__item" (click)="displayChangePassword = true"
+          ><i class="pi pi-key"></i><span class="white-space-nowrap">Change Password</span></a
+        >
         <a class="dropdown-user-name__item" routerLink=""><i class="pi pi-desktop"></i><span>Website</span></a>
       </div>
     </div>
   </div>
 </div>
+<p-dialog
+  header="Change Password"
+  (onHide)="changePasswordForm.reset()"
+  [modal]="true"
+  [dismissableMask]="true"
+  [(visible)]="displayChangePassword"
+  [style]="{ width: '50vw' }">
+  <form class="grid p-fluid" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+    <div class="field col-12 relative">
+      <label for="password" class="block font-semibold">Password</label>
+      <p-password
+        formControlName="password"
+        [feedback]="false"
+        [ngClass]="{
+          'ng-invalid ng-dirty': errorMessageInvalidPassword
+        }"></p-password>
+      <span *ngIf="getPassword.dirty" class="error-box">
+        <small *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']" class="profile-form__field-message p-error block">
+          Password must be at least 6 characters.</small
+        >
+        <small *ngIf="getPassword.errors?.['maxlength']" class="profile-form__field-message p-error block">
+          Password cannot be more than 40 characters.</small
+        >
+        <small *ngIf="errorMessageInvalidPassword" class="profile-form__field-message p-error block"> {{ errorMessageInvalidPassword }}</small>
+      </span>
+    </div>
+    <div class="field col-12 relative">
+      <label for="newPassword" class="block font-semibold">New Password</label>
+      <p-password formControlName="newPassword" [feedback]="false"></p-password>
+      <span *ngIf="getNewPassword.dirty" class="error-box">
+        <small *ngIf="getNewPassword.errors?.['minlength']||getNewPassword.errors?.['required']" class="profile-form__field-message p-error block">
+          Password must be at least 6 characters.</small
+        >
+        <small *ngIf="getNewPassword.errors?.['maxlength']" class="profile-form__field-message p-error block">
+          Password cannot be more than 40 characters.</small
+        >
+      </span>
+    </div>
+
+    <div class="field col-12 relative">
+      <label for="confirmPassword" class="block font-semibold">Confirm Password</label>
+      <p-password formControlName="confirmPassword" [feedback]="false"></p-password>
+      <span *ngIf="getConfirmPassword.dirty" class="error-box">
+        <small *ngIf="getConfirmPassword.errors?.['matching']" class="profile-form__field-message p-error block"> Password don't match.</small>
+        <small *ngIf="getConfirmPassword.errors?.['required']" class="profile-form__field-message p-error block"> Password is not empty.</small>
+      </span>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      [disabled]="!!errorMessageInvalidPassword || changePasswordForm.invalid"
+      (onClick)="changePassword()"
+      icon="pi pi-check"
+      [loading]=""
+      label="Change"
+      styleClass=""></p-button>
+  </ng-template>
+</p-dialog>

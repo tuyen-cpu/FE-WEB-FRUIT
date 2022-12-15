@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { User } from 'src/app/model/user.model';
+import { ChangePasswordResquest, User } from 'src/app/model/user.model';
 import { UserFilter } from 'src/app/model/filter.model';
 
 @Injectable({ providedIn: 'root' })
@@ -17,6 +17,10 @@ export default class UserManagerService {
   }
   getAll(page: number, size: number) {
     return this.httpClient.get(`${this.REST_API}/all?page=${page}&size=${size}`);
+  }
+
+  changePassword(changePasswordResquest: ChangePasswordResquest) {
+    return this.httpClient.post(`${this.REST_API}/change-password`, changePasswordResquest);
   }
   // filter(filter: UserFilter) {
   //   let params = new HttpParams();

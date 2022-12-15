@@ -29,13 +29,7 @@ export class Validation {
 //     : { invalidNumber: { valid: false, value: control.value } };
 // }
 
-export function nameValidator(
-  control: AbstractControl
-): { [key: string]: any } | null {
-  const valid = new RegExp(
-    "^([a-zA-Z]{2,}\\s[a-zA-Z]{1,}'?-?[a-zA-Z]{2,}\\s?([a-zA-Z]{1,})?)"
-  ).test(control.value);
-  return valid
-    ? null
-    : { invalidNumber: { valid: false, value: control.value } };
+export function nameValidator(control: AbstractControl): { [key: string]: any } | null {
+  const valid = new RegExp("^([a-zA-Z]{2,}\\s[a-zA-Z]{1,}'?-?[a-zA-Z]{2,}\\s?([a-zA-Z]{1,})?)").test(control.value);
+  return valid ? null : { invalidNumber: { valid: false, value: control.value } };
 }

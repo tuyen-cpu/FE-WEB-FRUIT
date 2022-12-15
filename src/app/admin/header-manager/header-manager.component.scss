@@ -68,6 +68,7 @@
   .user-link {
     cursor: pointer;
     position: relative;
+    padding-right: 12px;
     &.open {
       .dropdown-user-name {
         display: block;
@@ -77,6 +78,8 @@
       display: none;
       position: absolute;
       top: 100%;
+      right: 0;
+      z-index: 999;
       margin-left: 0;
       flex-direction: column;
       background-color: var(--surface-overlay);
@@ -126,4 +129,8 @@
       }
     }
   }
+}
+.error-box {
+  position: absolute;
+  top: 97%;
 }
