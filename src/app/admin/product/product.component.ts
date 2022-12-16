@@ -212,6 +212,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     return dates.map((date) => this.datePipe.transform(date, 'yyyy-MM-dd'));
   }
   onClearDate() {
+    this.filter.createdAt = undefined;
     this.checkAllWithoutFilter();
   }
   hasValueFilter() {

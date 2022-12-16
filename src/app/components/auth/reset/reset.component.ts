@@ -25,6 +25,8 @@ export class ResetComponent implements OnInit {
   resetForm!: FormGroup;
   submitted = false;
   isLoading = false;
+  isShowRePassword = false;
+  isShowPassword = false;
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -38,6 +40,12 @@ export class ResetComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+  }
+  onChangeShowRePassword() {
+    this.isShowRePassword = !this.isShowRePassword;
+  }
+  onChangeShowPassword() {
+    this.isShowPassword = !this.isShowPassword;
   }
   initForm() {
     this.resetForm = this.fb.group(

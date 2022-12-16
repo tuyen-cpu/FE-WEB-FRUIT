@@ -26,7 +26,7 @@
       <tr>
         <th style="flex: 1.5">ID</th>
         <th style="flex: 2">Order date</th>
-        <th style="flex: 1.5">Total</th>
+        <th style="flex: 2">Total</th>
         <th style="flex: 7">Address</th>
         <th style="flex: 2.5">Status Shipping</th>
         <th style="flex: 2.5">Status Payment</th>
@@ -49,17 +49,8 @@
           <a [routerLink]="['/account/order/' + order.id]" class="order-link">HD-{{ order.id }}</a>
         </td>
         <td style="flex: 2">{{ order.createdDate | date : 'M/d/yy, h:mm a' }}</td>
-        <td style="flex: 1.5">{{ order.total | myCurrency : 'VND' }}</td>
+        <td style="flex: 2">{{ order.total | myCurrency : 'VND' }}</td>
         <td style="flex: 7">
-          <!-- {{
-            order.address.street +
-              ", " +
-              order.address.ward +
-              ", " +
-              order.address.district +
-              ", " +
-              order.address.city
-          }} -->
           <div class="text-right md:text-left">{{ order.address }}</div>
         </td>
         <td style="flex: 2.5">

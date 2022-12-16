@@ -13,6 +13,10 @@
   &__field {
     margin-bottom: 24px;
     position: relative;
+    .pi {
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
     &-input {
       font-size: $text-large;
       width: 100%;

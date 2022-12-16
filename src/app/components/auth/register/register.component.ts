@@ -22,7 +22,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   submitted = false;
-
+  isShowPassword = false;
+  isShowRePassword = false;
   isLoading = false;
   constructor(
     private fb: FormBuilder,
@@ -34,6 +35,12 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+  }
+  onChangeShowRePassword() {
+    this.isShowRePassword = !this.isShowRePassword;
+  }
+  onChangeShowPassword() {
+    this.isShowPassword = !this.isShowPassword;
   }
   initForm() {
     this.registerForm = this.fb.group(
@@ -55,7 +62,7 @@ export class RegisterComponent implements OnInit {
     this.authService.register(this.registerForm.value).subscribe({
       next: (response) => {
         // this.showSuccessMessage('Success', response.message);
-        this.router.navigate(['/account/login']);
+        this.router.navigate(['/auth/login']);
         this.shareMessageService.message.next(response.message);
         this.isLoading = false;
       },

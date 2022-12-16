@@ -155,6 +155,7 @@ export class UserComponent implements OnInit, OnDestroy {
     console.log(this.filter.createdAt);
   }
   onClearDate() {
+    this.filter.createdAt = undefined;
     this.checkAllWithoutFilter();
   }
   hasValueFilter() {

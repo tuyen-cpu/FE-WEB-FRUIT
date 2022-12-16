@@ -1,4 +1,4 @@
-@import "../../../scss/utils/variable";
+@import '../../../scss/utils/variable';
 .reset-wrapper {
   margin: auto;
   .reset-site {
@@ -11,6 +11,10 @@
       &__field {
         margin-bottom: 24px;
         position: relative;
+        .pi {
+          font-size: 1.4rem;
+          cursor: pointer;
+        }
         &-input {
           font-size: $text-large;
           width: 100%;

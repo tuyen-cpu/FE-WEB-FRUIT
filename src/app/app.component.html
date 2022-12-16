@@ -1,4 +1,4 @@
-<app-header *ngIf="isShowHeader"></app-header>
+<app-header [hidden]="!isShowHeader"></app-header>
 <div class="body-section">
   <router-outlet> </router-outlet>
 </div>

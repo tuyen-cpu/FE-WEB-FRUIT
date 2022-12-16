@@ -40,16 +40,16 @@
         padding-bottom: 8px;
         position: relative;
 
-        &::after {
-          content: '';
-          position: absolute;
-          top: 100%;
-          right: 0;
-          transform: translateX(-50%);
-          width: 50%;
-          height: 4px;
-          background-color: #131313;
-        }
+        // &::after {
+        //   content: '';
+        //   position: absolute;
+        //   top: 100%;
+        //   right: 0;
+        //   transform: translateX(-50%);
+        //   width: 50%;
+        //   height: 4px;
+        //   background-color: #131313;
+        // }
       }
     }
     .cart-content {

@@ -1,3 +1,11 @@
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, Subject, Subscription, switchMap } from 'rxjs';
+//component
+
 import { FileUploadService } from './../../services/file-upload.service';
 import { CategoryService } from './../../services/category.service';
 import { CartItemService } from './../../services/cart-item.service';
@@ -6,24 +14,23 @@ import { TokenStorageService } from './../../services/token-storage.service';
 import { UserInforService } from './../../services/user-infor.service';
 import { AuthService } from './../../services/auth.service';
 import { DropdownDirective } from './../../directives/dropdown.directive';
-import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
+import ProductService from 'src/app/services/product.service';
+import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
+
+//model
+import { User } from 'src/app/model/user.model';
+import { Category, Product } from 'src/app/model/category.model';
+
+//primeng
 import { ButtonModule } from 'primeng/button';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { User } from 'src/app/model/user.model';
-import { debounceTime, fromEvent, mergeMap, Observable, of, Subject, Subscription, switchMap } from 'rxjs';
-import { SocialAuthService, SocialLoginModule, SocialUser } from '@abacritt/angularx-social-login';
-import ProductService from 'src/app/services/product.service';
-import { Category, Product } from 'src/app/model/category.model';
-import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
+import { InputTextModule } from 'primeng/inputtext';
 
+import { SocialAuthService, SocialLoginModule, SocialUser } from '@abacritt/angularx-social-login';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -38,6 +45,7 @@ import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
     SocialLoginModule,
     HighlighterPipe,
     ToastModule,
+    InputTextModule,
     MyCurrency,
   ],
   providers: [MessageService, ConfirmationService],
@@ -59,7 +67,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   user!: User;
   loginForm!: FormGroup;
   tokenExpirationTimer: any;
-  eventBusSub?: Subscription;
+  loginSubscription?: Subscription;
   socialUser!: SocialUser;
   keySearch = '';
   products: Product[] = [];
@@ -71,6 +79,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   totalQuantity: number = 0;
   totalCart: number = 0;
   urlImage!: string;
+  loginFormSubscription: Subscription;
+  isDisable = true;
+  googleSubscription: Subscription;
+  isShowPassword = false;
   constructor(
     private el: ElementRef,
     private fb: FormBuilder,
@@ -92,7 +104,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.initForm();
     this.autoLogin();
     this.getCategory();
-    this.userSubject = this.tokenStorageService.userChange.subscribe({
+    this.userSubject = this.tokenStorageService.userChange.pipe(distinctUntilChanged()).subscribe({
       next: (data) => {
         this.user = data;
 
@@ -110,6 +122,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.loadTotal();
       },
       error: (response) => {},
+    });
+    this.loginFormSubscription = this.loginForm.valueChanges.pipe(distinctUntilChanged()).subscribe({
+      next: (res) => {
+        this.isDisable = false;
+      },
+      error: (res) => {},
     });
   }
   getCartItems(userId: number) {
@@ -195,7 +213,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   onSubmit(e: any) {
     if (!this.searchForm.valid || e.value === '') return;
-    this.goSearchPage();
+
+    this.router.navigate(['/product/search'], {
+      queryParams: { query: this.keySearch },
+    });
+
     e.value = '';
     this.products = [];
     this.keySearch = '';
@@ -206,10 +228,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.searchInput.nativeElement.classList.remove('open');
     this.searchInputMobile.nativeElement.classList.remove('open');
   }
-  goSearchPage() {
+  goSearchPage(event: any) {
+    this.removeOpen(event);
     this.router.navigate(['/product/search'], {
       queryParams: { query: this.keySearch },
     });
+  }
+  onChangeShowPassword() {
+    this.isShowPassword = !this.isShowPassword;
+  }
+  removeOpen(event: any) {
+    event.value = '';
+    this.searchInput.nativeElement.classList.remove('open');
   }
   instantSearch(event: any) {
     const value = event.target.value;
@@ -243,7 +273,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * - Login with google.
    */
   listenerSocialAuth() {
-    this.socialAuthService.authState
+    this.googleSubscription = this.socialAuthService.authState
       .pipe(
         switchMap((response: any) => {
           return this.authService.loginWithGoogle({ value: response.idToken });
@@ -252,6 +282,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.addUserInformationToLocalstorage(response);
+          if (response.data.roles.includes('admin') || response.data.roles.includes('manager')) {
+            this.router.navigate(['/admin']);
+          }
         },
         error: (error) => {
           console.log(error);
@@ -261,8 +294,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   initForm(): void {
     this.loginForm = this.fb.group({
-      email: [null, Validators.required],
-      password: null,
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
     });
     this.searchForm = this.fb.group({
       inputSearch: ['', Validators.required],
@@ -299,12 +332,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
    * Handle when click login.
    */
   onLogin() {
+    this.isDisable = true;
     this.isLoading = true;
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         this.isLoading = false;
         this.loginForm.reset();
         this.addUserInformationToLocalstorage(response);
+        if (response.data.roles.includes('admin') || response.data.roles.includes('manager')) {
+          this.router.navigate(['/admin']);
+        }
         console.log(response);
       },
       error: (err) => {
@@ -343,6 +380,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.userSubject) {
       this.userSubject.unsubscribe();
+    }
+    if (this.googleSubscription) {
+      this.googleSubscription.unsubscribe();
     }
     if (this.subjectKeyup) {
       this.subjectKeyup.unsubscribe();
@@ -402,5 +442,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   trackById(index: number, item: any) {
     return item.id;
+  }
+  get getLoginForm(): { [key: string]: AbstractControl } {
+    return this.loginForm.controls;
+  }
+  get getEmail() {
+    return this.loginForm.controls['email'];
+  }
+  get getPassword() {
+    return this.loginForm.controls['password'];
   }
 }

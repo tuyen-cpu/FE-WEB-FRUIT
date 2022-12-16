@@ -14,6 +14,9 @@ export class UserService {
   changePassword(changePasswordResquest: ChangePasswordResquest) {
     return this.http.post(`${this.REST_API}/change-password`, changePasswordResquest);
   }
+  getRoles(userId: number) {
+    return this.http.get(`${this.REST_API}/role?userId=${userId}`);
+  }
   // getAll(page: number, size: number) {
   //   return this.http.get(`${this.REST_API}/all?page=${page}&size=${size}`);
   // }

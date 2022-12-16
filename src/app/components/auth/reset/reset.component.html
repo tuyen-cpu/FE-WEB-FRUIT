@@ -1,49 +1,65 @@
 <div class="reset-wrapper col-12 sm:col-12 md:col-6">
   <div class="reset-site">
     <div class="reset-title">
-      <h2>ĐẶT LẠI MẬT KHẨU</h2>
+      <h2>RESET PASSWORD</h2>
     </div>
     <form action="" [formGroup]="resetForm" (ngSubmit)="onSubmit()" class="reset-form">
       <div class="reset-form__field">
-        <input id="password" class="reset-form__field-input" placeholder="Mật khẩu" formControlName="password" type="password" pInputText />
+        <div class="p-input-icon-right block">
+          <i [ngClass]="isShowPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="onChangeShowPassword()"></i>
+          <input
+            id="password"
+            [type]="isShowPassword ? 'text' : 'password'"
+            class="reset-form__field-input"
+            placeholder="Password"
+            formControlName="password"
+            type="password"
+            pInputText />
+        </div>
+
         <span *ngIf="getPassword.dirty">
           <small
             *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
             id="password-help"
             class="reset-form__field-message p-error block">
-            Mật khẩu phải có ít nhất 6 kí tự.</small
+            Password must be at least 6 characters.</small
           >
           <small *ngIf="getPassword.errors?.['maxlength']" id="password-help" class="reset-form__field-message p-error block">
-            Mật khẩu không được nhiều hơn 40 kí tự.</small
+            Password cannot be more than 40 characters.</small
           >
         </span>
       </div>
-      <div class="reset-form__field">
-        <input
-          id="confirmpassword"
-          class="reset-form__field-input"
-          placeholder="Mật khẩu"
-          type="password"
-          pInputText
-          formControlName="confirmPassword"
-          placeholder="Xác nhận mật khẩu" />
+      <div class="reset-form__field mb-6">
+        <div class="p-input-icon-right block">
+          <i [ngClass]="isShowRePassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="onChangeShowRePassword()"></i>
+
+          <input
+            id="confirmpassword"
+            class="reset-form__field-input"
+            type="password"
+            pInputText
+            [type]="isShowRePassword ? 'text' : 'password'"
+            formControlName="confirmPassword"
+            placeholder="Confirmation password" />
+        </div>
+
         <span *ngIf="getConfirmPassword.dirty">
           <small *ngIf="getConfirmPassword.errors?.['matching']" id="password-help" class="reset-form__field-message p-error block">
-            Mật khẩu không khớp</small
+            Password don't match</small
           >
           <small *ngIf="getConfirmPassword.errors?.['required']" id="password-help" class="reset-form__field-message p-error block">
-            Mật khẩu trống</small
+            Password is not empty</small
           >
         </span>
       </div>
       <div class="grid action-wrapper mt-3">
         <button type="submit" [disabled]="!resetForm.valid" class="btn-action reset-form__btn col-5 sm:col-4 md:col-4" pButton [loading]="isLoading">
-          ĐẶT LẠI
+          RESET
         </button>
         <div class="link-action-wrapper col-5 sm:col-4 md:col-4">
-          <a class="link-action" [routerLink]="['/auth/login']">Đăng nhập?</a><br />
-          hoặc
-          <a class="link-action" [routerLink]="['/auth/register']">Đăng ký</a>
+          <a class="link-action" [routerLink]="['/auth/login']">Login?</a><br />
+          or
+          <a class="link-action" [routerLink]="['/auth/register']">Register</a>
         </div>
       </div>
     </form>

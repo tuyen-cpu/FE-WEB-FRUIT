@@ -1,3 +1,4 @@
+import { Category } from './../../model/category.model';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -9,5 +10,8 @@ export default class CategoryManagerService {
 
   getAll(page: number, size: number): Observable<any> {
     return this.httpClient.get(`${this.REST_API}/all?page=${page}&size=${size}`);
+  }
+  add(category: Category) {
+    return this.httpClient.post(`${this.REST_API}/add`, category);
   }
 }

@@ -11,7 +11,7 @@
             *ngIf="getLastName.errors?.['minlength']||getLastName.errors?.['required']"
             id="password-help"
             class="register-form__field-message p-error block">
-            Họ không được bỏ trống.</small
+            Last Name cannot be empty.</small
           >
         </span>
       </div>
@@ -22,7 +22,7 @@
             *ngIf="getFirstName.errors?.['minlength']||getFirstName.errors?.['required']"
             id="password-help"
             class="register-form__field-message p-error block">
-            Tên không được bỏ trống.</small
+            First Name cannot be empty.</small
           >
         </span>
       </div>
@@ -34,42 +34,58 @@
             *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
             id="password-help"
             class="register-form__field-message p-error block">
-            Email không được bỏ trống.</small
+            Email cannot be empty.</small
           >
           <small *ngIf="getEmail.errors?.['email']" id="password-help" class="register-form__field-message p-error block">
-            Email sai định dạng. Vd:tuyen@gmail.com</small
+            Email invalid. Vd:tuyen@gmail.com</small
           >
         </span>
       </div>
 
       <div class="register-form__field">
-        <input id="password" class="register-form__field-input" placeholder="Password" formControlName="password" type="password" pInputText />
+        <div class="p-input-icon-right block">
+          <i [ngClass]="isShowPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="onChangeShowPassword()"></i>
+
+          <input
+            id="password"
+            [type]="isShowPassword ? 'text' : 'password'"
+            class="register-form__field-input"
+            placeholder="Password"
+            formControlName="password"
+            type="password"
+            pInputText />
+        </div>
+
         <span *ngIf="getPassword.dirty">
           <small
             *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
             id="password-help"
             class="register-form__field-message p-error block">
-            Mật khẩu phải có ít nhất 6 kí tự.</small
+            Password must be at least 6 characters.</small
           >
           <small *ngIf="getPassword.errors?.['maxlength']" id="password-help" class="register-form__field-message p-error block">
-            Mật khẩu không được nhiều hơn 40 kí tự.</small
+            Password cannot be more than 40 characters.</small
           >
         </span>
       </div>
-      <div class="register-form__field">
-        <input
-          id="confirmpassword"
-          class="register-form__field-input"
-          placeholder="Re-password"
-          type="password"
-          pInputText
-          formControlName="confirmPassword" />
+      <div class="register-form__field mb-6">
+        <div class="p-input-icon-right block">
+          <i [ngClass]="isShowRePassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="onChangeShowRePassword()"></i>
+          <input
+            id="confirmpassword"
+            class="register-form__field-input"
+            placeholder="Re-password"
+            [type]="isShowRePassword ? 'text' : 'password'"
+            pInputText
+            formControlName="confirmPassword" />
+        </div>
+
         <span *ngIf="getConfirmPassword.dirty">
           <small *ngIf="getConfirmPassword.errors?.['matching']" id="password-help" class="register-form__field-message p-error block">
-            Mật khẩu không khớp</small
+            Password don't match</small
           >
           <small *ngIf="getConfirmPassword.errors?.['required']" id="password-help" class="register-form__field-message p-error block">
-            Mật khẩu trống</small
+            Password is not empty</small
           >
         </span>
       </div>

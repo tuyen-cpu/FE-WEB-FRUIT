@@ -14,13 +14,7 @@ import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 @Component({
   selector: 'app-product-item',
   standalone: true,
-  imports: [
-    CommonModule,
-    LazyLoadImageModule,
-    ToastModule,
-    MyCurrency,
-    RouterModule,
-  ],
+  imports: [CommonModule, LazyLoadImageModule, ToastModule, MyCurrency, RouterModule],
   providers: [MessageService, ConfirmationService],
   templateUrl: './product-item.component.html',
   styleUrls: ['./product-item.component.scss'],
@@ -36,7 +30,7 @@ export class ProductItemComponent implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private router: Router,
-    private fileUploadService: FileUploadService
+    private fileUploadService: FileUploadService,
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +54,7 @@ export class ProductItemComponent implements OnInit {
         });
       return;
     }
-    this.router.navigate(['/account/login']);
+    this.router.navigate(['/auth/login']);
   }
   showSuccessMessage(summary: string, detail: string) {
     this.messageService.add({

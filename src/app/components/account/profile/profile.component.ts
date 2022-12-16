@@ -35,6 +35,9 @@ export class ProfileComponent implements OnInit {
   valueFormSubscription!: Subscription;
   resetFormSubscription!: Subscription;
   errorMessageInvalidPassword!: string;
+  isShowRePassword = false;
+  isShowPassword = false;
+  isShowNewPassword = false;
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -72,6 +75,16 @@ export class ProfileComponent implements OnInit {
       error: (res) => {},
     });
   }
+  onChangeShowRePassword() {
+    this.isShowRePassword = !this.isShowRePassword;
+  }
+  onChangeShowPassword() {
+    this.isShowPassword = !this.isShowPassword;
+  }
+  onChangeShowNewPassword() {
+    this.isShowNewPassword = !this.isShowNewPassword;
+  }
+
   onSubmit() {
     this.isLoading = true;
     console.log(this.profileForm.value);

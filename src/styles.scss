@@ -150,9 +150,12 @@ p-dialog {
     }
   }
 }
+.p-dialog .p-dialog-header .p-dialog-title {
+  font-size: 1.6rem;
+}
 .p-component {
-  font-size: 1.4rem !important;
-
+  font-size: 1.6rem !important;
+  font-weight: 500;
   .p-link {
     font-size: 1.4rem !important;
   }

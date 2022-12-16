@@ -22,7 +22,7 @@ export interface OrderFilter {
   createdDate?: string[];
   shippingStatusId?: number;
   address?: string;
-  payment?: any;
+  payment?: { status: string; paymentMethod: string };
   page?: number;
   size?: number;
 }

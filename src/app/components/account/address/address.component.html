@@ -136,7 +136,13 @@
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="addressDialog" [style]="{ width: '450px', fontSize: '24rem' }" header="New Address" [modal]="true" styleClass="p-fluid">
+    <p-dialog
+      [dismissableMask]="true"
+      [(visible)]="addressDialog"
+      [style]="{ width: '450px', fontSize: '24rem' }"
+      header="New Address"
+      [modal]="true"
+      styleClass="p-fluid">
       <ng-template pTemplate="content">
         <div class="formgrid grid">
           <div class="field col">
@@ -195,7 +201,7 @@
           <small class="p-error" *ngIf="submitted && !address.street">Street is required.</small>
         </div>
         <div class="field-checkbox">
-          <label for="binary" class="font-semibold mr-2">Set default: </label>
+          <label for="binary" class="font-semibold mr-2 ml-0">Set default: </label>
           <p-checkbox [(ngModel)]="isDefault" [binary]="true" inputId="binary"></p-checkbox>
         </div>
         <div class="field">

@@ -86,6 +86,7 @@ export class CheckoutComponent implements OnInit {
   urlImage!: string;
   displayConfirm: boolean = false;
   contentConfirm = '';
+  shippingCost: number = 0;
   constructor(
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
@@ -114,36 +115,38 @@ export class CheckoutComponent implements OnInit {
   }
   autoSelectAddressDefault() {
     this.isLoading = true;
-    let { address } = this.addresses.find((e) => e.address.isDefault);
-    this.addressTemp.city = this.provinces.find((e) => e.name === address.city)!;
-    if (this.addressTemp.city) {
-      this.provincesApi
-        .getDistricts(this.addressTemp.city.code!)
-        .pipe(
-          switchMap((province: Province) => {
-            this.districts = province.districts!;
-            this.addressTemp.district = this.districts.find((e) => e.name === address.district)!;
-            return this.provincesApi.getCommunes(this.addressTemp.district.code!);
-          }),
-        )
-        .subscribe({
-          next: (district: District) => {
-            this.wards = district.wards!;
-            this.addressTemp.ward = this.wards.find((e) => e.name === address.ward)!;
-            this.infoForm.patchValue({
-              firstName: address.firstName,
-              lastName: address.lastName,
-              phoneNum: address.phone,
-              street: address.street,
-              province: this.addressTemp.city,
-              district: this.addressTemp.district,
-              ward: this.addressTemp.ward,
-            });
-          },
-          error: (res) => {
-            this.isLoading = false;
-          },
-        });
+    let address = this.addresses.find((e) => e.address.isDefault) ? this.addresses.find((e) => e.address.isDefault).address : undefined;
+    if (address) {
+      this.addressTemp.city = this.provinces.find((e) => e.name === address.city)!;
+      if (this.addressTemp.city) {
+        this.provincesApi
+          .getDistricts(this.addressTemp.city.code!)
+          .pipe(
+            switchMap((province: Province) => {
+              this.districts = province.districts!;
+              this.addressTemp.district = this.districts.find((e) => e.name === address.district)!;
+              return this.provincesApi.getCommunes(this.addressTemp.district.code!);
+            }),
+          )
+          .subscribe({
+            next: (district: District) => {
+              this.wards = district.wards!;
+              this.addressTemp.ward = this.wards.find((e) => e.name === address.ward)!;
+              this.infoForm.patchValue({
+                firstName: address.firstName,
+                lastName: address.lastName,
+                phoneNum: address.phone,
+                street: address.street,
+                province: this.addressTemp.city,
+                district: this.addressTemp.district,
+                ward: this.addressTemp.ward,
+              });
+            },
+            error: (res) => {
+              this.isLoading = false;
+            },
+          });
+      }
     }
 
     this.isLoading = false;
@@ -155,6 +158,7 @@ export class CheckoutComponent implements OnInit {
       }
       this.cartItems = data;
       this.loadTotal();
+      this.shippingCost = this.totalCart > 250000 ? 0 : 30000;
     });
   }
   getProvinces() {
@@ -269,7 +273,7 @@ export class CheckoutComponent implements OnInit {
     });
     let checkout: Checkout = {
       description: 'Mô tả thôi',
-      shippingCost: 300000,
+      shippingCost: this.shippingCost,
       // address: {
       //   city: valueForm.province.name,
       //   district: valueForm.district.name,

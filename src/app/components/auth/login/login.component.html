@@ -19,8 +19,20 @@
         </span>
       </div>
 
-      <div class="login-form__field">
-        <input id="password" class="login-form__field-input" placeholder="Password" formControlName="password" type="password" pInputText />
+      <div class="login-form__field mb-6">
+        <div class="p-input-icon-right block">
+          <i [ngClass]="isShowPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="onChangeShowPassword()"></i>
+
+          <input
+            id="password"
+            [type]="isShowPassword ? 'text' : 'password'"
+            class="login-form__field-input"
+            placeholder="Password"
+            formControlName="password"
+            type="password"
+            pInputText />
+        </div>
+
         <span *ngIf="getPassword.dirty">
           <small
             *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
@@ -34,7 +46,7 @@
         </span>
       </div>
 
-      <div class="grid action-wrapper">
+      <div class="grid action-wrapper mt-5">
         <button type="submit" [disabled]="!loginForm.valid" class="btn-action login-form__btn col-5 sm:col-4 md:col-4" pButton [loading]="isLoading">
           LOGIN
         </button>

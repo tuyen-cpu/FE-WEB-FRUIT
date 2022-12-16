@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   returnUrl!: string;
   isLoading = false;
   userSupscription!: Subscription;
+  isShowPassword = false;
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -49,6 +50,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.email, Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(40)]],
     });
+  }
+  onChangeShowPassword() {
+    this.isShowPassword = !this.isShowPassword;
   }
   onSubmit() {
     this.isLoading = true;

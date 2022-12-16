@@ -1,4 +1,4 @@
-@import "../../../scss/utils/variable";
+@import '../../../scss/utils/variable';
 .register-wrapper {
   margin: auto;
   .register-site {
@@ -9,8 +9,12 @@
     }
     .register-form {
       &__field {
-        margin-bottom: 24px;
+        margin-bottom: 28px;
         position: relative;
+        .pi {
+          font-size: 1.4rem;
+          cursor: pointer;
+        }
         &-input {
           font-size: $text-large;
           width: 100%;

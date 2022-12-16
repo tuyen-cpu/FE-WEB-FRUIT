@@ -115,7 +115,7 @@
             <p-progressBar [hidden]="!isLoading" mode="indeterminate" [style]="{ height: '2px' }"></p-progressBar>
             <ul class="search-result">
               <li *ngFor="let product of products" class="search-result__item">
-                <a [routerLink]="['/product/' + product.slug]" class="search-result__item-link">
+                <a (click)="removeOpen(searchInput)" [routerLink]="['/product/' + product.slug]" class="search-result__item-link">
                   <span class="image"><img [src]="urlImage + '/' + product.image.link" alt="" width="60px" /></span>
                   <span class="content">
                     <p class="name" [innerHtml]="product.name | highlighter : keySearch : 'partial'"></p>
@@ -128,7 +128,7 @@
               </li>
 
               <div class="result-more">
-                <a [hidden]="products.length === 0" class="cursor-pointer" (click)="goSearchPage()"> Xem thêm kết quả.</a>
+                <a [hidden]="products.length === 0" class="cursor-pointer" (click)="goSearchPage(searchInput)"> Xem thêm kết quả.</a>
                 <span [hidden]="products.length !== 0">No matching results.</span>
               </div>
             </ul>
@@ -178,7 +178,7 @@
                 </svg>
               </span>
             </a>
-            <div [ngClass]="user ? 'account-dropdown-wrapper user-info' : 'account-dropdown-wrapper'">
+            <div style="z-index: 1000" [ngClass]="user ? 'account-dropdown-wrapper user-info' : 'account-dropdown-wrapper'">
               <div *ngIf="!user" class="account-dropdown-list height-login">
                 <div id="site-login" class="account-wrapper is-selected">
                   <div class="account-site">
@@ -194,16 +194,61 @@
                       </form> -->
                       <form action="" [formGroup]="loginForm" (ngSubmit)="onLogin()">
                         <div class="account-content__group">
-                          <input id="account-content__email" class="account-content__input" formControlName="email" type="text" required />
+                          <input
+                            [ngClass]="{
+                            'ng-invalid ng-dirty':(getEmail.dirty&&(getEmail.errors?.['required']||getEmail.errors?.['email'])) 
+                          }"
+                            pInputText
+                            id="account-content__email"
+                            class="account-content__input"
+                            formControlName="email"
+                            type="text"
+                            required />
                           <label for="account-content__email" class="account-content__label">Email </label>
+                          <span *ngIf="getEmail.dirty" class="box-error">
+                            <small *ngIf="getEmail.errors?.['required']" id="password-help" class="reset-form__field-message p-error block">
+                              Email is not empty.</small
+                            >
+                            <small *ngIf="getEmail.errors?.['email']" id="password-help" class="login-form__field-message p-error block">
+                              Email invalid. Vd:tuyen@gmail.com</small
+                            >
+                          </span>
                         </div>
                         <div class="account-content__group">
-                          <input id="account-content__password" class="account-content__input" formControlName="password" type="password" required />
+                          <input
+                            [ngClass]="{
+                            'ng-invalid ng-dirty':(getPassword.dirty&&(getEmail.errors?.['minlength']||getPassword.errors?.['required']||getPassword.errors?.['maxlength'])) 
+                          }"
+                            pInputText
+                            id="account-content__password"
+                            class="account-content__input"
+                            formControlName="password"
+                            type="password"
+                            required />
                           <label for="account-content__password" class="account-content__label">Password</label>
+                          <span *ngIf="getPassword.dirty" class="box-error">
+                            <small
+                              *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
+                              id="password-help"
+                              class="reset-form__field-message p-error block">
+                              Password must be at least 6 characters.</small
+                            >
+                            <small *ngIf="getPassword.errors?.['maxlength']" id="password-help" class="login-form__field-message p-error block">
+                              Password cannot be more than 40 characters.</small
+                            >
+                          </span>
                         </div>
-                        <button class="btn-action" type="submit" pButton pRipple [loading]="isLoading">LOGIN</button>
+                        <button
+                          [disabled]="loginForm.invalid || isDisable"
+                          class="btn-action mt-2"
+                          type="submit"
+                          pButton
+                          pRipple
+                          [loading]="isLoading">
+                          LOGIN
+                        </button>
                       </form>
-                      <div class="social-btn-wrapper">
+                      <div class="social-btn-wrapper justify-content-center">
                         <div class="social-btn">
                           <asl-google-signin-button type="standard" size="medium" shape="rectangular"></asl-google-signin-button>
                         </div>
@@ -388,7 +433,7 @@
                   </li>
 
                   <div class="result-more">
-                    <a [hidden]="products.length === 0" class="cursor-pointer" (click)="goSearchPage()"> Xem thêm kết quả.</a>
+                    <a [hidden]="products.length === 0" class="cursor-pointer" (click)="goSearchPage(searchInputMobile)"> Xem thêm kết quả.</a>
                     <span [hidden]="products.length !== 0">Không có kết quả phù hợp.</span>
                   </div>
                 </ul>

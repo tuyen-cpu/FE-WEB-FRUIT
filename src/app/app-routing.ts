@@ -8,6 +8,7 @@ import { Routes } from '@angular/router';
 import { ProvincesApiService } from './services/provinces-api.service';
 import { MessageService } from 'primeng/api';
 import OrderManagerService from './services/admin/order-manager.service';
+import { AdminGuard } from './guards/admin.guard';
 
 export const APP_ROUTES: Routes = [
   { path: '', component: HomeComponent },
@@ -41,6 +42,6 @@ export const APP_ROUTES: Routes = [
     path: 'admin',
 
     loadChildren: () => import('./admin/admin-routes').then(({ AdminRoutes }) => AdminRoutes),
-    providers: [UserService, OrderManagerService],
+    providers: [UserService, OrderManagerService, AdminGuard],
   },
 ];

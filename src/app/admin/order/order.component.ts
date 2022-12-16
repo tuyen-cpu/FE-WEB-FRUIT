@@ -145,6 +145,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     return dates.map((date) => this.datePipe.transform(date, 'yyyy-MM-dd'));
   }
   onClearDate() {
+    this.filter.createdDate = undefined;
     this.checkAllWithoutFilter();
   }
   hasValueFilter() {
