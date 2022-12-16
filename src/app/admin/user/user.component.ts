@@ -128,6 +128,12 @@ export class UserComponent implements OnInit, OnDestroy {
   resetPaginator() {
     this.paginator.pageNumber = 0;
     this.paginator.pageSize = 10;
+    this.paramsURL = {
+      page: this.paginator.pageNumber + 1,
+      size: this.paginator.pageSize,
+    };
+
+    this.addParams();
   }
   onChangeRoleFilter() {
     this.filter.role = this.roleFilterSelected ? this.roleFilterSelected.label : undefined;
@@ -159,6 +165,12 @@ export class UserComponent implements OnInit, OnDestroy {
     if (!this.hasValueFilter()) {
       this.paginator.pageNumber = 0;
       this.paginator.pageSize = 10;
+      this.paramsURL = {
+        page: this.paginator.pageNumber + 1,
+        size: this.paginator.pageSize,
+      };
+
+      this.addParams();
       if (this.flagFilter) {
         this.getUsers();
       }
@@ -282,8 +294,8 @@ export class UserComponent implements OnInit, OnDestroy {
   };
   remove(user: User) {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this user?',
-      header: 'Delete Confirmation',
+      message: 'Do you want to INACTIVE this user?',
+      header: 'Update Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
         const userDelete = { ...user };
@@ -298,16 +310,16 @@ export class UserComponent implements OnInit, OnDestroy {
           },
         });
       },
-      reject: (type) => {
-        switch (type) {
-          case ConfirmEventType.REJECT:
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-            break;
-          case ConfirmEventType.CANCEL:
-            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
-            break;
-        }
-      },
+      // reject: (type) => {
+      //   switch (type) {
+      //     case ConfirmEventType.REJECT:
+      //       this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+      //       break;
+      //     case ConfirmEventType.CANCEL:
+      //       this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+      //       break;
+      //   }
+      // },
     });
   }
   applyFilterGlobal($event: any, stringVal: any) {

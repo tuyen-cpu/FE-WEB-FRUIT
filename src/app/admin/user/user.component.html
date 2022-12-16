@@ -196,7 +196,7 @@
                 pButton
                 pRipple
                 title="Delete"
-                icon="pi pi-trash"
+                icon="pi pi-ban"
                 class="p-button-rounded p-button-warning mr-2"
                 [disabled]="(!includesRole(currentUser, 'admin') && includesRole(user, 'admin')) || !user.status"
                 (click)="remove(user)"></button>

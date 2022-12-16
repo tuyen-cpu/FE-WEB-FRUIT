@@ -21,6 +21,7 @@ import { Paginator } from 'src/app/model/paginator.model';
 import { Table, TableModule } from 'primeng/table';
 import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { PaginatorModule } from 'primeng/paginator';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
@@ -30,7 +31,6 @@ import { ToastModule } from 'primeng/toast';
 import { MessageModule } from 'primeng/message';
 import { DialogModule } from 'primeng/dialog';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ImageModule } from 'primeng/image';
 import { CalendarModule } from 'primeng/calendar';
@@ -194,6 +194,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   resetPaginator() {
     this.paginator.pageNumber = 0;
     this.paginator.pageSize = 10;
+    this.paramsURL = {
+      page: this.paginator.pageNumber + 1,
+      size: this.paginator.pageSize,
+    };
+
+    this.addParams();
   }
   resetFilterPaginator() {
     this.filter.page = 0;
@@ -216,6 +222,12 @@ export class ProductComponent implements OnInit, OnDestroy {
     if (!this.hasValueFilter()) {
       this.paginator.pageNumber = 0;
       this.paginator.pageSize = 10;
+      this.paramsURL = {
+        page: this.paginator.pageNumber + 1,
+        size: this.paginator.pageSize,
+      };
+
+      this.addParams();
       if (this.flagFilter) {
         this.getProduct();
       }
@@ -231,6 +243,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   filterUser() {
     this.flagFilter = true;
     this.isLoadingTable = true;
+    this.filter.page = this.paginator.pageNumber;
+    this.filter.size = this.paginator.pageSize;
     this.productManagerService
       .filter(this.filter)
       .pipe(delay(500))
@@ -272,6 +286,8 @@ export class ProductComponent implements OnInit, OnDestroy {
       //   return;
       // }
       if (this.hasValueFilter()) {
+        // this.filter.page = this.paginator.pageNumber;
+        // this.filter.size = this.paginator.pageSize;
         this.filterUser();
         return;
       }
@@ -366,8 +382,8 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
   remove(product: Product) {
     this.confirmationService.confirm({
-      message: 'Do you want to delete this product?',
-      header: 'Delete Confirmation',
+      message: 'Do you want to INACTIVE this product?',
+      header: 'Update Confirmation',
       icon: 'pi pi-info-circle',
       accept: () => {
         this.formDataImage = new FormData();
@@ -385,16 +401,16 @@ export class ProductComponent implements OnInit, OnDestroy {
           },
         });
       },
-      reject: (type) => {
-        switch (type) {
-          case ConfirmEventType.REJECT:
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-            break;
-          case ConfirmEventType.CANCEL:
-            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
-            break;
-        }
-      },
+      // reject: (type) => {
+      //   switch (type) {
+      //     case ConfirmEventType.REJECT:
+      //        this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+      //       break;
+      //     case ConfirmEventType.CANCEL:
+      //       this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+      //       break;
+      //   }
+      // },
     });
   }
   hideDialog() {

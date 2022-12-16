@@ -1,13 +1,16 @@
+import { FileUploadService } from './../../services/file-upload.service';
+import { FileUploadModule } from 'primeng/fileupload';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime, delay, Subject, map } from 'rxjs';
+import { delay, Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
 //component
 import OrderManagerService from 'src/app/services/admin/order-manager.service';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 import { EStatusPayment, Order, OrderDetail, Payment, ShippingStatus } from 'src/app/model/bill.model';
 import { OrderFilter } from 'src/app/model/filter.model';
+import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
 //primeNg
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -19,7 +22,8 @@ import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
+
+import { OrderDetailService } from 'src/app/services/order-detail.service';
 @Component({
   selector: 'app-order',
   standalone: true,
@@ -43,6 +47,7 @@ import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
 })
 export class OrderComponent implements OnInit, OnDestroy {
   isLoadingTable = false;
+
   paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
   paramsURL: {} = {};
   orders: Order[] = [];
@@ -55,12 +60,20 @@ export class OrderComponent implements OnInit, OnDestroy {
   statusFilterSelected: ShippingStatus;
   isExpanded: boolean = false;
   orderDetails: OrderDetail[] = [];
+  isShowOrderDetail = false;
   expandedRows = {};
+  urlImage: string;
   datesFilter: Date[] = [];
-  paymentStatusList = ['PAID', 'UNPAID'];
-  paymentMethodList = ['PAYPAL', 'COD'];
-  paymentStatusFilter: string;
-  paymentMethodFilter: string;
+  paymentStatusList = [
+    { name: 'PAID', id: 1 },
+    { name: 'UNPAID', id: 2 },
+  ];
+  paymentMethodList = [
+    { name: 'PAYPAL', id: 1 },
+    { name: 'COD', id: 2 },
+  ];
+  paymentStatusFilter: { name: string; id: number };
+  paymentMethodFilter: { name: string; id: number };
   flagFilter = false;
   constructor(
     private route: ActivatedRoute,
@@ -70,12 +83,15 @@ export class OrderComponent implements OnInit, OnDestroy {
     public datepipe: DatePipe,
     private confirmationService: ConfirmationService,
     private datePipe: DatePipe,
+
+    private fileUploadService: FileUploadService,
+    private orderDetailService: OrderDetailService,
   ) {}
 
   ngOnInit(): void {
     this.titleComponent = this.route.snapshot.data['title'];
     this.changeParams();
-
+    this.urlImage = this.fileUploadService.getLink();
     this.listStatuses = [
       { name: 'VERIFIED', id: 1 },
       { name: 'DELIVERING', id: 2 },
@@ -94,11 +110,13 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.checkAllWithoutFilter();
   }
   onChangePaymentStatusFilter() {
-    this.filter.payment.status = this.paymentStatusFilter ? this.paymentStatusFilter : undefined;
+    this.filter.payment = { ...this.filter.payment, status: this.paymentStatusFilter ? this.paymentStatusFilter.name : undefined };
+    console.log(this.filter.payment);
     this.checkAllWithoutFilter();
   }
+
   onChangePaymentMethodFilter() {
-    this.filter.payment.paymentMethod = this.paymentMethodFilter ? this.paymentMethodFilter : undefined;
+    this.filter.payment = { ...this.filter.payment, paymentMethod: this.paymentMethodFilter ? this.paymentMethodFilter.name : undefined };
     this.checkAllWithoutFilter();
   }
   onFilterUser() {
@@ -109,6 +127,12 @@ export class OrderComponent implements OnInit, OnDestroy {
   resetPaginator() {
     this.paginator.pageNumber = 0;
     this.paginator.pageSize = 10;
+    this.paramsURL = {
+      page: this.paginator.pageNumber + 1,
+      size: this.paginator.pageSize,
+    };
+
+    this.addParams();
   }
   resetFilterPaginator() {
     this.filter.page = 0;
@@ -126,7 +150,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   hasValueFilter() {
     return (
       this.statusFilterSelected ||
-      this.statusFilterSelected ||
+      this.paymentMethodFilter ||
       this.paymentStatusFilter ||
       this.filter.address ||
       (this.datesFilter && this.datesFilter.length)
@@ -137,6 +161,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     if (!this.hasValueFilter()) {
       this.paginator.pageNumber = 0;
       this.paginator.pageSize = 10;
+      this.paramsURL = {
+        page: this.paginator.pageNumber + 1,
+        size: this.paginator.pageSize,
+      };
+
+      this.addParams();
       if (this.flagFilter) {
         this.getOrders();
       }
@@ -151,6 +181,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   filterOrder() {
     this.isLoadingTable = true;
     this.flagFilter = true;
+    this.filter.page = this.paginator.pageNumber;
+    this.filter.size = this.paginator.pageSize;
     this.orderManagerService
       .filter(this.filter)
       .pipe(delay(500))
@@ -174,6 +206,10 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.paginator.pageNumber = res['page'] - 1;
       }
       this.paginator.pageSize = Number(res['size']) || 10;
+      if (this.hasValueFilter()) {
+        this.filterOrder();
+        return;
+      }
       // if (this.filter.address || this.filter.createdDate) {
       //   this.filter.page = res['page'] - 1;
       //   this.filter.size = Number(res['size']);
@@ -260,22 +296,25 @@ export class OrderComponent implements OnInit, OnDestroy {
   isEmptyFilter(): boolean {
     return !this.filter.createdDate && !this.filter.address;
   }
-  // clearFilter() {
-  //   this.filter = { page: 0, size: 10 };
-
-  //   this.getOrders();
-  // }
+  showDetail(id: number) {
+    this.isLoadingTable = true;
+    this.orderDetailService
+      .getByOrderId(id)
+      .pipe(delay(100))
+      .subscribe({
+        next: (res) => {
+          this.isLoadingTable = false;
+          this.isShowOrderDetail = !this.isShowOrderDetail;
+          this.orderDetails = res.data;
+        },
+        error: (res) => {
+          this.isLoadingTable = false;
+        },
+      });
+  }
   ngOnDestroy(): void {
     if (this.subjectKeyup) {
       this.subjectKeyup.unsubscribe();
     }
-  }
-  expandAll() {
-    if (!this.isExpanded) {
-      this.orderDetails.forEach((orderDetail) => (this.expandedRows[orderDetail.id] = true));
-    } else {
-      this.expandedRows = {};
-    }
-    this.isExpanded = !this.isExpanded;
   }
 }

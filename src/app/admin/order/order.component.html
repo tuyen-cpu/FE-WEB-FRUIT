@@ -18,14 +18,13 @@
         [loading]="isLoadingTable"
         #dt
         [value]="orders"
-        [globalFilterFields]="['id', 'name', 'quantity', 'price', 'discount', 'status']"
+        styleClass="p-datatable-striped"
         [rowHover]="true"
         dataKey="id"
         [showCurrentPageReport]="true"
         [responsive]="true"
         responsiveLayout="scroll"
         [scrollable]="true"
-        [expandedRowKeys]="expandedRows"
         scrollHeight="61vh">
         <ng-template pTemplate="summary" *ngIf="!orders.length">
           <div class="page grid align-items-center">
@@ -43,11 +42,7 @@
         <ng-template pTemplate="caption">
           <div class="flex align-items-center justify-content-between">
             <!-- <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button> -->
-            <button
-              pButton
-              icon="pi pi-fw {{ isExpanded ? 'pi-minus' : 'pi-plus' }}"
-              label="{{ isExpanded ? 'Collapse All' : 'Expand All' }}"
-              (click)="expandAll()"></button>
+
             <span>
               Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
               {{
@@ -63,11 +58,11 @@
             </span> -->
           </div>
           <div class="grid pt-4 p-fluid align-items-end filter-bar">
-            <div class="col-3">
-              <label for="email-filter" class="block mb-1">Name</label>
+            <div class="col-2">
+              <label for="email-filter" class="block mb-1">Adress</label>
               <span class="p-input-icon-right">
                 <i class="pi pi-times cursor-pointer" (click)="clearFilterAddress()" *ngIf="filter.address"></i>
-                <input type="text" placeholder="Search Email here" [(ngModel)]="filter.address" pInputText id="email-filter" [maxLength]="30" />
+                <input type="text" placeholder="Search Address here" [(ngModel)]="filter.address" pInputText id="email-filter" [maxLength]="30" />
               </span>
             </div>
             <div class="col-2">
@@ -78,74 +73,44 @@
                 (onChange)="onChangeStatusFilter()"
                 optionLabel="id"
                 [showClear]="true"
-                placeholder="Select a Category">
+                placeholder="Select a Status">
                 <ng-template pTemplate="selectedItem">
                   <div class="country-item country-item-value" *ngIf="statusFilterSelected">
                     <div>
-                      <span>{{ statusFilterSelected.name }}</span>
+                      <span [class]="'status-default status-' + statusFilterSelected.id">{{ statusFilterSelected.name }}</span>
                     </div>
                   </div>
                 </ng-template>
                 <ng-template let-status pTemplate="item">
                   <div class="status-item">
                     <div>
-                      <span>{{ status.name }}</span>
+                      <span [class]="'status-default status-' + status.id">{{ status.name }}</span>
                     </div>
                   </div>
                 </ng-template>
               </p-dropdown>
             </div>
-            <div class="col-1">
+            <div class="col-2">
               <label for="" class="block mb-1">Payment Status</label>
               <p-dropdown
                 [options]="paymentStatusList"
                 [(ngModel)]="paymentStatusFilter"
-                optionLabel="value"
-                (onChange)="onChangeStatusFilter()"
-                [showClear]="true"
-                placeholder="Select a Status">
-                <ng-template pTemplate="selectedItem">
-                  <div class="status-item status-item-value" *ngIf="paymentStatusFilter">
-                    <div>
-                      <span>{{ paymentStatusFilter }}</span>
-                    </div>
-                  </div>
-                </ng-template>
-                <ng-template let-method pTemplate="item">
-                  <div class="status-item">
-                    <div>
-                      <span>{{ method }}</span>
-                    </div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
+                (onChange)="onChangePaymentStatusFilter()"
+                placeholder="Select a Status"
+                optionLabel="name"
+                [showClear]="true"></p-dropdown>
             </div>
-            <div class="col-1">
-              <label for="" class="block mb-1">Payment Status</label>
+            <div class="col-2">
+              <label for="" class="block mb-1">Payment Method</label>
               <p-dropdown
-                [options]="paymentStatusList"
-                [(ngModel)]="paymentStatusFilter"
-                optionLabel="value"
-                (onChange)="onChangeStatusFilter()"
-                [showClear]="true"
-                placeholder="Select a Status">
-                <ng-template pTemplate="selectedItem">
-                  <div class="status-item status-item-value" *ngIf="paymentStatusFilter">
-                    <div>
-                      <span>{{ paymentStatusFilter }}</span>
-                    </div>
-                  </div>
-                </ng-template>
-                <ng-template let-status pTemplate="item">
-                  <div class="status-item">
-                    <div>
-                      <span>{{ status }}</span>
-                    </div>
-                  </div>
-                </ng-template>
-              </p-dropdown>
+                [options]="paymentMethodList"
+                [(ngModel)]="paymentMethodFilter"
+                (onChange)="onChangePaymentMethodFilter()"
+                placeholder="Select a Method"
+                optionLabel="name"
+                [showClear]="true"></p-dropdown>
             </div>
-            <div class="col-4">
+            <div class="col-3">
               <label for="" class="block mb-1">Create Date</label>
               <p-calendar
                 [(ngModel)]="datesFilter"
@@ -166,27 +131,17 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th style="flex: 0.5"></th>
             <th pSortableColumn="id" style="flex: 0.5">Id <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="createdDate" style="flex: 2">Order date</th>
             <th style="flex: 5">Address</th>
             <th style="flex: 1">Status<p-sortIcon field="price"></p-sortIcon></th>
             <th style="flex: 1">Payment</th>
             <th style="flex: 1">Total</th>
-            <th style="flex: 0.5">Action</th>
+            <th style="flex: 0.5">View Detail</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-order style="min-height: 300px" let-expanded="expanded">
           <tr>
-            <td style="flex: 0.5">
-              <button
-                type="button"
-                pButton
-                pRipple
-                [pRowToggler]="order"
-                class="p-button-text p-button-rounded p-button-plain"
-                [icon]="isExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-            </td>
             <td style="flex: 0.5">{{ order.id }}</td>
             <td style="flex: 2">
               <div class="">{{ order.createdDate | date : 'M/d/yy, h:mm a' }}</div>
@@ -224,7 +179,15 @@
             <td style="flex: 1">
               <span>{{ order.total | myCurrency : 'VND' }}</span>
             </td>
-            <td style="flex: 0.5"></td>
+            <td style="flex: 0.5">
+              <button
+                pButton
+                pRipple
+                type="button"
+                (click)="showDetail(order.id)"
+                icon="pi pi-eye"
+                class="p-element p-button-text p-button-rounded p-button-plain p-button p-component p-button-icon-only eyes-view"></button>
+            </td>
             <!-- <td style="flex: 0.5">
               <button
                 pButton
@@ -360,8 +323,62 @@
     </ng-template>
   </p-table>
   <ng-template pTemplate="footer">
-    <button type="button" pButton pRipple icon="pi pi-times" (click)="isShowDialogPayment = false" label="Dismiss" class=""></button>
+    <button type="button" pButton pRipple icon="pi pi-times" (click)="isShowDialogPayment = false" label="Close" class=""></button>
   </ng-template>
 </p-dialog>
-
+<p-dialog header="Order Detail" [resizable]="false" [modal]="true" [maximizable]="true" appendTo="body" [(visible)]="isShowOrderDetail">
+  <p-table
+    [scrollable]="true"
+    scrollHeight="600px"
+    [value]="orderDetails"
+    responsiveLayout="stack"
+    [breakpoint]="'960px'"
+    styleClass="p-datatable-gridlines"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+    <!-- <ng-template pTemplate="caption"> Stack </ng-template> -->
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th></th>
+        <th>Product</th>
+        <th>ID Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Discount</th>
+        <th>Total</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-orderdetail let-columns="columns">
+      <tr>
+        <td>
+          <span class="p-column-title"></span
+          ><a routerLink="/" class="order-detail-link"><img [src]="urlImage + '/' + orderdetail.product.image.link" width="100px" alt="" /></a>
+        </td>
+        <td><span class="p-column-title">Product</span>{{ orderdetail.product.name }}</td>
+        <td><span class="p-column-title">ID Product</span>{{ orderdetail.product.id }}</td>
+        <td><span class="p-column-title">Quantity</span>{{ orderdetail.quantity }}</td>
+        <td><span class="p-column-title">Price</span>{{ orderdetail.price | myCurrency : 'VND' }}</td>
+        <td><span class="p-column-title">Discount</span>-{{ orderdetail.discount }}%</td>
+        <td>
+          <span class="p-column-title">Total</span>
+          {{ (orderdetail.price - (orderdetail.price * orderdetail.discount) / 100) * orderdetail.quantity | myCurrency : 'VND' }}
+        </td>
+      </tr>
+    </ng-template>
+    <!-- <ng-template pTemplate="summary">
+    <div
+      class="flex align-items-center justify-content-between text-2xl"
+    >
+      <span> Subtotal:</span>
+      <span class="px-8"> {{ subTotal | myCurrency: "vnd" }}</span>
+    </div>
+  </ng-template> -->
+    <!-- <ng-template pTemplate="footer">
+      <tr>
+        <td colspan="3">Totals</td>
+        <td>$506,202</td>
+        <td>{{ subTotal | myCurrency : 'vnd' }}</td>
+      </tr>
+    </ng-template> -->
+  </p-table>
+</p-dialog>
 <!-- <app-loading [hidden]="!isLoading"></app-loading> -->

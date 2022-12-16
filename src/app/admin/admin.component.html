@@ -2,17 +2,20 @@
   <app-header-manager [class.isShowSidebar]="isShowSidebar" (newItemEvent)="showSidebar($event)"></app-header-manager>
   <div class="body-content flex">
     <div class="sidebar">
-      <a [routerLink]="['home']" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between mt-4"
+      <a [routerLink]="['home']" pTooltip="Home" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between mt-4"
         ><span>Home</span> <i class="pi pi-home"></i
       ></a>
-      <a [routerLink]="['user']" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between"
-        ><span>User</span> <i class="pi pi-users"></i
+      <a [routerLink]="['category']" pTooltip="Category" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between"
+        ><span>Category</span> <i class="pi pi-th-large"></i
       ></a>
-      <a [routerLink]="['product']" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between"
+      <a [routerLink]="['product']" pTooltip="Product" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between"
         ><span>Product</span> <i class="pi pi-circle"></i
       ></a>
-      <a [routerLink]="['order']" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between"
-        ><span>Order</span> <i class="pi pi-money-bill"></i
+      <a [routerLink]="['order']" pTooltip="Order" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between"
+        ><span>Order</span> <i class="pi pi-shopping-cart"></i
+      ></a>
+      <a [routerLink]="['user']" pTooltip="User" routerLinkActive="active" class="p-link sidebar-item flex justify-content-between"
+        ><span>User</span> <i class="pi pi-users"></i
       ></a>
       <!-- <a
         [routerLink]="['voucher']"
@@ -21,13 +24,7 @@
         class="p-link sidebar-item flex justify-content-between"
         ><span>Voucher</span> <i class="pi pi-tags"></i
       ></a> -->
-      <a
-        [routerLink]="['category']"
-        [routerLinkActiveOptions]="{ exact: true }"
-        routerLinkActive="active"
-        class="p-link sidebar-item flex justify-content-between"
-        ><span>Category</span> <i class="pi pi-th-large"></i
-      ></a>
+
       <!-- <a
         [routerLink]="['comment']"
         [routerLinkActiveOptions]="{ exact: true }"

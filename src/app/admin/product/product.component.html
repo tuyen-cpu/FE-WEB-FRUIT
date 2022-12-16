@@ -1,6 +1,10 @@
 <!-- <app-loading [hidden]="!isLoadingComponent"></app-loading> -->
 <p-toast></p-toast>
-<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog
+  header="Confirmation"
+  defaultFocus="none"
+  rejectButtonStyleClass="p-button-secondary p-button-plain"
+  icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <div class="mt-2">
   <div class="text-3xl font-semibold mb-4">{{ titleComponent }}</div>
   <div class="col-12 sm:col-12 md:12 lg:col-12 px-0">
@@ -269,7 +273,7 @@
                 pButton
                 pRipple
                 title="Delete"
-                icon="pi pi-trash"
+                icon="pi pi-ban"
                 class="p-button-rounded p-button-warning mr-2"
                 [disabled]="!product.status"
                 (click)="remove(product)"></button>
@@ -292,7 +296,7 @@
     <p-dialog
       [(visible)]="productDialog"
       [breakpoints]="{ '960px': '90vw', '640px': '95vw' }"
-      [style]="{ width: '50vw', maxHeight: '92vh', overflowY: 'scroll' }"
+      [style]="{ width: '50vw', maxHeight: '92vh', overflowY: 'auto' }"
       header="New Product"
       [modal]="true"
       styleClass="p-fluid">

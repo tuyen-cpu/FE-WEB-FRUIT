@@ -1,26 +1,31 @@
+import { CategoryManagerComponent } from './category-manager/category-manager.component';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin.component';
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { ProductComponent } from './product/product.component';
 import { OrderComponent } from './order/order.component';
+import { AdminGuard } from '../guards/admin.guard';
 
 export const AdminRoutes: Routes = [
   {
     path: '',
     component: AdminComponent,
+    canActivate: [AdminGuard],
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       {
         path: 'user',
         title: 'User',
         data: { title: 'User Manager' },
+
         component: UserComponent,
       },
       {
         path: 'home',
         title: 'Home',
         component: HomeComponent,
+        canActivate: [AdminGuard],
       },
       {
         path: 'product',
@@ -33,6 +38,12 @@ export const AdminRoutes: Routes = [
         title: 'Order Manager',
         data: { title: 'Order Manager' },
         component: OrderComponent,
+      },
+      {
+        path: 'category',
+        title: 'Category Manager',
+        data: { title: 'Category Manager' },
+        component: CategoryManagerComponent,
       },
     ],
   },

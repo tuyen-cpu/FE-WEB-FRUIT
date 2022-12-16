@@ -1,0 +1,181 @@
+<!-- <app-loading [hidden]="!isLoadingComponent"></app-loading> -->
+<p-toast></p-toast>
+<p-confirmDialog
+  header="Confirmation"
+  defaultFocus="none"
+  rejectButtonStyleClass="p-button-secondary p-button-plain"
+  icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<div class="mt-2">
+  <div class="text-3xl font-semibold mb-4">{{ titleComponent }}</div>
+  <div class="col-12 sm:col-12 md:12 lg:col-12 px-0">
+    <div class="card">
+      <!-- <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+          <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+          <p-button type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="resetView()"></p-button
+        ></ng-template>
+      </p-toolbar> -->
+
+      <p-table
+        [loading]="isLoadingTable"
+        #dt
+        [value]="categories"
+        [globalFilterFields]="['id', 'name', 'quantity', 'price', 'discount', 'status']"
+        [rowHover]="true"
+        dataKey="id"
+        [showCurrentPageReport]="true"
+        [responsive]="true"
+        responsiveLayout="scroll"
+        [scrollable]="true"
+        scrollHeight="61vh">
+        <ng-template pTemplate="summary" *ngIf="!categories.length">
+          <div class="page grid align-items-center">
+            <div class="col-12">
+              <p-paginator
+                [rows]="paginator.pageSize"
+                [totalRecords]="paginator.totalElements"
+                [first]="paginator.pageSize * paginator.pageNumber"
+                (onPageChange)="onPageChange($event)"
+                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+
+            <span>
+              <!-- Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
+              {{
+                products.length <= paginator.pageNumber
+                  ? paginator.pageSize * paginator.pageNumber + products.length
+                  : paginator.pageSize * paginator.pageNumber + paginator.pageSize
+              }} -->
+              Total: {{ paginator.totalElements }} products</span
+            >
+            <!-- <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
+            </span> -->
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="flex: 0.5">Id</th>
+            <th style="flex: 3">Product Name</th>
+
+            <th style="flex: 1">Status</th>
+            <th style="flex: 0.5">Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-category>
+          <tr>
+            <td style="flex: 0.5">{{ category.id }}</td>
+            <td style="flex: 3">
+              <div class="">{{ category.name }}</div>
+            </td>
+            <td style="flex: 1">
+              <span [class]="'status-default status-' + category.status">{{ category.status === 0 ? 'INACTIVE' : 'ACTIVE' }}</span>
+            </td>
+            <td style="flex: 0.5">
+              <button
+                pButton
+                pRipple
+                title="Edit"
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-success mr-2"
+                (click)="editCategory(category)"></button>
+              <button
+                pButton
+                pRipple
+                title="Delete"
+                icon="pi pi-ban"
+                class="p-button-rounded p-button-warning mr-2"
+                [disabled]="!category.status"
+                (click)="remove(category)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7">No product found.</td>
+          </tr>
+        </ng-template>
+        <!-- <ng-template pTemplate="footer">
+          <tr>
+            <td colspan="3">Total: {{ paginator.totalElements }}</td>
+          </tr>
+        </ng-template> -->
+      </p-table>
+    </div>
+
+    <p-dialog
+      [(visible)]="cateogryDialog"
+      [breakpoints]="{ '960px': '90vw', '640px': '95vw' }"
+      [style]="{ width: '50vw', maxHeight: '92vh', overflowY: 'auto' }"
+      header="Category Product"
+      [modal]="true"
+      styleClass="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="formgrid grid">
+          <div class="field col-12">
+            <label class="font-semibold">Status*</label>
+            <p-dropdown
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !statusSelected.label
+              }"
+              [options]="listStatuses"
+              [(ngModel)]="statusSelected"
+              optionLabel="value"
+              placeholder="Select a Status">
+              <ng-template pTemplate="selectedItem">
+                <div class="country-item country-item-value" *ngIf="statusSelected">
+                  <div>
+                    <span [class]="'status-default status-label-' + statusSelected.value">{{ statusSelected.label }}</span>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template let-status pTemplate="item">
+                <div class="status-item">
+                  <div>
+                    <span [class]="'status-default status-' + status.value">{{ status.label }}</span>
+                  </div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <small class="p-error" *ngIf="submitted && !statusSelected.label">Status name is required.</small>
+          </div>
+          <div class="field col-12">
+            <label for="firstName" class="font-semibold">Name*</label>
+            <input
+              type="text"
+              pInputText
+              id="firstName"
+              [(ngModel)]="category.name"
+              required
+              [maxlength]="100"
+              [ngClass]="{
+                'ng-invalid ng-dirty': submitted && !category.name
+              }" />
+            <small class="p-error" *ngIf="submitted && !category.name">Name is required.</small>
+          </div>
+
+          <!-- <div class="field">
+            <label>Status</label>
+            <p-dropdown [options]="listStatuses" [(ngModel)]="product.status" placeholder="Select a status" [showClear]="true"></p-dropdown>
+          </div> -->
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [loading]="isLoading" (click)="saveProduct()"></button> -->
+        <button pButton pRipple type="button" label="Cancel" class="p-button-secondary p-button-plain" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" [loading]="isLoading" (click)="saveCategory()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
