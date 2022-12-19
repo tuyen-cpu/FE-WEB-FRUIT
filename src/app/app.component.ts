@@ -12,6 +12,11 @@ import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ShareMessageService } from './services/share-message.service';
+
+//multi languge
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -63,7 +68,12 @@ export class AppComponent implements OnInit {
     private messageService: MessageService,
     private router: Router,
     private shareMessageService: ShareMessageService,
-  ) {}
+    public translateService: TranslateService,
+  ) {
+    translateService.addLangs(['en', 'vn']);
+    translateService.setDefaultLang('en');
+  }
+
   ngOnInit(): void {
     this.shareMessageService.message.subscribe((data: any) => {
       this.messageService.add({

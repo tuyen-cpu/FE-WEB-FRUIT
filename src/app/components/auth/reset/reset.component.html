@@ -1,7 +1,7 @@
 <div class="reset-wrapper col-12 sm:col-12 md:col-6">
   <div class="reset-site">
     <div class="reset-title">
-      <h2>RESET PASSWORD</h2>
+      <h2>{{ 'ResetPassword' | translate }}</h2>
     </div>
     <form action="" [formGroup]="resetForm" (ngSubmit)="onSubmit()" class="reset-form">
       <div class="reset-form__field">
@@ -11,7 +11,7 @@
             id="password"
             [type]="isShowPassword ? 'text' : 'password'"
             class="reset-form__field-input"
-            placeholder="Password"
+            [placeholder]="'Password' | translate"
             formControlName="password"
             type="password"
             pInputText />
@@ -22,10 +22,10 @@
             *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
             id="password-help"
             class="reset-form__field-message p-error block">
-            Password must be at least 6 characters.</small
+            {{ 'Password' | translate }} {{ 'PasswordAtLeast6Characters' | translate }}.</small
           >
           <small *ngIf="getPassword.errors?.['maxlength']" id="password-help" class="reset-form__field-message p-error block">
-            Password cannot be more than 40 characters.</small
+            {{ 'Password' | translate }} {{ 'PasswordMax40Characters' | translate }}.</small
           >
         </span>
       </div>
@@ -40,26 +40,26 @@
             pInputText
             [type]="isShowRePassword ? 'text' : 'password'"
             formControlName="confirmPassword"
-            placeholder="Confirmation password" />
+            [placeholder]="'ConfirmPassword' | translate" />
         </div>
 
         <span *ngIf="getConfirmPassword.dirty">
           <small *ngIf="getConfirmPassword.errors?.['matching']" id="password-help" class="reset-form__field-message p-error block">
-            Password don't match</small
+            {{ 'Password' | translate }} {{ 'DontMatch' | translate }}</small
           >
           <small *ngIf="getConfirmPassword.errors?.['required']" id="password-help" class="reset-form__field-message p-error block">
-            Password is not empty</small
+            {{ 'Password' | translate }} {{ 'NotEmpty' | translate }}</small
           >
         </span>
       </div>
       <div class="grid action-wrapper mt-3">
         <button type="submit" [disabled]="!resetForm.valid" class="btn-action reset-form__btn col-5 sm:col-4 md:col-4" pButton [loading]="isLoading">
-          RESET
+          {{ 'Reset' | translate }}
         </button>
         <div class="link-action-wrapper col-5 sm:col-4 md:col-4">
-          <a class="link-action" [routerLink]="['/auth/login']">Login?</a><br />
-          or
-          <a class="link-action" [routerLink]="['/auth/register']">Register</a>
+          <a class="link-action" [routerLink]="['/auth/login']">{{ 'Login' | translate }}?</a><br />
+          {{ 'Or' | translate }}
+          <a class="link-action" [routerLink]="['/auth/register']">{{ 'Register' | translate }}</a>
         </div>
       </div>
     </form>

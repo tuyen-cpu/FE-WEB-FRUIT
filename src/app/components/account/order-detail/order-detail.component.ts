@@ -10,10 +10,12 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-order-detail',
   standalone: true,
-  imports: [CommonModule, TableModule, RouterModule, MyCurrency, ButtonModule],
+  imports: [CommonModule, TableModule, RouterModule, MyCurrency, ButtonModule, TranslateModule],
   templateUrl: './order-detail.component.html',
   styleUrls: ['./order-detail.component.scss'],
   encapsulation: ViewEncapsulation.None,

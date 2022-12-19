@@ -4,15 +4,17 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from './environments/environment';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app/app.component';
 import { APP_ROUTES } from './app/app-routing';
 import { AppInterceptor } from './app/services/app.interceptor';
-import {
-  GoogleLoginProvider,
-  SocialAuthServiceConfig,
-} from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { AuthGuard } from './app/guards/auth.guard';
+
+//multi languge
+
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 if (environment.production) {
   enableProdMode();
@@ -35,9 +37,7 @@ bootstrapApplication(AppComponent, {
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '1049260761267-rfk990he95so6nilv8t1a35k3ggr1aft.apps.googleusercontent.com'
-            ),
+            provider: new GoogleLoginProvider('1049260761267-rfk990he95so6nilv8t1a35k3ggr1aft.apps.googleusercontent.com'),
           },
         ],
         onError: (err) => {
@@ -47,12 +47,23 @@ bootstrapApplication(AppComponent, {
     },
     importProvidersFrom(
       BrowserAnimationsModule,
+
       HttpClientModule,
       RouterModule.forRoot(APP_ROUTES, {
         preloadingStrategy: PreloadAllModules,
         scrollPositionRestoration: 'top',
-      })
+      }),
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: translateFactory,
+          deps: [HttpClient],
+        },
+      }),
     ),
     AuthGuard,
   ],
 });
+export function translateFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient, './assets/i18n/');
+}

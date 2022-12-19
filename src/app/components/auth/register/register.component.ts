@@ -10,11 +10,11 @@ import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModu
 import { ToastModule } from 'primeng/toast';
 import { Validation } from 'src/app/utils/Validation';
 import { ConfirmationService, MessageService } from 'primeng/api';
-
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, RouterModule, ToastModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, RouterModule, ToastModule, TranslateModule],
   providers: [MessageService, ConfirmationService],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],

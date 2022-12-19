@@ -2,7 +2,8 @@
 <header>
   <div class="sub-header container">
     <div class="sub-header__site flex py-2 justify-content-center lg:justify-content-between align-items-center">
-      <span class="sub-header__site-left">Freeship with orders from 250k. Express delivery 2 hours.</span>
+      <span class="sub-header__site-left"> {{ 'TitleTopFreeShip' | translate }}.</span>
+      <span class="form-inline"> </span>
       <ul class="sub-header__site-right align-items-center hidden lg:flex">
         <li class="email mr-5">
           <i class="pi pi-telegram pi-envelope mr-2"></i>
@@ -10,7 +11,28 @@
         </li>
         <li class="phone">
           <i class="pi pi-phone phone__icon mr-2"></i>
-          <span class="phone__text">Hotline: cskh@bio-ngon.com</span>
+          <span class="phone__text">{{ 'Hotline' | translate }}: cskh@bio-ngon.com</span>
+        </li>
+        <li>
+          <p-dropdown
+            [options]="languages"
+            [(ngModel)]="language"
+            (onChange)="translateSite(language.name)"
+            optionLabel="name"
+            placeholder="Select a Country">
+            <ng-template pTemplate="selectedItem">
+              <div class="country-item country-item-value flex" *ngIf="language">
+                <img src="../../../assets/img/flag_placeholder.png" [class]="'flag flag-' + language.code.toLowerCase()" />
+                <div>{{ language.name }}</div>
+              </div>
+            </ng-template>
+            <ng-template let-country pTemplate="item">
+              <div class="country-item flex">
+                <img src="../../../assets/img/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" />
+                <div>{{ country.name }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </li>
       </ul>
     </div>
@@ -28,13 +50,13 @@
           <div class="category-dropdown-mobile">
             <ul class="category-dropdown-mobile__list">
               <li class="category-dropdown-mobile__item">
-                <a href="" class="category-dropdown-mobile__item-link">Sản phẩm</a>
+                <a href="" class="category-dropdown-mobile__item-link">{{ 'Product' | translate }}</a>
                 <ul class="category-dropdown-mobile__sub">
                   <li>
-                    <a (click)="changeShowCategoryDropdown()" routerLink="/product/list">Tất cả sản phẩm</a>
+                    <a (click)="changeShowCategoryDropdown()" routerLink="/product/all">{{ 'AllProduct' | translate }}</a>
                   </li>
                   <li *ngFor="let cate of categories">
-                    <a (click)="changeShowCategoryDropdown()" routerLink="/product/list/{{ cate.slug }}">{{ cate.name }}</a>
+                    <a (click)="changeShowCategoryDropdown()" routerLink="/product/{{ cate.slug }}">{{ cate.name | translate }}</a>
                   </li>
                 </ul>
               </li>
@@ -81,25 +103,30 @@
         <div class="nav-wrapper hidden lg:block md:col-4">
           <ul class="navbar__list">
             <li class="navbar__item">
-              <a [routerLink]="['/']" class="navbar__item-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Home </a>
+              <a [routerLink]="['/']" class="navbar__item-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                {{ 'Home' | translate }}
+              </a>
             </li>
+
             <li class="navbar__item">
               <a [routerLink]="['/product']" class="navbar__item-link" routerLinkActive="active">
-                Product
+                {{ 'Product' | translate }}
                 <i class="pi pi-angle-down navbar__item-link-icon" aria-hidden="true"></i>
               </a>
 
               <ul class="navbar__sub-menu-list">
                 <li class="navbar__sub-menu-item">
-                  <a routerLink="/product/list" class="navbar__sub-menu-item-link">All product</a>
+                  <a routerLink="/product/all" class="navbar__sub-menu-item-link">{{ 'AllProduct' | translate }}</a>
                 </li>
                 <li *ngFor="let cate of categories" class="navbar__sub-menu-item">
-                  <a routerLink="/product/list/{{ cate.slug }}" class="navbar__sub-menu-item-link">{{ cate.name }}</a>
+                  <a routerLink="/product/list/{{ cate.slug }}" class="navbar__sub-menu-item-link">{{ cate.name | translate }}</a>
                 </li>
               </ul>
             </li>
             <li class="navbar__item">
-              <a [routerLink]="['/about']" class="navbar__item-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> About </a>
+              <a [routerLink]="['/about']" class="navbar__item-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                {{ 'About' | translate }}
+              </a>
             </li>
           </ul>
         </div>
@@ -110,7 +137,7 @@
             type="text"
             formControlName="inputSearch"
             class="input-search"
-            placeholder="Search product at here..." />
+            [placeholder]="'SearchProductAtHere' | translate" />
           <div class="search-dropdown">
             <p-progressBar [hidden]="!isLoading" mode="indeterminate" [style]="{ height: '2px' }"></p-progressBar>
             <ul class="search-result">
@@ -128,7 +155,9 @@
               </li>
 
               <div class="result-more">
-                <a [hidden]="products.length === 0" class="cursor-pointer" (click)="goSearchPage(searchInput)"> Xem thêm kết quả.</a>
+                <a [hidden]="products.length === 0" class="cursor-pointer" (click)="goSearchPage(searchInput)">
+                  {{ 'ViewMoreResults' | translate }}.</a
+                >
                 <span [hidden]="products.length !== 0">No matching results.</span>
               </div>
             </ul>
@@ -183,8 +212,8 @@
                 <div id="site-login" class="account-wrapper is-selected">
                   <div class="account-site">
                     <div class="account-header">
-                      <h2 class="account-header__title">LOGIN ACCOUNT</h2>
-                      <p>Enter your email and your password</p>
+                      <h2 class="account-header__title">{{ 'Login' | translate }}</h2>
+                      <p>{{ 'EnterYourEmailAndYourPassword' | translate }}</p>
                     </div>
                     <div class="account-content">
                       <!-- <form class="mygroup">
@@ -207,10 +236,10 @@
                           <label for="account-content__email" class="account-content__label">Email </label>
                           <span *ngIf="getEmail.dirty" class="box-error">
                             <small *ngIf="getEmail.errors?.['required']" id="password-help" class="reset-form__field-message p-error block">
-                              Email is not empty.</small
+                              Email {{ 'NotEmpty' | translate }}.</small
                             >
                             <small *ngIf="getEmail.errors?.['email']" id="password-help" class="login-form__field-message p-error block">
-                              Email invalid. Vd:tuyen@gmail.com</small
+                              Email {{ 'Invalid' | translate }}. Vd:tuyen@gmail.com</small
                             >
                           </span>
                         </div>
@@ -225,16 +254,16 @@
                             formControlName="password"
                             type="password"
                             required />
-                          <label for="account-content__password" class="account-content__label">Password</label>
+                          <label for="account-content__password" class="account-content__label">{{ 'Password' | translate }}</label>
                           <span *ngIf="getPassword.dirty" class="box-error">
                             <small
                               *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
                               id="password-help"
                               class="reset-form__field-message p-error block">
-                              Password must be at least 6 characters.</small
+                              {{ 'PasswordAtLeast6Characters' | translate }}.</small
                             >
                             <small *ngIf="getPassword.errors?.['maxlength']" id="password-help" class="login-form__field-message p-error block">
-                              Password cannot be more than 40 characters.</small
+                              {{ 'PasswordMax40Characters' | translate }}.</small
                             >
                           </span>
                         </div>
@@ -245,7 +274,7 @@
                           pButton
                           pRipple
                           [loading]="isLoading">
-                          LOGIN
+                          {{ 'Login' | translate }}
                         </button>
                       </form>
                       <div class="social-btn-wrapper justify-content-center">
@@ -274,12 +303,12 @@
                       </div>
                       <div class="switch-site-action">
                         <div class="switch-action__text">
-                          Are you a new customer?
-                          <a routerLink="/auth/register" (click)="changeShowAccountDropdown()">Create a account</a>
+                          {{ 'AYouANewCustomer' | translate }}
+                          <a routerLink="/auth/register" (click)="changeShowAccountDropdown()"> {{ 'CreateAAccount' | translate }}</a>
                         </div>
                         <div class="switch-action__text">
-                          Forgot password
-                          <a (click)="changeSiteAccount()">Reset password</a>
+                          {{ 'ForgotPassword' | translate }}
+                          <a (click)="changeSiteAccount()"> {{ 'ResetPassword' | translate }}</a>
                         </div>
                       </div>
                     </div>
@@ -288,7 +317,7 @@
                 <div id="site-forgot" class="account-wrapper">
                   <div class="account-site">
                     <div class="account-header">
-                      <h2 class="account-header__title">RESET PASSWORD</h2>
+                      <h2 class="account-header__title">{{ 'ResetPassword' | translate }}</h2>
                       <p>Enter your email</p>
                     </div>
                     <div class="account-content">
@@ -298,13 +327,13 @@
                           <label for="account-content__email-forgot" class="account-content__label">Email</label>
                         </div>
 
-                        <button class="btn-action w-100" pButton pRipple type="button">RESET</button>
+                        <button class="btn-action w-100" pButton pRipple type="button">{{ 'Reset' | translate }}</button>
                       </form>
 
                       <div class="switch-site-action">
                         <div class="switch-action__text">
-                          Did you remember the password?
-                          <a (click)="changeSiteAccount()">Back to login</a>
+                          {{ 'PasswordRemembered' | translate }}
+                          <a (click)="changeSiteAccount()"> {{ 'BackTo' | translate }} {{ 'Login' | translate }}</a>
                         </div>
                       </div>
                     </div>
@@ -320,17 +349,17 @@
                     </div>
                     <ul>
                       <li>
-                        <a routerLink="/account/profile" (click)="changeShowAccountDropdown()" class="item-info">My account</a>
+                        <a routerLink="/account/profile" (click)="changeShowAccountDropdown()" class="item-info"> {{ 'MyProfile' | translate }}</a>
                       </li>
                       <li>
-                        <a routerLink="/account/address" (click)="changeShowAccountDropdown()" class="item-info">Address list</a>
+                        <a routerLink="/account/address" (click)="changeShowAccountDropdown()" class="item-info">{{ 'MyAddress' | translate }}</a>
                       </li>
                       <li>
-                        <a routerLink="/account/order" (click)="changeShowAccountDropdown()" class="item-info">Orders list</a>
+                        <a routerLink="/account/order" (click)="changeShowAccountDropdown()" class="item-info">{{ 'MyOrder' | translate }}</a>
                       </li>
 
                       <li>
-                        <a (click)="logout(); changeShowAccountDropdown()" class="item-info">Logout</a>
+                        <a (click)="logout(); changeShowAccountDropdown()" class="item-info">{{ 'Logout' | translate }}</a>
                       </li>
                     </ul>
                   </div>
@@ -390,16 +419,18 @@
                       <path d="M22.9360352 15h54.8070373l-4.3391876 30H30.3387146L19.6676025 0H.99560547"></path>
                     </g>
                   </svg>
-                  <p class="mt-4">Cart is empty</p>
+                  <p class="mt-4">{{ 'CartIsEmpty' | translate }}</p>
                 </div>
                 <div class="cart-dropdown-footer">
                   <div class="total-wrapper flex justify-content-between">
-                    <span class="total_title">Subtotal</span>
+                    <span class="total_title">{{ 'Subtotal' | translate }}</span>
                     <span class="total_value">{{ totalCart | currency : 'VND' }}</span>
                   </div>
                   <div class="btn-action-wrapper flex">
-                    <a class="btn-action" routerLink="/cart" pButton pRipple type="button">MY CART</a>
-                    <button routerLink="/checkout" class="btn-action" pButton pRipple [disabled]="carts.length === 0">CHECKOUT</button>
+                    <a class="btn-action" routerLink="/cart" pButton pRipple type="button">{{ 'Cart' | translate }}</a>
+                    <button routerLink="/checkout" class="btn-action" pButton pRipple [disabled]="carts.length === 0">
+                      {{ 'Checkout' | translate }}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -433,8 +464,10 @@
                   </li>
 
                   <div class="result-more">
-                    <a [hidden]="products.length === 0" class="cursor-pointer" (click)="goSearchPage(searchInputMobile)"> Xem thêm kết quả.</a>
-                    <span [hidden]="products.length !== 0">Không có kết quả phù hợp.</span>
+                    <a [hidden]="products.length === 0" class="cursor-pointer" (click)="goSearchPage(searchInputMobile)">
+                      {{ 'ViewMoreResults' | translate }}.</a
+                    >
+                    <span [hidden]="products.length !== 0">{{ 'NoMatchingResult' | translate }}.</span>
                   </div>
                 </ul>
               </div>

@@ -22,6 +22,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { ProductItemComponent } from '../product-item/product-item.component';
 import { Category, Product } from 'src/app/model/category.model';
 import { Paginator } from 'src/app/model/paginator.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-list',
@@ -41,6 +42,7 @@ import { Paginator } from 'src/app/model/paginator.model';
     ProgressSpinnerModule,
     LoadingComponent,
     MyCurrency,
+    TranslateModule,
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],

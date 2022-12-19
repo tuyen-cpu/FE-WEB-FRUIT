@@ -1,9 +1,14 @@
 <p-toast></p-toast>
-<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog
+  header="Confirmation"
+  defaultFocus="none"
+  [dismissableMask]="true"
+  rejectButtonStyleClass="p-button-secondary p-button-plain"
+  icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
 <div class="">
   <div class="title text-center mb-6">
-    <h2 class="title-account-component">My Address</h2>
+    <h2 class="title-account-component">{{ 'MyAddress' | translate }}</h2>
   </div>
 
   <!-- <div class="account-side col-12 sm:col-12 md:12 lg:col-3">
@@ -34,7 +39,7 @@
           <button
             pButton
             pRipple
-            label="Delete"
+            [label]="'Delete' | translate"
             icon="pi pi-trash"
             class="p-button-danger"
             (click)="deleteSelectedAddresses($event)"
@@ -66,7 +71,7 @@
           </ng-template> -->
         <ng-template pTemplate="caption">
           <div class="flex align-items-center justify-content-between">
-            <span class="text-2xl">Total: {{ paginator.totalElements }}</span>
+            <span class="text-2xl">{{ 'Total' | translate }}: {{ paginator.totalElements }}</span>
             <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
@@ -78,10 +83,10 @@
             <th style="width: 4rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-            <th>Address</th>
-            <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th>
-            <th>Default</th>
+            <th pSortableColumn="name">{{ 'Name' | translate }} <p-sortIcon field="name"></p-sortIcon></th>
+            <th>{{ 'Address' | translate }}</th>
+            <th pSortableColumn="phone">{{ 'Phone' | translate }} <p-sortIcon field="phone"></p-sortIcon></th>
+            <th>{{ 'Status' | translate }}</th>
             <th style="min-width: 10rem"></th>
           </tr>
         </ng-template>
@@ -98,7 +103,7 @@
               {{ address.phone }}
             </td>
             <td>
-              <span [class]="'address-default status-' + address.isDefault">{{ address.isDefault === 0 ? '' : 'DEFAULT' }}</span>
+              <span [class]="'address-default status-' + address.isDefault">{{ address.isDefault === 0 ? '' : ('DEFAULT' | translate) }}</span>
             </td>
             <td>
               <button
@@ -140,7 +145,7 @@
       [dismissableMask]="true"
       [(visible)]="addressDialog"
       [style]="{ width: '450px', fontSize: '24rem' }"
-      header="New Address"
+      [header]="'Add' | translate"
       [modal]="true"
       styleClass="p-fluid">
       <ng-template pTemplate="content">

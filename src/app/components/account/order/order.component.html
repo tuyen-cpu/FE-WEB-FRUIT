@@ -2,7 +2,7 @@
 <p-toast></p-toast>
 <div class="order-wrapper container">
   <div class="title text-center mb-6">
-    <h2 class="title-account-component">ORDERED LIST</h2>
+    <h2 class="title-account-component">{{ 'MyOrder' | translate }}</h2>
   </div>
   <p-table
     #dt
@@ -15,7 +15,7 @@
     <!-- <ng-template pTemplate="caption"> List of latest orders </ng-template> -->
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
-        <span class="text-2xl">Total: {{ paginator.totalElements }}</span>
+        <span class="text-2xl">{{ 'Total' | translate }}: {{ paginator.totalElements }}</span>
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
           <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
@@ -24,13 +24,13 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th style="flex: 1.5">ID</th>
-        <th style="flex: 2">Order date</th>
-        <th style="flex: 2">Total</th>
-        <th style="flex: 7">Address</th>
-        <th style="flex: 2.5">Status Shipping</th>
-        <th style="flex: 2.5">Status Payment</th>
-        <th style="flex: 0.8">Action</th>
+        <th style="flex: 1.5">{{ 'ID' | translate }}</th>
+        <th style="flex: 2">{{ 'OrderDate' | translate }}</th>
+        <th style="flex: 2">{{ 'Total' | translate }}</th>
+        <th style="flex: 7">{{ 'Address' | translate }}</th>
+        <th style="flex: 2.5">{{ 'ShippingStatus' | translate }}</th>
+        <th style="flex: 2.5">{{ 'PaymentStatus' | translate }}</th>
+        <th style="flex: 0.8">{{ 'Action' | translate }}</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary" *ngIf="orders">
@@ -54,10 +54,10 @@
           <div class="text-right md:text-left">{{ order.address }}</div>
         </td>
         <td style="flex: 2.5">
-          {{ order.shippingStatus.name }}
+          {{ order.shippingStatus.name | translate }}
         </td>
         <td style="flex: 2.5">
-          {{ order.payment.status }}
+          {{ order.payment.status | translate }}
         </td>
         <td style="flex: 0.8">
           <a class="cursor-pointer text-red-700" *ngIf="order.shippingStatus.name === 'UNVERIFIED'" (click)="onCancelOrder(order)">Cancel</a>

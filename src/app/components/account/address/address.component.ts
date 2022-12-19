@@ -26,6 +26,7 @@ import { LoadingComponent } from 'src/app/utils/loading/loading.component';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-address',
@@ -51,6 +52,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     MessagesModule,
     ConfirmDialogModule,
     TooltipModule,
+    TranslateModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './address.component.html',

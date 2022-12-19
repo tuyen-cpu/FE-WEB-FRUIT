@@ -15,10 +15,12 @@ import { Paginator } from 'src/app/model/paginator.model';
 import { PaginatorModule } from 'primeng/paginator';
 import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-order',
   standalone: true,
-  imports: [CommonModule, ToastModule, TableModule, InputTextModule, RouterModule, MyCurrency, ConfirmDialogModule, PaginatorModule],
+  imports: [CommonModule, ToastModule, TableModule, InputTextModule, RouterModule, MyCurrency, ConfirmDialogModule, PaginatorModule, TranslateModule],
   providers: [ConfirmationService, MessageService],
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],

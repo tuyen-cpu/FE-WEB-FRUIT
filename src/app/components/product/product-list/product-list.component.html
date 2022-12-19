@@ -4,7 +4,7 @@
       <div class="product-list-filter__category">
         <p-accordion>
           <div class="product-list-filter__title" (click)="toggleFilterCategory()">
-            <span class="product-list-filter__title-name">Categories</span>
+            <span class="product-list-filter__title-name">{{ 'Categories' | translate }}</span>
             <span class="product-list-filter__title-icon">
               <i [ngClass]="isShowFilterCategory ? 'pi pi-minus' : 'pi pi-plus'"></i>
             </span>
@@ -13,13 +13,7 @@
           <p-accordionTab [(selected)]="isShowFilterCategory">
             <ul class="product-list-filter__list">
               <li class="product-list-filter__item">
-                <a
-                  [routerLink]="['/product/list']"
-                  [routerLinkActiveOptions]="{ exact: true }"
-                  routerLinkActive="active"
-                  class="product-list-filter__item-link"
-                  >All products</a
-                >
+                <a [routerLink]="['/product/all']" routerLinkActive="active" class="product-list-filter__item-link">{{ 'AllProduct' | translate }}</a>
               </li>
               <li *ngFor="let category of categories" class="product-list-filter__item is-selected">
                 <a [routerLink]="['/product/list/' + category.slug]" routerLinkActive="active" class="product-list-filter__item-link">{{
@@ -50,7 +44,7 @@
       <div class="product-list-filter__price">
         <p-accordion>
           <div class="product-list-filter__title" (click)="toggleFilterPrice()">
-            <span class="product-list-filter__title-name">Price</span>
+            <span class="product-list-filter__title-name">{{ 'Price' | translate }}</span>
             <span class="product-list-filter__title-icon">
               <i [ngClass]="isShowFilterPrice ? 'pi pi-minus' : 'pi pi-plus'"></i>
             </span>
@@ -59,7 +53,7 @@
           <p-accordionTab [(selected)]="isShowFilterPrice">
             <div class="field-radiobutton" *ngFor="let price of priceList; let i = index">
               <p-radioButton (onClick)="changePrice()" name="price" [value]="price" [(ngModel)]="filter.price" [inputId]="i + ''"></p-radioButton>
-              <label [for]="i">Dưới {{ price | myCurrency : 'vnd' }}</label>
+              <label [for]="i">{{ 'Under' | translate }} {{ price | myCurrency : 'vnd' }}</label>
             </div>
           </p-accordionTab>
         </p-accordion>

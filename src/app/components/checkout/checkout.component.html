@@ -9,11 +9,15 @@
         </span>
         <div class="content ml-4">
           <p class="m-0 mb-2">alanwalker (tranquangtuyen3263263@gmail.com)</p>
-          <a (click)="logout()" class="btn-v cursor-pointer">Logout</a>
+          <a (click)="logout()" class="btn-v cursor-pointer"> {{ 'Logout' | translate }}</a>
         </div>
       </div>
       <div *ngIf="!getUser()" class="user-information flex align-items-center mb-3">
-        <span>Do you already have an account?<a routerLink="/account/login" class="btn-v cursor-pointer">Login</a></span>
+        <span
+          >{{ 'DoYouAlreadyHaveAnAccount' | translate }}?<a routerLink="/account/login" class="btn-v cursor-pointer">
+            {{ 'Login' | translate }}</a
+          ></span
+        >
       </div>
     </div>
   </div>
@@ -23,9 +27,11 @@
       <form class="grid" [formGroup]="infoForm" (ngSubmit)="onSubmit()">
         <div class="col-12">
           <div class="section-wrapper">
-            <h4 class="info-title">Information delivery</h4>
+            <h4 class="info-title">{{ 'InformationDelivery' | translate }}</h4>
             <div class="field" *ngIf="!addresses.length">
-              <span> Don't have an address yet? <a class="btn-add" routerLink="/account/address">Add now</a></span>
+              <span>
+                {{ 'DontHaveAddress' | translate }}? <a class="btn-add" routerLink="/account/address">{{ 'AddNow' | translate }}</a></span
+              >
             </div>
             <div class="field">
               <p-dropdown
@@ -33,60 +39,76 @@
                 [style]="{ minWidth: '100%' }"
                 [options]="addresses"
                 formControlName="address"
-                placeholder="Select a stored address"
+                [placeholder]="'SelectAAddress' | translate"
                 optionLabel="name"></p-dropdown>
             </div>
             <div class="field">
               <input
                 id="firstName"
-                placeholder="First Name"
+                [placeholder]="'FirstName' | translate"
                 formControlName="firstName"
                 [class]="firstName?.invalid ? 'ng-invalid ng-dirty w-full input-custom' : 'w-full input-custom'"
                 pInputText />
               <div class="mt-1" *ngIf="firstName?.invalid && firstName?.dirty && firstName?.touched" id="firstName-help">
-                <small class="p-error message-error" [hidden]="!firstName?.errors?.['required']"> FirstName is required. </small>
-                <small class="p-error message-error" [hidden]="!firstName?.errors?.['firstName']"> FirstName is invalid. </small>
+                <small class="p-error message-error" [hidden]="!firstName?.errors?.['required']">
+                  {{ 'FirstName' | translate }} {{ 'NotEmpty' | translate }}.
+                </small>
+                <small class="p-error message-error" [hidden]="!firstName?.errors?.['firstName']">
+                  {{ 'FirstName' | translate }} {{ 'Invalid' | translate }}.
+                </small>
               </div>
             </div>
             <div class="field">
               <input
                 id="lastName"
-                placeholder="Last Name"
+                [placeholder]="'LastName' | translate"
                 formControlName="lastName"
                 [class]="lastName?.invalid ? 'ng-invalid ng-dirty w-full input-custom' : 'w-full input-custom'"
                 pInputText />
               <div class="mt-1" *ngIf="lastName?.invalid && lastName?.dirty && lastName?.touched" id="name-help">
-                <small class="p-error message-error" [hidden]="!lastName?.errors?.['required']"> Last name is required. </small>
-                <small class="p-error message-error" [hidden]="!lastName?.errors?.['minlength']"> Min length of last name is 3. </small>
+                <small class="p-error message-error" [hidden]="!lastName?.errors?.['required']">
+                  {{ 'LastName' | translate }} {{ 'NotEmpty' | translate }}.
+                </small>
+                <small class="p-error message-error" [hidden]="!lastName?.errors?.['minlength']"
+                  >{{ 'PasswordAtLeast6Characters' | translate }}.
+                </small>
               </div>
             </div>
             <div class="field"></div>
 
             <input
               id="phone"
-              placeholder="Phone number"
+              [placeholder]="'PhoneNumber' | translate"
               formControlName="phoneNum"
               [class]="phoneNum?.invalid ? 'ng-invalid ng-dirty w-full input-custom' : 'w-full input-custom'"
               pInputText />
             <div class="mt-1" *ngIf="phoneNum?.invalid && phoneNum?.dirty && phoneNum?.touched" id="phoneNum-help">
-              <small class="p-error message-error" [hidden]="!phoneNum?.errors?.['required']"> Phone number is required. </small>
-              <small class="p-error message-error" [hidden]="!phoneNum?.errors?.['pattern']"> Phone number is invalid. </small>
+              <small class="p-error message-error" [hidden]="!phoneNum?.errors?.['required']">
+                {{ 'PhoneNumber' | translate }} {{ 'NotEmpty' | translate }}.
+              </small>
+              <small class="p-error message-error" [hidden]="!phoneNum?.errors?.['pattern']">
+                {{ 'PhoneNumber' | translate }} {{ 'Invalid' | translate }}.
+              </small>
             </div>
           </div>
         </div>
         <div class="col-12 mt-3">
           <div class="section-wrapper">
-            <h4 class="info-title">Address delivery.</h4>
+            <h4 class="info-title">{{ 'AddressDelivery' | translate }}</h4>
             <div class="field">
               <input
                 id="street"
-                placeholder="Street"
+                [placeholder]="'Street' | translate"
                 formControlName="street"
                 [class]="street?.invalid ? 'ng-invalid ng-dirty w-full input-custom' : 'w-full input-custom'"
                 pInputText />
               <div class="mt-1" *ngIf="street?.invalid && street?.dirty && street?.touched" id="street">
-                <small class="p-error message-error" [hidden]="!street?.errors?.['required']"> Street number is required. </small>
-                <small class="p-error message-error" [hidden]="!street?.errors?.['minlength']"> Street number is invalid. </small>
+                <small class="p-error message-error" [hidden]="!street?.errors?.['required']">
+                  {{ 'Street' | translate }} {{ 'NotEmpty' | translate }}.
+                </small>
+                <small class="p-error message-error" [hidden]="!street?.errors?.['minlength']">
+                  {{ 'Street' | translate }} {{ 'Invalid' | translate }}.
+                </small>
               </div>
             </div>
             <div class="grid">
@@ -96,7 +118,7 @@
                   [style]="{ minWidth: '100%' }"
                   [options]="provinces"
                   formControlName="province"
-                  placeholder="Select a City"
+                  [placeholder]="'SelectACity' | translate"
                   optionLabel="name"></p-dropdown>
               </div>
               <div class="col-12 sm:col-12 md:col-12 lg:col-4">
@@ -105,7 +127,7 @@
                   [style]="{ minWidth: '100%' }"
                   [options]="districts"
                   formControlName="district"
-                  placeholder="Select a district"
+                  [placeholder]="'SelectADistrict' | translate"
                   optionLabel="name"></p-dropdown>
               </div>
               <div class="col-12 sm:col-12 md:col-12 lg:col-4">
@@ -113,14 +135,20 @@
                   [style]="{ minWidth: '100%' }"
                   [options]="wards"
                   formControlName="ward"
-                  placeholder="Select a ward"
+                  [placeholder]="'SelectAWard' | translate"
                   optionLabel="name"></p-dropdown>
               </div>
             </div>
           </div>
         </div>
         <div class="col-12">
-          <textarea class="input-custom w-full" placeholder="Notes (Option)" rows="5" cols="30" formControlName="notes" pInputTextarea></textarea>
+          <textarea
+            class="input-custom w-full"
+            [placeholder]="('Notes' | translate) + ' (' + ('Option' | translate) + ')'"
+            rows="5"
+            cols="30"
+            formControlName="notes"
+            pInputTextarea></textarea>
         </div>
         <!-- <button type="submit" [disabled]="!infoForm.valid">Submit</button> -->
       </form>
@@ -184,7 +212,7 @@
   <div class="flex-order-1 md:flex-order-2 col-12 sm:col-12 md:col-12 lg:col-4 mt-4">
     <div class="sidebar grid px-3">
       <div class="w-full sidebar__title">
-        <h4>Orders ({{ totalQuantity }})</h4>
+        <h4>{{ 'Order' | translate }} ({{ totalQuantity }})</h4>
       </div>
       <div class="col-12">
         <ul class="product-list max-h-24rem">
@@ -231,31 +259,31 @@
         </div> -->
         <div class="fee-wrapper py-2">
           <div class="flex justify-content-between pt-2">
-            <span>Subtotal ({{ totalQuantity }} items):</span>
+            <span>{{ 'Subtotal' | translate }} ({{ totalQuantity }} items):</span>
             <span>{{ totalCart | myCurrency : 'VND' }}</span>
           </div>
           <div class="flex justify-content-between pt-2">
-            <span>Shipping fee:</span>
+            <span>{{ 'ShippingFee' | translate }}:</span>
             <span>{{ shippingCost | myCurrency : 'VND' }}</span>
           </div>
         </div>
         <div class="total-wrapper py-3">
           <div class="flex justify-content-between">
-            <span>Total:</span>
+            <span>{{ 'Total' | translate }}:</span>
             <span class="total-value">{{ totalCart | myCurrency : 'VND' }}</span>
           </div>
         </div>
         <div class="btn-action-wrapper flex justify-content-between">
           <a routerLink="/cart" class="flex align-items-center back-page">
             <i class="pi pi-angle-left back-icon"></i>
-            <span>Back to cart</span>
+            <span>{{ 'BackTo' | translate }}</span>
           </a>
           <button
             pButton
             pRipple
             type="button"
             class="btn-checkout"
-            label="Payment on delivery"
+            [label]="'PaymentOnDelivery' | translate"
             (click)="onSubmit()"
             [disabled]="infoForm.invalid"
             [loading]="isLoading"></button>

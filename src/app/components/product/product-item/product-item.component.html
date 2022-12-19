@@ -30,7 +30,7 @@
       <del *ngIf="product.discount" class="product-detail__price-old">{{ product.price | currency : 'VND' }}</del>
     </div>
     <div class="product-wrapper">
-      <button class="btn-action" (click)="addCart(product)">Add to cart</button>
+      <button class="btn-action" (click)="addCart(product)">{{ 'AddToCart' | translate }}</button>
     </div>
   </div>
 </div>

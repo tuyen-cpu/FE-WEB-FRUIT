@@ -14,11 +14,12 @@ import { name } from 'src/app/utils/regex';
 import { UserService } from 'src/app/services/user.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, RouterModule, ToastModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, RouterModule, ToastModule, TranslateModule],
   providers: [MessageService, ConfirmationService],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],

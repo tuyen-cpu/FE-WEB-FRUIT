@@ -1,7 +1,7 @@
 <div class="login-wrapper col-12 sm:col-12 md:col-6 lg:12">
   <div class="login-site">
     <div class="login-title">
-      <h2>LOGIN</h2>
+      <h2>{{ 'Login' | translate }}</h2>
     </div>
     <form action="" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
       <div class="login-form__field">
@@ -11,10 +11,10 @@
             *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
             id="password-help"
             class="login-form__field-message p-error block">
-            Email không được bỏ trống.</small
+            Email {{ 'NotEmpty' | translate }}.</small
           >
           <small *ngIf="getEmail.errors?.['email']" id="password-help" class="login-form__field-message p-error block">
-            Email sai định dạng. Vd:tuyen@gmail.com</small
+            Email {{ 'Invalid' | translate }}. Vd:tuyen@gmail.com</small
           >
         </span>
       </div>
@@ -27,7 +27,7 @@
             id="password"
             [type]="isShowPassword ? 'text' : 'password'"
             class="login-form__field-input"
-            placeholder="Password"
+            [placeholder]="'Password' | translate"
             formControlName="password"
             type="password"
             pInputText />
@@ -38,22 +38,22 @@
             *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
             id="password-help"
             class="login-form__field-message p-error block">
-            Mật khẩu phải có ít nhất 6 kí tự.</small
+            {{ 'Password' | translate }} {{ 'PasswordAtLeast6Characters' | translate }}.</small
           >
           <small *ngIf="getPassword.errors?.['maxlength']" id="password-help" class="login-form__field-message p-error block">
-            Mật khẩu không được nhiều hơn 40 kí tự.</small
+            {{ 'Password' | translate }} {{ 'PasswordMax40Characters' | translate }}.</small
           >
         </span>
       </div>
 
       <div class="grid action-wrapper mt-5">
         <button type="submit" [disabled]="!loginForm.valid" class="btn-action login-form__btn col-5 sm:col-4 md:col-4" pButton [loading]="isLoading">
-          LOGIN
+          {{ 'Login' | translate }}
         </button>
         <div class="link-action-wrapper col-5 sm:col-7 md:col-7">
-          <a class="link-action" [routerLink]="['/auth/forgot']">Forgot Password?</a><br />
-          or
-          <a class="link-action" [routerLink]="['/auth/register']">Create a New Account</a>
+          <a class="link-action" [routerLink]="['/auth/forgot']">{{ 'ForgotPassword' | translate }}?</a><br />
+          {{ 'Or' | translate }}
+          <a class="link-action" [routerLink]="['/auth/register']">{{ 'CreateAAccount' | translate }}</a>
         </div>
         <div class="col-5 sm:col-4 md:col-4">
           <!-- <asl-google-signin-button

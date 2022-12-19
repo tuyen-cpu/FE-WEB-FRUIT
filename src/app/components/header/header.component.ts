@@ -2,7 +2,7 @@ import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, OnDestro
 import { ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject, Subscription, switchMap } from 'rxjs';
 //component
 
@@ -29,14 +29,19 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
-
+import { DropdownModule } from 'primeng/dropdown';
 import { SocialAuthService, SocialLoginModule, SocialUser } from '@abacritt/angularx-social-login';
+
+//ngx-translator
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     ButtonModule,
     ProgressBarModule,
     MegaMenuModule,
@@ -47,6 +52,8 @@ import { SocialAuthService, SocialLoginModule, SocialUser } from '@abacritt/angu
     ToastModule,
     InputTextModule,
     MyCurrency,
+    TranslateModule,
+    DropdownModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './header.component.html',
@@ -83,6 +90,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isDisable = true;
   googleSubscription: Subscription;
   isShowPassword = false;
+  languages = [
+    { name: 'vn', code: 'VN' },
+    { name: 'en', code: 'US' },
+  ];
+  language: { name: string; code: string };
   constructor(
     private el: ElementRef,
     private fb: FormBuilder,
@@ -96,8 +108,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private categoryService: CategoryService,
     private fileUploadService: FileUploadService,
-  ) {}
-
+    public translateService: TranslateService,
+  ) {
+    // translateService.addLangs(['en', 'vn']);
+    // translateService.setDefaultLang('en');
+  }
+  translateSite(langauge: string) {
+    this.translateService.use(langauge);
+  }
   ngOnInit(): void {
     this.urlImage = this.fileUploadService.getLink();
     this.listenerSocialAuth();

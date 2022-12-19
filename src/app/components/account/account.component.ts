@@ -3,11 +3,12 @@ import { RouterModule } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-account',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   providers: [SocialLoginModule],
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],

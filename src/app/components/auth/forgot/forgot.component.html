@@ -1,7 +1,7 @@
 <div class="forgot-wrapper col-12 sm:col-12 md:col-6">
   <div class="forgot-site">
     <div class="forgot-title">
-      <h2>FORGOT PASSWORD</h2>
+      <h2>{{ 'ForgotPassword' | translate }}</h2>
     </div>
     <form action="" [formGroup]="forgotForm" (ngSubmit)="onSubmit()" class="forgot-form">
       <div class="forgot-form__field">
@@ -11,10 +11,10 @@
             *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
             id="password-help"
             class="forgot-form__field-message p-error block">
-            Email không được bỏ trống.</small
+            Email {{ 'NotEmpty' | translate }}.</small
           >
           <small *ngIf="getEmail.errors?.['email']" id="password-help" class="forgot-form__field-message p-error block">
-            Email sai định dạng. Vd:tuyen@gmail.com</small
+            Email {{ 'Invalid' | translate }}. Vd:tuyen@gmail.com</small
           >
         </span>
       </div>
@@ -26,12 +26,13 @@
           class="btn-action forgot-form__btn col-5 sm:col-4 md:col-4"
           pButton
           [loading]="isLoading">
-          RESET
+          {{ 'Reset' | translate }}
         </button>
         <div class="link-action-wrapper col-5 sm:col-7 md:col-7">
-          <a class="link-action" [routerLink]="['/auth/login']">Login</a><br />
-          or
-          <a class="link-action" [routerLink]="['/auth/register']">Create a New Account</a>
+          <a class="link-action" [routerLink]="['/auth/login']">{{ 'Login' | translate }}</a
+          ><br />
+          {{ 'Or' | translate }}
+          <a class="link-action" [routerLink]="['/auth/register']">{{ 'CreateAAccount' | translate }}</a>
         </div>
       </div>
     </form>

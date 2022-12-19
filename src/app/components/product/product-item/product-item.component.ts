@@ -10,12 +10,13 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Router, RouterModule } from '@angular/router';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-item',
   standalone: true,
-  imports: [CommonModule, LazyLoadImageModule, ToastModule, MyCurrency, RouterModule],
-  providers: [MessageService, ConfirmationService],
+  imports: [CommonModule, LazyLoadImageModule, ToastModule, MyCurrency, RouterModule, TranslateModule],
+  providers: [MessageService, ConfirmationService, TranslateService],
   templateUrl: './product-item.component.html',
   styleUrls: ['./product-item.component.scss'],
   encapsulation: ViewEncapsulation.None,

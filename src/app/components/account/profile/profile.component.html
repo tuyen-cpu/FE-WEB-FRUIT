@@ -3,7 +3,7 @@
   <div class="profile-wrapper col-12 sm:col-12 md:col-8">
     <div class="profile-site">
       <div class="profile-title">
-        <h2 class="title-account-component">My account</h2>
+        <h2 class="title-account-component">{{ 'MyProfile' | translate }}</h2>
       </div>
       <form action="" [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
         <div class="profile-form__field">
@@ -14,10 +14,10 @@
               *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
               id="password-help"
               class="profile-form__field-message p-error block">
-              Email is not empty.</small
+              Email {{ 'NotEmpty' | translate }}.</small
             >
             <small *ngIf="getEmail.errors?.['email']" id="password-help" class="profile-form__field-message p-error block">
-              Invalid Email. Vd:tuyen@gmail.com</small
+              Email {{ 'Invalid' | translate }}. Vd:tuyen@gmail.com</small
             >
           </span>
         </div>
@@ -32,25 +32,29 @@
             type="first-name"
             pInputText />
           <span *ngIf="firstName.dirty">
-            <small *ngIf="firstName.errors?.['required']" class="profile-form__field-message p-error block"> First name is not empty.</small>
+            <small *ngIf="firstName.errors?.['required']" class="profile-form__field-message p-error block">
+              {{ 'FirstName' | translate }} {{ 'NotEmpty' | translate }}.</small
+            >
             <small *ngIf="firstName.errors?.['minlength']" class="profile-form__field-message p-error block">
-              Minimum length must be 3 characters.</small
+              {{ 'FirstName' | translate }} {{ 'PasswordAtLeast6Characters' | translate }}.</small
             >
             <small *ngIf="firstName.errors?.['maxlength']" class="profile-form__field-message p-error block">
-              Maximum length must be 40 characters.</small
+              {{ 'FirstName' | translate }} {{ 'PasswordMax40Characters' | translate }}.</small
             >
           </span>
         </div>
         <div class="profile-form__field mb-6">
-          <label for="last-name" class="mb-2 text-2xl inline-block">Last Name</label>
+          <label for="last-name" class="mb-2 text-2xl inline-block">{{ 'LastName' | translate }}</label>
           <input id="last-name" class="profile-form__field-input" placeholder="Last name" formControlName="lastName" type="last-name" pInputText />
           <span *ngIf="lastName.dirty">
-            <small *ngIf="lastName.errors?.['required']" class="profile-form__field-message p-error block"> Last name không được bỏ trống.</small>
+            <small *ngIf="lastName.errors?.['required']" class="profile-form__field-message p-error block">
+              {{ 'LastName' | translate }} {{ 'NotEmpty' | translate }}.</small
+            >
             <small *ngIf="lastName.errors?.['minlength']" class="profile-form__field-message p-error block">
-              Minimum length must be 3 characters.</small
+              {{ 'LastName' | translate }} {{ 'PasswordAtLeast6Characters' | translate }}.</small
             >
             <small *ngIf="lastName.errors?.['maxlength']" class="profile-form__field-message p-error block">
-              Maximum length must be 20 characters.</small
+              {{ 'LastName' | translate }} {{ 'PasswordMax40Characters' | translate }}.</small
             >
           </span>
         </div>
@@ -61,23 +65,23 @@
             class="btn-action profile-form__btn col-5 sm:col-4 md:col-4"
             pButton
             [loading]="isLoading">
-            Save
+            {{ 'Save' | translate }}
           </button>
         </div>
       </form>
     </div>
     <div class="change-password mt-7">
-      <h2 class="text-center text-4xl">CHANGE PASSWORD</h2>
+      <h2 class="text-center text-4xl">{{ 'ChangPassword' | translate }}</h2>
       <form action="" [formGroup]="resetForm" (ngSubmit)="changePassword()" class="profile-form">
         <div class="profile-form__field">
-          <label for="old-password" class="mb-2 text-2xl inline-block">Password</label>
+          <label for="old-password" class="mb-2 text-2xl inline-block">{{ 'Password' | translate }}</label>
           <div class="p-input-icon-right block">
             <i [ngClass]="isShowPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="onChangeShowPassword()"></i>
             <input
               id="old-password"
               class="profile-form__field-input"
               [type]="isShowPassword ? 'text' : 'password'"
-              placeholder="Password"
+              [placeholder]="'Password' | translate"
               formControlName="oldPassword"
               type="password"
               title="Password"
@@ -89,10 +93,10 @@
               *ngIf="getOldPassword.errors?.['minlength']||getOldPassword.errors?.['required']"
               id="password-help"
               class="profile-form__field-message p-error block">
-              Password must be at least 6 characters.</small
+              {{ 'Password' | translate }} {{ 'PasswordAtLeast6Characters' | translate }}.</small
             >
             <small *ngIf="getOldPassword.errors?.['maxlength']" id="password-help" class="profile-form__field-message p-error block">
-              Password cannot be more than 40 characters.</small
+              {{ 'Password' | translate }} {{ 'PasswordMax40Characters' | translate }}.</small
             >
             <small *ngIf="errorMessageInvalidPassword" id="password-help" class="profile-form__field-message p-error block">
               {{ errorMessageInvalidPassword }}</small
@@ -100,7 +104,7 @@
           </span>
         </div>
         <div class="profile-form__field">
-          <label for="password" class="mb-2 text-2xl inline-block">New Password</label>
+          <label for="password" class="mb-2 text-2xl inline-block">{{ 'NewPassword' | translate }}</label>
 
           <div class="p-input-icon-right block">
             <i [ngClass]="isShowNewPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="onChangeShowNewPassword()"></i>
@@ -108,7 +112,7 @@
               id="password"
               [type]="isShowNewPassword ? 'text' : 'password'"
               class="profile-form__field-input"
-              placeholder="New Password"
+              [placeholder]="'NewPassword' | translate"
               formControlName="newPassword"
               type="password"
               title="New Password"
@@ -120,22 +124,22 @@
               *ngIf="getNewPassword.errors?.['minlength']||getNewPassword.errors?.['required']"
               id="password-help"
               class="profile-form__field-message p-error block">
-              Password must be at least 6 characters.</small
+              {{ 'Password' | translate }} {{ 'PasswordAtLeast6Characters' | translate }}.</small
             >
             <small *ngIf="getNewPassword.errors?.['maxlength']" id="password-help" class="profile-form__field-message p-error block">
-              Password cannot be more than 40 characters.</small
+              {{ 'Password' | translate }} {{ 'PasswordMax40Characters' | translate }}.</small
             >
           </span>
         </div>
         <div class="profile-form__field mb-6">
-          <label for="confirmpassword" class="mb-2 text-2xl inline-block">Confirm Password</label>
+          <label for="confirmpassword" class="mb-2 text-2xl inline-block">{{ 'ConfirmPassword' | translate }}</label>
           <div class="p-input-icon-right block">
             <i [ngClass]="isShowRePassword ? 'pi pi-eye-slash' : 'pi pi-eye'" (click)="onChangeShowRePassword()"></i>
             <input
               id="confirmpassword"
               class="profile-form__field-input"
               [type]="isShowRePassword ? 'text' : 'password'"
-              placeholder="Confirm Password"
+              [placeholder]="'ConfirmPassword' | translate"
               type="password"
               pInputText
               formControlName="confirmPassword"
@@ -144,10 +148,10 @@
 
           <span *ngIf="getConfirmPassword.dirty">
             <small *ngIf="getConfirmPassword.errors?.['matching']" id="password-help" class="profile-form__field-message p-error block">
-              Password don't match.</small
+              {{ 'Password' | translate }} {{ 'DontMatch' | translate }}.</small
             >
             <small *ngIf="getConfirmPassword.errors?.['required']" id="password-help" class="profile-form__field-message p-error block">
-              Password is not empty.</small
+              {{ 'Password' | translate }} {{ 'NotEmpty' | translate }}.</small
             >
           </span>
         </div>
@@ -158,7 +162,7 @@
             class="btn-action reset-form__btn col-5 sm:col-4 md:col-4 m-0 border-noround profile-form__btn"
             pButton
             [loading]="isLoadingChangePassword">
-            Change
+            {{ 'Change' | translate }}
           </button>
         </div>
       </form>

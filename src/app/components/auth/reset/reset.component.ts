@@ -12,11 +12,12 @@ import { Validation } from 'src/app/utils/Validation';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, RouterModule, ToastModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, RouterModule, ToastModule, TranslateModule],
   providers: [MessageService],
   templateUrl: './reset.component.html',
   styleUrls: ['./reset.component.scss'],

@@ -33,6 +33,8 @@ import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { phoneNum } from 'src/app/utils/regex';
 import { ShareMessageService } from 'src/app/services/share-message.service';
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -54,6 +56,7 @@ import { ShareMessageService } from 'src/app/services/share-message.service';
     MyCurrency,
     ConfirmDialogModule,
     DialogModule,
+    TranslateModule,
   ],
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],

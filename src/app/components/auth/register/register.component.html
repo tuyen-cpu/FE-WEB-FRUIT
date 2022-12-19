@@ -1,28 +1,40 @@
 <div class="register-wrapper col-12 sm:col-12 md:col-6">
   <div class="register-site">
     <div class="register-title">
-      <h2>CREATE A NEW ACCOUNT</h2>
+      <h2>{{ 'CreateAAccount' | translate }}</h2>
     </div>
     <form action="" [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
       <div class="register-form__field">
-        <input id="lastName" class="register-form__field-input" placeholder="Last name" formControlName="lastName" type="text" pInputText />
+        <input
+          id="lastName"
+          class="register-form__field-input"
+          [placeholder]="'LastName' | translate"
+          formControlName="lastName"
+          type="text"
+          pInputText />
         <span *ngIf="getLastName.dirty">
           <small
             *ngIf="getLastName.errors?.['minlength']||getLastName.errors?.['required']"
             id="password-help"
             class="register-form__field-message p-error block">
-            Last Name cannot be empty.</small
+            {{ 'LastName' | translate }} {{ 'NotEmpty' | translate }}.</small
           >
         </span>
       </div>
       <div class="register-form__field">
-        <input id="firstName" class="register-form__field-input" placeholder="First name" formControlName="firstName" type="text" pInputText />
+        <input
+          id="firstName"
+          class="register-form__field-input"
+          [placeholder]="'FirstName' | translate"
+          formControlName="firstName"
+          type="text"
+          pInputText />
         <span *ngIf="getFirstName.dirty">
           <small
             *ngIf="getFirstName.errors?.['minlength']||getFirstName.errors?.['required']"
             id="password-help"
             class="register-form__field-message p-error block">
-            First Name cannot be empty.</small
+            {{ 'FirstName' | translate }} {{ 'NotEmpty' | translate }}.</small
           >
         </span>
       </div>
@@ -34,10 +46,10 @@
             *ngIf="getEmail.errors?.['minlength']||getEmail.errors?.['required']"
             id="password-help"
             class="register-form__field-message p-error block">
-            Email cannot be empty.</small
+            Email {{ 'NotEmpty' | translate }}.</small
           >
           <small *ngIf="getEmail.errors?.['email']" id="password-help" class="register-form__field-message p-error block">
-            Email invalid. Vd:tuyen@gmail.com</small
+            Email {{ 'Invalid' | translate }}. Vd:tuyen@gmail.com</small
           >
         </span>
       </div>
@@ -50,7 +62,7 @@
             id="password"
             [type]="isShowPassword ? 'text' : 'password'"
             class="register-form__field-input"
-            placeholder="Password"
+            [placeholder]="'Password' | translate"
             formControlName="password"
             type="password"
             pInputText />
@@ -61,10 +73,10 @@
             *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
             id="password-help"
             class="register-form__field-message p-error block">
-            Password must be at least 6 characters.</small
+            {{ 'Password' | translate }} {{ 'PasswordAtLeast6Characters' | translate }}.</small
           >
           <small *ngIf="getPassword.errors?.['maxlength']" id="password-help" class="register-form__field-message p-error block">
-            Password cannot be more than 40 characters.</small
+            {{ 'Password' | translate }} {{ 'PasswordMax40Characters' | translate }}.</small
           >
         </span>
       </div>
@@ -74,7 +86,7 @@
           <input
             id="confirmpassword"
             class="register-form__field-input"
-            placeholder="Re-password"
+            [placeholder]="'ConfirmPassword' | translate"
             [type]="isShowRePassword ? 'text' : 'password'"
             pInputText
             formControlName="confirmPassword" />
@@ -82,17 +94,24 @@
 
         <span *ngIf="getConfirmPassword.dirty">
           <small *ngIf="getConfirmPassword.errors?.['matching']" id="password-help" class="register-form__field-message p-error block">
-            Password don't match</small
+            {{ 'Password' | translate }} {{ 'DontMatch' | translate }}</small
           >
           <small *ngIf="getConfirmPassword.errors?.['required']" id="password-help" class="register-form__field-message p-error block">
-            Password is not empty</small
+            {{ 'Password' | translate }} {{ 'NotEmpty' | translate }}</small
           >
         </span>
       </div>
-      <button type="submit" [disabled]="!registerForm.valid" class="btn-action register-form__btn" pButton [loading]="isLoading">CREATE</button>
+      <button type="submit" [disabled]="!registerForm.valid" class="btn-action register-form__btn" pButton [loading]="isLoading">
+        {{ 'Create' | translate }}
+      </button>
     </form>
 
-    <button pButton [routerLink]="['/auth/login']" label="Back to login" icon="pi pi-arrow-left" class="p-button-text back-login-btn"></button>
+    <button
+      pButton
+      [routerLink]="['/auth/login']"
+      [label]="'Login' | translate"
+      icon="pi pi-arrow-left"
+      class="p-button-text back-login-btn"></button>
   </div>
 </div>
 <p-toast></p-toast>
