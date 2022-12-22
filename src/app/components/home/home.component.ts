@@ -78,7 +78,7 @@ export class HomeComponent implements OnInit {
     ];
   }
   getProducts() {
-    this.productService.getProductByCategorySlugAndPriceLessThan('nuoc-ep', 999999, 0, 24).subscribe({
+    this.productService.getProductByCategorySlugAndPriceLessThan('trai-cay-nhap-khau', 999999, 0, 24).subscribe({
       next: (res) => {
         this.products = res.data.content;
       },

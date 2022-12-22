@@ -14,13 +14,15 @@
   font-weight: 600;
   font-size: 1.6rem;
 }
-
-.p-datatable-header {
-  font-size: 2rem;
-  color: #00381a;
-  font-family: $font-family;
-  // text-transform: uppercase;
+.address-user {
+  .p-datatable-header {
+    font-size: 2rem;
+    color: #00381a;
+    font-family: $font-family;
+    // text-transform: uppercase;
+  }
 }
+
 .p-component {
   font-size: 1.4rem;
   .p-link {

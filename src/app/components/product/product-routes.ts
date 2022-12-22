@@ -18,7 +18,7 @@ export const ProductRoutes: Routes = [
         path: 'all',
         component: ProductListComponent,
       },
-      { path: 'vv', component: ProductItemComponent },
+
       {
         path: 'search',
         component: SearchComponent,

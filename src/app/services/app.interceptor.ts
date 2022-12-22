@@ -4,12 +4,18 @@ import { Observable, BehaviorSubject, catchError, switchMap, throwError, filter,
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 const TOKEN_HEADER_KEY = 'Authorization';
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  constructor(private tokenService: TokenStorageService, private authService: AuthService, private userInforServicel: UserInforService) {}
+  constructor(
+    private tokenService: TokenStorageService,
+    private router: Router,
+    private authService: AuthService,
+    private userInforServicel: UserInforService,
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<Object>> {
     if (req.url.includes('provinces.open-api.vn')) {
@@ -51,8 +57,7 @@ export class AppInterceptor implements HttpInterceptor {
             this.isRefreshing = false;
             this.tokenService.signOut();
             this.tokenService.userChange.next(this.userInforServicel.user);
-
-            alert('Đã hết phiên đăng nhập!');
+            alert('The login session has expired.Logged out!');
             return throwError(err);
           }),
         );

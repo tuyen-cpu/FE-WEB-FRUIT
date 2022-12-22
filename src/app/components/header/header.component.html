@@ -5,31 +5,31 @@
       <span class="sub-header__site-left"> {{ 'TitleTopFreeShip' | translate }}.</span>
       <span class="form-inline"> </span>
       <ul class="sub-header__site-right align-items-center hidden lg:flex">
-        <li class="email mr-5">
+        <!-- <li class="email mr-5">
           <i class="pi pi-telegram pi-envelope mr-2"></i>
           <span class="email-text">Email: cskh@bio-ngon.com</span>
-        </li>
+        </li> -->
         <li class="phone">
           <i class="pi pi-phone phone__icon mr-2"></i>
           <span class="phone__text">{{ 'Hotline' | translate }}: cskh@bio-ngon.com</span>
         </li>
-        <li>
+        <li class="ml-4">
           <p-dropdown
             [options]="languages"
             [(ngModel)]="language"
             (onChange)="translateSite(language.name)"
-            optionLabel="name"
+            optionLabel="code"
             placeholder="Select a Country">
             <ng-template pTemplate="selectedItem">
-              <div class="country-item country-item-value flex" *ngIf="language">
-                <img src="../../../assets/img/flag_placeholder.png" [class]="'flag flag-' + language.code.toLowerCase()" />
-                <div>{{ language.name }}</div>
+              <div class="country-item country-item-value flex align-items-center" *ngIf="language">
+                <img src="../../../assets/img/flag_placeholder.png" [class]="'mr-2 flag flag-' + language.code.toLowerCase()" />
+                <div>{{ language.code }}</div>
               </div>
             </ng-template>
             <ng-template let-country pTemplate="item">
               <div class="country-item flex">
-                <img src="../../../assets/img/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" />
-                <div>{{ country.name }}</div>
+                <img src="../../../assets/img/flag_placeholder.png" [class]="'mr-2 flag flag-' + country.code.toLowerCase()" />
+                <div>{{ country.code }}</div>
               </div>
             </ng-template>
           </p-dropdown>
@@ -123,11 +123,11 @@
                 </li>
               </ul>
             </li>
-            <li class="navbar__item">
+            <!-- <li class="navbar__item">
               <a [routerLink]="['/about']" class="navbar__item-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 {{ 'About' | translate }}
               </a>
-            </li>
+            </li> -->
           </ul>
         </div>
         <form (ngSubmit)="onSubmit(searchInput)" [formGroup]="searchForm" class="form-search relative relative hidden lg:block md:col-6">
@@ -392,10 +392,17 @@
               <div class="cart-dropdown-site">
                 <div class="cart-dropdown__title">CART</div>
                 <ul class="cart-dropdown__list">
-                  <li *ngFor="let item of carts; trackBy: trackById" class="cart-dropdown-item flex">
+                  <li
+                    *ngFor="let item of carts; trackBy: trackById"
+                    [attr.data-before-content]="!item.product.status ? 'Not available ' : 'Quantity not enough'"
+                    [ngClass]="
+                      !item.product.status || item.product.quantity < item.quantity
+                        ? 'cart-dropdown-item cart-dropdown-item--disabled flex'
+                        : 'cart-dropdown-item flex'
+                    ">
                     <img class="cart-dropdown-item__image" [src]="urlImage + '/' + item.product.image.link" alt="" />
                     <div class="cart-dropdown-item__content">
-                      <h4 class="name">{{ item.product.name }}</h4>
+                      <h4 class="name my-3">{{ item.product.name }}</h4>
                       <span class="quantity">
                         <button (click)="updateQuantity(inputQuantityElementHeader, item, '-')" class="quantity__btn">-</button>
                         <input type="text" min="1" class="value" value="{{ item.quantity }}" #inputQuantityElementHeader />

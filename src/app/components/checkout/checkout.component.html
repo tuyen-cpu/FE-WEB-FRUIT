@@ -8,7 +8,7 @@
             alt="" />
         </span>
         <div class="content ml-4">
-          <p class="m-0 mb-2">alanwalker (tranquangtuyen3263263@gmail.com)</p>
+          <p class="m-0 mb-2">{{ getUser().firstName }} ({{ getUser().email }})</p>
           <a (click)="logout()" class="btn-v cursor-pointer"> {{ 'Logout' | translate }}</a>
         </div>
       </div>
@@ -212,13 +212,22 @@
   <div class="flex-order-1 md:flex-order-2 col-12 sm:col-12 md:col-12 lg:col-4 mt-4">
     <div class="sidebar grid px-3">
       <div class="w-full sidebar__title">
-        <h4>{{ 'Order' | translate }} ({{ totalQuantity }})</h4>
+        <h4 class="flex">
+          {{ 'Order' | translate }} ({{ totalQuantity }}) <span *ngIf="errorCart" [innerHtml]="errorCart" class="error-cart ml-3"></span>
+        </h4>
       </div>
       <div class="col-12">
         <ul class="product-list max-h-24rem">
-          <li *ngFor="let item of cartItems" class="product-item flex align-items-center justify-content-between">
+          <li
+            *ngFor="let item of cartItems"
+            [attr.data-before-content]="!item.product.status ? 'Not available ' : 'Quantity not enough'"
+            [ngClass]="
+              !item.product.status || item.product.quantity < item.quantity
+                ? 'product-item product-item--disabled flex align-items-center justify-content-between'
+                : 'product-item flex align-items-center justify-content-between'
+            ">
             <span class="relative img-wrapper">
-              <img [src]="urlImage + '/' + item.product.image.link" alt="" />
+              <img class="" [src]="urlImage + '/' + item.product.image.link" alt="" />
               <small class="quantity">{{ item.quantity }}</small>
             </span>
             <div class="name">
@@ -254,7 +263,7 @@
               [label]="v"
               icon="pi pi-times"
               class="p-button-outlined mr-1"></button>
-            <p-toast></p-toast>
+
           </div>
         </div> -->
         <div class="fee-wrapper py-2">
@@ -285,10 +294,10 @@
             class="btn-checkout"
             [label]="'PaymentOnDelivery' | translate"
             (click)="onSubmit()"
-            [disabled]="infoForm.invalid"
+            [disabled]="infoForm.invalid || errorCart"
             [loading]="isLoading"></button>
         </div>
-        <div [hidden]="infoForm.invalid" id="myPaypalButton"></div>
+        <div [hidden]="infoForm.invalid || errorCart" id="myPaypalButton"></div>
       </div>
     </div>
   </div>
@@ -301,3 +310,4 @@
     <p-button icon="pi pi-check" (click)="displayConfirm = false; goHome()" label="Ok" styleClass="p-button-success"></p-button>
   </ng-template>
 </p-dialog>
+<p-toast></p-toast>

@@ -163,7 +163,7 @@ export class ProductListComponent implements OnInit {
       queryParams: this.paramsURL,
     });
   }
-  changeSort() {}
+
   trackById(index: number, item: any) {
     return item.id;
   }

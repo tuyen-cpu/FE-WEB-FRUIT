@@ -251,7 +251,7 @@
           <tr>
             <td style="flex: 0.5">{{ product.id }}</td>
             <td style="flex: 3">
-              <div class="" [innerHTML]="product.name | highlighter : filter.name : 'full'"></div>
+              <div class="" [innerHTML]="product.name | highlighter : filter.name : ''"></div>
             </td>
             <td style="flex: 0.5">
               {{ product.quantity }}

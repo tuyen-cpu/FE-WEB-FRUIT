@@ -1,4 +1,4 @@
-<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog header="Confirmation" rejectButtonStyleClass="p-button-secondary p-button-plain" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 <p-toast></p-toast>
 <div class="order-wrapper container">
   <div class="title text-center mb-6">
@@ -48,7 +48,7 @@
         <td style="flex: 1.5">
           <a [routerLink]="['/account/order/' + order.id]" class="order-link">HD-{{ order.id }}</a>
         </td>
-        <td style="flex: 2">{{ order.createdDate | date : 'M/d/yy, h:mm a' }}</td>
+        <td style="flex: 2">{{ order.createdDate | date : 'dd/MM/yyyy' }}</td>
         <td style="flex: 2">{{ order.total | myCurrency : 'VND' }}</td>
         <td style="flex: 7">
           <div class="text-right md:text-left">{{ order.address }}</div>
@@ -60,7 +60,14 @@
           {{ order.payment.status | translate }}
         </td>
         <td style="flex: 0.8">
-          <a class="cursor-pointer text-red-700" *ngIf="order.shippingStatus.name === 'UNVERIFIED'" (click)="onCancelOrder(order)">Cancel</a>
+          <button
+            pButton
+            pRipple
+            title="Cancel"
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-warning mr-2"
+            [disabled]="order.shippingStatus.name !== 'UNVERIFIED'"
+            (click)="onCancelOrder(order)"></button>
         </td>
       </tr>
     </ng-template>

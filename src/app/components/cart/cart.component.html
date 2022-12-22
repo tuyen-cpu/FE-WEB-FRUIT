@@ -12,7 +12,11 @@
           </p>
         </div>
         <ul class="cart-list">
-          <li *ngFor="let item of carts; trackBy: trackById" class="cart-item">
+          <li
+            *ngFor="let item of carts; trackBy: trackById"
+            [attr.data-before-content]="!item.product.status ? 'Not available ' : 'Quantity not enough'"
+            class=""
+            [ngClass]="!item.product.status || item.product.quantity > item.quantity ? 'cart-item cart-item--disabled' : 'cart-item'">
             <span>
               <p-skeleton *ngIf="!item.product.image.link" size="10rem" styleClass="mr-2"></p-skeleton>
               <img *ngIf="item.product.image.link" [src]="urlImage + '/' + item.product.image.link" [alt]="item.product.name" />

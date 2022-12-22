@@ -6,7 +6,7 @@
   rejectButtonStyleClass="p-button-secondary p-button-plain"
   icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
-<div class="">
+<div class="address-user">
   <div class="title text-center mb-6">
     <h2 class="title-account-component">{{ 'MyAddress' | translate }}</h2>
   </div>
@@ -45,9 +45,9 @@
             (click)="deleteSelectedAddresses($event)"
             [disabled]="!selectedAddresses || !selectedAddresses.length"></button>
         </ng-template>
-        <ng-template pTemplate="right">
+        <!-- <ng-template pTemplate="right">
           <p-button pTooltip="Fresher User List" type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="resetView()"></p-button
-        ></ng-template>
+        ></ng-template> -->
       </p-toolbar>
 
       <p-table
@@ -72,10 +72,10 @@
         <ng-template pTemplate="caption">
           <div class="flex align-items-center justify-content-between">
             <span class="text-2xl">{{ 'Total' | translate }}: {{ paginator.totalElements }}</span>
-            <span class="p-input-icon-left">
+            <!-- <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
-            </span>
+            </span> -->
           </div>
         </ng-template>
         <ng-template pTemplate="header">

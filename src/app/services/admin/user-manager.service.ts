@@ -18,7 +18,9 @@ export default class UserManagerService {
   getAll(page: number, size: number) {
     return this.httpClient.get(`${this.REST_API}/all?page=${page}&size=${size}`);
   }
-
+  get(id: number) {
+    return this.httpClient.get(`${this.REST_API}/${id}`);
+  }
   changePassword(changePasswordResquest: ChangePasswordResquest) {
     return this.httpClient.post(`${this.REST_API}/change-password`, changePasswordResquest);
   }

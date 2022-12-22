@@ -17,6 +17,32 @@ header {
     color: #fff;
 
     &-right {
+      .p-dropdown {
+        border: none;
+        border-radius: 2px;
+        &:not(.p-disabled).p-focus {
+          box-shadow: none;
+          border: none;
+        }
+        &.p-component {
+          border-radius: 2px;
+          img {
+            width: 24px;
+          }
+          .p-dropdown-panel {
+            border-radius: 2px;
+          }
+          .p-dropdown-trigger {
+            width: 2.2rem;
+          }
+        }
+      }
+      .p-dropdown-label {
+        padding-right: 0;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        padding-left: 0.5rem;
+      }
     }
   }
 }
@@ -656,7 +682,7 @@ header {
 
         .cart-dropdown-site {
           padding: 25px 15px 15px 15px;
-          font-size: $text-large;
+          font-size: $text-medium;
           .cart-dropdown__title {
             font-size: 14px;
             text-transform: uppercase;
@@ -677,10 +703,44 @@ header {
             .cart-dropdown-item {
               border-bottom: 1px dotted #bcbcbc;
               padding: 12px 0;
+              position: relative;
+              &--disabled {
+                user-select: none;
+                &::before {
+                  content: '';
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  z-index: 5;
+                  background-color: #fff;
+                  opacity: 0.7;
+                }
+                &::after {
+                  content: attr(data-before-content);
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translateY(-50%) translateX(-50%);
+                  width: 85px;
+                  height: 85px;
+                  border-radius: 50%;
+                  text-align: center;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  z-index: 5;
+                  background-color: rgb(0, 0, 0, 0.8);
+                  color: #fff;
+                  opacity: 1;
+                  font-size: 1.4rem;
+                }
+              }
               &__image {
                 width: 80px;
                 height: 80px;
-                object-fit: contain;
+                object-fit: cover;
                 padding: 0 12px 0 0;
               }
               &__content {
@@ -734,9 +794,10 @@ header {
                   // top: 10px;
                   // padding: 10px;
                   // border-radius: 50%;
+                  z-index: 6;
                   position: absolute;
                   right: 10px;
-                  top: 10px;
+                  top: 0;
                   width: 30px;
                   height: 30px;
                   cursor: pointer;

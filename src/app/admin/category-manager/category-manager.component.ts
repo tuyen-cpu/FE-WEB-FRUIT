@@ -3,11 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { delay } from 'rxjs';
 
-//component
-import CategoryManagerService from 'src/app/services/admin/cagtegory-manager.service';
-import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
-import { HighlighterPipe } from './../../pipes/highlighter.pipe';
-
 //model
 import { Category } from 'src/app/model/category.model';
 import { Paginator } from 'src/app/model/paginator.model';
@@ -23,6 +18,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Table, TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
+
+//component
+import CategoryManagerService from 'src/app/services/admin/cagtegory-manager.service';
+import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
+import { HighlighterPipe } from './../../pipes/highlighter.pipe';
 
 @Component({
   selector: 'app-category-manager',

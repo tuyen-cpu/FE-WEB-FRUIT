@@ -47,7 +47,6 @@ bootstrapApplication(AppComponent, {
     },
     importProvidersFrom(
       BrowserAnimationsModule,
-
       HttpClientModule,
       RouterModule.forRoot(APP_ROUTES, {
         preloadingStrategy: PreloadAllModules,

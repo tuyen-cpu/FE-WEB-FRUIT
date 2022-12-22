@@ -3,10 +3,10 @@ $border: 1px solid #ced4da;
 $border-bottom: 1px solid #e1e1e1;
 $color-btn: #357ebd;
 .checkout-wrapper {
-  font-size: $text-large;
+  font-size: $text-medium;
   .input-custom {
     padding: 1.2rem 0.8rem;
-    font-size: $text-large;
+    font-size: $text-medium;
     &:focus {
       border-color: #66afe9;
       box-shadow: 0 0 0 1px #66afe9;
@@ -96,6 +96,12 @@ $color-btn: #357ebd;
   .sidebar {
     background-color: #fafafa;
     border-left: #e1e1e1 solid 1px;
+    .error-cart {
+      color: red;
+      font-size: 1.2rem;
+      flex: 1;
+      font-weight: 700;
+    }
     &__title {
       border-bottom: $border-bottom;
     }
@@ -117,10 +123,50 @@ $color-btn: #357ebd;
 
       .product-item {
         margin-bottom: 8px;
+        position: relative;
+        &--disabled {
+          user-select: none;
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 5;
+            background-color: #fff;
+            opacity: 0.7;
+          }
+          &::after {
+            content: attr(data-before-content);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            background-color: rgb(0, 0, 0, 0.8);
+            color: #fff;
+            opacity: 1;
+            font-size: 1rem;
+          }
+        }
         .img-wrapper {
           width: 50px;
           height: 50px;
           margin-right: 8px;
+          img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+          }
           .quantity {
             font-size: 0.78em;
             white-space: nowrap;

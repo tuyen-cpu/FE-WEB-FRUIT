@@ -111,7 +111,6 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
   onChangePaymentStatusFilter() {
     this.filter.payment = { ...this.filter.payment, status: this.paymentStatusFilter ? this.paymentStatusFilter.name : undefined };
-    console.log(this.filter.payment);
     this.checkAllWithoutFilter();
   }
 
@@ -230,10 +229,8 @@ export class OrderComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.orders = res.data.content;
-          console.log(this.orders);
           this.isLoadingTable = false;
           this.paginator.totalElements = res.data.totalElements;
-          console.log(this.paginator.totalElements);
         },
         error: (res) => {
           this.isLoadingTable = false;

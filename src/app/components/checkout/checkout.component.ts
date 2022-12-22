@@ -9,7 +9,7 @@ import { CartItemService } from './../../services/cart-item.service';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Output, ViewEncapsulation, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, ViewEncapsulation, EventEmitter, OnDestroy } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
@@ -63,7 +63,7 @@ import { TranslateModule } from '@ngx-translate/core';
   providers: [MessageService, ConfirmationService],
   encapsulation: ViewEncapsulation.None,
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements OnInit, OnDestroy {
   voucherInput!: string;
   vouchers: any[] = [];
   isLoading = false;
@@ -90,6 +90,7 @@ export class CheckoutComponent implements OnInit {
   displayConfirm: boolean = false;
   contentConfirm = '';
   shippingCost: number = 0;
+  errorCart!: string;
   constructor(
     private fb: FormBuilder,
     private primengConfig: PrimeNGConfig,
@@ -154,15 +155,39 @@ export class CheckoutComponent implements OnInit {
 
     this.isLoading = false;
   }
-  getCartItems() {
-    this.cartItemsChange = this.cartItemService.cartItemsChange.subscribe((data) => {
-      if (data.length === 0) {
-        this.router.navigate(['/']);
-      }
-      this.cartItems = data;
-      this.loadTotal();
-      this.shippingCost = this.totalCart > 250000 ? 0 : 30000;
+  remove(cartItem: CartItem) {
+    this.cartItemService.delete(cartItem.id).subscribe({
+      next: (res) => {},
     });
+  }
+  getCartItems() {
+    this.cartItemsChange = this.cartItemService
+      .getAllByUserId(this.userInforService.user.id)
+      .pipe(
+        switchMap((res) => {
+          this.cartItemService.cartItemsChange.next(res.data.content);
+          return this.cartItemService.cartItemsChange;
+        }),
+      )
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          if (data.length === 0) {
+            this.router.navigate(['/']);
+          }
+          this.cartItems = data;
+          if (this.cartItems.some((item) => item.product.quantity < item.quantity)) {
+            this.errorCart = 'There are some products that do not have enough quantity. Please go back to cart to check.';
+          } else if (this.cartItems.some((item) => !item.product.status)) {
+            this.errorCart = 'Some products are not available. Please go back to cart to check.';
+          } else {
+            this.errorCart = '';
+          }
+
+          this.loadTotal();
+          this.shippingCost = this.totalCart > 250000 ? 0 : 30000;
+        },
+      });
   }
   getProvinces() {
     this.provincesApi.getProvinces().subscribe({
@@ -271,11 +296,11 @@ export class CheckoutComponent implements OnInit {
         price: item.product.price,
         quantity: item.quantity,
         discount: item.product.discount || 0,
-        productId: item.product.id || 222222,
+        productId: item.product.id,
       };
     });
     let checkout: Checkout = {
-      description: 'Mô tả thôi',
+      description: this.infoForm.value.notes,
       shippingCost: this.shippingCost,
       // address: {
       //   city: valueForm.province.name,
@@ -289,6 +314,8 @@ export class CheckoutComponent implements OnInit {
       userId: this.getUser().id,
       address: `${valueForm.street}, ${valueForm.ward.name}, ${valueForm.district.name}, ${valueForm.province.name}`,
       orderDetails: orderDetails,
+      phone: this.infoForm.value.phoneNum,
+      fullName: this.infoForm.value.lastName + ' ' + this.infoForm.value.firstName,
       payment: {
         email: this.emailPayer || '',
         payer: this.payer || this.getUser().name,
@@ -308,7 +335,6 @@ export class CheckoutComponent implements OnInit {
               next: (res: any) => {
                 this.isLoadingComponent = false;
                 this.shareMessageService.message.next('Ordered successfully. The store staff will contact you to confirm your order.');
-
                 this.router.navigate(['/account/order']);
               },
               error: (res) => {
@@ -337,6 +363,7 @@ export class CheckoutComponent implements OnInit {
             this.router.navigate(['/account/order']);
           },
           error: (res) => {
+            console.log(res);
             this.isLoadingComponent = false;
             this.messageService.add({
               severity: 'error',
@@ -428,5 +455,10 @@ export class CheckoutComponent implements OnInit {
   }
   goHome() {
     this.router.navigate(['/']);
+  }
+  ngOnDestroy(): void {
+    if (this.cartItemsChange) {
+      this.cartItemsChange.unsubscribe();
+    }
   }
 }

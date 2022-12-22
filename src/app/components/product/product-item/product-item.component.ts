@@ -1,22 +1,25 @@
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
+//primeng
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
+
+//component
 import { FileUploadService } from './../../../services/file-upload.service';
 import { UserInforService } from './../../../services/user-infor.service';
 import { CartItemService } from './../../../services/cart-item.service';
 import { ImageService } from './../../../services/image.service';
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Image, Product } from 'src/app/model/category.model';
-import { LazyLoadImageModule } from 'ng-lazyload-image';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { Router, RouterModule } from '@angular/router';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-
+import { Image, Product } from 'src/app/model/category.model';
 @Component({
   selector: 'app-product-item',
   standalone: true,
   imports: [CommonModule, LazyLoadImageModule, ToastModule, MyCurrency, RouterModule, TranslateModule],
-  providers: [MessageService, ConfirmationService, TranslateService],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './product-item.component.html',
   styleUrls: ['./product-item.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -38,6 +41,7 @@ export class ProductItemComponent implements OnInit {
     this.urlImage = this.fileUploadService.getLink();
   }
   addCart(product: Product) {
+    console.log('vao add to cart');
     if (this.userInforService.user) {
       this.cartItemService
         .add({

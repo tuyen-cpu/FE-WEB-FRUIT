@@ -116,5 +116,6 @@
   "DoYouAlreadyHaveAnAccount":"Do you already have an account?",
   "DontHaveAddress":"Don't have an address yet",
   "VerifiedSuccessfully":"Email verification successful",
-  "ID":"ID"
+  "ID":"ID",
+ "DeliveryAddress": "Delivery Address"
   }

@@ -6,6 +6,8 @@ export interface Checkout {
   shippingCost?: number;
   description?: string;
   address?: string;
+  fullName?: string;
+  phone?: string;
   userId?: number;
   orderDetails?: OrderDetail[];
   payment?: Payment;
@@ -24,6 +26,8 @@ export interface Order {
   createdDate?: Date;
   shippingStatus?: ShippingStatus;
   address?: string;
+  fullName?: string;
+  phone?: string;
   payment?: Payment;
   orderDetails: OrderDetail[];
 }

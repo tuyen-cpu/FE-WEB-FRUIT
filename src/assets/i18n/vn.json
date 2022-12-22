@@ -116,5 +116,6 @@
   "DoYouAlreadyHaveAnAccount":"Bạn đã có tài khoản chưa?",
   "DontHaveAddress":"Bạn chưa có địa chỉ",
   "VerifiedSuccessfully":"Xác minh email thành công",
-  "ID":"STT"
+  "ID":"STT",
+  "DeliveryAddress": "Địa chỉ nhận hàng"
   }

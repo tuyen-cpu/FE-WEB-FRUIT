@@ -7,7 +7,7 @@
       <div class="order-information">
         <div class="title text-2xl mb-3">
           <b class="font-medium">Order: H-{{ orderId }}</b
-          >, Ordered at — {{ order.createdDate | date : 'M/d/yy, h:mm a' }}
+          >, Ordered at — {{ order.createdDate | date : 'dd/MM/yyyy' }}
         </div>
         <!-- <div class="text-xl mb-2">Đơn hàng của bạn đã hủy lúc 09/11/2022, 11:05SA</div> -->
         <a class="inline-block text-2xl mt-3 cursor-pointer back-page" (click)="backToPreviousPage()">
@@ -53,35 +53,35 @@
               </td>
             </tr>
           </ng-template>
-          <!-- <ng-template pTemplate="summary">
-            <div
-              class="flex align-items-center justify-content-between text-2xl"
-            >
-              <span> Subtotal:</span>
-              <span class="px-8"> {{ subTotal | myCurrency: "vnd" }}</span>
+          <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between text-2xl">
+              <span> Total:</span>
+              <span class="px-8"> {{ subTotal | myCurrency : 'vnd' }}</span>
             </div>
-          </ng-template> -->
-          <ng-template pTemplate="footer">
+          </ng-template>
+          <!-- <ng-template pTemplate="footer">
             <tr>
               <td colspan="3">Totals</td>
               <td>$506,202</td>
               <td>{{ subTotal | myCurrency : 'vnd' }}</td>
             </tr>
-          </ng-template>
+          </ng-template> -->
         </p-table>
       </div>
       <div class="address-order text-2xl grid">
         <div class="col-12 sm:col-12 md:col-12 lg:col-6">
           <div class="title">
-            <h6 class="text-2xl mb-4 font-semibold">PAYING ADDRESS</h6>
+            <h6 class="text-2xl mb-4 font-semibold">{{ 'DeliveryAddress' | translate }}</h6>
           </div>
-          <div class="status-order alert alert-info"><b class="font-medium">Payment status: </b>{{ order.payment.status }}</div>
+          <div class="status-order alert alert-info">
+            <b class="font-medium">{{ 'PaymentStatus' | translate }}: </b>{{ order.payment.status + '' | translate }}
+          </div>
           <div class="box p-3">
-            <div class="name line-height-2 mb-2">Trần Quang Tuyền</div>
+            <div class="name line-height-2 mb-2">{{ order.fullName }}</div>
             <div class="address line-height-2 mb-2">
               {{ order.address }}
             </div>
-            <div class="phone line-height-2 mb-2">035696589</div>
+            <div class="phone line-height-2 mb-2">{{ order.phone }}</div>
           </div>
         </div>
       </div>

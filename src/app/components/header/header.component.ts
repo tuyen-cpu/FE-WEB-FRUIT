@@ -117,6 +117,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.translateService.use(langauge);
   }
   ngOnInit(): void {
+    this.language = { name: 'en', code: 'US' };
     this.urlImage = this.fileUploadService.getLink();
     this.listenerSocialAuth();
     this.initForm();
@@ -357,10 +358,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.loginForm.reset();
         this.addUserInformationToLocalstorage(response);
+        this.changeShowAccountDropdown();
         if (response.data.roles.includes('admin') || response.data.roles.includes('manager')) {
           this.router.navigate(['/admin']);
         }
-        console.log(response);
       },
       error: (err) => {
         this.messageService.add({

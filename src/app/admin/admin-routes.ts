@@ -13,7 +13,7 @@ export const AdminRoutes: Routes = [
     component: AdminComponent,
     canActivate: [AdminGuard],
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: '', redirectTo: 'user', pathMatch: 'full' },
       {
         path: 'user',
         title: 'User',

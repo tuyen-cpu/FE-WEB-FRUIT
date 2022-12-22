@@ -1,3 +1,4 @@
+import { UserInforService } from './services/user-infor.service';
 import { MessageService } from 'primeng/api';
 import { TokenStorageService } from './services/token-storage.service';
 import { CommonModule } from '@angular/common';
@@ -17,6 +18,7 @@ import { ShareMessageService } from './services/share-message.service';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
+import UserManagerService from './services/admin/user-manager.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -69,12 +71,23 @@ export class AppComponent implements OnInit {
     private router: Router,
     private shareMessageService: ShareMessageService,
     public translateService: TranslateService,
+    private userInforService: UserInforService,
+    private userManagerService: UserManagerService,
   ) {
     translateService.addLangs(['en', 'vn']);
     translateService.setDefaultLang('en');
   }
 
   ngOnInit(): void {
+    if (this.userInforService.user) {
+      this.userManagerService.get(this.userInforService.user.id).subscribe({
+        next: (res: any) => {
+          this.updateCurrentUser(res.data);
+        },
+        error: (error) => {},
+      });
+    }
+
     this.shareMessageService.message.subscribe((data: any) => {
       this.messageService.add({
         severity: 'success',
@@ -94,5 +107,15 @@ export class AppComponent implements OnInit {
         }
       });
     });
+  }
+  updateCurrentUser(user: User) {
+    const newUser = <User>{
+      ...this.userInforService.user,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      roles: user.roles,
+      status: user.status,
+    };
+    this.userInforService.user = newUser;
   }
 }

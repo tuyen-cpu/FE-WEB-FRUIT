@@ -40,18 +40,19 @@
         </ng-template>
 
         <ng-template pTemplate="caption">
-          <div class="flex align-items-center justify-content-between">
+          <div class="flex align-items-center justify-content-end">
             <!-- <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button> -->
 
             <span>
-              Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
+              <!-- Show {{ paginator.pageSize * paginator.pageNumber + 1 }} to
               {{
                 orders.length <= paginator.pageNumber
                   ? paginator.pageSize * paginator.pageNumber + orders.length
                   : paginator.pageSize * paginator.pageNumber + paginator.pageSize
               }}
-              of {{ paginator.totalElements }} products.</span
-            >
+              of {{ paginator.totalElements }} products. -->
+              Total: {{ paginator.totalElements }} Orders
+            </span>
             <!-- <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
@@ -299,7 +300,7 @@
   [maximizable]="true"
   appendTo="body"
   [(visible)]="isShowDialogPayment"
-  [style]="{ width: '50vw' }">
+  [style]="{ width: '30vw' }">
   <p-table [value]="payments" responsiveLayout="stack" [breakpoint]="'2000px'">
     <ng-template pTemplate="header" let-columns>
       <tr>
@@ -338,13 +339,13 @@
     <!-- <ng-template pTemplate="caption"> Stack </ng-template> -->
     <ng-template pTemplate="header" let-columns>
       <tr>
-        <th></th>
-        <th>Product</th>
-        <th>ID Product</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Discount</th>
-        <th>Total</th>
+        <th class="justify-content-center">Image</th>
+        <th class="justify-content-center">Product</th>
+        <th class="justify-content-center">ID Product</th>
+        <th class="justify-content-center">Quantity</th>
+        <th class="justify-content-center">Price</th>
+        <th class="justify-content-center">Discount</th>
+        <th class="justify-content-center">Total</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-orderdetail let-columns="columns">
@@ -353,12 +354,14 @@
           <span class="p-column-title"></span
           ><a routerLink="/" class="order-detail-link"><img [src]="urlImage + '/' + orderdetail.product.image.link" width="100px" alt="" /></a>
         </td>
-        <td><span class="p-column-title">Product</span>{{ orderdetail.product.name }}</td>
-        <td><span class="p-column-title">ID Product</span>{{ orderdetail.product.id }}</td>
-        <td><span class="p-column-title">Quantity</span>{{ orderdetail.quantity }}</td>
-        <td><span class="p-column-title">Price</span>{{ orderdetail.price | myCurrency : 'VND' }}</td>
-        <td><span class="p-column-title">Discount</span>-{{ orderdetail.discount }}%</td>
-        <td>
+        <td class="justify-content-center"><span class="p-column-title">Product</span>{{ orderdetail.product.name }}</td>
+        <td class="justify-content-center"><span class="p-column-title">ID Product</span>{{ orderdetail.product.id }}</td>
+        <td class="justify-content-center"><span class="p-column-title">Quantity</span>{{ orderdetail.quantity }}</td>
+        <td class="justify-content-center"><span class="p-column-title">Price</span>{{ orderdetail.price | myCurrency : 'VND' }}</td>
+        <td class="justify-content-center">
+          <span class="p-column-title">Discount</span>{{ orderdetail.discount ? '-' + orderdetail.discount + '%' : '' }}
+        </td>
+        <td class="justify-content-center">
           <span class="p-column-title">Total</span>
           {{ (orderdetail.price - (orderdetail.price * orderdetail.discount) / 100) * orderdetail.quantity | myCurrency : 'VND' }}
         </td>

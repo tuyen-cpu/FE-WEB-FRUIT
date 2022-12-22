@@ -1,6 +1,7 @@
+import { TokenStorageService } from './../../services/token-storage.service';
 import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { delay, Subject, Subscription, BehaviorSubject, debounceTime } from 'rxjs';
+import { delay, Subject, Subscription, BehaviorSubject, debounceTime, throwIfEmpty } from 'rxjs';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 //component
 import { UserService } from 'src/app/services/user.service';
@@ -96,6 +97,7 @@ export class UserComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private userManagerService: UserManagerService,
     private datePipe: DatePipe,
+    private tokenStorageService: TokenStorageService,
   ) {}
 
   ngOnInit(): void {
@@ -151,9 +153,7 @@ export class UserComponent implements OnInit, OnDestroy {
   onSelectDateFilter() {
     this.filter.createdAt = this.convertDateToString(this.datesFilter);
   }
-  onFilter(event: any) {
-    console.log(this.filter.createdAt);
-  }
+
   onClearDate() {
     this.filter.createdAt = undefined;
     this.checkAllWithoutFilter();
@@ -194,11 +194,9 @@ export class UserComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           this.users = res.data.content;
           this.paginator.totalElements = res.data.totalElements;
-          console.log(res.data);
           this.isLoadingTable = false;
         },
         error: (res) => {
-          console.log(res);
           this.isLoadingTable = false;
         },
       });
@@ -226,7 +224,6 @@ export class UserComponent implements OnInit, OnDestroy {
   }
   resetView() {}
   editUser(user: User) {
-    console.log(user);
     this.userDialog = true;
     this.user = { ...user };
     // this.rolesSelected = user.roles.map((e) => ({ label: e, value: e }));
@@ -248,7 +245,14 @@ export class UserComponent implements OnInit, OnDestroy {
             detail: res.message,
             life: 2000,
           });
-          this.getUsers();
+          if (res.data.id === this.currentUser.id) {
+            this.updateCurrentUser(res.data);
+          }
+          if (this.hasValueFilter) {
+            this.filterUser();
+          } else {
+            this.getUsers();
+          }
 
           this.hideDialog();
         },
@@ -271,7 +275,12 @@ export class UserComponent implements OnInit, OnDestroy {
           detail: res.message,
           life: 2000,
         });
-        this.getUsers();
+        if (this.hasValueFilter) {
+          this.filterUser();
+        } else {
+          this.getUsers();
+        }
+
         this.goLastPage();
         this.hideDialog();
       },
@@ -285,6 +294,17 @@ export class UserComponent implements OnInit, OnDestroy {
       },
     });
     // }
+  }
+  updateCurrentUser(user: User) {
+    const newUser = <User>{
+      ...this.userInforService.user,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      roles: user.roles,
+      status: user.status,
+    };
+    this.userInforService.user = newUser;
+    this.currentUser = this.userInforService.user;
   }
   goLastPage() {
     this.paginator.pageNumber = this.calculatePagesCount(this.paginator.pageSize, this.paginator.totalElements);
@@ -375,7 +395,6 @@ export class UserComponent implements OnInit, OnDestroy {
         this.filterUser();
         return;
       }
-      console.log('change para');
       this.getUsers();
     });
   }

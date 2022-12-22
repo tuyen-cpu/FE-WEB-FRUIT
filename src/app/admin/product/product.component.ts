@@ -169,7 +169,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.titleComponent = this.route.snapshot.data['title'];
     this.urlImage = this.fileUploadService.getLink();
 
-    this.filterUserKeyup();
+    // this.filterUserKeyup();
     this.changeParams();
     this.initTable();
     this.getCategories();
@@ -189,7 +189,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   onFilterUser() {
     this.resetFilterPaginator();
     this.resetPaginator();
-    this.filterUser();
+    this.filterProduct();
   }
   resetPaginator() {
     this.paginator.pageNumber = 0;
@@ -241,7 +241,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.getProduct();
   }
 
-  filterUser() {
+  filterProduct() {
     this.flagFilter = true;
     this.isLoadingTable = true;
     this.filter.page = this.paginator.pageNumber;
@@ -260,12 +260,11 @@ export class ProductComponent implements OnInit, OnDestroy {
         },
       });
   }
-  filterUserKeyup() {
-    this.subjectKeyup.pipe(distinctUntilChanged(), debounceTime(800)).subscribe((key) => {
-      console.log('filter');
-      this.filterUser();
-    });
-  }
+  // filterUserKeyup() {
+  //   this.subjectKeyup.pipe(distinctUntilChanged(), debounceTime(800)).subscribe((key) => {
+  //     this.filterProduct();
+  //   });
+  // }
 
   onReady(editor: any) {
     if (editor.model.schema.isRegistered('image')) {
@@ -289,7 +288,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       if (this.hasValueFilter()) {
         // this.filter.page = this.paginator.pageNumber;
         // this.filter.size = this.paginator.pageSize;
-        this.filterUser();
+        this.filterProduct();
         return;
       }
       this.getProduct();
@@ -324,7 +323,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.addParams();
   }
   addParams() {
-    console.log('Add params');
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: this.paramsURL,
@@ -356,10 +354,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.product.description = this.dataEditor;
     this.product.slug = slug(this.product.name);
     this.formDataImage.append('product', JSON.stringify(this.product));
-    console.log(this.product);
     this.productManagerService.add(this.formDataImage).subscribe({
       next: (res) => {
-        console.log(res);
         this.hideDialog();
         this.submitted = false;
         this.messageService.add({
@@ -368,7 +364,11 @@ export class ProductComponent implements OnInit, OnDestroy {
           detail: 'Added product successfully!',
           life: 2000,
         });
-        this.getProduct();
+        if (this.hasValueFilter()) {
+          this.filterProduct();
+        } else {
+          this.getProduct();
+        }
       },
       error: (res) => {
         this.submitted = false;
@@ -477,7 +477,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.categoryManagerService.getAll(0, 10).subscribe({
       next: (res) => {
         this.categories = res.data.content;
-        console.log(this.categories);
       },
     });
   }

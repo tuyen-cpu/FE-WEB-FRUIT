@@ -69,7 +69,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
   onCancelOrder(order: Order) {
     this.confirmationService.confirm({
-      message: 'Are you sure that you want to perform this action?',
+      message: 'Are you sure that you want to cancel this order?',
       accept: () => {
         this.orderService.setCancel(order).subscribe({
           next: (res) => {
