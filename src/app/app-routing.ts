@@ -9,6 +9,7 @@ import { ProvincesApiService } from './services/provinces-api.service';
 import { MessageService } from 'primeng/api';
 import OrderManagerService from './services/admin/order-manager.service';
 import { AdminGuard } from './guards/admin.guard';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 export const APP_ROUTES: Routes = [
   { path: '', component: HomeComponent },
@@ -43,5 +44,10 @@ export const APP_ROUTES: Routes = [
 
     loadChildren: () => import('./admin/admin-routes').then(({ AdminRoutes }) => AdminRoutes),
     providers: [UserService, OrderManagerService, AdminGuard],
+  },
+  { path: '**', redirectTo: '404' },
+  {
+    path: '404',
+    component: NotFoundComponent,
   },
 ];

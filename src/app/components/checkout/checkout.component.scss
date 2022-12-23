@@ -199,8 +199,12 @@ $color-btn: #357ebd;
         }
         .name {
           flex: 1;
-          p {
+          a {
             margin: 0;
+            color: #000;
+            &:hover {
+              color: $main-color;
+            }
           }
         }
         .price {

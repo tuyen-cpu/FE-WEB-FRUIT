@@ -16,15 +16,15 @@
             *ngFor="let item of carts; trackBy: trackById"
             [attr.data-before-content]="!item.product.status ? 'Not available ' : 'Quantity not enough'"
             class=""
-            [ngClass]="!item.product.status || item.product.quantity > item.quantity ? 'cart-item cart-item--disabled' : 'cart-item'">
-            <span>
+            [ngClass]="!item.product.status || item.product.quantity < item.quantity ? 'cart-item cart-item--disabled' : 'cart-item'">
+            <a [routerLink]="['/product/' + item.product.slug]">
               <p-skeleton *ngIf="!item.product.image.link" size="10rem" styleClass="mr-2"></p-skeleton>
               <img *ngIf="item.product.image.link" [src]="urlImage + '/' + item.product.image.link" [alt]="item.product.name" />
-            </span>
+            </a>
             <div class="cart-item__infor">
-              <p class="cart-item__infor-name">
+              <a [routerLink]="['/product/' + item.product.slug]" class="cart-item__infor-name">
                 {{ item.product.name }}
-              </p>
+              </a>
               <p class="cart-item__infor-price">
                 <b>{{ calcPriceDiscount(item.product.price, item.product.discount) | currency : 'VND' }}&nbsp;&nbsp;</b>
                 <del *ngIf="item.product.price">{{ item.product.price | myCurrency : 'VND' }}</del>

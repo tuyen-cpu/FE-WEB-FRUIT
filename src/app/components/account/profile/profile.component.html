@@ -27,7 +27,7 @@
           <input
             id="first-name"
             class="profile-form__field-input"
-            placeholder="First name"
+            [placeholder]="'FirstName' | translate"
             formControlName="firstName"
             type="first-name"
             pInputText />
@@ -45,7 +45,13 @@
         </div>
         <div class="profile-form__field mb-6">
           <label for="last-name" class="mb-2 text-2xl inline-block">{{ 'LastName' | translate }}</label>
-          <input id="last-name" class="profile-form__field-input" placeholder="Last name" formControlName="lastName" type="last-name" pInputText />
+          <input
+            id="last-name"
+            class="profile-form__field-input"
+            [placeholder]="'LastName' | translate"
+            formControlName="lastName"
+            type="last-name"
+            pInputText />
           <span *ngIf="lastName.dirty">
             <small *ngIf="lastName.errors?.['required']" class="profile-form__field-message p-error block">
               {{ 'LastName' | translate }} {{ 'NotEmpty' | translate }}.</small
@@ -71,7 +77,7 @@
       </form>
     </div>
     <div class="change-password mt-7">
-      <h2 class="text-center text-4xl">{{ 'ChangPassword' | translate }}</h2>
+      <h2 class="text-center text-4xl">{{ 'ChangePassword' | translate }}</h2>
       <form action="" [formGroup]="resetForm" (ngSubmit)="changePassword()" class="profile-form">
         <div class="profile-form__field">
           <label for="old-password" class="mb-2 text-2xl inline-block">{{ 'Password' | translate }}</label>

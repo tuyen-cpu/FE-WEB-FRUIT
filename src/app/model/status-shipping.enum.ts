@@ -4,6 +4,7 @@ export enum EStatusShipping {
   VERIFIED = 'VERIFIED',
   DELIVERING = 'DELIVERING',
   DELIVERED = 'DELIVERED',
+  CANCELING = 'CANCELING',
 }
 export enum Status {
   INACTIVE,

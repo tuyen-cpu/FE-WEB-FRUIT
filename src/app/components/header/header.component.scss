@@ -755,6 +755,11 @@ header {
                   white-space: nowrap;
                   display: block;
                   width: 90%;
+                  color: #000;
+                  font-weight: bold;
+                  &:hover {
+                    color: $main-color;
+                  }
                 }
                 .quantity {
                   display: inline-flex;

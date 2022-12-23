@@ -400,9 +400,11 @@
                         ? 'cart-dropdown-item cart-dropdown-item--disabled flex'
                         : 'cart-dropdown-item flex'
                     ">
-                    <img class="cart-dropdown-item__image" [src]="urlImage + '/' + item.product.image.link" alt="" />
+                    <a [routerLink]="['/product/' + item.product.slug]"
+                      ><img class="cart-dropdown-item__image" [src]="urlImage + '/' + item.product.image.link" alt=""
+                    /></a>
                     <div class="cart-dropdown-item__content">
-                      <h4 class="name my-3">{{ item.product.name }}</h4>
+                      <a [routerLink]="['/product/' + item.product.slug]" class="name block my-3">{{ item.product.name }}</a>
                       <span class="quantity">
                         <button (click)="updateQuantity(inputQuantityElementHeader, item, '-')" class="quantity__btn">-</button>
                         <input type="text" min="1" class="value" value="{{ item.quantity }}" #inputQuantityElementHeader />

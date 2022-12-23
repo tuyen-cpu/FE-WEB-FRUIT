@@ -125,6 +125,12 @@
               flex: 1;
               &-name {
                 font-weight: $font-bold;
+                color: #000;
+                margin-bottom: 1rem;
+                display: block;
+                &:hover {
+                  color: $main-color;
+                }
               }
               &-price {
               }

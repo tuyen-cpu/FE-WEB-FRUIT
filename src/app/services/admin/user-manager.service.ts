@@ -36,4 +36,10 @@ export default class UserManagerService {
   filter(userFilter: UserFilter) {
     return this.httpClient.post(`${this.REST_API}/filter`, userFilter);
   }
+  getTotalOrders() {
+    return this.httpClient.get(`${this.REST_API}/total`);
+  }
+  getTotalOrdersInDay() {
+    return this.httpClient.get(`${this.REST_API}/total-in-day`);
+  }
 }

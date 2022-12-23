@@ -25,7 +25,7 @@
         [responsive]="true"
         responsiveLayout="scroll"
         [scrollable]="true"
-        scrollHeight="61vh">
+        scrollHeight="90vh">
         <ng-template pTemplate="summary" *ngIf="!orders.length">
           <div class="page grid align-items-center">
             <div class="col-12">
@@ -330,7 +330,7 @@
 <p-dialog header="Order Detail" [resizable]="false" [modal]="true" [maximizable]="true" appendTo="body" [(visible)]="isShowOrderDetail">
   <p-table
     [scrollable]="true"
-    scrollHeight="600px"
+    scrollHeight="700px"
     [value]="orderDetails"
     responsiveLayout="stack"
     [breakpoint]="'960px'"

@@ -1,3 +1,4 @@
+import { EStatusShipping } from 'src/app/model/status-shipping.enum';
 import { FileUploadService } from './../../services/file-upload.service';
 import { FileUploadModule } from 'primeng/fileupload';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
@@ -93,11 +94,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.changeParams();
     this.urlImage = this.fileUploadService.getLink();
     this.listStatuses = [
-      { name: 'VERIFIED', id: 1 },
-      { name: 'DELIVERING', id: 2 },
-      { name: 'DELIVERED', id: 3 },
-      { name: 'UNVERIFIED', id: 4 },
-      { name: 'CANCELED', id: 5 },
+      { name: EStatusShipping.VERIFIED, id: 1 },
+      { name: EStatusShipping.DELIVERING, id: 2 },
+      { name: EStatusShipping.DELIVERED, id: 3 },
+      { name: EStatusShipping.UNVERIFIED, id: 4 },
+      { name: EStatusShipping.CANCELED, id: 5 },
+      { name: EStatusShipping.CANCELING, id: 6 },
     ];
   }
 

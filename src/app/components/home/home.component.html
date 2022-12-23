@@ -1,28 +1,19 @@
 <div class="home-wrapper">
   <div class="slide-auto">
-    <p-carousel
-      [value]="backgrounds"
-      [numVisible]="1"
-      [numScroll]="1"
-      [responsiveOptions]="responsiveOptions"
-      [autoplayInterval]="3000"
-    >
+    <p-carousel [value]="backgrounds" [numVisible]="1" [numScroll]="1" [responsiveOptions]="responsiveOptions" [autoplayInterval]="3000">
       <ng-template let-item pTemplate="item">
         <div
           class="slide-auto__img-background"
           [ngStyle]="{
             backgroundImage: 'url(../../../assets/img/background/' + item + ')'
-          }"
-        >
+          }">
           <div class="slide-auto__content absolute">
             <div class="subtitle text-4xl">Top Selling!</div>
             <h1 class="mt-5 font-semibold">
               <span class="block">Fresh fruit</span>
               <span class="block">stay cool</span>
             </h1>
-            <a routerLink="/product/list" class="btn-action btn-shop-now"
-              >Shop Now</a
-            >
+            <a routerLink="/product/all" class="btn-action btn-shop-now">Shop Now</a>
           </div>
         </div>
         <!-- <img [src]="'../../../assets/img/background/' + item" alt="" class="" /> -->
@@ -69,22 +60,11 @@
         [circular]="true"
         [responsiveOptions]="responsiveCateOptions"
         [showNavigators]="false"
-        class="col-12 lg:col-9 mx-4"
-      >
+        class="col-12 lg:col-9 mx-4">
         <ng-template let-cate pTemplate="item">
-          <div
-            class="relative category-home__item sm:px-2 sm:px-2 md:px-3 md:px-3 lg:px-4 lg:px-4"
-          >
-            <a href="" class="block overflow-hidden"
-              ><img
-                [src]="
-                  '../../../assets/img/background/banner-' + cate + '.webp'
-                "
-                alt=""
-            /></a>
-            <div
-              class="absolute translate-y-50 bottom-50 category-home__content"
-            >
+          <div class="relative category-home__item sm:px-2 sm:px-2 md:px-3 md:px-3 lg:px-4 lg:px-4">
+            <a href="" class="block overflow-hidden"><img [src]="'../../../assets/img/background/banner-' + cate + '.webp'" alt="" /></a>
+            <div class="absolute translate-y-50 bottom-50 category-home__content">
               <p>Winter Fruits</p>
               <h3>Organic Fruits</h3>
               <a href="" class="btn-action inline-block m-0">SHOP NOW</a>
@@ -120,14 +100,9 @@
   </div>
   <div class="product-list-home my-8">
     <div class="container">
-      <h3 class="product-list-home__title text-black-alpha-80 text-5xl">
-        Our Products
-      </h3>
+      <h3 class="product-list-home__title text-black-alpha-80 text-5xl">Our Products</h3>
       <div class="grid">
-        <div
-          class="col-6 sm:col-3 md:col-3 lg:col-3"
-          *ngFor="let product of products"
-        >
+        <div class="col-6 sm:col-3 md:col-3 lg:col-3" *ngFor="let product of products">
           <app-product-item [product]="product"></app-product-item>
         </div>
       </div>
@@ -136,34 +111,16 @@
   <div class="banner-new-customner my-4">
     <div class="container">
       <div class="relative banner-new-customner__site">
-        <img
-          src="../../../assets/img/background/organic-banner-04.webp"
-          alt=""
-        />
-        <div
-          class="banner-new-customner__content absolute bottom-50 translate-y-50 text-center left-0 right-0"
-        >
-          <span
-            class="banner-new-customner__content-subtitle md:text-4xl lg:text-5xl"
-            >New customer offers</span
-          >
-          <h3
-            class="banner-new-customner__content-title my-3 md:text-5xl lg:text-6xl"
-          >
-            Cooked vegetable with sauce and space
-          </h3>
-          <p
-            class="banner-new-customner__content-des md:text-xl lg:text-2xl line-height-2"
-          >
+        <img src="../../../assets/img/background/organic-banner-04.webp" alt="" />
+        <div class="banner-new-customner__content absolute bottom-50 translate-y-50 text-center left-0 right-0">
+          <span class="banner-new-customner__content-subtitle md:text-4xl lg:text-5xl">New customer offers</span>
+          <h3 class="banner-new-customner__content-title my-3 md:text-5xl lg:text-6xl">Cooked vegetable with sauce and space</h3>
+          <p class="banner-new-customner__content-des md:text-xl lg:text-2xl line-height-2">
             Praesent dapibus, neque id cursus ucibus, tortor neque
             <br />
             egestas augue, eu vulputate magna eros eu erat.
           </p>
-          <a
-            routerLink="/product/list"
-            class="btn-action inline-block m-0 md:px-4 md:py-3 lg:p-4 lg:px-6 md:text-xl lg:text-2xl mt-3"
-            >Shop now</a
-          >
+          <a routerLink="/product/all" class="btn-action inline-block m-0 md:px-4 md:py-3 lg:p-4 lg:px-6 md:text-xl lg:text-2xl mt-3">Shop now</a>
         </div>
       </div>
     </div>
