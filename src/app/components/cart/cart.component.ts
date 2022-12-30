@@ -126,6 +126,9 @@ export class CartComponent implements OnInit, OnDestroy {
     if (this.userSubject) {
       this.userSubject.unsubscribe();
     }
+    if (this.cartsSubscription) {
+      this.cartsSubscription.unsubscribe();
+    }
   }
   showSuccessMessage(summary: string, detail: string) {
     this.messageService.add({

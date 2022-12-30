@@ -39,4 +39,7 @@ export default class OrderManagerService {
   getRevenueCurrentMonth() {
     return this.httpClient.get(`${this.REST_API}/revenue-current-month`);
   }
+  getStatisticalShippingStatus() {
+    return this.httpClient.get(`${this.REST_API}/statistical-shipping-status`);
+  }
 }

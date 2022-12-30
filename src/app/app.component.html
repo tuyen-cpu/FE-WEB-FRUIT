@@ -2,8 +2,41 @@
 <div class="body-section">
   <router-outlet> </router-outlet>
 </div>
-<!-- <app-footer></app-footer> -->
 <div *ngIf="isShow" class="go-to-top" (click)="gotoTop()">
   <i class="pi pi-arrow-up"></i>
 </div>
-<p-toast></p-toast>
+<p-toast></p-toast> -->
+<!-- <div class="box-chat-online">
+  Chat now
+  <div class="absolute box-site">
+    <div class="grid h-full">
+      <div class="col-12 absolute top-0 left-0 right-0 flex justify-content-between align-items-center mb-1 box-chat-header">
+        <div class="flex align-items-center">
+          <p-avatar
+            image="https://f3-zpc.zdn.vn/6413092686719229887/1e5883658fb357ed0ea2.jpg"
+            styleClass="mr-2"
+            size="xlarge"
+            shape="circle"></p-avatar>
+          Admin 1
+        </div>
+        <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded btn-close"></button>
+      </div>
+      <ul class="content-chat col-12">
+        <li [ngClass]="r.createdBy === 'dd' ? 'text-right' : ''" class="py-2" *ngFor="let r of mess">
+          <p-avatar
+            *ngIf="r.createdBy !== 'dd'"
+            icon="pi pi-user"
+            size="large"
+            styleClass="mr-2"
+            shape="circle"
+            [style]="{ 'background-color': '#2196F3', color: '#ffffff' }"></p-avatar
+          ><span>{{ r.content }}</span>
+        </li>
+      </ul>
+      <div class="col-12 absolute bottom-0 left-0 right-0 flex justify-content-between mb-1">
+        <input class="flex-1" type="text" pInputText [(ngModel)]="name" />
+        <button (click)="chat()" pButton pRipple type="button" label="Send" class="p-button-info ml-2"></button>
+      </div>
+    </div>
+  </div>
+</div> -->

@@ -15,6 +15,7 @@ import { AuthGuard } from './app/guards/auth.guard';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { AgmCoreModule } from '@agm/core';
 
 if (environment.production) {
   enableProdMode();
@@ -25,6 +26,7 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
   providers: [
     //  {provide: BACKEND_URL, useValue: 'https://photoapp.looknongmodules.com/api'},
+
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AppInterceptor,

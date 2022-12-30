@@ -8,5 +8,6 @@ const REFRESHTOKEN_KEY = 'refresh-token';
 })
 export class ShareMessageService {
   message = new BehaviorSubject<String>(null);
+  errorMessage = new BehaviorSubject<String>(null);
   constructor() {}
 }

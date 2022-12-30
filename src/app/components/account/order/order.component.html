@@ -14,12 +14,50 @@
     scrollHeight="61vh">
     <!-- <ng-template pTemplate="caption"> List of latest orders </ng-template> -->
     <ng-template pTemplate="caption">
-      <div class="flex align-items-center justify-content-between">
-        <span class="text-2xl">{{ 'Total' | translate }}: {{ paginator.totalElements }}</span>
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
-        </span>
+      <div class="grid pt-4 p-fluid align-items-end filter-bar">
+        <div class="col-2">
+          <label class="block mb-1">Shipping</label>
+          <p-dropdown
+            [options]="listStatuses"
+            [(ngModel)]="statusFilterSelected"
+            (onChange)="onChangeStatusFilter()"
+            optionLabel="id"
+            [showClear]="true"
+            placeholder="Select a Status">
+            <ng-template pTemplate="selectedItem">
+              <div class="country-item country-item-value" *ngIf="statusFilterSelected">
+                <div>
+                  <span [class]="'status-default status-' + statusFilterSelected.id">{{ statusFilterSelected.name }}</span>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template let-status pTemplate="item">
+              <div class="status-item">
+                <div>
+                  <span [class]="'status-default status-' + status.id">{{ status.name }}</span>
+                </div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+
+        <div class="col-3">
+          <label for="" class="block mb-1">Create Date</label>
+          <p-calendar
+            [(ngModel)]="datesFilter"
+            (onSelect)="onSelectDateFilter()"
+            (onClearClick)="onClearDate()"
+            [showButtonBar]="true"
+            placeholder="Select Date here"
+            selectionMode="range"
+            [readonlyInput]="true"
+            inputId="range"
+            todayButtonStyleClass="p-secondary-button"
+            [showIcon]="true"></p-calendar>
+        </div>
+        <div class="col-1">
+          <p-button *ngIf="hasValueFilter()" label="Filter" styleClass="p-button-sm" (click)="onFilterOrders()"></p-button>
+        </div>
       </div>
     </ng-template>
     <ng-template pTemplate="header">

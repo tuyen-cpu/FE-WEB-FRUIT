@@ -1,8 +1,9 @@
+import { FormsModule } from '@angular/forms';
 import { UserInforService } from './services/user-infor.service';
 import { MessageService } from 'primeng/api';
 import { TokenStorageService } from './services/token-storage.service';
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavigationStart, Router, RouterModule } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -13,12 +14,21 @@ import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ShareMessageService } from './services/share-message.service';
-
+//primeNg
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 //multi languge
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import UserManagerService from './services/admin/user-manager.service';
+import { WebSocketAPI } from './components/chat/web-socket';
+import { SocketClientService } from './services/chat/socket-client.service';
+import { ChatRoomService } from './services/chat/chat-room.service';
+import { MessageRoomService } from './services/chat/message-room.service';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -26,16 +36,22 @@ import UserManagerService from './services/admin/user-manager.service';
     CommonModule,
     MessagesModule,
     MessageModule,
+    FormsModule,
     HeaderComponent,
     ToastModule,
     FooterComponent,
     RouterModule,
     HomeComponent,
     SocialLoginModule,
+    AvatarModule,
+    AvatarGroupModule,
+    InputTextModule,
+    ButtonModule,
   ],
   providers: [MessageService],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit {
   title = 'FE-BAN-HANG';
@@ -45,11 +61,7 @@ export class AppComponent implements OnInit {
   user!: User;
   @HostListener('window:scroll')
   checkScroll() {
-    // window의 scroll top
-    // Both window.pageYOffset and document.documentElement.scrollTop returns the same result in all the cases. window.pageYOffset is not supported below IE 9.
-
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-
     if (scrollPosition >= this.topPosToStartShowing) {
       this.isShow = true;
     } else {
@@ -65,6 +77,12 @@ export class AppComponent implements OnInit {
       behavior: 'smooth',
     });
   }
+  webSocketAPI: WebSocketAPI;
+  greeting: any;
+  name: string;
+  rooms: any;
+  mess: any = [];
+  roomSelected: any = 1;
   constructor(
     private tokenStorageService: TokenStorageService,
     private messageService: MessageService,
@@ -73,12 +91,43 @@ export class AppComponent implements OnInit {
     public translateService: TranslateService,
     private userInforService: UserInforService,
     private userManagerService: UserManagerService,
+    private socketClientService: SocketClientService,
+    private chatRoomService: ChatRoomService,
+    private messageRoomService: MessageRoomService,
   ) {
     translateService.addLangs(['en', 'vn']);
     translateService.setDefaultLang('en');
   }
 
+  response = '';
+  config = {
+    title: 'ChatBot',
+    subTitle: 'New Way of learning',
+  };
+  setData(message) {
+    this.response = message;
+  }
+  getMessage($event) {
+    console.log($event);
+  }
   ngOnInit(): void {
+    // this.chatRoomService.findAll().subscribe((posts) => {
+    //   this.rooms = posts;
+    //   console.log(posts);
+    // });
+    // this.chatRoomService.onPost().subscribe((post) => {
+    //   this.rooms.push(post);
+    //   console.log(this.rooms);
+    // });
+    // this.messageRoomService.findAll(this.roomSelected).subscribe((post) => {
+    //   this.mess = post;
+    //   console.log(post);
+    // });
+    // this.messageRoomService.onMessage().subscribe((post) => {
+    //   console.log(post);
+    //   this.mess.push(post);
+    // });
+    // this.webSocketAPI = new WebSocketAPI(this);
     if (this.userInforService.user) {
       this.userManagerService.get(this.userInforService.user.id).subscribe({
         next: (res: any) => {
@@ -96,6 +145,14 @@ export class AppComponent implements OnInit {
         life: 5000,
       });
     });
+    this.shareMessageService.errorMessage.subscribe((data: any) => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: data,
+        life: 5000,
+      });
+    });
     this.tokenStorageService.userChange.subscribe((data) => {
       this.router.events.forEach((event) => {
         if (event instanceof NavigationStart) {
@@ -108,6 +165,21 @@ export class AppComponent implements OnInit {
       });
     });
   }
+  // createRoom() {
+  //   this.chatRoomService.save({ createdBy: 'tuyền' });
+  // }
+  // onChangeRoom() {
+  //   this.messageRoomService.findAll(this.roomSelected).subscribe((post) => {
+  //     this.mess = post;
+  //     console.log(post);
+  //   });
+  //   console.log(this.roomSelected);
+  // }
+  // chat() {
+  //   if (this.name === '') return;
+  //   this.messageRoomService.save({ chatRoomId: this.roomSelected, content: this.name, createdBy: 'dd' });
+  //   this.name = '';
+  // }
   updateCurrentUser(user: User) {
     const newUser = <User>{
       ...this.userInforService.user,

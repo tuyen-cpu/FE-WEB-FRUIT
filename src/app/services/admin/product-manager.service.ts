@@ -24,4 +24,7 @@ export default class ProductManagerService {
     // });
     return this.httpClient.post(`${this.REST_API}/filter`, filter);
   }
+  getBestSelling(): Observable<any> {
+    return this.httpClient.get(`${this.REST_API}/best-selling`);
+  }
 }

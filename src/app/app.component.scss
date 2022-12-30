@@ -1,4 +1,4 @@
-@import "../app/scss/utils/variable";
+@import '../app/scss/utils/variable';
 @media screen and (max-width: 991.98px) {
   .body-section {
     padding-top: 52px;
@@ -6,8 +6,8 @@
 }
 .go-to-top {
   position: fixed;
-  bottom: 60px;
-  right: 30px;
+  bottom: 120px;
+  right: 36px;
   font-size: 2rem;
   background-color: transparent;
   width: 34px;
@@ -26,5 +26,62 @@
   &:hover {
     background-color: $main-color;
     color: #fff;
+  }
+}
+.box-chat-online {
+  z-index: 99999;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  cursor: pointer;
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box-chat-header {
+  border-bottom: 1px solid rgb(230 230 230);
+  color: #ffffff;
+  background-color: #0085ff;
+  font-weight: 700;
+  img {
+    object-fit: cover;
+  }
+  .btn-close {
+    &:enabled:focus {
+      box-shadow: none;
+    }
+  }
+}
+.content-chat {
+  max-height: 94%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 300px;
+}
+.box-site {
+  font-size: 1.4rem;
+  height: 50vh;
+  border-radius: 2px;
+  right: 100px;
+  padding: 14px;
+  background-color: #fff;
+  bottom: 0;
+  box-shadow: 0px 0px 14px 14px rgba(0, 0, 0, 0.22);
+  .p-component {
+    font-size: 1.4rem !important;
+  }
+  li {
+    margin: 8px 0;
+    span {
+      background-color: #0085ff;
+      color: #fff;
+      padding: 4px 6px;
+      border-radius: 8px;
+    }
   }
 }

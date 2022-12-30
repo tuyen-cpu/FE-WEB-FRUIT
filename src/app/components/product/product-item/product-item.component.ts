@@ -1,3 +1,4 @@
+import { ShareMessageService } from 'src/app/services/share-message.service';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
@@ -12,7 +13,6 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { FileUploadService } from './../../../services/file-upload.service';
 import { UserInforService } from './../../../services/user-infor.service';
 import { CartItemService } from './../../../services/cart-item.service';
-import { ImageService } from './../../../services/image.service';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 import { Image, Product } from 'src/app/model/category.model';
 @Component({
@@ -35,6 +35,7 @@ export class ProductItemComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private router: Router,
     private fileUploadService: FileUploadService,
+    private shareMessageService: ShareMessageService,
   ) {}
 
   ngOnInit(): void {
@@ -43,6 +44,10 @@ export class ProductItemComponent implements OnInit {
   addCart(product: Product) {
     console.log('vao add to cart');
     if (this.userInforService.user) {
+      if (this.userInforService.user.roles.some((e) => e === 'admin' || e === 'manager')) {
+        this.shareMessageService.errorMessage.next('Cannot add to cart');
+        return;
+      }
       this.cartItemService
         .add({
           product: product,

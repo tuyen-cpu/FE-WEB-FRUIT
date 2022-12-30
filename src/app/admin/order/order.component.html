@@ -126,7 +126,7 @@
                 [showIcon]="true"></p-calendar>
             </div>
             <div class="col-1">
-              <p-button *ngIf="hasValueFilter()" label="Filter" styleClass="p-button-sm" (click)="onFilterUser()"></p-button>
+              <p-button *ngIf="hasValueFilter()" label="Filter" styleClass="p-button-sm" (click)="onFilterOrders()"></p-button>
             </div>
           </div>
         </ng-template>
@@ -139,6 +139,7 @@
             <th style="flex: 1">Payment</th>
             <th style="flex: 1">Total</th>
             <th style="flex: 0.5">View Detail</th>
+            <th style="flex: 0.5">Action</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-order style="min-height: 300px" let-expanded="expanded">
@@ -151,8 +152,8 @@
               <div class="" [innerHTML]="order.address | highlighter : filter.address : ''"></div>
             </td>
             <td style="flex: 1">
-              <!-- <span [class]="'status-default status-' + order.shippingStatus.id">{{ order.shippingStatus.name }}</span> -->
-              <p-dropdown
+              <span [class]="'status-default status-' + order.shippingStatus.id">{{ order.shippingStatus.name }}</span>
+              <!-- <p-dropdown
                 [options]="listStatuses"
                 (onChange)="changeShippingStatus($event, order)"
                 [(ngModel)]="order.shippingStatus"
@@ -172,7 +173,7 @@
                     </div>
                   </div>
                 </ng-template>
-              </p-dropdown>
+              </p-dropdown> -->
             </td>
             <td style="flex: 1">
               <a class="underline cursor-pointer payment" (click)="showDialogPayment(order.payment)">{{ order.payment.status }}</a>
@@ -189,15 +190,15 @@
                 icon="pi pi-eye"
                 class="p-element p-button-text p-button-rounded p-button-plain p-button p-component p-button-icon-only eyes-view"></button>
             </td>
-            <!-- <td style="flex: 0.5">
+            <td style="flex: 0.5">
               <button
                 pButton
                 pRipple
                 title="Edit"
                 icon="pi pi-pencil"
                 class="p-button-rounded p-button-success mr-2"
-                (click)="editProduct(product)"></button>
-            </td> -->
+                (click)="editOrder(order)"></button>
+            </td>
           </tr>
         </ng-template>
 
@@ -293,14 +294,7 @@
   </div>
 </div>
 
-<p-dialog
-  header="Payment"
-  [resizable]="false"
-  [modal]="true"
-  [maximizable]="true"
-  appendTo="body"
-  [(visible)]="isShowDialogPayment"
-  [style]="{ width: '30vw' }">
+<p-dialog header="Payment" [resizable]="false" [modal]="true" appendTo="body" [(visible)]="isShowDialogPayment" [style]="{ width: '30vw' }">
   <p-table [value]="payments" responsiveLayout="stack" [breakpoint]="'2000px'">
     <ng-template pTemplate="header" let-columns>
       <tr>
@@ -327,7 +321,7 @@
     <button type="button" pButton pRipple icon="pi pi-times" (click)="isShowDialogPayment = false" label="Close" class=""></button>
   </ng-template>
 </p-dialog>
-<p-dialog header="Order Detail" [resizable]="false" [modal]="true" [maximizable]="true" appendTo="body" [(visible)]="isShowOrderDetail">
+<p-dialog header="Order Detail" [resizable]="false" [modal]="true" [style]="{ width: '70vw' }" appendTo="body" [(visible)]="isShowOrderDetail">
   <p-table
     [scrollable]="true"
     scrollHeight="700px"
@@ -339,29 +333,29 @@
     <!-- <ng-template pTemplate="caption"> Stack </ng-template> -->
     <ng-template pTemplate="header" let-columns>
       <tr>
-        <th class="justify-content-center">Image</th>
-        <th class="justify-content-center">Product</th>
-        <th class="justify-content-center">ID Product</th>
-        <th class="justify-content-center">Quantity</th>
-        <th class="justify-content-center">Price</th>
-        <th class="justify-content-center">Discount</th>
-        <th class="justify-content-center">Total</th>
+        <th class="justify-content-center" style="flex: 0.5">Image</th>
+        <th class="justify-content-center" style="flex: 1.5">Product</th>
+        <!-- <th class="justify-content-center" style="flex: 0.5">ID Product</th> -->
+        <th class="justify-content-center" style="flex: 0.4">Quantity</th>
+        <th class="justify-content-center" style="flex: 1">Price</th>
+        <th class="justify-content-center" style="flex: 0.5">Discount</th>
+        <th class="justify-content-center" style="flex: 1">Total</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-orderdetail let-columns="columns">
       <tr>
-        <td>
+        <td class="justify-content-center" style="flex: 0.5">
           <span class="p-column-title"></span
           ><a routerLink="/" class="order-detail-link"><img [src]="urlImage + '/' + orderdetail.product.image.link" width="100px" alt="" /></a>
         </td>
-        <td class="justify-content-center"><span class="p-column-title">Product</span>{{ orderdetail.product.name }}</td>
-        <td class="justify-content-center"><span class="p-column-title">ID Product</span>{{ orderdetail.product.id }}</td>
-        <td class="justify-content-center"><span class="p-column-title">Quantity</span>{{ orderdetail.quantity }}</td>
-        <td class="justify-content-center"><span class="p-column-title">Price</span>{{ orderdetail.price | myCurrency : 'VND' }}</td>
-        <td class="justify-content-center">
+        <td class="justify-content-center" style="flex: 1.5"><span class="p-column-title">Product</span>{{ orderdetail.product.name }}</td>
+        <!-- <td class="justify-content-center" style="flex: 0.5"><span class="p-column-title">ID Product</span>{{ orderdetail.product.id }}</td> -->
+        <td class="justify-content-center" style="flex: 0.4"><span class="p-column-title">Quantity</span>{{ orderdetail.quantity }}</td>
+        <td class="justify-content-center" style="flex: 1"><span class="p-column-title">Price</span>{{ orderdetail.price | myCurrency : 'VND' }}</td>
+        <td class="justify-content-center" style="flex: 0.5">
           <span class="p-column-title">Discount</span>{{ orderdetail.discount ? '-' + orderdetail.discount + '%' : '' }}
         </td>
-        <td class="justify-content-center">
+        <td class="justify-content-center" style="flex: 1">
           <span class="p-column-title">Total</span>
           {{ (orderdetail.price - (orderdetail.price * orderdetail.discount) / 100) * orderdetail.quantity | myCurrency : 'VND' }}
         </td>
@@ -383,5 +377,45 @@
       </tr>
     </ng-template> -->
   </p-table>
+  <ng-template pTemplate="footer">
+    <button type="button" pButton pRipple icon="pi pi-times" (click)="isShowOrderDetail = false" label="Close" class=""></button>
+  </ng-template>
+</p-dialog>
+<p-dialog
+  [(visible)]="editDialog"
+  [breakpoints]="{ '960px': '90vw', '640px': '95vw' }"
+  [style]="{ width: '50vw', maxHeight: '92vh', overflow: 'unset' }"
+  header="Edit Order"
+  [modal]="true"
+  styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <div class="formgrid grid">
+      <div class="col-12">
+        <p-dropdown [options]="listStatuses" [(ngModel)]="orderEdit.shippingStatus" optionLabel="name" placeholder="Select a Status">
+          <ng-template pTemplate="selectedItem">
+            <div class="status-item status-item-value">
+              <div>
+                <span [class]="'status-default status-' + orderEdit.shippingStatus.id">{{ orderEdit.shippingStatus.name }}</span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template let-status pTemplate="item">
+            <div class="status-item">
+              <div>
+                <span [class]="'status-default status-' + status.id">{{ status.name }}</span>
+              </div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+  <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" [loading]="isLoading" (click)="saveProduct()"></button> -->
+    <button pButton pRipple type="button" label="Cancel" class="p-button-secondary p-button-plain" (click)="hideDialog()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" [loading]="isLoading" (click)="changeShippingStatuss()"></button>
+  </ng-template>
 </p-dialog>
 <!-- <app-loading [hidden]="!isLoading"></app-loading> -->

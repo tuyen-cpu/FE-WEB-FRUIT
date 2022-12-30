@@ -1,27 +1,44 @@
-import { TokenStorageService } from './../../../services/token-storage.service';
-import { Subscription } from 'rxjs';
-import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { UserInforService } from 'src/app/services/user-infor.service';
-import { OrderService } from './../../../services/order.service';
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { delay, Subscription } from 'rxjs';
+
+//primeNg
+
 import { Table, TableModule } from 'primeng/table';
-import { Order, OrderDetail } from 'src/app/model/bill.model';
-import { EStatusShipping } from 'src/app/model/status-shipping.enum';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Paginator } from 'src/app/model/paginator.model';
 import { PaginatorModule } from 'primeng/paginator';
 import { ToastModule } from 'primeng/toast';
 import { InputTextModule } from 'primeng/inputtext';
 import { TranslateModule } from '@ngx-translate/core';
+import { OrderFilter } from 'src/app/model/filter.model';
+import { CalendarModule } from 'primeng/calendar';
 
+//component
+import { TokenStorageService } from './../../../services/token-storage.service';
+import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
+import { UserInforService } from 'src/app/services/user-infor.service';
+import { OrderService } from './../../../services/order.service';
+import { EStatusShipping } from 'src/app/model/status-shipping.enum';
+import { Paginator } from 'src/app/model/paginator.model';
+import { Order, OrderDetail, ShippingStatus } from 'src/app/model/bill.model';
 @Component({
   selector: 'app-order',
   standalone: true,
-  imports: [CommonModule, ToastModule, TableModule, InputTextModule, RouterModule, MyCurrency, ConfirmDialogModule, PaginatorModule, TranslateModule],
-  providers: [ConfirmationService, MessageService],
+  imports: [
+    CommonModule,
+    ToastModule,
+    TableModule,
+    InputTextModule,
+    RouterModule,
+    MyCurrency,
+    ConfirmDialogModule,
+    PaginatorModule,
+    TranslateModule,
+    CalendarModule,
+  ],
+  providers: [ConfirmationService, MessageService, DatePipe],
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -33,6 +50,12 @@ export class OrderComponent implements OnInit, OnDestroy {
   paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
   paramsURL: {} = {};
   isLoadingComponent = false;
+  datesFilter: Date[] = [];
+  filter: OrderFilter = { page: 0, size: 10 };
+  statusFilterSelected: ShippingStatus;
+  flagFilter = false;
+  isLoadingTable = false;
+  listStatuses: any[] = [];
   constructor(
     private orderService: OrderService,
     private userInforService: UserInforService,
@@ -40,6 +63,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     private router: Router,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -51,8 +75,17 @@ export class OrderComponent implements OnInit, OnDestroy {
       }
       this.router.navigate(['/']);
     });
+    this.listStatuses = [
+      { name: EStatusShipping.VERIFIED, id: 1 },
+      { name: EStatusShipping.DELIVERING, id: 2 },
+      { name: EStatusShipping.DELIVERED, id: 3 },
+      { name: EStatusShipping.UNVERIFIED, id: 4 },
+      { name: EStatusShipping.CANCELED, id: 5 },
+      { name: EStatusShipping.CANCELING, id: 6 },
+    ];
   }
   getAll() {
+    this.flagFilter = false;
     this.isLoadingComponent = true;
     this.orderService.getAllByUserId(this.userInforService.user!.id!, this.paginator.pageNumber, this.paginator.pageSize).subscribe({
       next: (res) => {
@@ -108,7 +141,10 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.paginator.pageNumber = res['page'] - 1;
       }
       this.paginator.pageSize = Number(res['size']) || 10;
-
+      if (this.hasValueFilter()) {
+        this.filterOrder();
+        return;
+      }
       this.getAll();
     });
   }
@@ -127,6 +163,78 @@ export class OrderComponent implements OnInit, OnDestroy {
       relativeTo: this.route,
       queryParams: this.paramsURL,
     });
+  }
+
+  onSelectDateFilter() {
+    this.filter.createdDate = this.convertDateToString(this.datesFilter);
+  }
+  onClearDate() {
+    this.filter.createdDate = undefined;
+    this.checkAllWithoutFilter();
+  }
+  convertDateToString(dates: Date[]): string[] {
+    return dates.map((date) => this.datePipe.transform(date, 'yyyy-MM-dd'));
+  }
+  checkAllWithoutFilter() {
+    if (!this.hasValueFilter()) {
+      this.paginator.pageNumber = 0;
+      this.paginator.pageSize = 10;
+      this.paramsURL = {
+        page: this.paginator.pageNumber + 1,
+        size: this.paginator.pageSize,
+      };
+
+      this.addParams();
+      if (this.flagFilter) {
+        this.getAll();
+      }
+    }
+  }
+  onFilterOrders() {
+    this.resetFilterPaginator();
+    this.resetPaginator();
+    this.filterOrder();
+  }
+  filterOrder() {
+    this.isLoadingTable = true;
+    this.flagFilter = true;
+    this.filter.page = this.paginator.pageNumber;
+    this.filter.size = this.paginator.pageSize;
+    this.orderService
+      .filter(this.filter)
+      .pipe(delay(500))
+      .subscribe({
+        next: (res: any) => {
+          this.orders = res.data.content;
+
+          this.paginator.totalElements = res.data.totalElements;
+          this.isLoadingTable = false;
+        },
+        error: (res) => {
+          this.isLoadingTable = false;
+        },
+      });
+  }
+  resetPaginator() {
+    this.paginator.pageNumber = 0;
+    this.paginator.pageSize = 10;
+    this.paramsURL = {
+      page: this.paginator.pageNumber + 1,
+      size: this.paginator.pageSize,
+    };
+
+    this.addParams();
+  }
+  resetFilterPaginator() {
+    this.filter.page = 0;
+    this.filter.size = 10;
+  }
+  hasValueFilter() {
+    return this.statusFilterSelected || this.filter.address || (this.datesFilter && this.datesFilter.length);
+  }
+  onChangeStatusFilter() {
+    this.filter.shippingStatusId = this.statusFilterSelected ? this.statusFilterSelected.id : undefined;
+    this.checkAllWithoutFilter();
   }
   ngOnDestroy(): void {
     if (this.userSupscription) {

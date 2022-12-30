@@ -48,7 +48,7 @@ import { OrderDetailService } from 'src/app/services/order-detail.service';
 })
 export class OrderComponent implements OnInit, OnDestroy {
   isLoadingTable = false;
-
+  isLoading = false;
   paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
   paramsURL: {} = {};
   orders: Order[] = [];
@@ -76,6 +76,9 @@ export class OrderComponent implements OnInit, OnDestroy {
   paymentStatusFilter: { name: string; id: number };
   paymentMethodFilter: { name: string; id: number };
   flagFilter = false;
+  editDialog = false;
+
+  orderEdit: Order;
   constructor(
     private route: ActivatedRoute,
     private messageService: MessageService,
@@ -120,7 +123,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.filter.payment = { ...this.filter.payment, paymentMethod: this.paymentMethodFilter ? this.paymentMethodFilter.name : undefined };
     this.checkAllWithoutFilter();
   }
-  onFilterUser() {
+  onFilterOrders() {
     this.resetFilterPaginator();
     this.resetPaginator();
     this.filterOrder();
@@ -239,40 +242,54 @@ export class OrderComponent implements OnInit, OnDestroy {
         },
       });
   }
-  changeShippingStatus(event, order: Order) {
-    console.log(event.value);
-    this.isLoadingTable = true;
-    this.confirmationService.confirm({
-      message: 'Do you want to update this order?',
-      header: 'Update Confirmation',
-      icon: 'pi pi-info-circle',
-      accept: () => {
-        let orderUpdate = { ...order };
-        this.orderManagerService.updateStatus(orderUpdate).subscribe({
-          next: (res) => {
-            this.isLoadingTable = false;
-            this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Record updated' });
-          },
-          error: (res) => {
-            this.getOrders();
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: res.error.message });
-          },
-        });
+  changeShippingStatuss() {
+    this.isLoading = true;
+    this.orderManagerService.updateStatus(this.orderEdit).subscribe({
+      next: (res) => {
+        this.isLoading = false;
+        this.editDialog = false;
+        this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Record updated' });
       },
-      reject: (type) => {
-        switch (type) {
-          case ConfirmEventType.REJECT:
-            this.getOrders();
-            this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-            break;
-          case ConfirmEventType.CANCEL:
-            this.getOrders();
-            this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
-            break;
-        }
+      error: (res) => {
+        this.getOrders();
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: res.error.message });
       },
     });
   }
+  // changeShippingStatus(event, order: Order) {
+  //   console.log(event.value);
+  //   this.isLoadingTable = true;
+  //   this.confirmationService.confirm({
+  //     message: 'Do you want to update this order?',
+  //     header: 'Update Confirmation',
+  //     icon: 'pi pi-info-circle',
+  //     accept: () => {
+  //       let orderUpdate = { ...order };
+  //       this.orderManagerService.updateStatus(orderUpdate).subscribe({
+  //         next: (res) => {
+  //           this.isLoadingTable = false;
+  //           this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Record updated' });
+  //         },
+  //         error: (res) => {
+  //           this.getOrders();
+  //           this.messageService.add({ severity: 'error', summary: 'Error', detail: res.error.message });
+  //         },
+  //       });
+  //     },
+  //     reject: (type) => {
+  //       switch (type) {
+  //         case ConfirmEventType.REJECT:
+  //           this.getOrders();
+  //           this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
+  //           break;
+  //         case ConfirmEventType.CANCEL:
+  //           this.getOrders();
+  //           this.messageService.add({ severity: 'warn', summary: 'Cancelled', detail: 'You have cancelled' });
+  //           break;
+  //       }
+  //     },
+  //   });
+  // }
   onPageChange(event: any) {
     this.paginator.pageNumber = event.page;
     this.paginator.pageSize = event.rows;
@@ -311,6 +328,13 @@ export class OrderComponent implements OnInit, OnDestroy {
           this.isLoadingTable = false;
         },
       });
+  }
+  editOrder(order: Order) {
+    this.orderEdit = { ...order };
+    this.editDialog = true;
+  }
+  hideDialog() {
+    this.editDialog = false;
   }
   ngOnDestroy(): void {
     if (this.subjectKeyup) {
