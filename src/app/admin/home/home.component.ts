@@ -1,22 +1,29 @@
+import { Revenue } from './../../model/revenue.model';
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
 //primeNg
 import { Table, TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
-
+import { PaginatorModule } from 'primeng/paginator';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { CalendarModule } from 'primeng/calendar';
 //component
 import CategoryManagerService from 'src/app/services/admin/cagtegory-manager.service';
 import OrderManagerService from 'src/app/services/admin/order-manager.service';
 import UserManagerService from 'src/app/services/admin/user-manager.service';
 import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
 import ProductManagerService from 'src/app/services/admin/product-manager.service';
+import { Paginator } from 'src/app/model/paginator.model';
+import AnalyticService from 'src/app/services/admin/analytic.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, TableModule, MyCurrency, ChartModule],
+  imports: [CommonModule, TableModule, MyCurrency, ChartModule, PaginatorModule, ButtonModule, CheckboxModule, CalendarModule],
   templateUrl: './home.component.html',
+  providers: [DatePipe],
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
@@ -33,11 +40,41 @@ export class HomeComponent implements OnInit {
   polarOptions: any;
   statisticalShipping: any;
   pieOptions: any;
+  revenues: Revenue[] = [];
+  paginator: Paginator = { totalElements: 0, pageNumber: 0, pageSize: 10 };
+  isLoadingTable = false;
+  paramsURL: {} = {};
+  filter: {
+    dayStart: number;
+    dayEnd: number;
+    monthStart: number;
+    monthEnd: number;
+    yearStart: number;
+    yearEnd: number;
+    page: number;
+    size: number;
+  };
+  showDay = true;
+
+  rangeDates: Date[] = [
+    new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
+  ];
+  cols = [
+    { field: 'createdAt', header: 'Date' },
+    { field: 'totalOrder', header: 'Total' },
+    { field: 'grossRevenue', header: 'Gross Revenue' },
+    { field: 'shipping', header: 'Shipping' },
+    { field: 'netRevenue', header: 'Net Revenue' },
+  ];
   constructor(
     private route: ActivatedRoute,
     private orderManagerService: OrderManagerService,
     private userManagerService: UserManagerService,
     private productManagerService: ProductManagerService,
+    private router: Router,
+    private analyticService: AnalyticService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +88,7 @@ export class HomeComponent implements OnInit {
     this.getRevenueCurrentMonth();
     this.getBestSellingProduct();
     this.getStatisticalShippingStatus();
+    this.getWithDayMonthYearBetween();
     this.polarOptions = {
       plugins: {
         legend: {
@@ -87,7 +125,9 @@ export class HomeComponent implements OnInit {
   }
 
   roundNumber = (number: number) => ~~number;
-
+  bbb(current: any, las: any) {
+    console.log(current, las);
+  }
   getTotalOrders() {
     this.orderManagerService.getTotalOrders().subscribe({
       next: (res: any) => {
@@ -132,6 +172,7 @@ export class HomeComponent implements OnInit {
     this.orderManagerService.getRevenueLastMonth().subscribe({
       next: (res: any) => {
         this.revenueLastMonth = res.data;
+        console.log(res);
       },
       error: (res) => {},
     });
@@ -181,6 +222,99 @@ export class HomeComponent implements OnInit {
         };
       },
       error: (res) => {},
+    });
+  }
+  selectData(event: any) {
+    console.log(event);
+  }
+  convertDatesToString(dates: Date[]): string[] {
+    return dates.map((date) => this.datePipe.transform(date, 'yyyy-MM-dd'));
+  }
+  convertDateToString(date: Date): string {
+    return this.datePipe.transform(date, 'yyyy-MM-dd');
+  }
+  yearOf(string: Date): number {
+    const s = this.convertDateToString(string).split('-');
+    return +s[0];
+  }
+  monthOf(string: Date): number {
+    const s = this.convertDateToString(string).split('-');
+    return +s[1];
+  }
+  dayOf(string: Date): number {
+    const s = this.convertDateToString(string).split('-');
+    return +s[2];
+  }
+  getWithDayMonthYearBetween() {
+    this.analyticService
+      .getWithDayMonthYearBetween({
+        dayStart: this.dayOf(this.rangeDates[0]),
+        dayEnd: this.dayOf(this.rangeDates[1]),
+        monthStart: this.monthOf(this.rangeDates[0]),
+        monthEnd: this.monthOf(this.rangeDates[1]),
+        yearEnd: this.yearOf(this.rangeDates[0]),
+        yearStart: this.yearOf(this.rangeDates[1]),
+        page: 0,
+        size: 10,
+      })
+      .subscribe({
+        next: (res) => {
+          this.revenues = res.data.content;
+        },
+        error: (res) => {},
+      });
+  }
+  getWithMonthYearBetween() {
+    this.analyticService
+      .getWithMonthYearBetween({
+        monthStart: this.monthOf(this.rangeDates[0]),
+        monthEnd: this.monthOf(this.rangeDates[1]),
+        yearEnd: this.yearOf(this.rangeDates[0]),
+        yearStart: this.yearOf(this.rangeDates[1]),
+        page: 0,
+        size: 10,
+      })
+      .subscribe({
+        next: (res) => {
+          this.revenues = res.data.content;
+        },
+        error: (res) => {},
+      });
+  }
+  onChangeShowDay() {
+    if (this.showDay) {
+      this.getWithDayMonthYearBetween();
+      return;
+    }
+    this.getWithMonthYearBetween();
+  }
+  onClearDate() {
+    this.rangeDates = [
+      new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+      new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
+    ];
+  }
+  onSelectDateFilter() {
+    if (this.showDay) {
+      this.getWithDayMonthYearBetween();
+      return;
+    }
+    this.getWithMonthYearBetween();
+  }
+  onPageChange(event: any) {
+    this.paginator.pageNumber = event.page;
+    this.paginator.pageSize = event.rows;
+    this.paramsURL = {
+      page: this.paginator.pageNumber + 1,
+      size: this.paginator.pageSize,
+    };
+
+    this.addParams();
+  }
+  addParams() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this.paramsURL,
     });
   }
 }

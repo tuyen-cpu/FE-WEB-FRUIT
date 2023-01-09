@@ -54,7 +54,7 @@
                   ? paginator.pageSize * paginator.pageNumber + products.length
                   : paginator.pageSize * paginator.pageNumber + paginator.pageSize
               }} -->
-              Total: {{ paginator.totalElements }} products</span
+              Total: {{ paginator.totalElements }} catogories</span
             >
             <!-- <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
@@ -65,7 +65,7 @@
         <ng-template pTemplate="header">
           <tr>
             <th style="flex: 0.5">Id</th>
-            <th style="flex: 3">Product Name</th>
+            <th style="flex: 3">Category Name</th>
 
             <th style="flex: 1">Status</th>
             <th style="flex: 0.5">Action</th>
@@ -101,7 +101,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="7">No product found.</td>
+            <td colspan="7">No Category found.</td>
           </tr>
         </ng-template>
         <!-- <ng-template pTemplate="footer">

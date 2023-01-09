@@ -42,4 +42,7 @@ export default class OrderManagerService {
   getStatisticalShippingStatus() {
     return this.httpClient.get(`${this.REST_API}/statistical-shipping-status`);
   }
+  getByOrderId(orderId: number): Observable<any> {
+    return this.httpClient.get(`${this.REST_API}/${orderId}/order-detail`);
+  }
 }

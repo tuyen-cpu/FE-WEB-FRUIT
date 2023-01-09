@@ -31,35 +31,39 @@
         </li>
       </ul>
     </div> -->
-  <div class="col-12 sm:col-12 md:12 lg:col-12">
-    <div class="card">
-      <p-toolbar styleClass="mb-4 gap-2">
-        <ng-template pTemplate="left">
-          <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-          <button
-            pButton
-            pRipple
-            [label]="'Delete' | translate"
-            icon="pi pi-trash"
-            class="p-button-danger"
-            (click)="deleteSelectedAddresses($event)"
-            [disabled]="!selectedAddresses || !selectedAddresses.length"></button>
-        </ng-template>
-        <!-- <ng-template pTemplate="right">
+  <a class="inline-block text-2xl mb-3 cursor-pointer back-page" (click)="backToPreviousPage()">
+    <i class="pi pi-angle-left back-icon"></i>
+    <span> Back </span>
+  </a>
+
+  <div class="card">
+    <p-toolbar styleClass="mb-4 gap-2">
+      <ng-template pTemplate="left">
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+        <button
+          pButton
+          pRipple
+          [label]="'Delete' | translate"
+          icon="pi pi-trash"
+          class="p-button-danger"
+          (click)="deleteSelectedAddresses($event)"
+          [disabled]="!selectedAddresses || !selectedAddresses.length"></button>
+      </ng-template>
+      <!-- <ng-template pTemplate="right">
           <p-button pTooltip="Fresher User List" type="button" icon="pi pi-refresh" styleClass="p-button-text" (click)="resetView()"></p-button
         ></ng-template> -->
-      </p-toolbar>
+    </p-toolbar>
 
-      <p-table
-        #dt
-        [value]="addresses"
-        [rows]="row"
-        [globalFilterFields]="['ward', 'city', 'district', 'street', 'firstName', 'lastName']"
-        [(selection)]="selectedAddresses"
-        [rowHover]="true"
-        dataKey="id"
-        responsiveLayout="scroll">
-        <!-- <ng-template pTemplate="summary" *ngIf="orders.length !== 0">
+    <p-table
+      #dt
+      [value]="addresses"
+      [rows]="row"
+      [globalFilterFields]="['ward', 'city', 'district', 'street', 'firstName', 'lastName']"
+      [(selection)]="selectedAddresses"
+      [rowHover]="true"
+      dataKey="id"
+      responsiveLayout="scroll">
+      <!-- <ng-template pTemplate="summary" *ngIf="orders.length !== 0">
             <div class="page">
               <p-paginator
                 [rows]="1"
@@ -69,196 +73,195 @@
               ></p-paginator>
             </div>
           </ng-template> -->
-        <ng-template pTemplate="caption">
-          <div class="flex align-items-center justify-content-between">
-            <span class="text-2xl">{{ 'Total' | translate }}: {{ paginator.totalElements }}</span>
-            <!-- <span class="p-input-icon-left">
+      <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between">
+          <span class="text-2xl">{{ 'Total' | translate }}: {{ paginator.totalElements }}</span>
+          <!-- <span class="p-input-icon-left">
               <i class="pi pi-search"></i>
               <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Search..." />
             </span> -->
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th style="width: 4rem">
-              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
-            <th pSortableColumn="name">{{ 'Name' | translate }} <p-sortIcon field="name"></p-sortIcon></th>
-            <th>{{ 'Address' | translate }}</th>
-            <th pSortableColumn="phone">{{ 'Phone' | translate }} <p-sortIcon field="phone"></p-sortIcon></th>
-            <th>{{ 'Status' | translate }}</th>
-            <th style="min-width: 10rem"></th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-address>
-          <tr>
-            <td>
-              <p-tableCheckbox [value]="address"></p-tableCheckbox>
-            </td>
-            <td>{{ address.lastName + ' ' + address.firstName }}</td>
-            <td>
-              {{ address.street + ', ' + address.ward + ', ' + address.district + ', ' + address.city }}
-            </td>
-            <td>
-              {{ address.phone }}
-            </td>
-            <td>
-              <span [class]="'address-default status-' + address.isDefault">{{ address.isDefault === 0 ? '' : ('DEFAULT' | translate) }}</span>
-            </td>
-            <td>
-              <button
-                pButton
-                pRipple
-                title="Edit"
-                icon="pi pi-pencil"
-                class="p-button-rounded p-button-success mr-2"
-                (click)="editAddress(address)"></button>
-              <button
-                pButton
-                pRipple
-                title="Delete"
-                icon="pi pi-trash"
-                class="p-button-rounded p-button-warning"
-                (click)="deleteAddress(address, $event)"></button>
-            </td>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="summary" *ngIf="addresses">
-          <div class="page">
-            <p-paginator
-              [rows]="paginator.pageSize"
-              [totalRecords]="paginator.totalElements"
-              [first]="paginator.pageSize * paginator.pageNumber"
-              (onPageChange)="onPageChange($event)"
-              [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="emptymessage">
-          <tr>
-            <td colspan="7">No address found.</td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
-
-    <p-dialog
-      [dismissableMask]="true"
-      [(visible)]="addressDialog"
-      [style]="{ width: '450px', fontSize: '24rem' }"
-      [header]="'Add' | translate"
-      [modal]="true"
-      styleClass="p-fluid">
-      <ng-template pTemplate="content">
-        <div class="formgrid grid">
-          <div class="field col">
-            <label for="firstName" class="font-semibold">First name*</label>
-            <input
-              type="text"
-              pInputText
-              id="firstName"
-              [(ngModel)]="address.firstName"
-              required
-              [ngClass]="{
-                'ng-invalid ng-dirty': submitted && !address.firstName
-              }" />
-            <small class="p-error" *ngIf="submitted && !address.firstName">First name is required.</small>
-          </div>
-          <div class="field col">
-            <label for="lastName" class="font-semibold">Last name*</label>
-            <input
-              type="text"
-              pInputText
-              id="lastName "
-              [(ngModel)]="address.lastName"
-              required
-              [ngClass]="{
-                'ng-invalid ng-dirty': submitted && !address.lastName
-              }" />
-            <small class="p-error" *ngIf="submitted && !address.lastName">Last name is required.</small>
-          </div>
         </div>
-        <div class="field">
-          <label for="phone" class="font-semibold">Phone*</label>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 4rem">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th pSortableColumn="name">{{ 'Name' | translate }} <p-sortIcon field="name"></p-sortIcon></th>
+          <th>{{ 'Address' | translate }}</th>
+          <th pSortableColumn="phone">{{ 'Phone' | translate }} <p-sortIcon field="phone"></p-sortIcon></th>
+          <th>{{ 'Status' | translate }}</th>
+          <th style="min-width: 10rem"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-address>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="address"></p-tableCheckbox>
+          </td>
+          <td>{{ address.lastName + ' ' + address.firstName }}</td>
+          <td>
+            {{ address.street + ', ' + address.ward + ', ' + address.district + ', ' + address.city }}
+          </td>
+          <td>
+            {{ address.phone }}
+          </td>
+          <td>
+            <span [class]="'address-default status-' + address.isDefault">{{ address.isDefault === 0 ? '' : ('DEFAULT' | translate) }}</span>
+          </td>
+          <td>
+            <button
+              pButton
+              pRipple
+              title="Edit"
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-success mr-2"
+              (click)="editAddress(address)"></button>
+            <button
+              pButton
+              pRipple
+              title="Delete"
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-warning"
+              (click)="deleteAddress(address, $event)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary" *ngIf="addresses">
+        <div class="page">
+          <p-paginator
+            [rows]="paginator.pageSize"
+            [totalRecords]="paginator.totalElements"
+            [first]="paginator.pageSize * paginator.pageNumber"
+            (onPageChange)="onPageChange($event)"
+            [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">No address found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <p-dialog
+    [dismissableMask]="true"
+    [(visible)]="addressDialog"
+    [style]="{ width: '450px', fontSize: '24rem' }"
+    [header]="'Add' | translate"
+    [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="formgrid grid">
+        <div class="field col">
+          <label for="firstName" class="font-semibold">First name*</label>
           <input
+            type="text"
             pInputText
-            id="phone "
-            [(ngModel)]="address.phone"
+            id="firstName"
+            [(ngModel)]="address.firstName"
             required
-            [pattern]="phonePattern"
-            #phone="ngModel"
             [ngClass]="{
+              'ng-invalid ng-dirty': submitted && !address.firstName
+            }" />
+          <small class="p-error" *ngIf="submitted && !address.firstName">First name is required.</small>
+        </div>
+        <div class="field col">
+          <label for="lastName" class="font-semibold">Last name*</label>
+          <input
+            type="text"
+            pInputText
+            id="lastName "
+            [(ngModel)]="address.lastName"
+            required
+            [ngClass]="{
+              'ng-invalid ng-dirty': submitted && !address.lastName
+            }" />
+          <small class="p-error" *ngIf="submitted && !address.lastName">Last name is required.</small>
+        </div>
+      </div>
+      <div class="field">
+        <label for="phone" class="font-semibold">Phone*</label>
+        <input
+          pInputText
+          id="phone "
+          [(ngModel)]="address.phone"
+          required
+          [pattern]="phonePattern"
+          #phone="ngModel"
+          [ngClass]="{
                 'ng-invalid ng-dirty': (submitted && !address.phone)||(submitted && phone.errors?.['pattern'])
               }" />
-          <small class="p-error" *ngIf="submitted && !address.phone">Phone is required.</small>
-          <small class="p-error" *ngIf="phone.errors?.['pattern']">Phone is invalid.</small>
-        </div>
-        <div class="field">
-          <label for="street" class="font-semibold">Street*</label>
-          <input
-            pInputText
-            id="street"
-            [(ngModel)]="address.street"
-            required
-            #street="ngModel"
-            [ngClass]="{
+        <small class="p-error" *ngIf="submitted && !address.phone">Phone is required.</small>
+        <small class="p-error" *ngIf="phone.errors?.['pattern']">Phone is invalid.</small>
+      </div>
+      <div class="field">
+        <label for="street" class="font-semibold">Street*</label>
+        <input
+          pInputText
+          id="street"
+          [(ngModel)]="address.street"
+          required
+          #street="ngModel"
+          [ngClass]="{
                 'ng-invalid ng-dirty': (submitted && !address.street)||(submitted && street.errors?.['pattern'])
               }" />
-          <small class="p-error" *ngIf="submitted && !address.street">Street is required.</small>
-        </div>
-        <div class="field-checkbox">
-          <label for="binary" class="font-semibold mr-2 ml-0">Set default: </label>
-          <p-checkbox [(ngModel)]="isDefault" [binary]="true" inputId="binary"></p-checkbox>
-        </div>
-        <div class="field">
-          <label for="" class="font-semibold">City*</label>
-          <p-dropdown
-            (onChange)="onChangeProvince($event.value.code)"
-            [style]="{ minWidth: '100%' }"
-            [options]="provinces"
-            placeholder="Select a City"
-            optionLabel="name"
-            [ngClass]="{
-              'ng-invalid ng-dirty': submitted && isEmptyObject(city)
-            }"
-            [(ngModel)]="city"></p-dropdown>
-          <small class="p-error" *ngIf="submitted && isEmptyObject(city)">City is required.</small>
-        </div>
-        <div class="field">
-          <label for="" class="font-semibold">District*</label>
-          <p-dropdown
-            (onChange)="onChangeDistrict($event.value.code)"
-            [style]="{ minWidth: '100%' }"
-            [options]="districts"
-            placeholder="Select a district"
-            optionLabel="name"
-            [ngClass]="{
-              'ng-invalid ng-dirty': submitted && isEmptyObject(district)
-            }"
-            [(ngModel)]="district"></p-dropdown>
-          <small class="p-error" *ngIf="submitted && isEmptyObject(district)">District is required.</small>
-        </div>
-        <div class="field">
-          <label for="" class="font-semibold">Ward*</label>
-          <p-dropdown
-            [options]="wards"
-            placeholder="Select a ward"
-            optionLabel="name"
-            [ngClass]="{
-              'ng-invalid ng-dirty': submitted && isEmptyObject(ward)
-            }"
-            [(ngModel)]="ward"></p-dropdown>
-          <small class="p-error" *ngIf="submitted && isEmptyObject(ward)">Ward is required.</small>
-        </div>
-      </ng-template>
+        <small class="p-error" *ngIf="submitted && !address.street">Street is required.</small>
+      </div>
+      <div class="field-checkbox">
+        <label for="binary" class="font-semibold mr-2 ml-0">Set default: </label>
+        <p-checkbox [(ngModel)]="isDefault" [binary]="true" inputId="binary"></p-checkbox>
+      </div>
+      <div class="field">
+        <label for="" class="font-semibold">City*</label>
+        <p-dropdown
+          (onChange)="onChangeProvince($event.value.code)"
+          [style]="{ minWidth: '100%' }"
+          [options]="provinces"
+          placeholder="Select a City"
+          optionLabel="name"
+          [ngClass]="{
+            'ng-invalid ng-dirty': submitted && isEmptyObject(city)
+          }"
+          [(ngModel)]="city"></p-dropdown>
+        <small class="p-error" *ngIf="submitted && isEmptyObject(city)">City is required.</small>
+      </div>
+      <div class="field">
+        <label for="" class="font-semibold">District*</label>
+        <p-dropdown
+          (onChange)="onChangeDistrict($event.value.code)"
+          [style]="{ minWidth: '100%' }"
+          [options]="districts"
+          placeholder="Select a district"
+          optionLabel="name"
+          [ngClass]="{
+            'ng-invalid ng-dirty': submitted && isEmptyObject(district)
+          }"
+          [(ngModel)]="district"></p-dropdown>
+        <small class="p-error" *ngIf="submitted && isEmptyObject(district)">District is required.</small>
+      </div>
+      <div class="field">
+        <label for="" class="font-semibold">Ward*</label>
+        <p-dropdown
+          [options]="wards"
+          placeholder="Select a ward"
+          optionLabel="name"
+          [ngClass]="{
+            'ng-invalid ng-dirty': submitted && isEmptyObject(ward)
+          }"
+          [(ngModel)]="ward"></p-dropdown>
+        <small class="p-error" *ngIf="submitted && isEmptyObject(ward)">Ward is required.</small>
+      </div>
+    </ng-template>
 
-      <ng-template pTemplate="footer">
-        <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button> -->
-        <button pButton pRipple type="button" label="Cancel" class="p-button-secondary p-button-plain" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" [loading]="isLoading" (click)="saveAddress()"></button>
-        <!-- <button pButton pRipple label="Save" icon="pi pi-check"></button> -->
-      </ng-template>
-    </p-dialog>
-  </div>
+    <ng-template pTemplate="footer">
+      <!-- <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button> -->
+      <button pButton pRipple type="button" label="Cancel" class="p-button-secondary p-button-plain" (click)="hideDialog()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" [loading]="isLoading" (click)="saveAddress()"></button>
+      <!-- <button pButton pRipple label="Save" icon="pi pi-check"></button> -->
+    </ng-template>
+  </p-dialog>
 </div>
 
 <app-loading [hidden]="!isLoading"></app-loading>

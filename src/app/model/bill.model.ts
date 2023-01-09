@@ -22,6 +22,7 @@ export interface OrderDetail {
 }
 export interface Order {
   id?: number;
+  createdBy?: string;
   total?: number;
   createdDate?: Date;
   shippingStatus?: ShippingStatus;
@@ -50,8 +51,8 @@ export interface Payment {
   email?: string;
 }
 export enum PaymentMethod {
-  COD,
-  PAYPAL,
+  COD = 'COD',
+  PAYPAL = 'PAYPAL',
 }
 export enum EStatusPayment {
   PAID,

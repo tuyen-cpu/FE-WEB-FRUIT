@@ -115,7 +115,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.getProvinces();
     this.getCartItems();
     // this.getAddresses();
-    this.renderPaypal();
   }
   autoSelectAddressDefault() {
     this.isLoading = true;
@@ -186,6 +185,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
           this.loadTotal();
           this.shippingCost = this.totalCart > 250000 ? 0 : 30000;
+          this.renderPaypal();
         },
       });
   }
@@ -257,11 +257,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.isLoading = false;
   }
   renderPaypal() {
+    console.log(this.totalCart / 25000);
     render({
       id: '#myPaypalButton',
       currency: 'USD',
-      value: '' + this.totalCart / 25,
-      // value: '' + 7266690 / 25,
+      value: '' + ~~(this.totalCart / 25000),
+      // value: '' + ~~10.94904,
       onApprove: (details) => {
         console.log(~~(this.totalCart / 25));
         this.payer = details.payer.name.given_name + ' ' + details.payer.name.surname;
@@ -380,7 +381,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: 'warn',
         summary: 'Service Message',
-        detail: 'Mã không hợp lệ',
+        detail: 'Code is wrong',
       });
       this.isLoading = false;
       return;
@@ -404,7 +405,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   initForm() {
     this.infoForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
-      lastName: ['', [Validators.required, Validators.minLength(3)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
       phoneNum: ['', [Validators.required, Validators.pattern(phoneNum)]],
       street: ['', [Validators.required, Validators.minLength(3)]],
       province: [null, Validators.required],

@@ -77,7 +77,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   paymentMethodFilter: { name: string; id: number };
   flagFilter = false;
   editDialog = false;
-
+  maxDateValue = new Date();
   orderEdit: Order;
   constructor(
     private route: ActivatedRoute,
@@ -89,7 +89,6 @@ export class OrderComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
 
     private fileUploadService: FileUploadService,
-    private orderDetailService: OrderDetailService,
   ) {}
 
   ngOnInit(): void {
@@ -315,7 +314,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
   showDetail(id: number) {
     this.isLoadingTable = true;
-    this.orderDetailService
+    this.orderManagerService
       .getByOrderId(id)
       .pipe(delay(100))
       .subscribe({

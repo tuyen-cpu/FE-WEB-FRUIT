@@ -217,7 +217,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return price - (price * discount) / 100;
   }
   searchProduct() {
-    this.subjectKeyup.pipe(debounceTime(900)).subscribe((key) => {
+    this.subjectKeyup.pipe(debounceTime(900), distinctUntilChanged()).subscribe((key) => {
       this.isLoading = false;
       this.productService.search(key, 0, 6).subscribe({
         next: (response) => {
@@ -259,6 +259,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   removeOpen(event: any) {
     event.value = '';
     this.searchInput.nativeElement.classList.remove('open');
+    this.searchInputMobile.nativeElement.classList.remove('open');
   }
   instantSearch(event: any) {
     const value = event.target.value;

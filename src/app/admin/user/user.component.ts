@@ -88,16 +88,17 @@ export class UserComponent implements OnInit, OnDestroy {
   emailPattern: RegExp =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   flagFilter = false;
+  invalidDates: Array<Date>;
+  maxDateValue = new Date();
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private userInforService: UserInforService,
-    private userService: UserService,
     private userManagerService: UserManagerService,
     private datePipe: DatePipe,
-    private tokenStorageService: TokenStorageService,
   ) {}
 
   ngOnInit(): void {
@@ -232,6 +233,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
   saveUser() {
     this.submitted = true;
+    this.isLoading = true;
     if (!this.isValid()) return;
     this.user.status = this.statusSelected.value;
     // this.user.roles = this.rolesSelected.map((role) => role.value);
@@ -253,6 +255,7 @@ export class UserComponent implements OnInit, OnDestroy {
           } else {
             this.getUsers();
           }
+          this.isLoading = false;
 
           this.hideDialog();
         },
@@ -263,6 +266,7 @@ export class UserComponent implements OnInit, OnDestroy {
             detail: res.error.message,
             life: 2000,
           });
+          this.isLoading = false;
         },
       });
       return;

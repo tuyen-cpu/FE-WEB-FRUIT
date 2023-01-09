@@ -5,17 +5,17 @@
   <div class="grid">
     <div class="col-12 sm:col-12 md:12 lg:col-12">
       <div class="order-information">
-        <div class="title text-2xl mb-3">
+        <a class="inline-block text-2xl mb-3 cursor-pointer back-page" (click)="backToPreviousPage()">
+          <i class="pi pi-angle-left back-icon"></i>
+          <span> Back </span>
+        </a>
+        <div class="title text-2xl mb-1">
           <b class="font-medium">Order: H-{{ orderId }}</b
           >, Ordered at — {{ order.createdDate | date : 'dd/MM/yyyy' }}
         </div>
         <!-- <div class="text-xl mb-2">Đơn hàng của bạn đã hủy lúc 09/11/2022, 11:05SA</div> -->
-        <a class="inline-block text-2xl mt-3 cursor-pointer back-page" (click)="backToPreviousPage()">
-          <i class="pi pi-angle-left back-icon"></i>
-          <span> Back </span>
-        </a>
       </div>
-      <div class="mt-4">
+      <div class="mt-3">
         <p-table
           [scrollable]="true"
           scrollHeight="600px"

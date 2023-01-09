@@ -3,20 +3,6 @@ import { BehaviorSubject, debounceTime, delay, distinctUntilChanged, of, Subject
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
-//component
-import CategoryManagerService from 'src/app/services/admin/cagtegory-manager.service';
-import ProductManagerService from 'src/app/services/admin/product-manager.service';
-import { ImageService } from './../../services/image.service';
-import { FileUploadService } from './../../services/file-upload.service';
-import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
-import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
-import { LoadingComponent } from 'src/app/utils/loading/loading.component';
-
-//model
-import { ProductFilter } from 'src/app/model/filter.model';
-import { Category, Image, Product, ProductRequest } from 'src/app/model/category.model';
-import { Paginator } from 'src/app/model/paginator.model';
-
 //primeNg
 import { Table, TableModule } from 'primeng/table';
 import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
@@ -38,6 +24,19 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import * as customBuild from '../../../ckeditorCustom/build/ckeditor';
 import * as slug from 'vietnamese-slug';
 
+//component
+import CategoryManagerService from 'src/app/services/admin/cagtegory-manager.service';
+import ProductManagerService from 'src/app/services/admin/product-manager.service';
+import { ImageService } from './../../services/image.service';
+import { FileUploadService } from './../../services/file-upload.service';
+import { HighlighterPipe } from 'src/app/pipes/highlighter.pipe';
+import { MyCurrency } from 'src/app/pipes/my-currency.pipe';
+import { LoadingComponent } from 'src/app/utils/loading/loading.component';
+
+//model
+import { ProductFilter } from 'src/app/model/filter.model';
+import { Category, Image, Product, ProductRequest } from 'src/app/model/category.model';
+import { Paginator } from 'src/app/model/paginator.model';
 @Component({
   selector: 'app-product',
   standalone: true,
@@ -99,6 +98,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   datesFilter: Date[] = [];
   categoryFilterSelected: Category;
   private subjectKeyup = new Subject<any>();
+  maxDateValue = new Date();
   flagFilter = false;
   config = {
     toolbar: {

@@ -29,7 +29,11 @@
             </div>
           </div>
           <span class="text-green-500 text-2xl font-medium"
-            >{{ '+' + roundNumber(((revenueCurrentMonth - revenueLastMonth) / revenueLastMonth) * 100) + '%' }}
+            >{{
+              roundNumber(((revenueCurrentMonth - revenueLastMonth) / revenueLastMonth) * 100) > 0
+                ? '+'
+                : '' + roundNumber(((revenueCurrentMonth - revenueLastMonth) / revenueLastMonth) * 100) + '%'
+            }}
           </span>
           <span class="text-500 text-2xl">from last month</span>
         </div>
@@ -64,17 +68,117 @@
           <span class="text-500 text-2xl">responded</span>
         </div>
       </div>
-      <div class="col-12 xl:col-6">
+      <div class="col-12 xl:col-4">
         <div class="card">
-          <h5 class="text-3xl">Best Selling Products of the month</h5>
+          <h5 class="text-3xl text-center">Best Selling revenues of The Month</h5>
           <p-chart type="polarArea" [data]="bestSellingData" [options]="polarOptions"></p-chart>
         </div>
       </div>
-      <div class="col-12 xl:col-6">
+      <div class="col-12 xl:col-4">
         <div class="card">
-          <h5 class="text-3xl">Best Selling Products of the month</h5>
-          <p-chart type="pie" [data]="statisticalShipping" [options]="pieOptions"></p-chart>
+          <h5 class="text-3xl text-center">Status Orders</h5>
+          <p-chart type="pie" (onDataSelect)="selectData($event)" [data]="statisticalShipping" [options]="pieOptions"></p-chart>
         </div>
+      </div>
+      <div class="col-12">
+        <p-table
+          [loading]="isLoadingTable"
+          #dt
+          [columns]="cols"
+          [value]="revenues"
+          [rowHover]="true"
+          dataKey="id"
+          [showCurrentPageReport]="true"
+          [responsive]="true"
+          responsiveLayout="scroll"
+          [scrollable]="true"
+          scrollHeight="61vh">
+          <ng-template pTemplate="summary" *ngIf="!revenues.length">
+            <div class="page grid align-items-center">
+              <div class="col-12">
+                <p-paginator
+                  [rows]="paginator.pageSize"
+                  [totalRecords]="paginator.totalElements"
+                  [first]="paginator.pageSize * paginator.pageNumber"
+                  (onPageChange)="onPageChange($event)"
+                  [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="caption">
+            <div class="grid pt-4 p-fluid align-items-end justify-content-between filter-bar">
+              <div class="col-2">
+                <label for="binary" class="mr-2">Show Day</label>
+                <p-checkbox [(ngModel)]="showDay" (onChange)="onChangeShowDay()" [binary]="true" inputId="binary"></p-checkbox>
+              </div>
+              <div class="col-6 flex align-items-center" *ngIf="!showDay">
+                <label for="monthpicker" class="mr-2">Select Month</label>
+                <p-calendar
+                  class="col"
+                  [(ngModel)]="rangeDates"
+                  view="month"
+                  selectionMode="range"
+                  dateFormat="mm/yy"
+                  [readonlyInput]="true"
+                  [showButtonBar]="true"
+                  todayButtonStyleClass="p-secondary-button"
+                  inputId="monthpicker"
+                  (onSelect)="onSelectDateFilter()"
+                  (onClearClick)="onClearDate()"
+                  [showIcon]="true"></p-calendar>
+              </div>
+              <div class="col-6 flex align-items-center" *ngIf="showDay">
+                <label for="range" class="mr-2">Select Date</label>
+                <p-calendar
+                  class="col"
+                  [(ngModel)]="rangeDates"
+                  selectionMode="range"
+                  [readonlyInput]="true"
+                  [showButtonBar]="true"
+                  todayButtonStyleClass="p-secondary-button"
+                  [showIcon]="true"
+                  (onSelect)="onSelectDateFilter()"
+                  (onClearClick)="onClearDate()"
+                  inputId="range"></p-calendar>
+              </div>
+              <div class="col-2">
+                <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="createdAt" style="flex: 2">Date <p-sortIcon field="id"></p-sortIcon></th>
+              <th pSortableColumn="totalOrder" style="flex: 1">Total</th>
+              <th pSortableColumn="grossevenue" style="flex: 2">Gross Revenue <p-sortIcon field="quantity"></p-sortIcon></th>
+              <th pSortableColumn="shipping" style="flex: 2">Shipping<p-sortIcon field="price"></p-sortIcon></th>
+              <th pSortableColumn="netRevenue" style="flex: 2">Net Revenue</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-revenue>
+            <tr>
+              <td style="flex: 2">{{ revenue.createdAt }}</td>
+              <td style="flex: 1">
+                <div class="" [innerHTML]="revenue.totalOrder"></div>
+              </td>
+              <td style="flex: 2">
+                {{ revenue.grossRevenue | myCurrency : 'VND' }}
+              </td>
+              <td style="flex: 2">{{ revenue.shipping | myCurrency : 'VND' }}</td>
+              <td style="flex: 2">{{ revenue.netRevenue | myCurrency : 'VND' }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7">No item found.</td>
+            </tr>
+          </ng-template>
+          <!-- <ng-template pTemplate="footer">
+          <tr>
+            <td colspan="3">Total: {{ paginator.totalElements }}</td>
+          </tr>
+        </ng-template> -->
+        </p-table>
       </div>
     </div>
   </div>

@@ -15,7 +15,6 @@ import { AuthGuard } from './app/guards/auth.guard';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { AgmCoreModule } from '@agm/core';
 
 if (environment.production) {
   enableProdMode();

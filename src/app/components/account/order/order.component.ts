@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@ang
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { delay, Subscription } from 'rxjs';
-
+import { Location } from '@angular/common';
 //primeNg
 
 import { Table, TableModule } from 'primeng/table';
@@ -22,7 +22,7 @@ import { UserInforService } from 'src/app/services/user-infor.service';
 import { OrderService } from './../../../services/order.service';
 import { EStatusShipping } from 'src/app/model/status-shipping.enum';
 import { Paginator } from 'src/app/model/paginator.model';
-import { Order, OrderDetail, ShippingStatus } from 'src/app/model/bill.model';
+import { Order, OrderDetail, PaymentMethod, ShippingStatus } from 'src/app/model/bill.model';
 @Component({
   selector: 'app-order',
   standalone: true,
@@ -64,6 +64,8 @@ export class OrderComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    private _location: Location,
+    private messageService: MessageService,
   ) {}
 
   ngOnInit(): void {
@@ -97,6 +99,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       error: (res) => {
         console.log(res.error.message);
         this.isLoadingComponent = false;
+        this.orders = [];
       },
     });
   }
@@ -107,6 +110,22 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.orderService.setCancel(order).subscribe({
           next: (res) => {
             this.getAll();
+
+            if (order.payment.paymentMethod === PaymentMethod.PAYPAL) {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Successful',
+                detail: 'Staff will contact you to confirm your order cancellation request. Money will be refunded to your account in 5-6 days',
+                life: 4000,
+              });
+              return;
+            }
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'Staff will contact you to confirm your request.',
+              life: 4000,
+            });
           },
           error: (res) => {
             console.log(res.error.message);
@@ -243,5 +262,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
   applyFilterGlobal($event: any, stringVal: any) {
     this.dt.filterGlobal(($event.target as HTMLInputElement).value, stringVal);
+  }
+  backToPreviousPage() {
+    this._location.back();
   }
 }

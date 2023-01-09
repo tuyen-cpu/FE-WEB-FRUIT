@@ -1,11 +1,10 @@
+import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy, AfterViewInit } from '@angular/core';
 import { BehaviorSubject, debounceTime, delay, fromEvent, isEmpty, of, Subscription, switchMap, timeout } from 'rxjs';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { UserInforService } from 'src/app/services/user-infor.service';
-import { AddressService } from './../../../services/address.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TokenStorageService } from 'src/app/services/token-storage.service';
-import { Component, OnInit, ViewChild, ViewEncapsulation, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Location } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -17,17 +16,21 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { Address } from 'src/app/model/address.model';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { District, Province, Ward } from 'src/app/model/province.model';
-import { ProvincesApiService } from 'src/app/services/provinces-api.service';
 import { CheckboxModule } from 'primeng/checkbox';
-import { Paginator } from 'src/app/model/paginator.model';
 import { PaginatorModule } from 'primeng/paginator';
-import { LoadingComponent } from 'src/app/utils/loading/loading.component';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { TranslateModule } from '@ngx-translate/core';
 
+//component
+import { ProvincesApiService } from 'src/app/services/provinces-api.service';
+import { UserInforService } from 'src/app/services/user-infor.service';
+import { AddressService } from './../../../services/address.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TokenStorageService } from 'src/app/services/token-storage.service';
+import { LoadingComponent } from 'src/app/utils/loading/loading.component';
+import { Paginator } from 'src/app/model/paginator.model';
+import { District, Province, Ward } from 'src/app/model/province.model';
 @Component({
   selector: 'app-address',
   standalone: true,
@@ -93,6 +96,7 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
     private provincesApi: ProvincesApiService,
     private route: ActivatedRoute,
     private router: Router,
+    private _location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -377,5 +381,8 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
     setTimeout(() => {
       this.getAddresses();
     }, 500);
+  }
+  backToPreviousPage() {
+    this._location.back();
   }
 }

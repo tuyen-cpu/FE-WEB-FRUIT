@@ -4,6 +4,10 @@
   <div class="title text-center mb-6">
     <h2 class="title-account-component">{{ 'MyOrder' | translate }}</h2>
   </div>
+  <a class="inline-block text-2xl mb-3 cursor-pointer back-page" (click)="backToPreviousPage()">
+    <i class="pi pi-angle-left back-icon"></i>
+    <span> Back </span>
+  </a>
   <p-table
     #dt
     [value]="orders"
@@ -14,7 +18,7 @@
     scrollHeight="61vh">
     <!-- <ng-template pTemplate="caption"> List of latest orders </ng-template> -->
     <ng-template pTemplate="caption">
-      <div class="grid pt-4 p-fluid align-items-end filter-bar">
+      <div class="grid pt-0 p-fluid align-items-end filter-bar">
         <div class="col-2">
           <label class="block mb-1">Shipping</label>
           <p-dropdown
@@ -41,7 +45,7 @@
           </p-dropdown>
         </div>
 
-        <div class="col-3">
+        <div class="col-4">
           <label for="" class="block mb-1">Create Date</label>
           <p-calendar
             [(ngModel)]="datesFilter"

@@ -14,7 +14,7 @@ export const AdminRoutes: Routes = [
     component: AdminComponent,
     canActivate: [AdminGuard],
     children: [
-      { path: '', redirectTo: 'user', pathMatch: 'full' },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
 
       {
         path: 'user',

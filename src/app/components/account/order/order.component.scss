@@ -3,6 +3,9 @@
   // margin-top: 20px;
   // background: #f7f7f7;
   padding: 10px 10px 0 10px;
+  .p-datepicker table {
+    font-size: 1.4rem;
+  }
 }
 .p-element {
   .p-datatable .p-datatable-tbody > tr > td {
@@ -29,5 +32,8 @@
   font-size: 1.4rem;
   color: #00381a;
   font-family: $font-family;
-  text-transform: uppercase;
+
+  li {
+    text-transform: uppercase;
+  }
 }
