@@ -114,11 +114,38 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.checkAllWithoutFilter();
   }
   onChangePaymentStatusFilter() {
+    if (!this.paymentStatusFilter) {
+      this.paymentMethodList = [
+        { name: 'PAYPAL', id: 1 },
+        { name: 'COD', id: 2 },
+      ];
+    } else {
+      if (this.paymentStatusFilter && this.paymentStatusFilter.id === 1) {
+        this.paymentMethodList = [{ name: 'PAYPAL', id: 1 }];
+      } else {
+        this.paymentMethodList = [{ name: 'COD', id: 2 }];
+      }
+    }
+
     this.filter.payment = { ...this.filter.payment, status: this.paymentStatusFilter ? this.paymentStatusFilter.name : undefined };
     this.checkAllWithoutFilter();
   }
 
   onChangePaymentMethodFilter() {
+    console.log(this.paymentMethodFilter);
+    if (!this.paymentMethodFilter) {
+      this.paymentStatusList = [
+        { name: 'PAID', id: 1 },
+        { name: 'UNPAID', id: 2 },
+      ];
+    } else {
+      if (this.paymentMethodFilter && this.paymentMethodFilter.id === 1) {
+        this.paymentStatusList = [{ name: 'PAID', id: 1 }];
+      } else {
+        this.paymentStatusList = [{ name: 'UNPAID', id: 2 }];
+      }
+    }
+
     this.filter.payment = { ...this.filter.payment, paymentMethod: this.paymentMethodFilter ? this.paymentMethodFilter.name : undefined };
     this.checkAllWithoutFilter();
   }

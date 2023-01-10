@@ -1,5 +1,5 @@
 import { Revenue } from './../../model/revenue.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -27,6 +27,7 @@ import AnalyticService from 'src/app/services/admin/analytic.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  @ViewChild('dt') dt!: Table;
   titleComponent: string;
   totalOrders: number;
   totalOrdersInDay: number;
@@ -88,7 +89,7 @@ export class HomeComponent implements OnInit {
     this.getRevenueCurrentMonth();
     this.getBestSellingProduct();
     this.getStatisticalShippingStatus();
-    this.getWithDayMonthYearBetween();
+    this.changeParams();
     this.polarOptions = {
       plugins: {
         legend: {
@@ -246,22 +247,27 @@ export class HomeComponent implements OnInit {
     return +s[2];
   }
   getWithDayMonthYearBetween() {
+    this.isLoadingTable = true;
     this.analyticService
       .getWithDayMonthYearBetween({
         dayStart: this.dayOf(this.rangeDates[0]),
         dayEnd: this.dayOf(this.rangeDates[1]),
         monthStart: this.monthOf(this.rangeDates[0]),
         monthEnd: this.monthOf(this.rangeDates[1]),
-        yearEnd: this.yearOf(this.rangeDates[0]),
-        yearStart: this.yearOf(this.rangeDates[1]),
-        page: 0,
-        size: 10,
+        yearStart: this.yearOf(this.rangeDates[0]),
+        yearEnd: this.yearOf(this.rangeDates[1]),
+        page: this.paginator.pageNumber,
+        size: this.paginator.pageSize,
       })
       .subscribe({
         next: (res) => {
           this.revenues = res.data.content;
+          this.isLoadingTable = false;
+          this.paginator.totalElements = res.data.totalElements;
         },
-        error: (res) => {},
+        error: (res) => {
+          this.isLoadingTable = false;
+        },
       });
   }
   getWithMonthYearBetween() {
@@ -269,16 +275,20 @@ export class HomeComponent implements OnInit {
       .getWithMonthYearBetween({
         monthStart: this.monthOf(this.rangeDates[0]),
         monthEnd: this.monthOf(this.rangeDates[1]),
-        yearEnd: this.yearOf(this.rangeDates[0]),
-        yearStart: this.yearOf(this.rangeDates[1]),
-        page: 0,
-        size: 10,
+        yearStart: this.yearOf(this.rangeDates[0]),
+        yearEnd: this.yearOf(this.rangeDates[1]),
+        page: this.paginator.pageNumber,
+        size: this.paginator.pageSize,
       })
       .subscribe({
         next: (res) => {
           this.revenues = res.data.content;
+          this.isLoadingTable = false;
+          this.paginator.totalElements = res.data.totalElements;
         },
-        error: (res) => {},
+        error: (res) => {
+          this.isLoadingTable = false;
+        },
       });
   }
   onChangeShowDay() {
@@ -288,6 +298,51 @@ export class HomeComponent implements OnInit {
     }
     this.getWithMonthYearBetween();
   }
+  exportCSV(dt: any) {
+    if (this.showDay) {
+      this.analyticService
+        .getWithDayMonthYearBetween({
+          dayStart: this.dayOf(this.rangeDates[0]),
+          dayEnd: this.dayOf(this.rangeDates[1]),
+          monthStart: this.monthOf(this.rangeDates[0]),
+          monthEnd: this.monthOf(this.rangeDates[1]),
+          yearStart: this.yearOf(this.rangeDates[0]),
+          yearEnd: this.yearOf(this.rangeDates[1]),
+          page: this.paginator.pageNumber,
+          size: 999999999,
+        })
+        .subscribe({
+          next: (res) => {
+            dt.value = res.data.content;
+            dt.exportCSV();
+            this.getWithDayMonthYearBetween();
+          },
+          error: (res) => {
+            this.isLoadingTable = false;
+          },
+        });
+    } else {
+      this.analyticService
+        .getWithMonthYearBetween({
+          monthStart: this.monthOf(this.rangeDates[0]),
+          monthEnd: this.monthOf(this.rangeDates[1]),
+          yearStart: this.yearOf(this.rangeDates[0]),
+          yearEnd: this.yearOf(this.rangeDates[1]),
+          page: this.paginator.pageNumber,
+          size: 99999999,
+        })
+        .subscribe({
+          next: (res) => {
+            dt.value = res.data.content;
+            dt.exportCSV();
+            this.getWithMonthYearBetween();
+          },
+          error: (res) => {
+            this.isLoadingTable = false;
+          },
+        });
+    }
+  }
   onClearDate() {
     this.rangeDates = [
       new Date(new Date().getFullYear(), new Date().getMonth(), 1),
@@ -295,11 +350,25 @@ export class HomeComponent implements OnInit {
     ];
   }
   onSelectDateFilter() {
+    console.log(this.rangeDates);
     if (this.showDay) {
       this.getWithDayMonthYearBetween();
       return;
     }
     this.getWithMonthYearBetween();
+  }
+
+  changeParams() {
+    this.route.queryParams.subscribe((res) => {
+      if (res['page'] === undefined || res['page'] === null || +res['page'] <= 0) {
+        this.paginator.pageNumber = 0;
+      } else {
+        this.paginator.pageNumber = res['page'] - 1;
+      }
+      this.paginator.pageSize = Number(res['size']) || 10;
+
+      this.getWithDayMonthYearBetween();
+    });
   }
   onPageChange(event: any) {
     this.paginator.pageNumber = event.page;

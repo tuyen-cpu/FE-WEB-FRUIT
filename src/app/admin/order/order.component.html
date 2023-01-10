@@ -140,7 +140,7 @@
             <th style="flex: 1">Status<p-sortIcon field="price"></p-sortIcon></th>
             <th style="flex: 1">Payment</th>
             <th style="flex: 1">Total</th>
-            <th style="flex: 0.5">View Detail</th>
+            <th style="flex: 0.5">Products</th>
             <th style="flex: 0.5">Action</th>
           </tr>
         </ng-template>
@@ -326,7 +326,13 @@
     <button type="button" pButton pRipple icon="pi pi-times" (click)="isShowDialogPayment = false" label="Close" class=""></button>
   </ng-template>
 </p-dialog>
-<p-dialog header="Order Detail" [resizable]="false" [modal]="true" [style]="{ width: '70vw' }" appendTo="body" [(visible)]="isShowOrderDetail">
+<p-dialog
+  header="Products"
+  [resizable]="false"
+  [modal]="true"
+  [style]="{ width: '70vw', height: '80vh' }"
+  appendTo="body"
+  [(visible)]="isShowOrderDetail">
   <p-table
     [scrollable]="true"
     scrollHeight="700px"

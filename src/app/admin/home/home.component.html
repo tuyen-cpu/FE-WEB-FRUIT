@@ -68,13 +68,13 @@
           <span class="text-500 text-2xl">responded</span>
         </div>
       </div>
-      <div class="col-12 xl:col-4">
+      <div class="col-12 xl:col-6">
         <div class="card">
           <h5 class="text-3xl text-center">Best Selling revenues of The Month</h5>
           <p-chart type="polarArea" [data]="bestSellingData" [options]="polarOptions"></p-chart>
         </div>
       </div>
-      <div class="col-12 xl:col-4">
+      <div class="col-12 xl:col-6">
         <div class="card">
           <h5 class="text-3xl text-center">Status Orders</h5>
           <p-chart type="pie" (onDataSelect)="selectData($event)" [data]="statisticalShipping" [options]="pieOptions"></p-chart>
@@ -106,7 +106,7 @@
             </div>
           </ng-template>
           <ng-template pTemplate="caption">
-            <div class="grid pt-4 p-fluid align-items-end justify-content-between filter-bar">
+            <div class="grid pt-4 p-fluid align-items-center justify-content-between filter-bar">
               <div class="col-2">
                 <label for="binary" class="mr-2">Show Day</label>
                 <p-checkbox [(ngModel)]="showDay" (onChange)="onChangeShowDay()" [binary]="true" inputId="binary"></p-checkbox>
@@ -142,7 +142,7 @@
                   inputId="range"></p-calendar>
               </div>
               <div class="col-2">
-                <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="exportCSV(dt)"></button>
               </div>
             </div>
           </ng-template>
