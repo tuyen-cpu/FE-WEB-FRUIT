@@ -115,6 +115,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.getProvinces();
     this.getCartItems();
     // this.getAddresses();
+    this.renderPaypal();
   }
   autoSelectAddressDefault() {
     this.isLoading = true;
@@ -185,7 +186,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
           this.loadTotal();
           this.shippingCost = this.totalCart > 250000 ? 0 : 30000;
-          this.renderPaypal();
         },
       });
   }

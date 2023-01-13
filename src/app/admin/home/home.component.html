@@ -92,6 +92,7 @@
           [responsive]="true"
           responsiveLayout="scroll"
           [scrollable]="true"
+          [exportFilename]="'Summary Revenue' + convertDateToString(rangeDates[0]) + '-' + convertDateToString(rangeDates[1])"
           scrollHeight="61vh">
           <ng-template pTemplate="summary" *ngIf="!revenues.length">
             <div class="page grid align-items-center">

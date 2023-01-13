@@ -10,6 +10,9 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
+
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 //component
 import CategoryManagerService from 'src/app/services/admin/cagtegory-manager.service';
 import OrderManagerService from 'src/app/services/admin/order-manager.service';
@@ -234,6 +237,9 @@ export class HomeComponent implements OnInit {
   convertDateToString(date: Date): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd');
   }
+  convertDateToDDMMYY(date: Date): string {
+    return this.datePipe.transform(date, 'dd-MM-yyyy');
+  }
   yearOf(string: Date): number {
     const s = this.convertDateToString(string).split('-');
     return +s[0];
@@ -313,9 +319,13 @@ export class HomeComponent implements OnInit {
         })
         .subscribe({
           next: (res) => {
-            dt.value = res.data.content;
-            dt.exportCSV();
-            this.getWithDayMonthYearBetween();
+            // dt.value = res.data.content;
+            this.exportExcel(
+              res.data.content,
+              'Summary ' + this.convertDateToDDMMYY(this.rangeDates[0]) + ' ' + this.convertDateToDDMMYY(this.rangeDates[1]),
+            );
+            // dt.exportCSV();
+            // this.getWithDayMonthYearBetween();
           },
           error: (res) => {
             this.isLoadingTable = false;
@@ -333,15 +343,33 @@ export class HomeComponent implements OnInit {
         })
         .subscribe({
           next: (res) => {
-            dt.value = res.data.content;
-            dt.exportCSV();
-            this.getWithMonthYearBetween();
+            this.exportExcel(
+              res.data.content,
+              'Summary ' + this.convertDateToDDMMYY(this.rangeDates[0]) + ' ' + this.convertDateToDDMMYY(this.rangeDates[1]),
+            );
           },
           error: (res) => {
             this.isLoadingTable = false;
           },
         });
     }
+  }
+  exportExcel(data, fileName: string) {
+    const wb = XLSX.utils.book_new();
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([]);
+    XLSX.utils.sheet_add_aoa(ws, [this.cols.map((e) => e.header)]);
+    XLSX.utils.sheet_add_json(ws, data, { origin: 'A2', skipHeader: true });
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, fileName);
+  }
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const data: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE,
+    });
+    FileSaver.default(data, fileName + EXCEL_EXTENSION);
   }
   onClearDate() {
     this.rangeDates = [
