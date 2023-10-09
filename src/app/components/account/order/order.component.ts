@@ -23,6 +23,7 @@ import { OrderService } from './../../../services/order.service';
 import { EStatusShipping } from 'src/app/model/status-shipping.enum';
 import { Paginator } from 'src/app/model/paginator.model';
 import { Order, OrderDetail, PaymentMethod, ShippingStatus } from 'src/app/model/bill.model';
+import ShippingStatusService from '../../../services/admin/shipping-status.service';
 @Component({
   selector: 'app-order',
   standalone: true,
@@ -56,6 +57,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   flagFilter = false;
   isLoadingTable = false;
   listStatuses: any[] = [];
+  maxDateValue = new Date();
   constructor(
     private orderService: OrderService,
     private userInforService: UserInforService,
@@ -66,6 +68,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private _location: Location,
     private messageService: MessageService,
+    private shippingStatusService: ShippingStatusService,
   ) {}
 
   ngOnInit(): void {
@@ -77,14 +80,14 @@ export class OrderComponent implements OnInit, OnDestroy {
       }
       this.router.navigate(['/']);
     });
-    this.listStatuses = [
-      { name: EStatusShipping.VERIFIED, id: 1 },
-      { name: EStatusShipping.DELIVERING, id: 2 },
-      { name: EStatusShipping.DELIVERED, id: 3 },
-      { name: EStatusShipping.UNVERIFIED, id: 4 },
-      { name: EStatusShipping.CANCELED, id: 5 },
-      { name: EStatusShipping.CANCELING, id: 6 },
-    ];
+    this.getShippingStatus();
+  }
+  getShippingStatus(){
+    this.shippingStatusService.getAll().subscribe({
+      next:(res)=>{
+        this.listStatuses = res.data
+      }
+    })
   }
   getAll() {
     this.flagFilter = false;

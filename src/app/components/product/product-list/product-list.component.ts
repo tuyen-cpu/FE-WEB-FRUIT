@@ -1,7 +1,7 @@
 import {
   combineLatest,
   combineLatestAll, debounceTime,
-  delay, finalize,
+  delay, distinctUntilChanged, filter, finalize,
   forkJoin,
   map,
   mergeWith, Subject,
@@ -9,7 +9,7 @@ import {
   take, tap,
   withLatestFrom,
 } from 'rxjs';
-import { Router, RouterModule, ActivatedRoute, ParamMap, Params } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute, ParamMap, Params, NavigationEnd } from '@angular/router';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -72,7 +72,7 @@ export class ProductListComponent implements OnInit {
   categories: Category[] = [];
   paramsURL: {} = {};
 
-  filter: { categorySlug: string; price: number } = {
+  filterCondition: { categorySlug: string; price: number } = {
     categorySlug: 'trai-cay-nhapppp',
     price: this.priceList[0],
   };
@@ -115,17 +115,18 @@ export class ProductListComponent implements OnInit {
   }
   changeRouter() {
     combineLatest({paramMap:this.route.paramMap,params:this.route.queryParams})
+      .pipe(debounceTime(0))
       .subscribe(({paramMap, params}) => {
         console.log("change param")
-      this.filter.categorySlug = paramMap.get('categorySlug');
+      this.filterCondition.categorySlug = paramMap.get('categorySlug');
       if (params['page'] === undefined || +params['page'] <= 0) {
         this.paginator.pageNumber = 0;
       } else {
         this.paginator.pageNumber = params['page'] - 1;
       }
       this.paginator.pageSize = Number(params['size']) || 12;
-      this.filter.price = Number(params['price']) || 99999999;
-      this.getProducts(this.filter, this.paginator);
+      this.filterCondition.price = Number(params['price']) || 99999999;
+      this.getProducts(this.filterCondition, this.paginator);
     })
   }
 
@@ -139,7 +140,7 @@ export class ProductListComponent implements OnInit {
   }
 
   changePrice() {
-    this.paramsURL = { price: this.filter.price };
+    this.paramsURL = { price: this.filterCondition.price };
     this.addParams();
   }
 
@@ -159,7 +160,6 @@ export class ProductListComponent implements OnInit {
       queryParams: this.paramsURL,
     });
   }
-
   trackById(index: number, item: any) {
     return item.id;
   }

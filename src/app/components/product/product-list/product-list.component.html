@@ -35,7 +35,7 @@
 
           <p-accordionTab [(selected)]="isShowFilterPrice">
             <div class="field-radiobutton" *ngFor="let price of priceList; let i = index">
-              <p-radioButton (onClick)="changePrice()" name="price" [value]="price" [(ngModel)]="filter.price" [inputId]="i + ''"></p-radioButton>
+              <p-radioButton (onClick)="changePrice()" name="price" [value]="price" [(ngModel)]="filterCondition.price" [inputId]="i + ''"></p-radioButton>
               <label [for]="i">{{ 'Under' | translate }} {{ price | myCurrency : 'vnd' }}</label>
             </div>
           </p-accordionTab>

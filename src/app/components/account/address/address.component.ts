@@ -102,7 +102,7 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     // this.isLoading = true;
     this.changeParams();
-    this.getProvinces();
+
     // this.addressSubscription = this.addressesChange.subscribe((data) => {
     //   this.addresses = data;
     // });
@@ -132,6 +132,9 @@ export class AddressComponent implements OnInit, OnDestroy, AfterViewInit {
     this.tokenStorageService.signOut();
   }
   openNew() {
+    if(!this.provinces.length){
+      this.getProvinces();
+    }
     this.resetValueForm();
     this.submitted = false;
     this.addressDialog = true;
