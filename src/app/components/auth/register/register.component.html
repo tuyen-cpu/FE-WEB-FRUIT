@@ -73,10 +73,10 @@
             *ngIf="getPassword.errors?.['minlength']||getPassword.errors?.['required']"
             id="password-help"
             class="register-form__field-message p-error block">
-            {{ 'Password' | translate }} {{ 'PasswordAtLeast6Characters' | translate }}.</small
+            {{ 'PasswordAtLeast6Characters' | translate }}.</small
           >
           <small *ngIf="getPassword.errors?.['maxlength']" id="password-help" class="register-form__field-message p-error block">
-            {{ 'Password' | translate }} {{ 'PasswordMax40Characters' | translate }}.</small
+            {{ 'PasswordMax40Characters' | translate }}.</small
           >
         </span>
       </div>

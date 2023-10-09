@@ -323,12 +323,19 @@ header {
           text-align: left;
           font-size: 1.4rem;
           color: #000;
+          &:hover{
+            color: $main-color;
+            background: #f3fdf8;
+          }
+          &.active{
+            color: $main-color;
+            background: #f3fdf8;
+          }
         }
 
-        .navbar__sub-menu-item-link:hover {
-          color: $main-color;
-          background: #f3fdf8;
-        }
+        //.navbar__sub-menu-item-link:hover {
+        //
+        //}
       }
       .form-search {
         // flex: 1;

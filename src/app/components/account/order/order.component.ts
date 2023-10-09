@@ -88,17 +88,17 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
   getAll() {
     this.flagFilter = false;
-    this.isLoadingComponent = true;
-    this.orderService.getAllByUserId(this.userInforService.user!.id!, this.paginator.pageNumber, this.paginator.pageSize).subscribe({
+    this.isLoadingTable = true;
+    this.orderService.getAllByUserId(this.userInforService.user!.id!, this.paginator.pageNumber, this.paginator.pageSize).pipe(delay(400)).subscribe({
       next: (res) => {
         this.orders = res.data.content;
         console.log(this.orders);
-        this.isLoadingComponent = false;
+        this.isLoadingTable = false;
         this.paginator.totalElements = res.data.totalElements;
       },
       error: (res) => {
         console.log(res.error.message);
-        this.isLoadingComponent = false;
+        this.isLoadingTable = false;
         this.orders = [];
       },
     });

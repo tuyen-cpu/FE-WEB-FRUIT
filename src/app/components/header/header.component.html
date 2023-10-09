@@ -116,10 +116,10 @@
 
               <ul class="navbar__sub-menu-list">
                 <li class="navbar__sub-menu-item">
-                  <a routerLink="/product/all" class="navbar__sub-menu-item-link">{{ 'AllProduct' | translate }}</a>
+                  <a routerLink="/product/list/all"  routerLinkActive="active" class="navbar__sub-menu-item-link">{{ 'AllProduct' | translate }}</a>
                 </li>
                 <li *ngFor="let cate of categories" class="navbar__sub-menu-item">
-                  <a routerLink="/product/list/{{ cate.slug }}" class="navbar__sub-menu-item-link">{{ cate.name | translate }}</a>
+                  <a routerLink="/product/list/{{ cate.slug }}"  routerLinkActive="active" class="navbar__sub-menu-item-link">{{ cate.name | translate }}</a>
                 </li>
               </ul>
             </li>
@@ -225,7 +225,7 @@
                         <div class="account-content__group">
                           <input
                             [ngClass]="{
-                            'ng-invalid ng-dirty':(getEmail.dirty&&(getEmail.errors?.['required']||getEmail.errors?.['email'])) 
+                            'ng-invalid ng-dirty':(getEmail.dirty&&(getEmail.errors?.['required']||getEmail.errors?.['email']))
                           }"
                             pInputText
                             id="account-content__email"
@@ -246,7 +246,7 @@
                         <div class="account-content__group">
                           <input
                             [ngClass]="{
-                            'ng-invalid ng-dirty':(getPassword.dirty&&(getEmail.errors?.['minlength']||getPassword.errors?.['required']||getPassword.errors?.['maxlength'])) 
+                            'ng-invalid ng-dirty':(getPassword.dirty&&(getEmail.errors?.['minlength']||getPassword.errors?.['required']||getPassword.errors?.['maxlength']))
                           }"
                             pInputText
                             id="account-content__password"
@@ -283,7 +283,7 @@
                         </div>
 
                         <!-- <button class="social-btn" type="button">
-                          
+
                           <div
                             class="pre-btn-login"
                             style="

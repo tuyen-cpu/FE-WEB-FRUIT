@@ -108,22 +108,24 @@
       color: #ffffff;
       transition: opacity 150ms linear, color 150ms linear, background 150ms linear;
       &:not(.p-highlight):hover {
+        transition: opacity 150ms linear, color 150ms linear, background 150ms linear;
         background: #000000;
         border-color: transparent;
         color: #ffffff;
       }
     }
     .p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+      transition: opacity 150ms linear, color 150ms linear, background 150ms linear;
       background: #000000;
       border-color: transparent;
       color: #ffffff;
     }
     .p-paginator .p-paginator-pages .p-paginator-page {
+      transition: opacity 150ms linear, color 150ms linear, background 150ms linear;
       background-color: #fff;
       border-radius: 0;
       color: #000;
       border: 1px solid #e1e1e1;
-      border-radius: 0;
     }
     .p-paginator .p-paginator-first,
     .p-paginator .p-paginator-prev,

@@ -30,10 +30,11 @@
         responsiveLayout="scroll"
         [scrollable]="true"
         scrollHeight="61vh">
-        <ng-template pTemplate="summary" *ngIf="!products.length">
+        <ng-template pTemplate="summary">
           <div class="page grid align-items-center">
             <div class="col-12">
               <p-paginator
+                *ngIf="products.length"
                 [rows]="paginator.pageSize"
                 [totalRecords]="paginator.totalElements"
                 [first]="paginator.pageSize * paginator.pageNumber"
@@ -236,7 +237,7 @@
                 [showClear]="true"></p-dropdown>
             </th>
             <th style="flex: 0.5">
-              <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clearFilter()"></button> 
+              <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clearFilter()"></button>
               <button
                 *ngIf="!isEmptyFilter()"
                 type="button"

@@ -1,42 +1,45 @@
-<p-confirmDialog header="Confirmation" rejectButtonStyleClass="p-button-secondary p-button-plain" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-confirmDialog header='Confirmation' rejectButtonStyleClass='p-button-secondary p-button-plain'
+                 icon='pi pi-exclamation-triangle'></p-confirmDialog>
 <p-toast></p-toast>
-<div class="order-wrapper container">
-  <div class="title text-center mb-6">
-    <h2 class="title-account-component">{{ 'MyOrder' | translate }}</h2>
+<div class='order-wrapper container'>
+  <div class='title text-center mb-6'>
+    <h2 class='title-account-component'>{{ 'MyOrder' | translate }}</h2>
   </div>
-  <a class="inline-block text-2xl mb-3 cursor-pointer back-page" (click)="backToPreviousPage()">
-    <i class="pi pi-angle-left back-icon"></i>
+  <a class='inline-block text-2xl mb-3 cursor-pointer back-page' (click)='backToPreviousPage()'>
+    <i class='pi pi-angle-left back-icon'></i>
     <span> Back </span>
   </a>
   <p-table
     #dt
-    [value]="orders"
-    styleClass="p-datatable-striped"
-    [responsive]="true"
-    responsiveLayout="scroll"
-    [scrollable]="true"
-    scrollHeight="61vh">
+    [value]='orders'
+    styleClass='p-datatable-striped'
+    [responsive]='true'
+    responsiveLayout='scroll'
+    [scrollable]='true'
+    [loading]='isLoadingTable'
+    scrollHeight='61vh'>
     <!-- <ng-template pTemplate="caption"> List of latest orders </ng-template> -->
-    <ng-template pTemplate="caption">
-      <div class="grid pt-0 p-fluid align-items-end filter-bar">
-        <div class="col-2">
-          <label class="block mb-1">Shipping</label>
+    <ng-template pTemplate='caption'>
+      <div class='grid pt-0 p-fluid align-items-end filter-bar'>
+        <div class='col-2'>
+          <label class='block mb-1'>Shipping</label>
           <p-dropdown
-            [options]="listStatuses"
-            [(ngModel)]="statusFilterSelected"
-            (onChange)="onChangeStatusFilter()"
-            optionLabel="id"
-            [showClear]="true"
-            placeholder="Select a Status">
-            <ng-template pTemplate="selectedItem">
-              <div class="country-item country-item-value" *ngIf="statusFilterSelected">
+            [options]='listStatuses'
+            [(ngModel)]='statusFilterSelected'
+            (onChange)='onChangeStatusFilter()'
+            optionLabel='id'
+            [showClear]='true'
+            placeholder='Select a Status'>
+            <ng-template pTemplate='selectedItem'>
+              <div class='country-item country-item-value' *ngIf='statusFilterSelected'>
                 <div>
-                  <span [class]="'status-default status-' + statusFilterSelected.id">{{ statusFilterSelected.name }}</span>
+                  <span
+                    [class]="'status-default status-' + statusFilterSelected.id">{{ statusFilterSelected.name }}</span>
                 </div>
               </div>
             </ng-template>
-            <ng-template let-status pTemplate="item">
-              <div class="status-item">
+            <ng-template let-status pTemplate='item'>
+              <div class='status-item'>
                 <div>
                   <span [class]="'status-default status-' + status.id">{{ status.name }}</span>
                 </div>
@@ -45,77 +48,79 @@
           </p-dropdown>
         </div>
 
-        <div class="col-4">
-          <label for="" class="block mb-1">Create Date</label>
+        <div class='col-4'>
+          <label for='' class='block mb-1'>Create Date</label>
           <p-calendar
-            [(ngModel)]="datesFilter"
-            (onSelect)="onSelectDateFilter()"
-            (onClearClick)="onClearDate()"
-            [showButtonBar]="true"
-            placeholder="Select Date here"
-            selectionMode="range"
-            [readonlyInput]="true"
-            inputId="range"
-            todayButtonStyleClass="p-secondary-button"
-            [showIcon]="true"></p-calendar>
+            [(ngModel)]='datesFilter'
+            (onSelect)='onSelectDateFilter()'
+            (onClearClick)='onClearDate()'
+            [showButtonBar]='true'
+            placeholder='Select Date here'
+            selectionMode='range'
+            [readonlyInput]='true'
+            inputId='range'
+            todayButtonStyleClass='p-secondary-button'
+            [showIcon]='true'></p-calendar>
         </div>
-        <div class="col-1">
-          <p-button *ngIf="hasValueFilter()" label="Filter" styleClass="p-button-sm" (click)="onFilterOrders()"></p-button>
+        <div class='col-1'>
+          <p-button *ngIf='hasValueFilter()' label='Filter' styleClass='p-button-sm'
+                    (click)='onFilterOrders()'></p-button>
         </div>
       </div>
     </ng-template>
-    <ng-template pTemplate="header">
+    <ng-template pTemplate='header'>
       <tr>
-        <th style="flex: 1.5">{{ 'ID' | translate }}</th>
-        <th style="flex: 2">{{ 'OrderDate' | translate }}</th>
-        <th style="flex: 2">{{ 'Total' | translate }}</th>
-        <th style="flex: 7">{{ 'Address' | translate }}</th>
-        <th style="flex: 2.5">{{ 'ShippingStatus' | translate }}</th>
-        <th style="flex: 2.5">{{ 'PaymentStatus' | translate }}</th>
-        <th style="flex: 0.8">{{ 'Action' | translate }}</th>
+        <th style='flex: 1.5'>{{ 'ID' | translate }}</th>
+        <th style='flex: 2'>{{ 'OrderDate' | translate }}</th>
+        <th style='flex: 2'>{{ 'Total' | translate }}</th>
+        <th style='flex: 7'>{{ 'Address' | translate }}</th>
+        <th style='flex: 2.5'>{{ 'ShippingStatus' | translate }}</th>
+        <th style='flex: 2.5'>{{ 'PaymentStatus' | translate }}</th>
+        <th style='flex: 0.8'>{{ 'Action' | translate }}</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="summary" *ngIf="orders">
-      <div class="page">
+    <ng-template pTemplate='summary'>
+      <div class='page'>
         <p-paginator
-          [rows]="paginator.pageSize"
-          [totalRecords]="paginator.totalElements"
-          [first]="paginator.pageSize * paginator.pageNumber"
-          (onPageChange)="onPageChange($event)"
-          [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+          *ngIf='orders.length>0'
+          [rows]='paginator.pageSize'
+          [totalRecords]='paginator.totalElements'
+          [first]='paginator.pageSize * paginator.pageNumber'
+          (onPageChange)='onPageChange($event)'
+          [rowsPerPageOptions]='[10, 20, 30]'></p-paginator>
       </div>
     </ng-template>
-    <ng-template pTemplate="body" let-order>
+    <ng-template pTemplate='body' let-order>
       <tr>
-        <td style="flex: 1.5">
-          <a [routerLink]="['/account/order/' + order.id]" class="order-link">HD-{{ order.id }}</a>
+        <td style='flex: 1.5'>
+          <a [routerLink]="['/account/order/' + order.id]" class='order-link'>HD-{{ order.id }}</a>
         </td>
-        <td style="flex: 2">{{ order.createdDate | date : 'dd/MM/yyyy' }}</td>
-        <td style="flex: 2">{{ order.total | myCurrency : 'VND' }}</td>
-        <td style="flex: 7">
-          <div class="text-right md:text-left">{{ order.address }}</div>
+        <td style='flex: 2'>{{ order.createdDate | date : 'dd/MM/yyyy' }}</td>
+        <td style='flex: 2'>{{ order.total | myCurrency : 'VND' }}</td>
+        <td style='flex: 7'>
+          <div class='text-right md:text-left'>{{ order.address }}</div>
         </td>
-        <td style="flex: 2.5">
+        <td style='flex: 2.5'>
           {{ order.shippingStatus.name | translate }}
         </td>
-        <td style="flex: 2.5">
+        <td style='flex: 2.5'>
           {{ order.payment.status | translate }}
         </td>
-        <td style="flex: 0.8">
+        <td style='flex: 0.8'>
           <button
             pButton
             pRipple
-            title="Cancel"
-            icon="pi pi-trash"
-            class="p-button-rounded p-button-warning mr-2"
+            title='Cancel'
+            icon='pi pi-trash'
+            class='p-button-rounded p-button-warning mr-2'
             [disabled]="order.shippingStatus.name !== 'UNVERIFIED'"
-            (click)="onCancelOrder(order)"></button>
+            (click)='onCancelOrder(order)'></button>
         </td>
       </tr>
     </ng-template>
-    <ng-template pTemplate="emptymessage">
+    <ng-template pTemplate='emptymessage'>
       <tr>
-        <td colspan="7">No Order found.</td>
+        <td colspan='7'>No Order found.</td>
       </tr>
     </ng-template>
   </p-table>

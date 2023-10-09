@@ -69,11 +69,9 @@ export class ProductDetailComponent implements OnInit {
     switch (action) {
       case '-':
         e.value <= 1 ? (e.value = 1) : e.value--;
-
         break;
       case '+':
         e.value > 50 ? (e.value = 50) : e.value++;
-
         break;
       default:
         break;
@@ -81,7 +79,6 @@ export class ProductDetailComponent implements OnInit {
     this.quantity = +e.value;
   }
   addToCart() {
-    console.log();
     this.cartItemService
       .add({
         product: this.product,

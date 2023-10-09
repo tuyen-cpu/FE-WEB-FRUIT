@@ -127,9 +127,10 @@
           </td>
         </tr>
       </ng-template>
-      <ng-template pTemplate="summary" *ngIf="addresses">
+      <ng-template pTemplate="summary">
         <div class="page">
           <p-paginator
+            *ngIf="addresses.length"
             [rows]="paginator.pageSize"
             [totalRecords]="paginator.totalElements"
             [first]="paginator.pageSize * paginator.pageNumber"

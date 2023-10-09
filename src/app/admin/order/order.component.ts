@@ -25,6 +25,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
 
 import { OrderDetailService } from 'src/app/services/order-detail.service';
+import ShippingStatusService from '../../services/admin/shipping-status.service';
 @Component({
   selector: 'app-order',
   standalone: true,
@@ -79,6 +80,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   editDialog = false;
   maxDateValue = new Date();
   orderEdit: Order;
+
   constructor(
     private route: ActivatedRoute,
     private messageService: MessageService,
@@ -87,7 +89,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     public datepipe: DatePipe,
     private confirmationService: ConfirmationService,
     private datePipe: DatePipe,
-
+    private shippingStatusService: ShippingStatusService,
     private fileUploadService: FileUploadService,
   ) {}
 
@@ -95,16 +97,24 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.titleComponent = this.route.snapshot.data['title'];
     this.changeParams();
     this.urlImage = this.fileUploadService.getLink();
-    this.listStatuses = [
-      { name: EStatusShipping.VERIFIED, id: 1 },
-      { name: EStatusShipping.DELIVERING, id: 2 },
-      { name: EStatusShipping.DELIVERED, id: 3 },
-      { name: EStatusShipping.UNVERIFIED, id: 4 },
-      { name: EStatusShipping.CANCELED, id: 5 },
-      { name: EStatusShipping.CANCELING, id: 6 },
-    ];
-  }
+    // this.listStatuses = [
+    //   { name: EStatusShipping.VERIFIED, id: 1 },
+    //   { name: EStatusShipping.UNVERIFIED, id: 2 },
+    //   { name: EStatusShipping.DELIVERING, id: 3 },
+    //   { name: EStatusShipping.DELIVERED, id: 4 },
+    //   { name: EStatusShipping.CANCELED, id: 5 },
+    //   { name: EStatusShipping.CANCELING, id: 6 },
+    // ];
+    this.getShippingStatus();
 
+  }
+  getShippingStatus(){
+    this.shippingStatusService.getAll().subscribe({
+      next:(res)=>{
+        this.listStatuses = res.data
+      }
+    })
+  }
   clearFilterAddress() {
     this.filter.address = undefined;
     this.checkAllWithoutFilter();
@@ -275,6 +285,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.editDialog = false;
         this.messageService.add({ severity: 'success', summary: 'Confirmed', detail: 'Record updated' });
+        this.getOrders();
       },
       error: (res) => {
         this.getOrders();
@@ -358,6 +369,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   editOrder(order: Order) {
     this.orderEdit = { ...order };
     this.editDialog = true;
+    console.log(this.orderEdit)
   }
   hideDialog() {
     this.editDialog = false;

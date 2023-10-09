@@ -24,7 +24,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import UserManagerService from './services/admin/user-manager.service';
-import { WebSocketAPI } from './components/chat/web-socket';
+
 
 
 @Component({
@@ -75,7 +75,7 @@ export class AppComponent implements OnInit {
       behavior: 'smooth',
     });
   }
-  webSocketAPI: WebSocketAPI;
+
   greeting: any;
   name: string;
   rooms: any;

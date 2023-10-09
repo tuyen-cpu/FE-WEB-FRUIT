@@ -3,7 +3,7 @@
     <div class="product-list-filter">
       <div class="product-list-filter__category">
         <p-accordion>
-          <div class="product-list-filter__title" (click)="toggleFilterCategory()">
+          <div class="product-list-filter__title" (click)="this.isShowFilterCategory = !this.isShowFilterCategory">
             <span class="product-list-filter__title-name">{{ 'Categories' | translate }}</span>
             <span class="product-list-filter__title-icon">
               <i [ngClass]="isShowFilterCategory ? 'pi pi-minus' : 'pi pi-plus'"></i>
@@ -13,37 +13,20 @@
           <p-accordionTab [(selected)]="isShowFilterCategory">
             <ul class="product-list-filter__list">
               <li class="product-list-filter__item">
-                <a [routerLink]="['/product/all']" routerLinkActive="active" class="product-list-filter__item-link">{{ 'AllProduct' | translate }}</a>
+                <a [routerLink]="['/product/list/all']"  routerLinkActive="active" class="product-list-filter__item-link">{{ 'AllProduct' | translate }}</a>
               </li>
               <li *ngFor="let category of categories" class="product-list-filter__item is-selected">
-                <a [routerLink]="['/product/list/' + category.slug]" routerLinkActive="active" class="product-list-filter__item-link">{{
+                <a [routerLink]="['/product/list/' + category.slug]"  routerLinkActive="active" class="product-list-filter__item-link">{{
                   category.name
                 }}</a>
               </li>
-
-              <!-- <li class="product-list-filter__item">
-                <a
-                  [routerLink]="['u']"
-                  routerLinkActive="active"
-                  class="product-list-filter__item-link"
-                  >Rau ăn lá</a
-                >
-              </li>
-              <li class="product-list-filter__item">
-                <a
-                  [routerLink]="['p']"
-                  routerLinkActive="active"
-                  class="product-list-filter__item-link"
-                  >Tất cả sản phẩm</a
-                >
-              </li> -->
             </ul>
           </p-accordionTab>
         </p-accordion>
       </div>
       <div class="product-list-filter__price">
         <p-accordion>
-          <div class="product-list-filter__title" (click)="toggleFilterPrice()">
+          <div class="product-list-filter__title" (click)=" this.isShowFilterPrice = !this.isShowFilterPrice;">
             <span class="product-list-filter__title-name">{{ 'Price' | translate }}</span>
             <span class="product-list-filter__title-icon">
               <i [ngClass]="isShowFilterPrice ? 'pi pi-minus' : 'pi pi-plus'"></i>
@@ -98,5 +81,5 @@
       ></p-progressBar>
     </div>
   </p-dialog> -->
-  <app-loading [hidden]="!isLoading"></app-loading>
+  <app-loading [hidden]='!isLoading'></app-loading>
 </div>

@@ -1,5 +1,15 @@
-import { delay } from 'rxjs';
-import { Router, RouterModule, ActivatedRoute, ParamMap } from '@angular/router';
+import {
+  combineLatest,
+  combineLatestAll, debounceTime,
+  delay, finalize,
+  forkJoin,
+  map,
+  mergeWith, Subject,
+  switchMap,
+  take, tap,
+  withLatestFrom,
+} from 'rxjs';
+import { Router, RouterModule, ActivatedRoute, ParamMap, Params } from '@angular/router';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -63,7 +73,7 @@ export class ProductListComponent implements OnInit {
   paramsURL: {} = {};
 
   filter: { categorySlug: string; price: number } = {
-    categorySlug: '0',
+    categorySlug: 'trai-cay-nhapppp',
     price: this.priceList[0],
   };
   isLoading: boolean = false;
@@ -82,49 +92,43 @@ export class ProductListComponent implements OnInit {
       { name: 'A-Z', code: 'AZ' },
       { name: 'Z-A', code: 'ZA' },
     ];
-
-    this.changeRouter();
-    this.changeParams();
     this.getCategory();
-
-    // this.getProducts(this.filter, this.paginator);
+    this.changeRouter();
   }
+
   getProducts(filter: { categorySlug: string; price: number }, paginator: Paginator) {
     this.isLoading = true;
     this.productService
       .getProductByCategorySlugAndPriceLessThan(filter.categorySlug, filter.price, paginator.pageNumber!, paginator.pageSize!)
-      .pipe(delay(500))
+      .pipe(delay(500) ,finalize(() => (this.isLoading = false))
+      )
       .subscribe({
         next: (response) => {
           this.products = response.data.content;
           this.paginator.totalElements = response.data.totalElements;
-          this.isLoading = false;
         },
         error: (response) => {
           console.log(response);
           this.products = [];
-          this.isLoading = false;
         },
       });
   }
   changeRouter() {
-    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+    combineLatest({paramMap:this.route.paramMap,params:this.route.queryParams})
+      .subscribe(({paramMap, params}) => {
+        console.log("change param")
       this.filter.categorySlug = paramMap.get('categorySlug');
-      this.getProducts(this.filter, this.paginator);
-    });
-  }
-  changeParams() {
-    this.route.queryParams.subscribe((res) => {
-      if (res['page'] === undefined || +res['page'] <= 0) {
+      if (params['page'] === undefined || +params['page'] <= 0) {
         this.paginator.pageNumber = 0;
       } else {
-        this.paginator.pageNumber = res['page'] - 1;
+        this.paginator.pageNumber = params['page'] - 1;
       }
-      this.paginator.pageSize = Number(res['size']) || 12;
-      this.filter.price = Number(res['price']) || 99999999;
+      this.paginator.pageSize = Number(params['size']) || 12;
+      this.filter.price = Number(params['price']) || 99999999;
       this.getProducts(this.filter, this.paginator);
-    });
+    })
   }
+
   getCategory() {
     this.categoryService.getAll().subscribe({
       next: (response) => {
@@ -133,31 +137,23 @@ export class ProductListComponent implements OnInit {
       error: (response) => {},
     });
   }
-  toggleFilterCategory() {
-    this.isShowFilterCategory = !this.isShowFilterCategory;
-  }
-  toggleFilterPrice() {
-    this.isShowFilterPrice = !this.isShowFilterPrice;
-  }
+
   changePrice() {
     this.paramsURL = { price: this.filter.price };
     this.addParams();
   }
+
   onPageChange(event: any) {
-    console.log('Change page: ', event);
     this.paginator.pageNumber = event.page;
     this.paramsURL = {
       ...this.paramsURL,
       page: this.paginator.pageNumber! + 1,
       size: this.paginator.pageSize,
     };
-
-    console.log('Change page: ', event);
-    // this.getProducts(this.filter, this.paginator);
     this.addParams();
   }
+
   addParams() {
-    console.log('Add params');
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: this.paramsURL,

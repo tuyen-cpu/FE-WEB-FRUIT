@@ -26,10 +26,11 @@
         responsiveLayout="scroll"
         [scrollable]="true"
         scrollHeight="90vh">
-        <ng-template pTemplate="summary" *ngIf="!orders.length">
+        <ng-template pTemplate="summary">
           <div class="page grid align-items-center">
             <div class="col-12">
               <p-paginator
+                *ngIf="orders.length>0"
                 [rows]="paginator.pageSize"
                 [totalRecords]="paginator.totalElements"
                 [first]="paginator.pageSize * paginator.pageNumber"
@@ -134,26 +135,26 @@
         <ng-template pTemplate="header">
           <tr>
             <th pSortableColumn="id" style="flex: 0.5">Id <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="createdDate" style="flex: 2">Order date</th>
+            <th pSortableColumn="createdDate" style="flex: 1">Order date</th>
             <th style="flex: 3">Created By</th>
-            <th style="flex: 5">Address</th>
+            <th style="flex: 4">Address</th>
             <th style="flex: 1">Status<p-sortIcon field="price"></p-sortIcon></th>
             <th style="flex: 1">Payment</th>
             <th style="flex: 1">Total</th>
             <th style="flex: 0.5">Products</th>
-            <th style="flex: 0.5">Action</th>
+            <th style="flex: 0.8">Action</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-order style="min-height: 300px" let-expanded="expanded">
           <tr>
             <td style="flex: 0.5">{{ order.id }}</td>
-            <td style="flex: 2">
+            <td style="flex: 1">
               <div class="">{{ order.createdDate | date : 'M/d/yy, h:mm a' }}</div>
             </td>
             <td style="flex: 3">
               <div class="">{{ order.createdBy }}</div>
             </td>
-            <td style="flex: 5">
+            <td style="flex: 4">
               <div class="" [innerHTML]="order.address | highlighter : filter.address : ''"></div>
             </td>
             <td style="flex: 1">
@@ -186,7 +187,7 @@
             <td style="flex: 1">
               <span>{{ order.total | myCurrency : 'VND' }}</span>
             </td>
-            <td style="flex: 0.5">
+            <td style="flex: 1; justify-content: center">
               <button
                 pButton
                 pRipple
@@ -195,7 +196,7 @@
                 icon="pi pi-eye"
                 class="p-element p-button-text p-button-rounded p-button-plain p-button p-component p-button-icon-only eyes-view"></button>
             </td>
-            <td style="flex: 0.5">
+            <td style="flex: 0.8; justify-content: center">
               <button
                 pButton
                 pRipple
@@ -419,6 +420,7 @@
             </div>
           </ng-template>
         </p-dropdown>
+
       </div>
     </div>
   </ng-template>

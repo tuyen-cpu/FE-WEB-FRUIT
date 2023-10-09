@@ -159,6 +159,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   getCategory() {
     this.categoryService.getAll().subscribe({
       next: (res) => {
+        console.log("tại header")
         this.categories = res.data.content;
       },
       error: (res) => {},

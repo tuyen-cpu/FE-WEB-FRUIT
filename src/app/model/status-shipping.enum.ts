@@ -10,3 +10,7 @@ export enum Status {
   INACTIVE,
   ACTIVE,
 }
+export interface ShippingStatus{
+  id:number
+  name:EStatusShipping
+}
